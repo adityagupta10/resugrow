@@ -1,35 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>ResuGrow</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ResuGrow — AI Resume Copilot</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
 body{
-font-family: Arial;
+font-family:'Inter',sans-serif;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
 text-align:center;
-padding-top:100px;
-background:#f7f7f7;
+padding:20px;
 }
+
+.container{
+max-width:800px;
+}
+
+.logo{
+font-size:40px;
+font-weight:700;
+margin-bottom:10px;
+letter-spacing:1px;
+}
+
+.highlight{
+color:#38bdf8;
+}
+
+.tagline{
+font-size:18px;
+color:#cbd5f5;
+margin-bottom:40px;
+}
+
 h1{
-font-size:48px;
+font-size:42px;
+margin-bottom:20px;
+line-height:1.2;
 }
-p{
-font-size:20px;
-color:#555;
+
+.subtext{
+color:#94a3b8;
+font-size:18px;
+margin-bottom:40px;
 }
+
+.features{
+display:flex;
+justify-content:center;
+gap:25px;
+flex-wrap:wrap;
+margin-bottom:40px;
+}
+
+.feature{
+background:rgba(255,255,255,0.05);
+padding:12px 18px;
+border-radius:10px;
+font-size:14px;
+}
+
+.email-box{
+display:flex;
+justify-content:center;
+gap:10px;
+flex-wrap:wrap;
+}
+
+input{
+padding:14px 18px;
+border:none;
+border-radius:8px;
+width:260px;
+font-size:14px;
+}
+
+button{
+background:#38bdf8;
+border:none;
+padding:14px 22px;
+border-radius:8px;
+font-size:14px;
+font-weight:600;
+cursor:pointer;
+color:#0f172a;
+}
+
+button:hover{
+background:#22c3ff;
+}
+
+.footer{
+margin-top:40px;
+font-size:13px;
+color:#94a3b8;
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>ResuGrow</h1>
+<div class="container">
 
-<p>Your AI Job Application Copilot</p>
+<div class="logo">
+Resu<span class="highlight">Grow</span>
+</div>
 
-<p>🚀 Launching Soon</p>
+<div class="tagline">
+Your AI Job Application Copilot
+</div>
 
-<p>Upload your resume → paste a job → get a tailored resume instantly.</p>
+<h1>
+Launch your career faster with AI
+</h1>
 
-<p>Join the waitlist: hello@resugrow.com</p>
+<p class="subtext">
+Upload your resume, paste a job description, and instantly get a tailored resume and cover letter designed to beat ATS filters.
+</p>
+
+<div class="features">
+
+<div class="feature">⚡ AI Resume Optimization</div>
+
+<div class="feature">📄 AI Cover Letters</div>
+
+<div class="feature">🎯 ATS Keyword Matching</div>
+
+<div class="feature">🚀 Job Application Copilot</div>
+
+</div>
+
+<div class="email-box">
+
+<input type="email" placeholder="Enter your email">
+
+<button>Join Waitlist</button>
+
+</div>
+
+<div class="footer">
+🚀 Launching Soon • ResuGrow.com
+</div>
+</div>
 
 </body>
 </html>
