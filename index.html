@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>ResuGrow — AI Resume Copilot</title>
+<title>ResuGrow – AI Resume Optimizer & Job Application Copilot</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- Google Search Console Verification -->
+<meta name="google-site-verification" content="google-site-verification=vRxeiAPUE8vqpT3dhmp37WSvO3WveHP37M27FRSQxAg" />
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="ResuGrow is an AI resume optimizer that tailors your resume to any job description and helps you beat ATS filters instantly.">
+<meta name="keywords" content="AI resume builder, ATS resume checker, resume optimizer, AI cover letter generator, job application AI">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (LinkedIn / Social Sharing) -->
+<meta property="og:title" content="ResuGrow – AI Job Application Copilot">
+<meta property="og:description" content="Upload your resume, paste a job description, and generate an optimized resume and cover letter instantly.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://resugrow.com">
+<meta property="og:image" content="https://resugrow.com/dashboard-preview.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -18,63 +35,57 @@ box-sizing:border-box;
 
 body{
 font-family:'Inter',sans-serif;
-background:linear-gradient(135deg,#0f172a,#1e293b);
-color:white;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-text-align:center;
-padding:20px;
+background:#ffffff;
+color:#111;
+line-height:1.6;
 }
 
 .container{
-max-width:800px;
+max-width:1100px;
+margin:auto;
+padding:40px 20px;
+}
+
+/* NAV */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:60px;
 }
 
 .logo{
-font-size:40px;
+font-size:24px;
 font-weight:700;
-margin-bottom:10px;
-letter-spacing:1px;
 }
 
-.highlight{
-color:#38bdf8;
+.logo span{
+color:#2563eb;
 }
 
-.tagline{
-font-size:18px;
-color:#cbd5f5;
-margin-bottom:40px;
+/* HERO */
+
+.hero{
+text-align:center;
+margin-bottom:80px;
 }
 
-h1{
-font-size:42px;
+.hero h1{
+font-size:48px;
+font-weight:700;
 margin-bottom:20px;
-line-height:1.2;
 }
 
-.subtext{
-color:#94a3b8;
-font-size:18px;
-margin-bottom:40px;
+.hero p{
+font-size:20px;
+color:#555;
+max-width:700px;
+margin:auto;
+margin-bottom:30px;
 }
 
-.features{
-display:flex;
-justify-content:center;
-gap:25px;
-flex-wrap:wrap;
-margin-bottom:40px;
-}
-
-.feature{
-background:rgba(255,255,255,0.05);
-padding:12px 18px;
-border-radius:10px;
-font-size:14px;
-}
+/* EMAIL FORM */
 
 .email-box{
 display:flex;
@@ -83,81 +94,218 @@ gap:10px;
 flex-wrap:wrap;
 }
 
-input{
-padding:14px 18px;
-border:none;
-border-radius:8px;
+.email-box input{
+padding:14px 16px;
 width:260px;
+border:1px solid #ddd;
+border-radius:8px;
 font-size:14px;
 }
 
-button{
-background:#38bdf8;
+.email-box button{
+background:#2563eb;
+color:white;
 border:none;
-padding:14px 22px;
+padding:14px 20px;
 border-radius:8px;
-font-size:14px;
 font-weight:600;
 cursor:pointer;
-color:#0f172a;
 }
 
-button:hover{
-background:#22c3ff;
+.email-box button:hover{
+background:#1d4ed8;
 }
+
+.trust{
+margin-top:20px;
+color:#777;
+font-size:14px;
+}
+
+/* SECTION */
+
+.section{
+margin-top:100px;
+}
+
+.section h2{
+text-align:center;
+font-size:36px;
+margin-bottom:50px;
+}
+
+/* FEATURES */
+
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+}
+
+.card{
+border:1px solid #eee;
+border-radius:12px;
+padding:30px;
+background:#fafafa;
+}
+
+.card h3{
+margin-bottom:10px;
+}
+
+.card p{
+color:#555;
+font-size:15px;
+}
+
+/* MOCKUP */
+
+.mockup{
+text-align:center;
+margin-top:40px;
+}
+
+.mockup img{
+max-width:900px;
+width:100%;
+border-radius:10px;
+box-shadow:0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* FOOTER */
 
 .footer{
-margin-top:40px;
-font-size:13px;
-color:#94a3b8;
+margin-top:120px;
+text-align:center;
+color:#888;
+font-size:14px;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
+<!-- NAV -->
+
+<nav>
+
 <div class="logo">
-Resu<span class="highlight">Grow</span>
+Resu<span>Grow</span>
 </div>
 
-<div class="tagline">
-Your AI Job Application Copilot
-</div>
+</nav>
 
-<h1>
-Launch your career faster with AI
-</h1>
 
-<p class="subtext">
-Upload your resume, paste a job description, and instantly get a tailored resume and cover letter designed to beat ATS filters.
+<!-- HERO -->
+
+<div class="hero">
+
+<h1>AI that tailors your resume to every job</h1>
+
+<p>
+Upload your resume, paste a job description, and instantly generate a job-optimized resume and cover letter designed to beat ATS filters.
 </p>
+
+<!-- WAITLIST FORM -->
+
+<form class="email-box" action="https://forms.gle/YOUR_FORM_LINK" target="_blank">
+
+<input type="email" placeholder="Enter your email" required>
+
+<button type="submit">Join Waitlist</button>
+
+</form>
+
+<div class="trust">
+🚀 Launching soon • Early users get free premium access
+</div>
+
+</div>
+
+
+<!-- PRODUCT MOCKUP -->
+
+<div class="section">
+
+<h2>See ResuGrow in action</h2>
+
+<div class="mockup">
+
+<img src="dashboard-preview.png" alt="ResuGrow Dashboard Preview">
+
+</div>
+
+</div>
+
+
+<!-- HOW IT WORKS -->
+
+<div class="section">
+
+<h2>How ResuGrow works</h2>
 
 <div class="features">
 
-<div class="feature">⚡ AI Resume Optimization</div>
+<div class="card">
+<h3>Upload Resume</h3>
+<p>Upload your resume and our AI analyzes your experience and skills.</p>
+</div>
 
-<div class="feature">📄 AI Cover Letters</div>
+<div class="card">
+<h3>Paste Job Description</h3>
+<p>Add the job listing and ResuGrow identifies the most important recruiter keywords.</p>
+</div>
 
-<div class="feature">🎯 ATS Keyword Matching</div>
-
-<div class="feature">🚀 Job Application Copilot</div>
+<div class="card">
+<h3>Instant Optimization</h3>
+<p>AI rewrites your resume and generates a tailored cover letter in seconds.</p>
+</div>
 
 </div>
 
-<div class="email-box">
+</div>
 
-<input type="email" placeholder="Enter your email">
 
-<button>Join Waitlist</button>
+<!-- BENEFITS -->
+
+<div class="section">
+
+<h2>Why job seekers use ResuGrow</h2>
+
+<div class="features">
+
+<div class="card">
+<h3>Beat ATS Filters</h3>
+<p>Automatically match recruiter keywords and improve resume scoring.</p>
+</div>
+
+<div class="card">
+<h3>Save Hours</h3>
+<p>No more rewriting resumes for every job application.</p>
+</div>
+
+<div class="card">
+<h3>Increase Interviews</h3>
+<p>Get resumes designed to attract recruiter attention.</p>
+</div>
 
 </div>
+
+</div>
+
+
+<!-- FOOTER -->
 
 <div class="footer">
-🚀 Launching Soon • ResuGrow.com
+
+© 2026 ResuGrow • AI Job Application Copilot
+
 </div>
+
 </div>
 
 </body>
