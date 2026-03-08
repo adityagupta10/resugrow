@@ -6,24 +6,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>ResuGrow – AI Resume Optimizer & Job Application Copilot</title>
+<title>ResuGrow – AI Resume Optimizer</title>
 
-<!-- Google Search Console Verification -->
 <meta name="google-site-verification" content="google-site-verification=vRxeiAPUE8vqpT3dhmp37WSvO3WveHP37M27FRSQxAg" />
 
-<!-- SEO Meta Tags -->
 <meta name="description" content="ResuGrow is an AI resume optimizer that tailors your resume to any job description and helps you beat ATS filters instantly.">
+
 <meta name="keywords" content="AI resume builder, ATS resume checker, resume optimizer, AI cover letter generator, job application AI">
+
 <meta name="robots" content="index, follow">
 
-<!-- Open Graph (LinkedIn / Social Sharing) -->
-<meta property="og:title" content="ResuGrow – AI Job Application Copilot">
-<meta property="og:description" content="Upload your resume, paste a job description, and generate an optimized resume and cover letter instantly.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://resugrow.com">
-<meta property="og:image" content="https://resugrow.com/dashboard-preview.png">
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -35,57 +28,51 @@ box-sizing:border-box;
 
 body{
 font-family:'Inter',sans-serif;
-background:#ffffff;
-color:#111;
-line-height:1.6;
+background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+background-size:400% 400%;
+animation:gradientMove 12s ease infinite;
+color:white;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:40px;
+}
+
+@keyframes gradientMove{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
 }
 
 .container{
 max-width:1100px;
-margin:auto;
-padding:40px 20px;
-}
-
-/* NAV */
-
-nav{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:60px;
+width:100%;
+text-align:center;
 }
 
 .logo{
-font-size:24px;
+font-size:28px;
 font-weight:700;
+margin-bottom:30px;
 }
 
 .logo span{
-color:#2563eb;
-}
-
-/* HERO */
-
-.hero{
-text-align:center;
-margin-bottom:80px;
+color:#38bdf8;
 }
 
 .hero h1{
-font-size:48px;
-font-weight:700;
+font-size:52px;
 margin-bottom:20px;
 }
 
 .hero p{
 font-size:20px;
-color:#555;
+opacity:0.9;
 max-width:700px;
 margin:auto;
-margin-bottom:30px;
+margin-bottom:40px;
 }
-
-/* EMAIL FORM */
 
 .email-box{
 display:flex;
@@ -95,90 +82,79 @@ flex-wrap:wrap;
 }
 
 .email-box input{
-padding:14px 16px;
+padding:16px;
+border-radius:10px;
+border:none;
 width:260px;
-border:1px solid #ddd;
-border-radius:8px;
 font-size:14px;
 }
 
 .email-box button{
-background:#2563eb;
-color:white;
+background:#38bdf8;
+color:#0f172a;
 border:none;
-padding:14px 20px;
-border-radius:8px;
+padding:16px 22px;
+border-radius:10px;
 font-weight:600;
 cursor:pointer;
 }
 
-.email-box button:hover{
-background:#1d4ed8;
-}
-
-.trust{
-margin-top:20px;
-color:#777;
-font-size:14px;
-}
-
-/* SECTION */
-
-.section{
-margin-top:100px;
-}
-
-.section h2{
-text-align:center;
-font-size:36px;
-margin-bottom:50px;
-}
-
-/* FEATURES */
-
-.features{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:30px;
-}
-
-.card{
-border:1px solid #eee;
-border-radius:12px;
-padding:30px;
-background:#fafafa;
-}
-
-.card h3{
-margin-bottom:10px;
-}
-
-.card p{
-color:#555;
-font-size:15px;
-}
-
-/* MOCKUP */
-
 .mockup{
-text-align:center;
-margin-top:40px;
+margin-top:60px;
 }
 
 .mockup img{
 max-width:900px;
 width:100%;
-border-radius:10px;
-box-shadow:0 20px 40px rgba(0,0,0,0.1);
+border-radius:14px;
+box-shadow:0 30px 60px rgba(0,0,0,0.4);
 }
 
-/* FOOTER */
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-top:70px;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(10px);
+padding:30px;
+border-radius:12px;
+}
 
 .footer{
-margin-top:120px;
-text-align:center;
-color:#888;
+margin-top:80px;
 font-size:14px;
+opacity:0.8;
+}
+
+/* Popup */
+
+.popup{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:white;
+color:#111;
+padding:30px;
+border-radius:12px;
+box-shadow:0 10px 40px rgba(0,0,0,0.3);
+display:none;
+max-width:400px;
+text-align:center;
+}
+
+.popup button{
+margin-top:15px;
+padding:10px 16px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:6px;
+cursor:pointer;
 }
 
 </style>
@@ -189,124 +165,99 @@ font-size:14px;
 
 <div class="container">
 
-<!-- NAV -->
-
-<nav>
-
 <div class="logo">
 Resu<span>Grow</span>
 </div>
-
-</nav>
-
-
-<!-- HERO -->
 
 <div class="hero">
 
 <h1>AI that tailors your resume to every job</h1>
 
 <p>
-Upload your resume, paste a job description, and instantly generate a job-optimized resume and cover letter designed to beat ATS filters.
+Upload your resume, paste a job description, and instantly generate a job-optimized resume designed to beat ATS filters.
 </p>
 
-<!-- WAITLIST FORM -->
+<div class="email-box">
 
-<form class="email-box" action="https://forms.gle/YOUR_FORM_LINK" target="_blank">
+<input type="email" id="emailInput" placeholder="Enter your email">
 
-<input type="email" placeholder="Enter your email" required>
-
-<button type="submit">Join Waitlist</button>
-
-</form>
-
-<div class="trust">
-🚀 Launching soon • Early users get free premium access
-</div>
+<button onclick="joinWaitlist()">Join Early Access</button>
 
 </div>
 
-
-<!-- PRODUCT MOCKUP -->
-
-<div class="section">
-
-<h2>See ResuGrow in action</h2>
+</div>
 
 <div class="mockup">
 
-<img src="dashboard-preview.png" alt="ResuGrow Dashboard Preview">
+<img src="dashboard-preview.png">
 
 </div>
-
-</div>
-
-
-<!-- HOW IT WORKS -->
-
-<div class="section">
-
-<h2>How ResuGrow works</h2>
 
 <div class="features">
 
 <div class="card">
-<h3>Upload Resume</h3>
-<p>Upload your resume and our AI analyzes your experience and skills.</p>
+<h3>AI Resume Optimization</h3>
+<p>Automatically rewrite resumes for each job.</p>
 </div>
 
 <div class="card">
-<h3>Paste Job Description</h3>
-<p>Add the job listing and ResuGrow identifies the most important recruiter keywords.</p>
+<h3>ATS Keyword Matching</h3>
+<p>Improve your ATS score instantly.</p>
 </div>
 
 <div class="card">
-<h3>Instant Optimization</h3>
-<p>AI rewrites your resume and generates a tailored cover letter in seconds.</p>
+<h3>AI Cover Letters</h3>
+<p>Generate personalized cover letters.</p>
 </div>
 
 </div>
-
-</div>
-
-
-<!-- BENEFITS -->
-
-<div class="section">
-
-<h2>Why job seekers use ResuGrow</h2>
-
-<div class="features">
-
-<div class="card">
-<h3>Beat ATS Filters</h3>
-<p>Automatically match recruiter keywords and improve resume scoring.</p>
-</div>
-
-<div class="card">
-<h3>Save Hours</h3>
-<p>No more rewriting resumes for every job application.</p>
-</div>
-
-<div class="card">
-<h3>Increase Interviews</h3>
-<p>Get resumes designed to attract recruiter attention.</p>
-</div>
-
-</div>
-
-</div>
-
-
-<!-- FOOTER -->
 
 <div class="footer">
 
-© 2026 ResuGrow • AI Job Application Copilot
+🚀 Launching Soon • ResuGrow.com
 
 </div>
 
 </div>
+
+<div class="popup" id="popup">
+
+<h2>🎉 You're on the list!</h2>
+
+<p>
+Thanks for joining the ResuGrow early access waitlist.  
+We'll notify you when the AI resume optimizer launches.
+</p>
+
+<button onclick="closePopup()">Close</button>
+
+</div>
+
+<script>
+
+function joinWaitlist(){
+
+var email=document.getElementById("emailInput").value;
+
+fetch("https://script.google.com/macros/s/AKfycbyarnVSsXDpzan6Iw-f9SmyG0vQSbFj2LUOyJ3zzsq-kozdn7wbzrFsbTK-x8OoZGU/exec",{
+method:"POST",
+body:JSON.stringify({email:email})
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+document.getElementById("popup").style.display="block";
+document.getElementById("emailInput").value="";
+});
+
+}
+
+function closePopup(){
+document.getElementById("popup").style.display="none";
+}
+
+</script>
 
 </body>
 </html>
