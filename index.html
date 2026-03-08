@@ -181,7 +181,7 @@ Upload your resume, paste a job description, and instantly generate a job-optimi
 
 <input type="email" id="emailInput" placeholder="Enter your email">
 
-<button onclick="joinWaitlist()">Join Early Access</button>
+<button type="button" onclick="joinWaitlist()">Join Early Access</button>
 
 </div>
 
@@ -239,16 +239,30 @@ function joinWaitlist(){
 
 var email=document.getElementById("emailInput").value;
 
-fetch("https://script.google.com/macros/s/AKfycbyarnVSsXDpzan6Iw-f9SmyG0vQSbFj2LUOyJ3zzsq-kozdn7wbzrFsbTK-x8OoZGU/exec",{
+if(email===""){
+alert("Please enter your email");
+return;
+}
+
+fetch("https://script.google.com/macros/s/AKfycbzbMLfNFwng9gHUYHsZfaoHoe-NOuYhHd8w0t1VWnTqJGVD2usWYQslrxX_Ys1GQy0l/exec",{
 method:"POST",
-body:JSON.stringify({email:email})
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+email:email
 })
-
-.then(res=>res.json())
-
+})
+.then(response=>response.json())
 .then(data=>{
+
 document.getElementById("popup").style.display="block";
+
 document.getElementById("emailInput").value="";
+
+})
+.catch(error=>{
+alert("Something went wrong. Please try again.");
 });
 
 }
