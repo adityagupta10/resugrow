@@ -77,27 +77,27 @@ const testimonials = [
 const faqData = [
   {
     q: 'Is ResuGrow free to use?',
-    a: 'ResuGrow offers a free plan that includes basic resume building features. Our premium plans unlock AI-powered writing, ATS optimization, unlimited templates, and more. You can start building your resume for free and upgrade whenever you need more features.',
+    a: 'Yes, ResuGrow offers a robust free tier that allows you to build a professional resume from start to finish. Our free plan includes access to select recruiter-approved templates, document generation in plain text formats, and basic AI content suggestions to help you overcome writer\'s block. For advanced features like unlimited ATS checks, full AI writer capabilities, one-click job tailoring, and premium file formats (PDF and Word document downloads designed pixel-perfect), you can upgrade to one of our premium plans at your convenience.',
   },
   {
     q: 'How does the AI resume builder work?',
-    a: 'Our AI analyzes your experience, skills, and target job to generate professional content. Simply enter your basic information, and the AI will suggest optimized bullet points, professional summaries, and skills that match your industry and target role.',
+    a: 'Our AI is powered by large language models that have been specifically trained on millions of successful, high-performing resumes across various industries. When you use the builder, you simply input brief context about your past role or basic bullets. The AI instantly generates powerful, metrics-driven professional summaries, bullet points, and skills that highlight your accomplishments. It ensures your phrasing is impactful, error-free, and aligned with industry standards, cutting writing time from hours down to just minutes.',
   },
   {
     q: 'What is an ATS and why does it matter?',
-    a: 'An Applicant Tracking System (ATS) is software used by employers to filter resumes before a human ever sees them. Over 90% of large companies use ATS. ResuGrow ensures your resume is formatted correctly and contains the right keywords to pass these systems.',
+    a: 'An Applicant Tracking System (ATS) is recruitment software used by over 98% of Fortune 500 companies—and increasingly small to mid-sized businesses—to collect, sort, scan, and rank resumes before a human recruiter ever sees them. If your resume lacks the right keywords or uses an unreadable format (like complex tables, graphs, or unusual fonts), the ATS will reject it. ResuGrow guarantees ATS compatibility by using systematically parsed templates and helping you incorporate the exact keywords from your target job description to score high.',
   },
   {
     q: 'Can I download my resume in different formats?',
-    a: 'Yes! You can download your resume as a PDF, Word document (.docx), or plain text file. Our PDF exports are pixel-perfect and our Word documents maintain full formatting for easy editing.',
+    a: 'Absolutely! Flexibility is key to your job search. You can export your finished resume into multiple formats depending on the employer\'s requirements. We offer high-resolution PDF exports which preserve your formatting exactly and are preferred for most direct applications. We also offer standard Microsoft Word (.docx) downloads which maintain full formatting for easy editing later on, as well as plain text (.txt) exports for restrictive legacy application portals.',
   },
   {
     q: 'How is ResuGrow different from other resume builders?',
-    a: 'ResuGrow combines AI-powered content generation, real-time ATS scoring, one-click job tailoring, and recruiter-approved templates in one platform. Our AI learns from millions of successful resumes to give you the best possible results.',
+    a: 'While traditional builders just provide static templates, ResuGrow functions as an intelligent career copilot. We uniquely combine AI-powered content generation, real-time Applicant Tracking System (ATS) scoring, and one-click job tailoring within a single platform. Instead of guessing how strong your resume is, ResuGrow analyzes it against your target job description and gives you actionable scoring and feedback on what to fix. Our templates are actively vetted by current HR professionals to ensure they align with hiring trends.',
   },
   {
-    q: 'Can I create multiple versions of my resume?',
-    a: 'Absolutely! With ResuGrow, you can create unlimited versions of your resume, each tailored to different job applications. Our one-click tailoring feature makes it easy to customize your resume for specific job postings.',
+    q: 'Can I create multiple versions of my resume for different jobs?',
+    a: 'Yes, and we highly encourage it! Best practice states you should tailor your resume for every application to maximize your chances of getting an interview. With ResuGrow, you can duplicate your base resume with a single click and use our "Job Tailoring" feature to instantly optimize the new version for a specific job description. The AI will reprioritize your skills, rewrite bullets to match the job\'s vocabulary, and identify missing keywords—allowing you to manage dozens of highly-targeted resumes effortlessly.',
   },
 ];
 
@@ -274,26 +274,26 @@ export default function Home() {
                 <div className={styles.whyImageBg}>
                   <svg className={styles.whyIllustration} viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
                     {/* Resume Document */}
-                    <rect x="80" y="30" width="240" height="240" rx="12" fill="white" stroke="#e2e8f0" strokeWidth="2"/>
-                    <rect x="100" y="55" width="200" height="8" rx="4" fill="#2563eb"/>
-                    <rect x="100" y="75" width="160" height="6" rx="3" fill="#e2e8f0"/>
-                    <rect x="100" y="90" width="180" height="6" rx="3" fill="#e2e8f0"/>
-                    <rect x="100" y="105" width="120" height="6" rx="3" fill="#e2e8f0"/>
-                    <rect x="100" y="130" width="80" height="6" rx="3" fill="#2563eb" opacity="0.3"/>
-                    <rect x="100" y="145" width="190" height="6" rx="3" fill="#e2e8f0"/>
-                    <rect x="100" y="160" width="170" height="6" rx="3" fill="#e2e8f0"/>
-                    <rect x="100" y="175" width="200" height="6" rx="3" fill="#e2e8f0"/>
-                    <rect x="100" y="200" width="80" height="6" rx="3" fill="#2563eb" opacity="0.3"/>
-                    <rect x="100" y="215" width="180" height="6" rx="3" fill="#e2e8f0"/>
-                    <rect x="100" y="230" width="150" height="6" rx="3" fill="#e2e8f0"/>
+                    <rect x="80" y="30" width="240" height="240" rx="12" fill="white" stroke="#e2e8f0" strokeWidth="2" />
+                    <rect x="100" y="55" width="200" height="8" rx="4" fill="#2563eb" />
+                    <rect x="100" y="75" width="160" height="6" rx="3" fill="#e2e8f0" />
+                    <rect x="100" y="90" width="180" height="6" rx="3" fill="#e2e8f0" />
+                    <rect x="100" y="105" width="120" height="6" rx="3" fill="#e2e8f0" />
+                    <rect x="100" y="130" width="80" height="6" rx="3" fill="#2563eb" opacity="0.3" />
+                    <rect x="100" y="145" width="190" height="6" rx="3" fill="#e2e8f0" />
+                    <rect x="100" y="160" width="170" height="6" rx="3" fill="#e2e8f0" />
+                    <rect x="100" y="175" width="200" height="6" rx="3" fill="#e2e8f0" />
+                    <rect x="100" y="200" width="80" height="6" rx="3" fill="#2563eb" opacity="0.3" />
+                    <rect x="100" y="215" width="180" height="6" rx="3" fill="#e2e8f0" />
+                    <rect x="100" y="230" width="150" height="6" rx="3" fill="#e2e8f0" />
                     {/* AI sparkle */}
-                    <circle cx="340" cy="60" r="24" fill="#7c3aed" opacity="0.1"/>
+                    <circle cx="340" cy="60" r="24" fill="#7c3aed" opacity="0.1" />
                     <text x="332" y="67" fontSize="20">✨</text>
                     {/* Check mark */}
-                    <circle cx="340" cy="140" r="20" fill="#10b981" opacity="0.15"/>
+                    <circle cx="340" cy="140" r="20" fill="#10b981" opacity="0.15" />
                     <text x="332" y="147" fontSize="18">✓</text>
                     {/* Score indicator */}
-                    <rect x="60" y="180" width="50" height="28" rx="14" fill="#2563eb"/>
+                    <rect x="60" y="180" width="50" height="28" rx="14" fill="#2563eb" />
                     <text x="72" y="199" fontSize="12" fill="white" fontWeight="bold">98%</text>
                   </svg>
                 </div>
@@ -375,7 +375,7 @@ export default function Home() {
                     viewBox="0 0 20 20"
                     fill="none"
                   >
-                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
                 {openFaq === i && (

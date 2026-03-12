@@ -23,23 +23,7 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
-}
-
-.logoIcon {
-  font-size: 28px;
-}
-
-.logoText {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.5px;
-}
-
-.logoAccent {
-  color: var(--primary);
 }
 
 .navLinks {
@@ -99,6 +83,7 @@
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

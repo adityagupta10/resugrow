@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './Navbar.module.css';
 
 const resumeItems = [
@@ -39,8 +40,14 @@ export default function Navbar() {
     <nav className={styles.navbar} ref={navRef}>
       <div className={styles.navContainer}>
         <Link href="/" className={styles.logo}>
-          <span className={styles.logoIcon}>📄</span>
-          <span className={styles.logoText}>Resu<span className={styles.logoAccent}>Grow</span></span>
+          <Image
+            src="/resugrow-logo.png"
+            alt="ResuGrow"
+            width={180}
+            height={48}
+            style={{ objectFit: 'contain' }}
+            priority
+          />
         </Link>
 
         <button
@@ -62,7 +69,7 @@ export default function Navbar() {
             >
               Resume
               <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
             {activeDropdown === 'resume' && (
@@ -90,7 +97,7 @@ export default function Navbar() {
             >
               Cover Letter
               <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
             {activeDropdown === 'cover' && (

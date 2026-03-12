@@ -24,25 +24,13 @@
   gap: 20px;
 }
 
-.logo {
-  display: flex;
+.logoWrapper {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-}
-
-.logoIcon {
-  font-size: 28px;
-}
-
-.logoText {
-  font-size: 24px;
-  font-weight: 800;
-  color: white;
-  letter-spacing: -0.5px;
-}
-
-.logoAccent {
-  color: var(--primary-light);
+  background: white;
+  padding: 8px 16px;
+  border-radius: var(--radius-lg);
+  width: fit-content;
 }
 
 .brandDesc {
