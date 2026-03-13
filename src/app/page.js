@@ -102,7 +102,6 @@ const faqData = [
 ];
 
 const heroPhrases = [
-  "Land more interviews",
   "Get hired faster",
   "Unlock the dream job",
   "Increase your salary",
@@ -110,6 +109,7 @@ const heroPhrases = [
   "Ace your job search",
   "Beat the hiring bots",
   "Secure your future",
+  "Land more interviews",
   "Skip the waitlist"
 ];
 
