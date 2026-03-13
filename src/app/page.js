@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
@@ -101,8 +101,51 @@ const faqData = [
   },
 ];
 
+const heroPhrases = [
+  "Land more interviews",
+  "Get hired faster",
+  "Unlock the dream job",
+  "Increase your salary",
+  "Level up your career",
+  "Ace your job search",
+  "Beat the hiring bots",
+  "Secure your future",
+  "Skip the waitlist"
+];
+
 export default function Home() {
   const [openFaq, setOpenFaq] = useState(null);
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const typeSpeed = isDeleting ? 40 : 80;
+    const currentPhrase = heroPhrases[currentPhraseIndex];
+
+    let timer;
+    if (isDeleting) {
+      if (currentText === "") {
+        setIsDeleting(false);
+        setCurrentPhraseIndex((prev) => (prev + 1) % heroPhrases.length);
+        timer = setTimeout(() => { }, 500); // pause before starting to type new phrase
+      } else {
+        timer = setTimeout(() => {
+          setCurrentText(currentPhrase.substring(0, currentText.length - 1));
+        }, typeSpeed);
+      }
+    } else {
+      if (currentText === currentPhrase) {
+        timer = setTimeout(() => setIsDeleting(true), 2000); // pause before deleting
+      } else {
+        timer = setTimeout(() => {
+          setCurrentText(currentPhrase.substring(0, currentText.length + 1));
+        }, typeSpeed);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, currentPhraseIndex]);
 
   return (
     <>
@@ -114,8 +157,12 @@ export default function Home() {
               ✨ <span>#1 AI Resume Builder</span>
             </div>
             <h1 className={styles.heroTitle}>
-              Land more interviews with{' '}
-              <span className={styles.heroHighlight}>ResuGrow&apos;s</span> Resume Builder
+              <span className={styles.typewriterText}>
+                {currentText}
+                <span className={styles.cursor}>|</span>
+              </span>
+              <br />
+              with <span className={styles.heroHighlight}>ResuGrow&apos;s</span> Resume Builder
             </h1>
             <p className={styles.heroDesc}>
               ATS Check, AI Writer, and One-Click Job Tailoring make your resume stand out to recruiters.
@@ -145,12 +192,37 @@ export default function Home() {
           </div>
 
           <div className={styles.heroImage}>
-            <div className={styles.heroImageWrapper}>
+            <div className={styles.heroImageStack}>
               <Image
-                src="/hero-resume.png"
-                alt="ResuGrow AI Resume Builder - Professional resume with AI writing assistance"
+                src="/hero-resume1.png"
+                alt="Resume Template Preview 1"
                 width={520}
-                height={520}
+                height={620}
+                className={`${styles.heroImageCard} ${styles.card1}`}
+                priority
+              />
+              <Image
+                src="/hero-resume2.png"
+                alt="Resume Template Preview 2"
+                width={520}
+                height={620}
+                className={`${styles.heroImageCard} ${styles.card2}`}
+                priority
+              />
+              <Image
+                src="/hero-resume3.png"
+                alt="Resume Template Preview 3"
+                width={520}
+                height={620}
+                className={`${styles.heroImageCard} ${styles.card3}`}
+                priority
+              />
+              <Image
+                src="/hero-resume4.png"
+                alt="Resume Template Preview 4"
+                width={520}
+                height={620}
+                className={`${styles.heroImageCard} ${styles.card4}`}
                 priority
               />
             </div>
