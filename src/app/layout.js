@@ -1,6 +1,7 @@
 import './globals.css';
 import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
   title: 'ResuGrow - AI Powered Resume Builder | Land More Interviews',
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
