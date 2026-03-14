@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
@@ -110,6 +110,43 @@ const heroPhrases = [
 ];
 
 export default function Home() {
+  const carouselRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    let animationFrameId;
+    const speed = 0.5; // Smooth scroll speed
+
+    const scroll = () => {
+      if (!isHovered) {
+        carousel.scrollLeft += speed;
+        
+        // Loop logic: If we reach near the end of the second set of items, reset seamlessly
+        const maxScroll = carousel.scrollWidth / 3;
+        if (carousel.scrollLeft >= maxScroll * 2) {
+          carousel.scrollLeft = maxScroll;
+        }
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isHovered]);
+
+  const handleNav = (direction) => {
+    if (carouselRef.current) {
+      const scrollAmount = 350;
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
   const [openFaq, setOpenFaq] = useState(null);
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
@@ -189,38 +226,31 @@ export default function Home() {
 
           <div className={styles.heroImage}>
             <div className={styles.heroImageStack}>
-              <Image
-                src="/hero-resume1.png"
-                alt="Resume Template Preview 1"
-                width={520}
-                height={620}
-                className={`${styles.heroImageCard} ${styles.card1}`}
-                priority
-              />
-              <Image
-                src="/hero-resume2.png"
-                alt="Resume Template Preview 2"
-                width={520}
-                height={620}
-                className={`${styles.heroImageCard} ${styles.card2}`}
-                priority
-              />
-              <Image
-                src="/hero-resume3.png"
-                alt="Resume Template Preview 3"
-                width={520}
-                height={620}
-                className={`${styles.heroImageCard} ${styles.card3}`}
-                priority
-              />
-              <Image
-                src="/hero-resume4.png"
-                alt="Resume Template Preview 4"
-                width={520}
-                height={620}
-                className={`${styles.heroImageCard} ${styles.card4}`}
-                priority
-              />
+              {/* Group 1 */}
+              <div className={`${styles.heroImageGroup} ${styles.group1}`}>
+                <Image src="/hero-resume1/1.png" alt="Hero 1 Main" width={520} height={620} className={styles.mainImg} priority />
+                <Image src="/hero-resume1/2.png" alt="Hero 1 Support 1" width={520} height={620} className={styles.support1} priority />
+                <Image src="/hero-resume1/3.png" alt="Hero 1 Support 2" width={520} height={620} className={styles.support2} priority />
+              </div>
+              
+              {/* Group 2 */}
+              <div className={`${styles.heroImageGroup} ${styles.group2}`}>
+                <Image src="/hero-resume2/1.png" alt="Hero 2 Main" width={520} height={620} className={styles.mainImg} priority />
+                <Image src="/hero-resume2/2.png" alt="Hero 2 Support 1" width={520} height={620} className={styles.support1} priority />
+              </div>
+
+              {/* Group 3 */}
+              <div className={`${styles.heroImageGroup} ${styles.group3}`}>
+                <Image src="/hero-resume3/1.png" alt="Hero 3 Main" width={520} height={620} className={styles.mainImg} priority />
+                <Image src="/hero-resume3/2.png" alt="Hero 3 Support 1" width={520} height={620} className={styles.support1} priority />
+                <Image src="/hero-resume3/3.png" alt="Hero 3 Support 2" width={520} height={620} className={styles.support2} priority />
+              </div>
+
+              {/* Group 4 */}
+              <div className={`${styles.heroImageGroup} ${styles.group4}`}>
+                <Image src="/hero-resume4/1.png" alt="Hero 4 Main" width={520} height={620} className={styles.mainImg} priority />
+                <Image src="/hero-resume4/3.png" alt="Hero 4 Support 2" width={520} height={620} className={styles.support2} priority />
+              </div>
             </div>
           </div>
         </div>
@@ -271,10 +301,22 @@ export default function Home() {
               Use the templates recruiters like. Download to Word or PDF.
             </p>
           </div>
+        </div>
 
-          <div className={styles.templatesCarousel}>
+        <div className={styles.templatesCarouselWrapper} 
+             onMouseEnter={() => setIsHovered(true)} 
+             onMouseLeave={() => setIsHovered(false)}>
+          <button 
+            className={`${styles.carouselNav} ${styles.prev}`}
+            onClick={() => handleNav('left')}
+            aria-label="Previous Template"
+          >
+            ←
+          </button>
+          
+          <div className={styles.templatesCarousel} ref={carouselRef}>
             <div className={styles.carouselTrack}>
-              {[...templateData, ...templateData].map((template, index) => (
+              {[...templateData, ...templateData, ...templateData].map((template, index) => (
                 <div key={`${template.id}-${index}`} className={styles.templateCarouselCard}>
                   <div className={styles.templatePreview}>
                     <div className={styles.templateDoc}>
@@ -302,6 +344,16 @@ export default function Home() {
             </div>
           </div>
 
+          <button 
+            className={`${styles.carouselNav} ${styles.next}`}
+            onClick={() => handleNav('right')}
+            aria-label="Next Template"
+          >
+            →
+          </button>
+        </div>
+
+        <div className={styles.templatesContainer}>
           <div className={styles.templatesBtn}>
             <Link href="/resume/templates" className="btn btn-primary">
               View All Templates →

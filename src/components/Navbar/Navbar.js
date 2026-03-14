@@ -16,6 +16,11 @@ const coverLetterItems = [
   { label: 'Cover Letter Templates', href: '/cover-letter/templates', icon: '📝' },
 ];
 
+const linkedinItems = [
+  { label: 'LinkedIn Profile Boost', href: '/linkedin-makeover', icon: '🚀' },
+  { label: 'Profile Review & Score', href: '/linkedin-review', icon: '📈' },
+];
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -117,10 +122,34 @@ export default function Navbar() {
             )}
           </div>
 
-          <Link href="/linkedin-makeover" className={styles.navLink} onClick={() => setMobileOpen(false)}>
-            LinkedIn Boost
-            <span className={styles.navBadgeNew}>New</span>
-          </Link>
+          {/* LinkedIn Dropdown */}
+          <div className={styles.dropdownWrapper}>
+            <button
+              className={`${styles.navLink} ${activeDropdown === 'linkedin' ? styles.active : ''}`}
+              onClick={() => toggleDropdown('linkedin')}
+            >
+              LinkedIn
+              <span className={styles.navBadgeNew}>New</span>
+              <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            {activeDropdown === 'linkedin' && (
+              <div className={styles.dropdown}>
+                {linkedinItems.map((item) => (
+                  <Link
+                    key={item.href + item.label}
+                    href={item.href}
+                    className={styles.dropdownItem}
+                    onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
+                  >
+                    <span className={styles.dropdownIcon}>{item.icon}</span>
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
 
           <Link href="/about" className={styles.navLink} onClick={() => setMobileOpen(false)}>
             About Us
