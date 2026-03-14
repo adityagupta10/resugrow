@@ -109,6 +109,28 @@ const heroPhrases = [
   "Skip the waitlist"
 ];
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ResuGrow",
+  "alternateName": "ResuGrow AI",
+  "url": "https://www.resugrow.com",
+  "logo": "https://www.resugrow.com/resugrow-logo.png",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "An advanced AI-powered resume builder and ATS optimization tool trusted by 25 million professionals.",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "1250"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0.00",
+    "priceCurrency": "USD"
+  }
+};
+
 export default function Home() {
   const carouselRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -182,6 +204,10 @@ export default function Home() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContainer}>
