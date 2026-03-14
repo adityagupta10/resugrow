@@ -71,7 +71,7 @@ export default function PrivacyPolicy() {
                     <p>
                         If you have questions or comments about this Privacy Policy, please contact us at:
                         <br />
-                        <strong>Email:</strong> privacy@resugrow.com
+                        <strong>Email:</strong> info@resugrow.com
                     </p>
                 </section>
             </div>

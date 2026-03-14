@@ -26,7 +26,7 @@ export default function ProfileReview() {
     <>
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
-          <div className={styles.subpageHeroBadge}>📈 LinkedIn Tool</div>
+          <div className={styles.subpageHeroBadge}>LinkedIn Tool</div>
           <h1 className={styles.subpageTitle}>
             LinkedIn <span className="gradient-text">Profile Review & Score</span>
           </h1>
@@ -45,7 +45,7 @@ export default function ProfileReview() {
                   placeholder="https://www.linkedin.com/in/yourprofile" 
                   style={{ flex: 1 }}
                 />
-                <button className="btn btn-primary">Score My Profile →</button>
+                <Link href="/coming-soon" className="btn btn-primary">Score My Profile</Link>
               </div>
             </div>
             <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px', textAlign: 'center' }}>
@@ -95,7 +95,7 @@ export default function ProfileReview() {
         <div className={styles.subpageContainer}>
           <div className={styles.aboutGrid}>
             <div className={styles.aboutContent}>
-              <div className={styles.subpageHeroBadge}>✨ Why Optimize?</div>
+              <div className={styles.subpageHeroBadge}>Why Optimize?</div>
               <h2>Don't Just Be on LinkedIn, <span className="gradient-text">Be Found</span></h2>
               <p>
                 LinkedIn is the world's largest professional network, but with over 900 million users, 
@@ -107,7 +107,7 @@ export default function ProfileReview() {
                 giving you an "insider's edge" to fixing common mistakes that hold you back from interview invites.
               </p>
               <div style={{ marginTop: '24px' }}>
-                <Link href="/linkedin-makeover" className="btn btn-primary">Need a Full Makeover? →</Link>
+                <Link href="/linkedin-makeover" className="btn btn-primary">Need a Full Makeover?</Link>
               </div>
             </div>
             <div className={styles.aboutImage}>

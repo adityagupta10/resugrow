@@ -2,12 +2,12 @@
 Check off these items as the corresponding buttons/links are wired up to their final destinations.
 
 ## Footer (`src/components/Footer/Footer.js`)
-- [ ] Profile Review & Score 
+- [X] Profile Review & Score 
 - [ ] Blog 
-- [ ] Twitter Icon
-- [ ] LinkedIn Icon
-- [ ] Facebook Icon
-- [ ] Instagram Icon
+- [X] Twitter Icon
+- [X] LinkedIn Icon
+- [X] Facebook Icon
+- [X] Instagram Icon
 
 ## LinkedIn Boost Page (`src/app/linkedin-makeover/page.js`)
 - [ ] "Yes, I want a powerful makeover →" (Hero Section button)

@@ -15,7 +15,7 @@ export default function Templates() {
     <>
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
-          <div className={styles.subpageHeroBadge}>📄 Templates</div>
+          <div className={styles.subpageHeroBadge}>Templates</div>
           <h1 className={styles.subpageTitle}>
             High Impact <span className="gradient-text">Resume Templates</span>
           </h1>
@@ -24,7 +24,7 @@ export default function Templates() {
             ATS-friendly and fully customizable.
           </p>
           <div className={styles.subpageBtn}>
-            <Link href="/resume/ai-builder" className="btn btn-primary">Start Customizing →</Link>
+            <Link href="/resume/ai-builder" className="btn btn-primary">Start Customizing</Link>
           </div>
         </div>
       </section>

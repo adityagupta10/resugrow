@@ -23,7 +23,7 @@ const footerLinks = {
     { label: 'Terms of Service', href: '/terms-of-service' },
   ],
   'Resources': [
-    { label: 'Blog', href: '#' },
+    { label: 'Blog', href: '/coming-soon' },
     { label: 'Career Tips', href: '/career-tips' },
     { label: 'Resume Examples', href: '/resume-examples' },
     { label: 'Help Center', href: '/help-center' },

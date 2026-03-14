@@ -187,7 +187,7 @@ export default function Home() {
         <div className={styles.heroContainer}>
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
-              ✨ <span>#1 AI Resume Builder</span>
+              <span>#1 AI Resume Builder</span>
             </div>
             <h1 className={styles.heroTitle}>
               <span className={styles.typewriterText}>
@@ -202,21 +202,19 @@ export default function Home() {
             </p>
             <div className={styles.heroButtons}>
               <Link href="/resume/ai-builder" className="btn btn-primary">
-                Build your resume →
+                Build your resume
               </Link>
               <Link href="/resume/ats-checker" className="btn btn-secondary">
-                📊 Get your resume Score
+                Get your resume Score
               </Link>
             </div>
             <div className={styles.heroStats}>
               <div className={styles.statItem}>
-                <span className={styles.statIcon}>⭐</span>
                 <div className={styles.statText}>
                   <strong>5,126</strong> Reviews
                 </div>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statIcon}>💬</span>
                 <div className={styles.statText}>
                   <strong>21,452</strong> users landed interviews last month
                 </div>
@@ -356,7 +354,7 @@ export default function Home() {
         <div className={styles.templatesContainer}>
           <div className={styles.templatesBtn}>
             <Link href="/resume/templates" className="btn btn-primary">
-              View All Templates →
+              View All Templates
             </Link>
           </div>
         </div>
@@ -367,7 +365,7 @@ export default function Home() {
         <div className={styles.whyContainer}>
           <div className={styles.whyGrid}>
             <div className={styles.whyContent}>
-              <div className={styles.whyBadge}>💡 Why ResuGrow?</div>
+              <div className={styles.whyBadge}>Why ResuGrow?</div>
               <h2 className={styles.whyTitle}>
                 Why Use ResuGrow&apos;s <span className="gradient-text">AI Powered</span> Resume Builder
               </h2>
@@ -417,7 +415,6 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.whyStats}>
-                <div className={styles.whyStatsIcon}>📈</div>
                 <div>
                   <div className={styles.whyStatsNumber}>3x</div>
                   <div className={styles.whyStatsLabel}>More Interview Calls</div>
@@ -514,7 +511,7 @@ export default function Home() {
           </p>
           <div className={styles.ctaButtons}>
             <Link href="/resume/ai-builder" className={`btn ${styles.ctaBtnWhite}`}>
-              Start Building for Free →
+              Start Building for Free
             </Link>
             <Link href="/resume/templates" className={`btn ${styles.ctaBtnOutline}`}>
               Browse Templates

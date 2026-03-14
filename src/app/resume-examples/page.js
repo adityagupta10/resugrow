@@ -20,7 +20,7 @@ export default function ResumeExamples() {
         <>
             <section className={styles.subpageHero}>
                 <div className={styles.subpageContainer}>
-                    <div className={styles.subpageHeroBadge}>👁️ Resume Examples</div>
+                    <div className={styles.subpageHeroBadge}>Resume Examples</div>
                     <h1 className={styles.subpageTitle}>
                         Resume Examples by <span className="gradient-text">Industry</span>
                     </h1>
@@ -77,7 +77,7 @@ export default function ResumeExamples() {
 
                     <div className={styles.subpageBtn} style={{ marginTop: '40px' }}>
                         <Link href="/resume/ai-builder" className="btn btn-primary">
-                            Build Your Resume Now →
+                            Build Your Resume Now
                         </Link>
                     </div>
                 </div>

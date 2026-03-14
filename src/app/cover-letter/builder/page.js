@@ -20,7 +20,7 @@ export default function CoverLetterBuilder() {
     <>
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
-          <div className={styles.subpageHeroBadge}>✍️ AI-Powered</div>
+          <div className={styles.subpageHeroBadge}>AI-Powered</div>
           <h1 className={styles.subpageTitle}>
             Cover Letter <span className="gradient-text">Builder</span>
           </h1>
@@ -29,7 +29,7 @@ export default function CoverLetterBuilder() {
             help you stand out from the competition.
           </p>
           <div className={styles.subpageBtn}>
-            <Link href="#" className="btn btn-primary">Build Your Cover Letter →</Link>
+            <Link href="/coming-soon" className="btn btn-primary">Build Your Cover Letter</Link>
             <Link href="/cover-letter/templates" className="btn btn-secondary">Browse Templates</Link>
           </div>
         </div>

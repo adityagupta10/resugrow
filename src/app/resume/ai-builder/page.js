@@ -26,7 +26,7 @@ export default function AIBuilder() {
     <>
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
-          <div className={styles.subpageHeroBadge}>🤖 AI-Powered</div>
+          <div className={styles.subpageHeroBadge}>AI-Powered</div>
           <h1 className={styles.subpageTitle}>
             AI Powered <span className="gradient-text">Resume Builder</span>
           </h1>
@@ -35,7 +35,7 @@ export default function AIBuilder() {
             intelligent content suggestions and ATS optimization.
           </p>
           <div className={styles.subpageBtn}>
-            <Link href="#" className="btn btn-primary">Start Building Free →</Link>
+            <Link href="/coming-soon" className="btn btn-primary">Start Building Free</Link>
             <Link href="/resume/ats-checker" className="btn btn-secondary">Check Your ATS Score</Link>
           </div>
         </div>

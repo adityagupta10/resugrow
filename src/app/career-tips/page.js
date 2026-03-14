@@ -50,7 +50,7 @@ export default function CareerTips() {
         <>
             <section className={styles.subpageHero}>
                 <div className={styles.subpageContainer}>
-                    <div className={styles.subpageHeroBadge}>📚 Resources</div>
+                    <div className={styles.subpageHeroBadge}>Resources</div>
                     <h1 className={styles.subpageTitle}>
                         Career <span className="gradient-text">Tips & Advice</span>
                     </h1>
@@ -98,14 +98,14 @@ export default function CareerTips() {
                                     {article.excerpt}
                                 </p>
                                 <div style={{ display: 'flex', alignItems: 'center', color: 'var(--primary)', fontWeight: '600', fontSize: '14px' }}>
-                                    Read Article →
+                                    Read Article
                                 </div>
                             </div>
                         ))}
                     </div>
 
                     <div style={{ textAlign: 'center', marginTop: '40px' }}>
-                        <button className="btn btn-secondary">Load More Articles</button>
+                        <Link href="/coming-soon" className="btn btn-secondary">Load More Articles</Link>
                     </div>
                 </div>
             </section>

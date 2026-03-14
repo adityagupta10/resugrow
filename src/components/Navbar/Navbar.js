@@ -6,19 +6,19 @@ import Image from 'next/image';
 import styles from './Navbar.module.css';
 
 const resumeItems = [
-  { label: 'AI Powered Resume Builder', href: '/resume/ai-builder', icon: '🤖' },
-  { label: 'ATS Score Checker', href: '/resume/ats-checker', icon: '📊' },
-  { label: 'High Impact Templates', href: '/resume/templates', icon: '📄' },
+  { label: 'AI Powered Resume Builder', href: '/resume/ai-builder' },
+  { label: 'ATS Score Checker', href: '/resume/ats-checker' },
+  { label: 'High Impact Templates', href: '/resume/templates' },
 ];
 
 const coverLetterItems = [
-  { label: 'Cover Letter Builder', href: '/cover-letter/builder', icon: '✍️' },
-  { label: 'Cover Letter Templates', href: '/cover-letter/templates', icon: '📝' },
+  { label: 'Cover Letter Builder', href: '/cover-letter/builder' },
+  { label: 'Cover Letter Templates', href: '/cover-letter/templates' },
 ];
 
 const linkedinItems = [
-  { label: 'LinkedIn Profile Boost', href: '/linkedin-makeover', icon: '🚀' },
-  { label: 'Profile Review & Score', href: '/linkedin-review', icon: '📈' },
+  { label: 'LinkedIn Profile Boost', href: '/linkedin-makeover' },
+  { label: 'Profile Review & Score', href: '/linkedin-review' },
 ];
 
 export default function Navbar() {
@@ -37,8 +37,45 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const isHovered = useRef(false);
+  const clickTimeoutRef = useRef(null);
+
+  const handleMouseEnter = (name) => {
+    isHovered.current = true;
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+      clickTimeoutRef.current = null;
+    }
+    setActiveDropdown(name);
+  };
+
+  const handleMouseLeave = () => {
+    isHovered.current = false;
+    // If a click-timer is running, don't close immediately. 
+    // The timer will check isHovered when it fires.
+    if (!clickTimeoutRef.current) {
+      setActiveDropdown(null);
+    }
+  };
+
   const toggleDropdown = (name) => {
-    setActiveDropdown(activeDropdown === name ? null : name);
+    if (activeDropdown === name) {
+      setActiveDropdown(null);
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+        clickTimeoutRef.current = null;
+      }
+    } else {
+      setActiveDropdown(name);
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+      
+      clickTimeoutRef.current = setTimeout(() => {
+        if (!isHovered.current) {
+          setActiveDropdown(null);
+        }
+        clickTimeoutRef.current = null;
+      }, 2000);
+    }
   };
 
   return (
@@ -67,7 +104,11 @@ export default function Navbar() {
 
         <div className={`${styles.navLinks} ${mobileOpen ? styles.open : ''}`}>
           {/* Resume Dropdown */}
-          <div className={styles.dropdownWrapper}>
+          <div 
+            className={styles.dropdownWrapper}
+            onMouseEnter={() => handleMouseEnter('resume')}
+            onMouseLeave={handleMouseLeave}
+          >
             <button
               className={`${styles.navLink} ${activeDropdown === 'resume' ? styles.active : ''}`}
               onClick={() => toggleDropdown('resume')}
@@ -86,7 +127,6 @@ export default function Navbar() {
                     className={styles.dropdownItem}
                     onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
                   >
-                    <span className={styles.dropdownIcon}>{item.icon}</span>
                     <span>{item.label}</span>
                   </Link>
                 ))}
@@ -95,7 +135,11 @@ export default function Navbar() {
           </div>
 
           {/* Cover Letter Dropdown */}
-          <div className={styles.dropdownWrapper}>
+          <div 
+            className={styles.dropdownWrapper}
+            onMouseEnter={() => handleMouseEnter('cover')}
+            onMouseLeave={handleMouseLeave}
+          >
             <button
               className={`${styles.navLink} ${activeDropdown === 'cover' ? styles.active : ''}`}
               onClick={() => toggleDropdown('cover')}
@@ -114,7 +158,6 @@ export default function Navbar() {
                     className={styles.dropdownItem}
                     onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
                   >
-                    <span className={styles.dropdownIcon}>{item.icon}</span>
                     <span>{item.label}</span>
                   </Link>
                 ))}
@@ -123,7 +166,11 @@ export default function Navbar() {
           </div>
 
           {/* LinkedIn Dropdown */}
-          <div className={styles.dropdownWrapper}>
+          <div 
+            className={styles.dropdownWrapper}
+            onMouseEnter={() => handleMouseEnter('linkedin')}
+            onMouseLeave={handleMouseLeave}
+          >
             <button
               className={`${styles.navLink} ${activeDropdown === 'linkedin' ? styles.active : ''}`}
               onClick={() => toggleDropdown('linkedin')}
@@ -143,7 +190,6 @@ export default function Navbar() {
                     className={styles.dropdownItem}
                     onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
                   >
-                    <span className={styles.dropdownIcon}>{item.icon}</span>
                     <span>{item.label}</span>
                   </Link>
                 ))}

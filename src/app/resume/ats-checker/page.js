@@ -20,7 +20,7 @@ export default function ATSChecker() {
     <>
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
-          <div className={styles.subpageHeroBadge}>📊 Free Tool</div>
+          <div className={styles.subpageHeroBadge}>Free Tool</div>
           <h1 className={styles.subpageTitle}>
             ATS <span className="gradient-text">Score Checker</span>
           </h1>
@@ -29,7 +29,7 @@ export default function ATSChecker() {
             and actionable suggestions to improve.
           </p>
           <div className={styles.subpageBtn}>
-            <Link href="#" className="btn btn-primary">Check Your Score Free →</Link>
+            <Link href="/coming-soon" className="btn btn-primary">Check Your Score Free</Link>
             <Link href="/resume/ai-builder" className="btn btn-secondary">Build ATS-Optimized Resume</Link>
           </div>
         </div>

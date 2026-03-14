@@ -18,7 +18,7 @@ export default function About() {
     <>
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
-          <div className={styles.subpageHeroBadge}>🏢 Our Story</div>
+          <div className={styles.subpageHeroBadge}>Our Story</div>
           <h1 className={styles.subpageTitle}>
             About <span className="gradient-text">ResuGrow</span>
           </h1>

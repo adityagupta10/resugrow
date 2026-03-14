@@ -30,9 +30,9 @@ const processSteps = [
 ];
 
 const features = [
-  { title: 'Stand Out at First Glance', desc: 'We revamp your headline, banner ideas, and profile layout to grab attention in seconds.', icon: '✨' },
-  { title: 'Speak to Dream Recruiters', desc: 'Content rewritten by experts to showcase your strengths and align with recruiter searches.', icon: '🎯' },
-  { title: 'Show Up in Searches', desc: 'We optimize every detail—from skills to keywords—so you get discovered by the right people.', icon: '🔍' },
+  { title: 'Stand Out at First Glance', desc: 'We revamp your headline, banner ideas, and profile layout to grab attention in seconds.' },
+  { title: 'Speak to Dream Recruiters', desc: 'Content rewritten by experts to showcase your strengths and align with recruiter searches.' },
+  { title: 'Show Up in Searches', desc: 'We optimize every detail—from skills to keywords—so you get discovered by the right people.' },
 ];
 
 const testimonials = [
@@ -81,7 +81,7 @@ export default function LinkedinMakeover() {
         <div className={styles.heroContainer}>
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
-              🚀 <span>Expert LinkedIn Service</span>
+              <span>Expert LinkedIn Service</span>
             </div>
             <h1 className={styles.heroTitle}>
               <span className={styles.typewriterText}>
@@ -95,9 +95,9 @@ export default function LinkedinMakeover() {
               Your LinkedIn profile is either opening doors—or being ignored. We completely rewrite every section so your profile sells your value and gets you noticed.
             </p>
             <div className={styles.heroButtons}>
-              <button className="btn btn-primary btn-lg">
-                Yes, I want a Professional makeover →
-              </button>
+              <Link href="/coming-soon" className="btn btn-primary btn-lg">
+                Yes, I want a Professional makeover
+              </Link>
             </div>
           </div>
           <div className={styles.heroImage}>
@@ -151,7 +151,6 @@ export default function LinkedinMakeover() {
             <div className={styles.featuresList}>
               {features.map((feature) => (
                 <div key={feature.title} className={styles.featureItem}>
-                  <div className={styles.featureIcon}>{feature.icon}</div>
                   <div>
                     <h4 className={styles.featureTitle}>{feature.title}</h4>
                     <p className={styles.featureDesc}>{feature.desc}</p>
@@ -215,9 +214,9 @@ export default function LinkedinMakeover() {
           <p className={styles.ctaDesc}>
             Don&apos;t let a poor LinkedIn profile be the reason you miss out on your dream job.
           </p>
-          <button className={`btn btn-lg ${styles.ctaBtnWhite}`}>
+          <Link href="/coming-soon" className={`btn btn-lg ${styles.ctaBtnWhite}`}>
             Claim Your Makeover Now
-          </button>
+          </Link>
         </div>
       </section>
     </div>

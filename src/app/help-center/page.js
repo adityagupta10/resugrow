@@ -16,7 +16,7 @@ export default function HelpCenter() {
         <>
             <section className={styles.subpageHero} style={{ paddingBottom: '100px' }}>
                 <div className={styles.subpageContainer}>
-                    <div className={styles.subpageHeroBadge}>🛟 Support</div>
+                    <div className={styles.subpageHeroBadge}>Support</div>
                     <h1 className={styles.subpageTitle}>
                         How can we <span className="gradient-text">help you?</span>
                     </h1>

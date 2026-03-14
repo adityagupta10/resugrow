@@ -1,22 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 import styles from '../subpage.module.css';
 
 export default function Contact() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState('idle'); // idle, loading, success, error
+  const form = useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setStatus('loading');
+
+    emailjs.sendForm(
+      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+      form.current,
+      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+    )
+      .then(() => {
+        setStatus('success');
+        form.current.reset();
+        setTimeout(() => setStatus('idle'), 5000);
+      }, (error) => {
+        console.error('EmailJS Error:', error);
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 5000);
+      });
   };
 
   return (
     <>
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
-          <div className={styles.subpageHeroBadge}>📧 Get in Touch</div>
+          <div className={styles.subpageHeroBadge}>Get in Touch</div>
           <h1 className={styles.subpageTitle}>
             Contact <span className="gradient-text">Us</span>
           </h1>
@@ -45,7 +62,7 @@ export default function Contact() {
                 <div className={styles.contactIcon}>📧</div>
                 <div>
                   <div className={styles.contactLabel}>Email</div>
-                  <div className={styles.contactValue}>support@resugrow.com</div>
+                  <div className={styles.contactValue}>info@resugrow.com</div>
                 </div>
               </div>
 
@@ -53,7 +70,7 @@ export default function Contact() {
                 <div className={styles.contactIcon}>📍</div>
                 <div>
                   <div className={styles.contactLabel}>Office</div>
-                  <div className={styles.contactValue}>123 Innovation Drive<br />San Francisco, CA 94105</div>
+                  <div className={styles.contactValue}>New Delhi, India</div>
                 </div>
               </div>
 
@@ -61,7 +78,7 @@ export default function Contact() {
                 <div className={styles.contactIcon}>🕐</div>
                 <div>
                   <div className={styles.contactLabel}>Business Hours</div>
-                  <div className={styles.contactValue}>Monday – Friday: 9:00 AM – 6:00 PM PST<br />Weekend: Limited Support</div>
+                  <div className={styles.contactValue}>9:00 AM – 6:00 PM UCT</div>
                 </div>
               </div>
 
@@ -74,26 +91,38 @@ export default function Contact() {
               </div>
             </div>
 
-            <form className={styles.contactForm} onSubmit={handleSubmit}>
+            <form className={styles.contactForm} ref={form} onSubmit={handleSubmit}>
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Full Name</label>
-                <input type="text" className={styles.formInput} placeholder="John Doe" required />
+                <input type="text" name="user_name" className={styles.formInput} placeholder="John Doe" required />
               </div>
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Email Address</label>
-                <input type="email" className={styles.formInput} placeholder="john@example.com" required />
+                <input type="email" name="user_email" className={styles.formInput} placeholder="john@example.com" required />
               </div>
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Subject</label>
-                <input type="text" className={styles.formInput} placeholder="How can we help?" required />
+                <input type="text" name="subject" className={styles.formInput} placeholder="How can we help?" required />
               </div>
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Message</label>
-                <textarea className={styles.formTextarea} placeholder="Tell us more about your question..." required></textarea>
+                <textarea name="message" className={styles.formTextarea} placeholder="Tell us more about your question..." required></textarea>
               </div>
-              <button type="submit" className={`btn btn-primary ${styles.formBtn}`}>
-                {submitted ? '✓ Message Sent!' : 'Send Message →'}
+              <button
+                type="submit"
+                className={`btn btn-primary ${styles.formBtn}`}
+                disabled={status === 'loading'}
+              >
+                {status === 'loading' ? 'Sending...' :
+                  status === 'success' ? '✓ Message Sent!' :
+                    status === 'error' ? '❌ Error Sending' :
+                      'Send Message'}
               </button>
+              {status === 'error' && (
+                <p style={{ color: '#dc2626', fontSize: '14px', marginTop: '8px' }}>
+                  There was an error sending your message. Please try again or email us directly at info@resugrow.com.
+                </p>
+              )}
             </form>
           </div>
         </div>
