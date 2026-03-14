@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
+import { templates as templateData } from '../data/templates';
 
 const features = [
   {
@@ -36,12 +37,7 @@ const features = [
   },
 ];
 
-const templates = [
-  { name: 'Executive Blue', category: 'Professional', color: '#2563eb', badge: 'popular' },
-  { name: 'Modern Minimal', category: 'Creative', color: '#7c3aed', badge: null },
-  { name: 'Classic Elegant', category: 'Traditional', color: '#0f766e', badge: 'new' },
-  { name: 'Bold Impact', category: 'Modern', color: '#dc2626', badge: null },
-];
+const templates = templateData.slice(0, 4); // Keep a small selection if needed for other sections, but we will use templateData directly for carousel
 
 const whyFeatures = [
   { icon: '🎯', title: 'Beat the ATS', desc: 'Our templates are designed to pass Applicant Tracking Systems used by 98% of Fortune 500 companies.' },
@@ -276,36 +272,34 @@ export default function Home() {
             </p>
           </div>
 
-          <div className={styles.templatesGrid}>
-            {templates.map((template) => (
-              <div key={template.name} className={styles.templateCard}>
-                <div className={styles.templatePreview}>
-                  <div className={styles.templateDoc}>
-                    <div className={styles.templateDocHeader} style={{ background: template.color }} />
-                    <div className={`${styles.templateDocLine} ${styles.long}`} />
-                    <div className={`${styles.templateDocLine} ${styles.medium}`} />
-                    <div className={`${styles.templateDocLine} ${styles.short}`} />
-                    <div className={styles.templateDocSection} style={{ background: template.color + '40' }} />
-                    <div className={`${styles.templateDocLine} ${styles.long}`} />
-                    <div className={`${styles.templateDocLine} ${styles.medium}`} />
-                    <div className={`${styles.templateDocLine} ${styles.long}`} />
-                    <div className={styles.templateDocSection} style={{ background: template.color + '40' }} />
-                    <div className={`${styles.templateDocLine} ${styles.medium}`} />
-                    <div className={`${styles.templateDocLine} ${styles.long}`} />
-                    <div className={`${styles.templateDocLine} ${styles.short}`} />
+          <div className={styles.templatesCarousel}>
+            <div className={styles.carouselTrack}>
+              {[...templateData, ...templateData].map((template, index) => (
+                <div key={`${template.id}-${index}`} className={styles.templateCarouselCard}>
+                  <div className={styles.templatePreview}>
+                    <div className={styles.templateDoc}>
+                      <Image
+                        src={template.image}
+                        alt={template.name}
+                        width={280}
+                        height={380}
+                        className={styles.templateImg}
+                        style={{ objectFit: 'cover' }}
+                      />
+                    </div>
+                    {template.badge && (
+                      <span className={`${styles.templateBadge} ${styles[template.badge]}`}>
+                        {template.badge}
+                      </span>
+                    )}
                   </div>
-                  {template.badge && (
-                    <span className={`${styles.templateBadge} ${styles[template.badge]}`}>
-                      {template.badge}
-                    </span>
-                  )}
+                  <div className={styles.templateInfo}>
+                    <h3 className={styles.templateName}>{template.name}</h3>
+                    <p className={styles.templateCategory}>{template.category}</p>
+                  </div>
                 </div>
-                <div className={styles.templateInfo}>
-                  <h3 className={styles.templateName}>{template.name}</h3>
-                  <p className={styles.templateCategory}>{template.category}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <div className={styles.templatesBtn}>

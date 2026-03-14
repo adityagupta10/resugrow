@@ -80,6 +80,22 @@ export default function TermsOfService() {
                         in that location.
                     </p>
                 </section>
+
+                <section>
+                    <h2>7. Trademark & Performance Disclaimers</h2>
+                    <p>
+                        This site is not part of, or endorsed by, Facebook™ or Google™ or any social media platform in any way.
+                        All product names, logos, and brands are property of their respective owners. All company, product and service names used in this website are for identification purposes only. Use of these names, logos, and brands does not imply endorsement.
+                    </p>
+                    <p>
+                        FACEBOOK™ is a trademark of FACEBOOK™, Inc.<br/>
+                        YOUTUBE™ and GOOGLE™ are trademarks of GOOGLE™ LLC.<br/>
+                        LINKEDIN™ is a trademark of MICROSOFT™ Corporation.
+                    </p>
+                    <p>
+                        Profile scores and review results may vary with each attempt or based on individual profiles. Resugrow does not guarantee job placements or interview opportunities. Our services are designed to optimize your profile for better visibility and recruiter engagement.
+                    </p>
+                </section>
             </div>
         </div>
     );

@@ -5,14 +5,16 @@ import Image from 'next/image';
 import styles from './Footer.module.css';
 
 const footerLinks = {
-  'Resume': [
+  'Resume & Cover Letter': [
     { label: 'AI Resume Builder', href: '/resume/ai-builder' },
     { label: 'ATS Score Checker', href: '/resume/ats-checker' },
     { label: 'Resume Templates', href: '/resume/templates' },
-  ],
-  'Cover Letter': [
     { label: 'Cover Letter Builder', href: '/cover-letter/builder' },
     { label: 'Cover Letter Templates', href: '/cover-letter/templates' },
+  ],
+  'LinkedIn': [
+    { label: 'Profile Boost', href: '/linkedin-makeover' },
+    { label: 'Profile Review & Score', href: '#' },
   ],
   'Company': [
     { label: 'About Us', href: '/about' },
@@ -89,7 +91,7 @@ export default function Footer() {
 
         <div className={styles.footerBottom}>
           <p className={styles.copyright}>
-            © {new Date().getFullYear()} ResuGrow. All rights reserved.
+            Made with love for job seekers © {new Date().getFullYear()} ResuGrow. All rights reserved.
           </p>
           <p className={styles.bottomLinks}>
             <Link href="/privacy-policy">Privacy</Link>

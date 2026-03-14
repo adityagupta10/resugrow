@@ -1,0 +1,22 @@
+# ResuGrow Missing CTA Links
+Check off these items as the corresponding buttons/links are wired up to their final destinations.
+
+## Footer (`src/components/Footer/Footer.js`)
+- [ ] Profile Review & Score 
+- [ ] Blog 
+- [ ] Twitter Icon
+- [ ] LinkedIn Icon
+- [ ] Facebook Icon
+- [ ] Instagram Icon
+
+## LinkedIn Boost Page (`src/app/linkedin-makeover/page.js`)
+- [ ] "Yes, I want a powerful makeover →" (Hero Section button)
+- [ ] "Claim Your Makeover Now" (Bottom CTA section button)
+
+## Landing / Tool Pages
+- [ ] ATS Checker: "Check Your Score Free →" (`src/app/resume/ats-checker/page.js`)
+- [ ] AI Builder: "Start Building Free →" (`src/app/resume/ai-builder/page.js`)
+- [ ] Cover Letter Builder: "Build Your Cover Letter →" (`src/app/cover-letter/builder/page.js`)
+
+## Sub-Pages
+- [ ] Career Tips Page: "Load More Articles" button (`src/app/career-tips/page.js`)

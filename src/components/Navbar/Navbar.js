@@ -117,6 +117,11 @@ export default function Navbar() {
             )}
           </div>
 
+          <Link href="/linkedin-makeover" className={styles.navLink} onClick={() => setMobileOpen(false)}>
+            LinkedIn Boost
+            <span className={styles.navBadgeNew}>New</span>
+          </Link>
+
           <Link href="/about" className={styles.navLink} onClick={() => setMobileOpen(false)}>
             About Us
           </Link>
