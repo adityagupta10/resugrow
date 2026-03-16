@@ -39,7 +39,7 @@ export default function Footer() {
             <Link href="/" className={styles.logoWrapper}>
               <Image
                 src="/resugrow-logo.png"
-                alt="ResuGrow"
+                alt="ResuGrow - AI Powered Resume Builder and ATS Checker Logo"
                 width={180}
                 height={48}
                 style={{ objectFit: 'contain' }}

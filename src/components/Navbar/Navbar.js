@@ -84,7 +84,7 @@ export default function Navbar() {
         <Link href="/" className={styles.logo}>
           <Image
             src="/resugrow-logo.png"
-            alt="ResuGrow"
+            alt="ResuGrow - AI Resume Builder"
             width={180}
             height={48}
             style={{ objectFit: 'contain' }}

@@ -38,7 +38,7 @@ export default function CoverLetterTemplates() {
                   <div className={styles.galleryDoc}>
                     <Image
                       src={t.image}
-                      alt={t.name}
+                      alt={`Clean and professional cover letter template: ${t.name}`}
                       fill
                       className={styles.templateImg}
                       style={{ objectFit: 'cover' }}

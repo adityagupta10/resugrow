@@ -104,7 +104,7 @@ export default function LinkedinMakeover() {
             <div className={styles.imageStack}>
               <Image
                 src="/linkedin-makeover.png"
-                alt="LinkedIn Profile Makeover"
+                alt="Professional LinkedIn profile makeover example highlighting optimized headline and about sections"
                 width={500}
                 height={500}
                 className={styles.bouncingImage}

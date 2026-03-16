@@ -38,7 +38,7 @@ export default function Templates() {
                   <div className={styles.galleryDoc}>
                     <Image
                       src={t.image}
-                      alt={t.name}
+                      alt={`Modern ATS-optimized resume template: ${t.name}`}
                       fill
                       className={styles.templateImg}
                       style={{ objectFit: 'cover' }}

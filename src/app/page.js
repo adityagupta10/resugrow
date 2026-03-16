@@ -50,21 +50,21 @@ const testimonials = [
   {
     text: "ResuGrow completely transformed my job search. I went from zero callbacks to 5 interviews in my first week after using their AI builder. The ATS optimization is incredible!",
     name: 'Sarah Chen',
-    role: 'Software Engineer at Google',
+    role: 'Software Engineer',
     avatar: '#2563eb',
     initials: 'SC',
   },
   {
     text: "The AI writing suggestions are spot-on. It helped me articulate my experience in ways I never could have on my own. Landed my dream job within a month!",
     name: 'Marcus Johnson',
-    role: 'Marketing Director at Spotify',
+    role: 'Marketing Director',
     avatar: '#7c3aed',
     initials: 'MJ',
   },
   {
     text: "I was skeptical about AI resume builders, but ResuGrow blew me away. The templates are beautiful and the ATS checker gave me confidence that my resume would actually be seen.",
     name: 'Emily Rodriguez',
-    role: 'Product Manager at Meta',
+    role: 'Product Manager',
     avatar: '#059669',
     initials: 'ER',
   },
@@ -109,7 +109,7 @@ const heroPhrases = [
   "Skip the waitlist"
 ];
 
-const jsonLd = {
+const appJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "ResuGrow",
@@ -131,6 +131,14 @@ const jsonLd = {
   }
 };
 
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ResuGrow",
+  "alternateName": ["ResuGrow AI", "ResuGrow Resume Builder"],
+  "url": "https://www.resugrow.com/"
+};
+
 export default function Home() {
   const carouselRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -145,7 +153,7 @@ export default function Home() {
     const scroll = () => {
       if (!isHovered) {
         carousel.scrollLeft += speed;
-        
+
         // Loop logic: If we reach near the end of the second set of items, reset seamlessly
         const maxScroll = carousel.scrollWidth / 3;
         if (carousel.scrollLeft >= maxScroll * 2) {
@@ -204,9 +212,14 @@ export default function Home() {
 
   return (
     <>
+      <link rel="icon" href="/favicon.png" sizes="48x48" />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
       />
       {/* Hero Section */}
       <section className={styles.hero}>
@@ -252,28 +265,28 @@ export default function Home() {
             <div className={styles.heroImageStack}>
               {/* Group 1 */}
               <div className={`${styles.heroImageGroup} ${styles.group1}`}>
-                <Image src="/hero-resume1/1.png" alt="Hero 1 Main" width={520} height={620} className={styles.mainImg} priority />
-                <Image src="/hero-resume1/2.png" alt="Hero 1 Support 1" width={520} height={620} className={styles.support1} priority />
-                <Image src="/hero-resume1/3.png" alt="Hero 1 Support 2" width={520} height={620} className={styles.support2} priority />
+                <Image src="/hero-resume1/1.png" alt="Modern professional resume template with clean typography and blue highlights" width={520} height={620} className={styles.mainImg} priority />
+                <Image src="/hero-resume1/2.png" alt="ATS-friendly resume layout showing skills and experience sections" width={520} height={620} className={styles.support1} priority />
+                <Image src="/hero-resume1/3.png" alt="Executive resume format for high-level management positions" width={520} height={620} className={styles.support2} priority />
               </div>
-              
+
               {/* Group 2 */}
               <div className={`${styles.heroImageGroup} ${styles.group2}`}>
-                <Image src="/hero-resume2/1.png" alt="Hero 2 Main" width={520} height={620} className={styles.mainImg} priority />
-                <Image src="/hero-resume2/2.png" alt="Hero 2 Support 1" width={520} height={620} className={styles.support1} priority />
+                <Image src="/hero-resume2/1.png" alt="Minimalist creative resume design for modern job seekers" width={520} height={620} className={styles.mainImg} priority />
+                <Image src="/hero-resume2/2.png" alt="Clean and elegant resume structure with clear contact information" width={520} height={620} className={styles.support1} priority />
               </div>
 
               {/* Group 3 */}
               <div className={`${styles.heroImageGroup} ${styles.group3}`}>
-                <Image src="/hero-resume3/1.png" alt="Hero 3 Main" width={520} height={620} className={styles.mainImg} priority />
-                <Image src="/hero-resume3/2.png" alt="Hero 3 Support 1" width={520} height={620} className={styles.support1} priority />
-                <Image src="/hero-resume3/3.png" alt="Hero 3 Support 2" width={520} height={620} className={styles.support2} priority />
+                <Image src="/hero-resume3/1.png" alt="Premium resume template with professional branding and impact statements" width={520} height={620} className={styles.mainImg} priority />
+                <Image src="/hero-resume3/2.png" alt="Well-structured professional summary and work history on a resume" width={520} height={620} className={styles.support1} priority />
+                <Image src="/hero-resume3/3.png" alt="ATS-optimized professional resume showing achievement-driven bullet points" width={520} height={620} className={styles.support2} priority />
               </div>
 
               {/* Group 4 */}
               <div className={`${styles.heroImageGroup} ${styles.group4}`}>
-                <Image src="/hero-resume4/1.png" alt="Hero 4 Main" width={520} height={620} className={styles.mainImg} priority />
-                <Image src="/hero-resume4/3.png" alt="Hero 4 Support 2" width={520} height={620} className={styles.support2} priority />
+                <Image src="/hero-resume4/1.png" alt="Technical resume template optimized for software engineers and developers" width={520} height={620} className={styles.mainImg} priority />
+                <Image src="/hero-resume4/3.png" alt="Project-focused resume layout highlighting technical stack and contributions" width={520} height={620} className={styles.support2} priority />
               </div>
             </div>
           </div>
@@ -327,17 +340,17 @@ export default function Home() {
           </div>
         </div>
 
-        <div className={styles.templatesCarouselWrapper} 
-             onMouseEnter={() => setIsHovered(true)} 
-             onMouseLeave={() => setIsHovered(false)}>
-          <button 
+        <div className={styles.templatesCarouselWrapper}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}>
+          <button
             className={`${styles.carouselNav} ${styles.prev}`}
             onClick={() => handleNav('left')}
             aria-label="Previous Template"
           >
             ←
           </button>
-          
+
           <div className={styles.templatesCarousel} ref={carouselRef}>
             <div className={styles.carouselTrack}>
               {[...templateData, ...templateData, ...templateData].map((template, index) => (
@@ -346,7 +359,7 @@ export default function Home() {
                     <div className={styles.templateDoc}>
                       <Image
                         src={template.image}
-                        alt={template.name}
+                        alt={`Modern ATS-friendly resume template: ${template.name}`}
                         width={280}
                         height={380}
                         className={styles.templateImg}
@@ -368,7 +381,7 @@ export default function Home() {
             </div>
           </div>
 
-          <button 
+          <button
             className={`${styles.carouselNav} ${styles.next}`}
             onClick={() => handleNav('right')}
             aria-label="Next Template"
