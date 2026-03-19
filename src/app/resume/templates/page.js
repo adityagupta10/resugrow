@@ -2,6 +2,7 @@ import Link from 'next/link';
 import styles from '../../subpage.module.css';
 import Image from 'next/image';
 import { templates as templateData } from '../../../data/templates';
+import Testimonials from '@/components/Testimonials/Testimonials';
 
 export const metadata = {
   title: 'High Impact Resume Templates | ResuGrow',
@@ -59,6 +60,11 @@ export default function Templates() {
           </div>
         </div>
       </section>
+
+      <Testimonials 
+        title="Templates that Get Hired" 
+        subtitle="See how our ATS-optimized layouts helped these professionals land interviews at top companies." 
+      />
     </>
   );
 }

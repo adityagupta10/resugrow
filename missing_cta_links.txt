@@ -1,22 +1,16 @@
 # ResuGrow Missing CTA Links
 Check off these items as the corresponding buttons/links are wired up to their final destinations.
 
-## Footer (`src/components/Footer/Footer.js`)
-- [X] Profile Review & Score 
-- [ ] Blog 
-- [X] Twitter Icon
-- [X] LinkedIn Icon
-- [X] Facebook Icon
-- [X] Instagram Icon
+## Heavy Lifting for Claud and Pro
+- [ ]  1. Template - Clicking on Template in Templates page should open the template in the builder.
 
-## LinkedIn Boost Page (`src/app/linkedin-makeover/page.js`)
-- [ ] "Yes, I want a powerful makeover →" (Hero Section button)
-- [ ] "Claim Your Makeover Now" (Bottom CTA section button)
+- [ ]  2. ATS Score Checker - uploaded resume should be checked by a logic and rated 
 
-## Landing / Tool Pages
-- [ ] ATS Checker: "Check Your Score Free →" (`src/app/resume/ats-checker/page.js`)
-- [ ] AI Builder: "Start Building Free →" (`src/app/resume/ai-builder/page.js`)
-- [ ] Cover Letter Builder: "Build Your Cover Letter →" (`src/app/cover-letter/builder/page.js`)
+- [ ]  3. LinkedIn Profile Review & Score - uploaded resume should be checked by a logic and rated 
 
-## Sub-Pages
-- [ ] Career Tips Page: "Load More Articles" button (`src/app/career-tips/page.js`)
+- [ ]  4. Cover letter Builder - A cover letter should be made according to given prompt
+
+- [ ]  5. AI Resume Builder - A resume should be made according to given prompt
+
+- [ ]  6. Guest Mode and Login - Guest users should be able to use the tools without login and their data should be saved in local storage. 
+
