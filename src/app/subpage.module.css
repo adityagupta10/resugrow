@@ -484,7 +484,8 @@
 
 @media (max-width: 768px) {
   .subpageTitle {
-    font-size: 32px;
+    font-size: 28px;
+    letter-spacing: -1px;
   }
 
   .featureGrid {
@@ -496,7 +497,8 @@
   }
 
   .aboutStatsGrid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .teamGrid {

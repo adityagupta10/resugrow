@@ -50,6 +50,15 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body.menu-open {
+  transform: translateX(-280px);
+  overflow: hidden;
+  height: 100vh;
 }
 
 a {

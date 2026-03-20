@@ -1015,9 +1015,6 @@
     justify-content: center;
   }
 
-  .heroImage {
-    order: -1;
-  }
 
   .heroImageWrapper img {
     max-width: 400px;

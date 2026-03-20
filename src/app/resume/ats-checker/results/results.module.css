@@ -336,12 +336,50 @@
   background: white;
 }
 
+@media (max-width: 1024px) {
+  .resultsContainer {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .previewPanel {
+    position: static;
+    height: 600px;
+    order: 2;
+  }
+
+  .analysisPanel {
+    order: 1;
+  }
+
+  .resultsPage {
+    padding: 24px 16px;
+  }
+
+  .cleanHero {
+    padding: 32px 20px;
+  }
+}
+
 @media (max-width: 768px) {
   .heroGrid {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
-  
+
   .heroTitle {
     font-size: 28px;
+  }
+
+  .categorySection {
+    padding: 24px 16px;
+  }
+
+  .aiFixCTA {
+    padding: 32px 20px;
+  }
+
+  .scoreHeader {
+    padding: 32px 20px;
   }
 }

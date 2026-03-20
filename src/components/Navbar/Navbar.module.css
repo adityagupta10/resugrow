@@ -1,22 +1,25 @@
-.navbar {
+.navbarWrapper {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 9999;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-light);
   transition: var(--transition);
+  /* Desktop Fix: align container and links */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .navContainer {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 24px;
+  width: auto;
+  flex: 0 0 auto;
+  padding: 0 0 0 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   height: 72px;
 }
 
@@ -30,6 +33,9 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  flex: 1;
+  justify-content: center;
+  max-width: var(--max-width);
 }
 
 .navLink {
@@ -181,29 +187,60 @@
     display: flex;
   }
 
+  .navbarWrapper {
+    display: block; /* Stack header and links on mobile */
+  }
+
+  .navContainer {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 24px;
+  }
+
   .navLinks {
     position: fixed;
-    top: 72px;
-    left: 0;
-    right: 0;
+    top: 0;
+    right: -280px; 
     bottom: 0;
+    height: 100vh;
+    width: 280px;
     background: white;
     flex-direction: column;
     align-items: stretch;
-    padding: 24px;
+    padding: 80px 24px 24px;
     gap: 8px;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: none;
     overflow-y: auto;
+    z-index: 10000;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    display: flex !important;
   }
 
-  .navLinks.open {
-    transform: translateX(0);
+
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+  }
+
+  .backdrop.active {
+    opacity: 1;
+    visibility: visible;
   }
 
   .navLink {
     padding: 14px 16px;
     font-size: 16px;
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .dropdown {
@@ -212,11 +249,21 @@
     border: none;
     background: var(--bg-secondary);
     margin-top: 4px;
+    padding: 4px 0;
+    min-width: 100%;
+  }
+
+  .dropdownItem {
+    padding: 12px 32px;
+    border-radius: 0;
   }
 
   .ctaBtn {
-    margin-left: 0;
-    margin-top: 16px;
+    margin: 16px 0 0;
+    width: 100%;
     text-align: center;
+    border-radius: var(--radius-md);
+    padding: 14px !important;
+    font-size: 16px !important;
   }
 }

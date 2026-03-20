@@ -1,0 +1,23 @@
+{
+  "api": ["rest", "graphql", "endpoints", "web services", "microservices"],
+  "leadership": ["mentorship", "management", "guided", "spearheaded", "directed", "lead", "cross-functional", "stakeholder"],
+  "develop": ["developed", "programmed", "engineered", "built", "coded", "created", "deployed", "implemented"],
+  "analyze": ["analyzed", "evaluated", "assessed", "reviewed", "synthesized", "forecasted"],
+  "database": ["sql", "nosql", "postgres", "mongodb", "mysql", "rdbms", "redis", "kafka"],
+  "frontend": ["ui", "user interface", "react", "vue", "angular", "client-side", "figma", "wireframing"],
+  "backend": ["server", "infrastructure", "node.js", "python", "java", "server-side", "microservices", "serverless"],
+  "agile": ["scrum", "kanban", "sprints", "jira", "product management", "a/b testing"],
+  "cloud": ["aws", "azure", "gcp", "amazon web services", "google cloud", "serverless"],
+  "testing": ["qa", "quality assurance", "tdd", "jest", "cypress", "automated tests", "validated"],
+  "optimize": ["optimized", "improved", "enhanced", "streamlined", "accelerated", "scaled", "maximized"],
+  "design": ["designed", "architected", "wireframed", "prototyped", "figma", "ui/ux", "system design"],
+  "manage": ["managed", "coordinated", "oversaw", "supervised", "administered", "facilitated", "delegation"],
+  "sales": ["revenue", "closing", "prospecting", "leads", "quotas", "business development", "monetized", "secured"],
+  "marketing": ["campaigns", "seo", "sem", "content", "branding", "growth"],
+  "devops": ["ci/cd", "terraform", "kubernetes", "infrastructure as code", "k8s", "jenkins", "bash", "nginx"],
+  "machine learning": ["ml", "ai", "deep learning", "nlp", "computer vision", "pytorch", "tensorflow", "llms", "rag", "predictive modeling"],
+  "mobile development": ["ios", "android", "react native", "flutter", "swift", "kotlin", "mobile-first", "mobile ui"],
+  "data engineering": ["etl", "data pipelines", "spark", "kafka", "hadoop", "data warehousing", "pandas"],
+  "security": ["infosec", "cybersecurity", "auth", "jwt", "oauth", "encryption", "soc2"],
+  "web performance": ["core web vitals", "seo", "lighthouse", "optimization", "lazy loading"]
+}

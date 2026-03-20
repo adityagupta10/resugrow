@@ -12,7 +12,10 @@ import {
   DATE_RANGE_REGEX,
   RESUME_CLICHES
 } from '@/constants/ats';
+import { INDUSTRY_MAPPINGS } from '@/constants/industry_keywords';
+import semanticDict from '@/constants/semantic_dict.json';
 import { parsePDF } from '@/lib/pdf-extract';
+import { detectDocumentType } from '@/lib/documentAnalyzer';
 
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -21,42 +24,57 @@ function escapeRegExp(string) {
 // ---------------------------------------------------------------------------
 // Foundation Modules
 // ---------------------------------------------------------------------------
-function scoreTextExtraction(text) {
-  const findings = [];
-  if (!text || text.trim().length < 50) {
-    findings.push({ status: 'error', message: 'Could not extract meaningful text. Your file may be an image-only PDF.' });
-    return { score: 0, max: 5, findings };
-  }
-  findings.push({ status: 'pass', message: `Successfully extracted ${text.trim().split(/\s+/).length} words.` });
-  return { score: 5, max: 5, findings };
-}
-
 function scoreContactInfo(text) {
   const findings = [];
   let score = 0;
   const checks = [
-    { key: 'email', label: 'Email Address', points: 3 },
-    { key: 'phone', label: 'Phone Number', points: 3 },
-    { key: 'linkedin', label: 'LinkedIn URL', points: 2 },
+    { key: 'email', label: 'Email Address', points: 5 },
+    { key: 'phone', label: 'Phone Number', points: 5 },
+    { key: 'linkedin', label: 'LinkedIn URL', points: 3 },
     { key: 'github', label: 'GitHub / Portfolio', points: 1 },
     { key: 'website', label: 'Personal Website', points: 1 },
   ];
   for (const c of checks) {
     if (CONTACT_PATTERNS[c.key].test(text)) {
       score += c.points;
-      findings.push({ status: 'pass', message: `${c.label} found.` });
+      let msg = `${c.label} found.`;
+      if (c.key === 'linkedin' && !text.match(CONTACT_PATTERNS.linkedin)?.[0].endsWith('/')) {
+        msg += " Tip: End your LinkedIn URL with a forward slash '/' for better ATS recognition.";
+      }
+      findings.push({ status: 'pass', message: msg });
     } else {
       findings.push({ status: 'error', message: `${c.label} not detected.` });
     }
   }
-  return { score, max: 10, findings };
+  return { score, max: 15, findings };
 }
 
-function scoreLength(text) {
+function scoreReadabilityExtraction(text) {
+  const findings = [];
+  let score = 0;
+  
+  // 1. Extraction Check (2 pts)
+  if (text && text.trim().length >= 50) {
+    score += 2;
+    findings.push({ status: 'pass', message: 'Text successfully extracted and readable.' });
+  } else {
+    findings.push({ status: 'error', message: 'Extraction failed. Ensure your file is not an image-only PDF.' });
+  }
+
+  // 2. Length Check (3 pts)
   const wordCount = text.trim().split(/\s+/).length;
-  if (wordCount < 150) return { score: 2, max: 5, findings: [{ status: 'warning', message: `Resume is very short (${wordCount} words). Aim for 300-800.` }] };
-  if (wordCount > 1500) return { score: 3, max: 5, findings: [{ status: 'warning', message: `Resume is very long (${wordCount} words). Consider trimming.` }] };
-  return { score: 5, max: 5, findings: [{ status: 'pass', message: `Good length (${wordCount} words).` }] };
+  if (wordCount >= 150 && wordCount <= 1500) {
+    score += 3;
+    findings.push({ status: 'pass', message: `Ideal length (${wordCount} words).` });
+  } else if (wordCount > 1500) {
+    score += 1.5;
+    findings.push({ status: 'warning', message: `Resume is long (${wordCount} words). Aim for under 1000.` });
+  } else {
+    score += 1;
+    findings.push({ status: 'warning', message: `Resume too short (${wordCount} words). Add more detail.` });
+  }
+
+  return { score, max: 5, findings };
 }
 
 // ---------------------------------------------------------------------------
@@ -92,9 +110,26 @@ async function scoreActionVerbs(text) {
 function scoreImpactMetrics(text) {
   const lines = text.split(/\n/).map(l => l.trim()).filter(l => l.length > 10);
   const metricPattern = /(\d+%|\$[\d,.]+|\b\d{2,}\b)/;
-  let matches = lines.filter(l => metricPattern.test(l)).length;
-  let score = Math.min(matches * 3, 15);
-  const findings = [{ status: matches > 0 ? 'pass' : 'warning', message: `${matches} bullet points include metrics (%, $, numbers).` }];
+  
+  let matches = 0;
+  let strongBullets = 0;
+  
+  for (const l of lines) {
+    if (metricPattern.test(l)) {
+      matches++;
+      const hasActionVerb = STRONG_VERBS.some(v => l.toLowerCase().includes(v));
+      const hasNumber = /\d/.test(l);
+      const hasPercentage = /%/.test(l);
+      if (hasActionVerb && hasNumber && hasPercentage) strongBullets++;
+    }
+  }
+  
+  let score = Math.min((matches * 2) + (strongBullets * 3), 15);
+  const findings = [];
+  if (matches > 0) findings.push({ status: 'pass', message: `${matches} bullet points include metrics (%, $, numbers).` });
+  if (strongBullets > 0) findings.push({ status: 'pass', message: `Found ${strongBullets} Elite "Strong" bullets (Verb + Number + %).` });
+  if (matches === 0) findings.push({ status: 'warning', message: 'No metrics (%, $) found in bullets.' });
+  
   return { score, max: 15, findings };
 }
 
@@ -164,19 +199,18 @@ function scoreSections(text) {
   return { score: Math.min(score, 10), max: 10, findings };
 }
 
-function scoreSkills(text, type) {
-  const list = type === 'soft' ? SOFT_SKILLS : HARD_SKILLS_KEYWORDS;
+function scoreSkills(text, type, targetedKeywords = null) {
+  const list = type === 'soft' ? SOFT_SKILLS : (targetedKeywords || HARD_SKILLS_KEYWORDS);
   const found = list.filter(sk => {
     const escaped = escapeRegExp(sk);
-    // If the skill ends with a special char (like C++ or C#), 
-    // the \b boundary might fail. We use a more flexible boundary.
-    const pattern = new RegExp(`(^|\\s|[,;:.]) ${escaped}($|\\s|[,;:.])`, 'i');
-    // Actually, simple word boundary \b works for the START of the word.
-    // For the end, if it's C++, we just want to ensure it's not part of another word.
     const safePattern = new RegExp(`\\b${escaped}(?![a-zA-Z0-9])`, 'i');
     return safePattern.test(text);
   });
-  const score = Math.min(found.length * 2, 10);
+  
+  // Cap at max 10 points. If a targeted list is small, we calculate proportional score.
+  let pointsPerFind = list.length < 20 ? 3 : 2;
+  const score = Math.min(found.length * pointsPerFind, 10);
+  
   return {
     score,
     max: 10,
@@ -186,24 +220,63 @@ function scoreSkills(text, type) {
 
 async function scoreKeywordMatch(resumeText, jobDescription) {
   if (!jobDescription || jobDescription.trim().length < 30) {
-    return { score: 0, max: 15, findings: [{ status: 'info', message: 'No JD provided for keyword match.' }], skipped: true };
+    return { score: 0, max: 15, findings: [{ status: 'info', message: 'No JD provided for keyword match.' }], skipped: true, gapAnalysis: [] };
   }
   const swModule = await import('stopword');
   const removeStopwords = swModule.removeStopwords || swModule.default?.removeStopwords || swModule.default;
+  
+  const nlpModule = await import('compromise');
+  const nlp = nlpModule.default || nlpModule;
   if (typeof removeStopwords !== 'function') {
-    console.error('Stopword removeStopwords is not a function:', removeStopwords);
-    return { score: 0, max: 15, findings: [{ status: 'info', message: 'Keyword match service unavailable.' }], skipped: true };
+    return { score: 0, max: 15, findings: [{ status: 'info', message: 'Keyword match service unavailable.' }], skipped: true, gapAnalysis: [] };
   }
+  
   const tokenize = (t) => removeStopwords(t.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(w => w.length > 2));
   const resumeSet = new Set(tokenize(resumeText));
+  const resumeTextLower = resumeText.toLowerCase();
+  
+  const jdDoc = nlp(jobDescription);
+  const jdNouns = jdDoc.nouns().out('array').map(n => n.toLowerCase());
+  const resumeNounsSet = new Set(nlp(resumeText).nouns().out('array').map(n => n.toLowerCase()));
+
   const jdUnique = [...new Set(tokenize(jobDescription))];
-  const matched = jdUnique.filter(t => resumeSet.has(t));
-  const ratio = matched.length / (jdUnique.length || 1);
+  let matchedCount = 0;
+  const missing = [];
+  const gapAnalysis = [];
+
+  for (const t of jdUnique) {
+    if (resumeSet.has(t)) {
+      matchedCount++;
+    } else {
+      let semanticMatched = false;
+      const synonyms = semanticDict[t] || [];
+      for (const syn of synonyms) {
+        if (resumeTextLower.includes(syn)) {
+          semanticMatched = true;
+          break;
+        }
+      }
+      if (semanticMatched) {
+        matchedCount++;
+      } else {
+        missing.push(t);
+        if (jdNouns.includes(t) && !resumeNounsSet.has(t) && gapAnalysis.length < 5) {
+          gapAnalysis.push({
+            missing: t,
+            suggestion: `The JD emphasizes '${t}'. Consider rewriting an experience bullet to include it.`
+          });
+        }
+      }
+    }
+  }
+
+  const ratio = matchedCount / (jdUnique.length || 1);
   return {
-    score: Math.round(ratio * 15),
+    score: Math.min(15, Math.round(ratio * 15)),
     max: 15,
-    findings: [{ status: ratio > 0.5 ? 'pass' : 'warning', message: `Found ${Math.round(ratio * 100)}% of JD keywords.` }],
-    missing: jdUnique.filter(t => !resumeSet.has(t)).slice(0, 15)
+    findings: [{ status: ratio > 0.5 ? 'pass' : 'warning', message: `Found ${Math.round(ratio * 100)}% of JD keywords (including semantic matches).` }],
+    missing: missing.slice(0, 15),
+    gapAnalysis: gapAnalysis
   };
 }
 
@@ -369,7 +442,7 @@ function scoreEmploymentGaps(text) {
   return { score, max: 5, findings };
 }
 
-function scoreLayoutArtifacts(text) {
+function scoreLayoutArtifacts(text, industryMode) {
   const columnArtifacts = (text.match(/\s{6,}/g) || []).length;
   const tabArtifacts = (text.match(/\t/g) || []).length;
   const total = columnArtifacts + tabArtifacts;
@@ -378,8 +451,12 @@ function scoreLayoutArtifacts(text) {
   let score = 5;
 
   if (total > 5) {
-    score = 0;
-    findings.push({ status: 'error', message: 'Complex multi-column/table formatting detected. This confuses many ATS bots.' });
+    if (industryMode === 'Creative') {
+      findings.push({ status: 'pass', message: 'Multi-column formatting detected, but acceptable for Creative roles.' });
+    } else {
+      score = 0;
+      findings.push({ status: 'error', message: 'Complex multi-column/table formatting detected. This confuses many ATS bots.' });
+    }
   } else {
     findings.push({ status: 'pass', message: 'Single-column structure detected. Highly ATS friendly.' });
   }
@@ -421,6 +498,8 @@ export async function POST(request) {
     const formData = await request.formData();
     const file = formData.get('resume');
     const jd = formData.get('jobDescription') || '';
+    const industryMode = formData.get('industryMode') || 'Standard';
+    
     if (!file) return NextResponse.json({ error: 'No file uploaded.' }, { status: 400 });
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -438,12 +517,20 @@ export async function POST(request) {
       return NextResponse.json({ error: 'PDF parsing failed' }, { status: 200 });
     }
 
+    // 1.5. Validate Document Type
+    const docAnalysis = detectDocumentType(text);
+    if (!docAnalysis.isResume) {
+      return NextResponse.json({
+        error: `Upload Error: The provided file appears to be a ${docAnalysis.identifiedType}. Please upload a standard Resume PDF for ATS analysis.`
+      }, { status: 400 });
+    }
+
     // Extraction for UI lists
     const extractedData = {
       contact: {
-        email: (text.match(CONTACT_PATTERNS.email)?.[0] || 'Not found').replace(/\s+/g, ''),
-        phone: (text.match(CONTACT_PATTERNS.phone)?.[0] || 'Not found').replace(/\s+/g, ''),
-        linkedin: (text.match(CONTACT_PATTERNS.linkedin)?.[0] || 'Not found').replace(/\s+/g, '')
+        email: (text.match(CONTACT_PATTERNS.email)?.[0] || 'Not found').trim(),
+        phone: (text.match(CONTACT_PATTERNS.phone)?.[0] || 'Not found').trim(),
+        linkedin: (text.match(CONTACT_PATTERNS.linkedin)?.[0] || 'Not found').trim()
       },
       sections: Object.entries(SECTION_PATTERNS)
         .filter(([name, pattern]) => pattern.test(text))
@@ -451,9 +538,8 @@ export async function POST(request) {
     };
 
     // 2. Score Individual Modules
-    const textExtraction = { score: text ? 5 : 0, max: 5, findings: text ? [{ status: 'pass', message: 'Text successfully extracted.' }] : [{ status: 'error', message: 'Failed to extract text. Check file encoding.' }] };
     const contactInfo = scoreContactInfo(text);
-    const length = scoreLength(text);
+    const readabilityExtraction = scoreReadabilityExtraction(text);
     const fileMetadata = { score: fileInfo.isPdf ? 5 : 3, max: 5, findings: [{ status: fileInfo.isPdf ? 'pass' : 'warning', message: `File format: ${fileInfo.type}. ${fileInfo.isPdf ? 'Ideal' : 'Consider PDF'}.` }] };
     
     const actionVerbs = await scoreActionVerbs(text);
@@ -464,13 +550,36 @@ export async function POST(request) {
     const cliches = scoreCliches(text);
 
     const sections = scoreSections(text);
-    const hardSkills = scoreSkills(text, 'hard');
+    
+    // Evaluate standard Hard Skills
+    const hardSkills = scoreSkills(text, 'hard'); // defaults to global HARD_SKILLS_KEYWORDS
+    
+    // Apply Bonus Points for Industry-Specific Keywords
+    if (industryMode && INDUSTRY_MAPPINGS[industryMode]) {
+      const industryKeys = INDUSTRY_MAPPINGS[industryMode];
+      const industryFound = industryKeys.filter(sk => {
+        const escaped = escapeRegExp(sk);
+        const safePattern = new RegExp(`\\b${escaped}(?![a-zA-Z0-9])`, 'i');
+        return safePattern.test(text);
+      });
+
+      if (industryFound.length > 0) {
+        const bonusPoints = industryFound.length * 2;
+        hardSkills.score = Math.min(hardSkills.score + bonusPoints, 15); // Cap at 15 with bonus
+        hardSkills.max = 15; // Increase max potential if applying for specific industry
+        hardSkills.findings.push({ 
+          status: 'pass', 
+          message: `Bonus: Found ${industryFound.length} industry keywords for ${industryMode}: ${industryFound.slice(0, 5).join(', ')}. (+${bonusPoints} pts)` 
+        });
+      }
+    }
+    
     const softSkills = scoreSkills(text, 'soft');
     const kwMatch = await scoreKeywordMatch(text, jd);
 
     const formatting = scoreFormatting(text);
     const spellCheck = scoreSpellCheck(text);
-    const layoutArtifacts = scoreLayoutArtifacts(text);
+    const layoutArtifacts = scoreLayoutArtifacts(text, industryMode);
     const employmentGaps = scoreEmploymentGaps(text);
     const linkedinPolish = scoreLinkedInPolish(extractedData);
 
@@ -479,9 +588,9 @@ export async function POST(request) {
       foundation: {
         title: 'Foundation',
         summary: 'These are the non-negotiables. If an ATS cannot extract your text or find your contact details, your application may be automatically discarded.',
-        score: textExtraction.score + contactInfo.score + length.score + fileMetadata.score,
+        score: contactInfo.score + readabilityExtraction.score + fileMetadata.score,
         max: 25,
-        modules: { textExtraction, contactInfo, length, fileMetadata }
+        modules: { contactInfo, readabilityExtraction, fileMetadata }
       },
       impact: {
         title: 'Impact',
@@ -506,16 +615,40 @@ export async function POST(request) {
       }
     };
 
-    // 4. Calculate Final Totals
-    let totalScore = 0;
-    let totalMax = 0;
-    Object.values(categories).forEach(cat => {
-      totalScore += cat.score;
-      totalMax += cat.max;
-    });
+    // 4. Calculate Final V2 Score & Normalizations
+    let wFoundation = 0.15, wImpact = 0.30, wRelevance = 0.40, wTechnical = 0.15;
+    if (industryMode === 'Executive & Leadership') { wImpact += 0.10; wFoundation -= 0.10; }
+
+    const getScore = (cat, weight) => {
+      if (cat.max === 0) return { weighted: 0, raw: 0 };
+      let rawPct = cat.score / cat.max;
+      if (rawPct > 0.8) rawPct = Math.min(1.0, rawPct * 1.1); // Non-Linear Elit Boost
+      return { weighted: Math.min(weight, rawPct * weight), raw: cat.score / cat.max };
+    };
+
+    const foundationCalc = getScore(categories.foundation, wFoundation);
+    const impactCalc = getScore(categories.impact, wImpact);
+    const relevanceCalc = getScore(categories.relevance, wRelevance);
+    const technicalCalc = getScore(categories.technical, wTechnical);
+
+    const totalV2Score = Math.round((foundationCalc.weighted + impactCalc.weighted + relevanceCalc.weighted + technicalCalc.weighted) * 100);
+
+    // Interview Probability Combine Relevance (40%) and Impact (30%)
+    let probability = "Medium";
+    if (totalV2Score > 80) {
+      probability = "High";
+    } else if (relevanceCalc.raw < 0.5) {
+      probability = "Low";
+    } else if (relevanceCalc.raw >= 0.8 && impactCalc.raw >= 0.8) {
+      probability = "High";
+    } else if (relevanceCalc.raw + impactCalc.raw > 1.4) {
+      probability = "High";
+    }
 
     return NextResponse.json({
-      score: Math.round((totalScore / totalMax) * 100),
+      score: totalV2Score,
+      probability,
+      gapAnalysis: kwMatch.skipped ? [] : kwMatch.gapAnalysis,
       fileInfo,
       categories,
       repetitionData: repetition.repetitionData,

@@ -422,3 +422,101 @@
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .heroContainer {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 48px;
+  }
+
+  .heroContent {
+    align-items: center;
+    order: 1;
+  }
+
+  .heroImage {
+    order: 2;
+  }
+
+  .heroDesc {
+    max-width: 100%;
+  }
+
+  .heroTitle {
+    font-size: 42px;
+  }
+
+  .painGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .valueGrid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .processGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 60px 0 80px;
+  }
+
+  .heroTitle {
+    font-size: 32px;
+  }
+
+  .heroDesc {
+    font-size: 16px;
+  }
+
+  .sectionTitle, .sectionTitleLeft, .ctaTitle {
+    font-size: 28px;
+  }
+
+  .sectionSubtitle, .sectionSubtitleLeft, .ctaDesc {
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  .painPoints, .valueProp, .process, .testimonials {
+    padding: 60px 0;
+  }
+
+  .processGrid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .processGrid::before {
+    display: none; /* Hide connecting line on mobile */
+  }
+
+  .testiGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionContainer, .heroContainer {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroButtons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .heroButtons :global(.btn) {
+    width: 100%;
+  }
+
+  .painCard, .valueCard, .testiCard {
+    padding: 24px;
+  }
+}

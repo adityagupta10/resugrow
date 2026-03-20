@@ -21,10 +21,22 @@ const linkedinItems = [
   { label: 'Profile Review & Score', href: '/linkedin-review' },
 ];
 
+const toolItems = [
+  { label: 'AI SAR Bullet Rewriter', href: '/tools/sar-rewriter' },
+];
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const navRef = useRef(null);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.classList.add('menu-open');
+    } else {
+      document.body.classList.remove('menu-open');
+    }
+  }, [mobileOpen]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -34,7 +46,10 @@ export default function Navbar() {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.body.classList.remove('menu-open');
+    };
   }, []);
 
   const isHovered = useRef(false);
@@ -79,7 +94,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={styles.navbar} ref={navRef}>
+    <nav className={styles.navbarWrapper} ref={navRef}>
       <div className={styles.navContainer}>
         <Link href="/" className={styles.logo}>
           <Image
@@ -102,7 +117,13 @@ export default function Navbar() {
           <span></span>
         </button>
 
-        <div className={`${styles.navLinks} ${mobileOpen ? styles.open : ''}`}>
+        <div 
+          className={`${styles.backdrop} ${mobileOpen ? styles.active : ''}`}
+          onClick={() => setMobileOpen(false)}
+        />
+
+      </div>
+      <div className={`${styles.navLinks} ${mobileOpen ? styles.open : ''}`}>
           {/* Resume Dropdown */}
           <div 
             className={styles.dropdownWrapper}
@@ -196,6 +217,37 @@ export default function Navbar() {
               </div>
             )}
           </div>
+          
+          {/* Tools Dropdown */}
+          <div 
+            className={styles.dropdownWrapper}
+            onMouseEnter={() => handleMouseEnter('tools')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button
+              className={`${styles.navLink} ${activeDropdown === 'tools' ? styles.active : ''}`}
+              onClick={() => toggleDropdown('tools')}
+            >
+              Tools
+              <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            {activeDropdown === 'tools' && (
+              <div className={styles.dropdown}>
+                {toolItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={styles.dropdownItem}
+                    onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
+                  >
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
 
           <Link href="/about" className={styles.navLink} onClick={() => setMobileOpen(false)}>
             About Us
@@ -208,7 +260,6 @@ export default function Navbar() {
             Build My Resume
           </Link>
         </div>
-      </div>
     </nav>
   );
 }

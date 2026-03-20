@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Testimonials from '@/components/Testimonials/Testimonials';
+import { INDUSTRY_MAPPINGS } from '@/constants/industry_keywords';
 import styles from '../../subpage.module.css';
 
 const features = [
@@ -19,7 +20,9 @@ export default function ATSChecker() {
   const router = useRouter();
   const [file, setFile] = useState(null);
   const [jobDescription, setJobDescription] = useState('');
+  const [industryMode, setIndustryMode] = useState('Software Engineering (General)');
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
 
   const handleScan = async () => {
@@ -30,6 +33,18 @@ export default function ATSChecker() {
 
     setError('');
     setLoading(true);
+    setProgress(0);
+
+    // Start progress animation
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90;
+        }
+        return prev + 5;
+      });
+    }, 100);
 
     try {
       const formData = new FormData();
@@ -37,6 +52,7 @@ export default function ATSChecker() {
       if (jobDescription.trim()) {
         formData.append('jobDescription', jobDescription);
       }
+      formData.append('industryMode', industryMode);
 
       const res = await fetch('/api/ats-scan', {
         method: 'POST',
@@ -46,22 +62,34 @@ export default function ATSChecker() {
       const data = await res.json();
 
       if (data.error && res.status !== 200) {
+        clearInterval(progressInterval);
         setError(data.error);
         setLoading(false);
+        setProgress(0);
         return;
       }
+
+      // Complete progress bar
+      clearInterval(progressInterval);
+      setProgress(100);
 
       // Convert file to Data URL for preview on the results page
       const reader = new FileReader();
       reader.onloadend = () => {
         sessionStorage.setItem('resumePreview', reader.result);
         sessionStorage.setItem('atsResults', JSON.stringify(data));
-        router.push('/resume/ats-checker/results');
+        
+        // Brief delay so user sees the 100% completion
+        setTimeout(() => {
+          router.push('/resume/ats-checker/results');
+        }, 400);
       };
       reader.readAsDataURL(file);
     } catch (err) {
+      clearInterval(progressInterval);
       setError('Something went wrong. Please try again.');
       setLoading(false);
+      setProgress(0);
     }
   };
   return (
@@ -75,8 +103,8 @@ export default function ATSChecker() {
             See What the ATS Sees.
           </h1>
           <p className={styles.subpageDesc}>
-            98% of Fortune 500 companies use Applicant Tracking Systems (ATS) to filter resumes. 
-            Our AI-powered checker scans your resume against real-world hiring algorithms to 
+            98% of Fortune 500 companies use Applicant Tracking Systems (ATS) to filter resumes.
+            Our AI-powered checker scans your resume against real-world hiring algorithms to
             ensure you make the &quot;Shortlist.&quot;
           </p>
 
@@ -105,23 +133,71 @@ export default function ATSChecker() {
               />
             </div>
 
+            {/* Industry Mode */}
+            <div className={styles.formGroup} style={{ marginTop: '16px' }}>
+              <label className={styles.formLabel}>Target Industry <span style={{ color: 'var(--text-muted)', fontWeight: '400' }}>(Optional)</span></label>
+              <select
+                className={styles.formInput}
+                value={industryMode}
+                onChange={(e) => setIndustryMode(e.target.value)}
+                style={{ padding: '12px', cursor: 'pointer', appearance: 'auto' }}
+              >
+                {Object.keys(INDUSTRY_MAPPINGS).map((industry) => (
+                  <option key={industry} value={industry}>{industry}</option>
+                ))}
+              </select>
+            </div>
+
             {/* Error */}
             {error && (
-              <p style={{ color: '#dc2626', fontSize: '14px', marginTop: '8px', fontWeight: '600' }}>
-                {error}
-              </p>
+              <div style={{ 
+                marginTop: '16px', 
+                padding: '16px', 
+                backgroundColor: '#fef2f2', 
+                borderLeft: '4px solid #ef4444', 
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '12px'
+              }}>
+                <span style={{ fontSize: '20px' }}>⚠️</span>
+                <div>
+                  <h4 style={{ color: '#991b1b', fontSize: '14px', fontWeight: '700', margin: '0 0 4px 0' }}>Scan Halted</h4>
+                  <p style={{ color: '#b91c1c', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>
+                    {error}
+                  </p>
+                </div>
+              </div>
             )}
 
-            {/* Submit Button */}
-            <div style={{ marginTop: '20px', textAlign: 'center' }}>
-              <button
-                className="btn btn-primary"
-                onClick={handleScan}
-                disabled={loading}
-                style={{ opacity: loading ? 0.7 : 1, minWidth: '220px' }}
-              >
-                {loading ? 'Scanning...' : 'Scan My Resume'}
-              </button>
+            {/* Submit Button & Progress */}
+            <div style={{ marginTop: '24px', textAlign: 'center' }}>
+              {!loading ? (
+                <button
+                  className="btn btn-primary"
+                  onClick={handleScan}
+                  style={{ minWidth: '220px' }}
+                >
+                  Scan My Resume
+                </button>
+              ) : (
+                <div style={{ width: '100%', maxWidth: '400px', margin: '0 auto', textAlign: 'left' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '13px', fontWeight: 'bold', color: '#0f172a' }}>
+                    <span>Analyzing your profile...</span>
+                    <span>{progress}%</span>
+                  </div>
+                  <div style={{ height: '10px', background: '#e2e8f0', borderRadius: '99px', overflow: 'hidden' }}>
+                    <div 
+                      style={{ 
+                        height: '100%', 
+                        background: 'linear-gradient(90deg, #2563eb, #7c3aed)', 
+                        width: `${progress}%`,
+                        transition: 'width 0.2s ease-out'
+                      }} 
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '12px', textAlign: 'center' }}>
@@ -178,9 +254,9 @@ export default function ATSChecker() {
       </section>
 
       {/* 4. The "Fear of Missing Out" (Social Proof) */}
-      <Testimonials 
-        title="Stop Getting Auto-Rejected" 
-        subtitle="Join thousands of professionals who used ResuGrow to beat the bots and land their dream interviews." 
+      <Testimonials
+        title="Stop Getting Auto-Rejected"
+        subtitle="Join thousands of professionals who used ResuGrow to beat the bots and land their dream interviews."
       />
 
       {/* 5. Technical Trust Signals (SEO Boost) */}
@@ -191,20 +267,20 @@ export default function ATSChecker() {
               <h2 className={styles.trustTitle}>Why is ATS Optimization important in 2026?</h2>
               <div className={styles.trustContent}>
                 <p>
-                  With the rise of AI-driven recruitment, resumes are now ranked by &quot;relevance scores.&quot; 
-                  Traditional resumes often fail because they focus only on aesthetics, ignoring the underlying 
+                  With the rise of AI-driven recruitment, resumes are now ranked by &quot;relevance scores.&quot;
+                  Traditional resumes often fail because they focus only on aesthetics, ignoring the underlying
                   data structures that bots require.
                 </p>
                 <p>
-                  ResuGrow uses a proprietary algorithm that mimics the logic of major systems like 
-                  Workday, Taleo, and Greenhouse to give you a competitive edge. We don&apos;t just check 
+                  ResuGrow uses a proprietary algorithm that mimics the logic of major systems like
+                  Workday, Taleo, and Greenhouse to give you a competitive edge. We don&apos;t just check
                   for keywords; we ensure your entire professional story is machine-readable and human-ready.
                 </p>
               </div>
             </div>
             <div className={styles.aboutImage}>
-               {/* Illustration or Graphic could go here */}
-               <div style={{ fontSize: '100px' }}>🤖</div>
+              {/* Illustration or Graphic could go here */}
+              <div style={{ fontSize: '100px' }}>🤖</div>
             </div>
           </div>
         </div>

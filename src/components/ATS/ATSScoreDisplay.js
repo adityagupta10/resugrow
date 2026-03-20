@@ -15,8 +15,28 @@ const ATSScoreDisplay = ({ score }) => {
            display: 'flex', 
            flexDirection: 'column', 
            gap: '24px', 
-           background: slab.bg.includes('red') ? '#fef2f2' : slab.bg.includes('orange') ? '#fff7ed' : slab.bg.includes('yellow') ? '#fefce8' : '#f0fdf4',
-           borderColor: slab.border.includes('red') ? '#fecaca' : slab.border.includes('orange') ? '#fed7aa' : slab.border.includes('yellow') ? '#fef08a' : '#bbf7d0',
+           background: 
+             slab.bg.includes('red') ? '#fef2f2' : 
+             slab.bg.includes('rose') ? '#fff1f2' : 
+             slab.bg.includes('orange') ? '#fff7ed' : 
+             slab.bg.includes('amber') ? '#fffbeb' : 
+             slab.bg.includes('yellow') ? '#fefce8' : 
+             slab.bg.includes('lime') ? '#f7fee7' : 
+             slab.bg.includes('green') ? '#f0fdf4' : 
+             slab.bg.includes('emerald') ? '#ecfdf5' : 
+             slab.bg.includes('teal') ? '#f0fdfa' : 
+             slab.bg.includes('indigo') ? '#eef2ff' : '#f8fafc',
+           borderColor: 
+             slab.border.includes('red') ? '#fecaca' : 
+             slab.border.includes('rose') ? '#fecdd3' : 
+             slab.border.includes('orange') ? '#fed7aa' : 
+             slab.border.includes('amber') ? '#fde68a' : 
+             slab.border.includes('yellow') ? '#fef08a' : 
+             slab.border.includes('lime') ? '#d9f99d' : 
+             slab.border.includes('green') ? '#bbf7d0' : 
+             slab.border.includes('emerald') ? '#a7f3d0' : 
+             slab.border.includes('teal') ? '#99f6e4' : 
+             slab.border.includes('indigo') ? '#c7d2fe' : '#e2e8f0',
            padding: '32px',
            borderRadius: '24px',
            borderWidth: '2px'
@@ -38,7 +58,17 @@ const ATSScoreDisplay = ({ score }) => {
               strokeDasharray={251.2}
               strokeDashoffset={251.2 - (251.2 * score) / 100}
               style={{ 
-                color: slab.color.includes('red') ? '#dc2626' : slab.color.includes('orange') ? '#ea580c' : slab.color.includes('yellow') ? '#ca8a04' : '#16a34a',
+                color: 
+                  slab.color.includes('red') ? '#dc2626' : 
+                  slab.color.includes('rose') ? '#e11d48' : 
+                  slab.color.includes('orange') ? '#ea580c' : 
+                  slab.color.includes('amber') ? '#d97706' : 
+                  slab.color.includes('yellow') ? '#ca8a04' : 
+                  slab.color.includes('lime') ? '#4d7c0f' : 
+                  slab.color.includes('green') ? '#16a34a' : 
+                  slab.color.includes('emerald') ? '#059669' : 
+                  slab.color.includes('teal') ? '#0d9488' : 
+                  slab.color.includes('indigo') ? '#4f46e5' : '#1e293b',
                 transition: 'all 1s ease-out' 
               }}
             />
@@ -47,7 +77,17 @@ const ATSScoreDisplay = ({ score }) => {
             position: 'absolute', 
             fontSize: '24px', 
             fontWeight: '800',
-            color: slab.color.includes('red') ? '#dc2626' : slab.color.includes('orange') ? '#ea580c' : slab.color.includes('yellow') ? '#ca8a04' : '#16a34a'
+            color: 
+              slab.color.includes('red') ? '#dc2626' : 
+              slab.color.includes('rose') ? '#e11d48' : 
+              slab.color.includes('orange') ? '#ea580c' : 
+              slab.color.includes('amber') ? '#d97706' : 
+              slab.color.includes('yellow') ? '#ca8a04' : 
+              slab.color.includes('lime') ? '#4d7c0f' : 
+              slab.color.includes('green') ? '#16a34a' : 
+              slab.color.includes('emerald') ? '#059669' : 
+              slab.color.includes('teal') ? '#0d9488' : 
+              slab.color.includes('indigo') ? '#4f46e5' : '#1e293b'
           }}>{score}%</span>
         </div>
 
@@ -59,7 +99,17 @@ const ATSScoreDisplay = ({ score }) => {
             textTransform: 'uppercase', 
             letterSpacing: '-0.025em',
             margin: 0,
-            color: slab.color.includes('red') ? '#dc2626' : slab.color.includes('orange') ? '#ea580c' : slab.color.includes('yellow') ? '#ca8a04' : '#16a34a'
+            color: 
+              slab.color.includes('red') ? '#dc2626' : 
+              slab.color.includes('rose') ? '#e11d48' : 
+              slab.color.includes('orange') ? '#ea580c' : 
+              slab.color.includes('amber') ? '#d97706' : 
+              slab.color.includes('yellow') ? '#ca8a04' : 
+              slab.color.includes('lime') ? '#4d7c0f' : 
+              slab.color.includes('green') ? '#16a34a' : 
+              slab.color.includes('emerald') ? '#059669' : 
+              slab.color.includes('teal') ? '#0d9488' : 
+              slab.color.includes('indigo') ? '#4f46e5' : '#1e293b'
           }}>
             {slab.label}
           </h3>
