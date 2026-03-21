@@ -90,48 +90,84 @@ ul, ol {
 
 /* Button Styles */
 .btn {
+  --btn-base: #2563eb;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 14px 32px;
-  border-radius: var(--radius-full);
-  font-weight: 600;
+  border-radius: 50px;
+  border: 1px solid transparent;
+  font-weight: 700;
   font-size: 16px;
-  transition: var(--transition);
+  line-height: 1;
   white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn::before,
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  z-index: -1;
+  background-color: var(--btn-base);
+  opacity: 0.4;
+  pointer-events: none;
+  transform: translate(0, 0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover::before {
+  transform: translate(-10px, -8px);
+}
+
+.btn:hover::after {
+  transform: translate(10px, 8px);
 }
 
 .btn-primary {
+  --btn-base: var(--primary);
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: white;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+  border-color: rgba(125, 211, 252, 0.45);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.34);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.38);
 }
 
 .btn-secondary {
+  --btn-base: #ffffff;
   background: white;
-  color: var(--primary);
-  border: 2px solid var(--primary);
+  color: #1e293b;
+  border-color: #bfdbfe;
+  box-shadow: 0 6px 14px rgba(30, 41, 59, 0.08);
 }
 
 .btn-secondary:hover {
-  background: var(--primary-50);
-  transform: translateY(-2px);
+  background: #f8fbff;
+  color: #1d4ed8;
 }
 
 .btn-dark {
+  --btn-base: var(--secondary);
   background: var(--secondary);
   color: white;
+  border-color: rgba(148, 163, 184, 0.4);
 }
 
 .btn-dark:hover {
   background: var(--secondary-light);
-  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.28);
 }
 
 /* Section Styles */
@@ -214,5 +250,6 @@ ul, ol {
   .btn {
     padding: 12px 24px;
     font-size: 14px;
+    border-radius: 50px;
   }
 }

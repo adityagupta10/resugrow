@@ -1,10 +1,14 @@
 import Link from 'next/link';
 import styles from '../../subpage.module.css';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'AI Powered Resume Builder | ResuGrow',
-  description: 'Build professional resumes with ResuGrow\'s AI-powered resume builder. Get intelligent suggestions, ATS-optimized formatting, and land more interviews.',
-};
+export const metadata = createPageMetadata({
+  title: 'AI Resume Builder | Build ATS-Friendly Resumes Faster',
+  description:
+    'Generate recruiter-ready resume content with AI, optimize formatting, and tailor resumes for each job posting.',
+  path: '/resume/ai-builder',
+  keywords: ['AI resume builder', 'resume generator', 'ATS friendly resume builder']
+});
 
 const features = [
   { icon: '🤖', title: 'AI Content Generation', desc: 'Our AI analyzes your experience and generates professional bullet points, summaries, and skill descriptions tailored to your target role.' },

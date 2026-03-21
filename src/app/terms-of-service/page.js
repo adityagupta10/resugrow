@@ -1,9 +1,12 @@
 import styles from '../legal.module.css';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
+export const metadata = createPageMetadata({
     title: 'Terms of Service | ResuGrow',
-    description: 'Terms and conditions governing your use of ResuGrow\'s resume building platform.',
-};
+    description: 'Read the terms and conditions for using ResuGrow services and tools.',
+    path: '/terms-of-service',
+    keywords: ['terms of service', 'terms and conditions', 'resugrow terms']
+});
 
 export default function TermsOfService() {
     return (
@@ -27,7 +30,7 @@ export default function TermsOfService() {
                     <h2>2. Use License</h2>
                     <p>
                         Permission is granted to temporarily use the materials and software provided on
-                        ResuGrow's website for personal, non-commercial use only (creating specific resumes
+                        ResuGrow&apos;s website for personal, non-commercial use only (creating specific resumes
                         for your job search). This is the grant of a license, not a transfer of title.
                     </p>
                     <p>Under this license you may not:</p>
@@ -63,7 +66,7 @@ export default function TermsOfService() {
                 <section>
                     <h2>5. Disclaimer</h2>
                     <p>
-                        The materials on ResuGrow's website are provided on an 'as is' basis. ResuGrow makes
+                        The materials on ResuGrow&apos;s website are provided on an &apos;as is&apos; basis. ResuGrow makes
                         no warranties, expressed or implied, and hereby disclaims and negates all other
                         warranties including, without limitation, implied warranties or conditions of
                         merchantability, fitness for a particular purpose, or non-infringement of intellectual

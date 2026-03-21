@@ -64,6 +64,27 @@
   transform: translateY(-2px);
 }
 
+.followLinkedIn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.followLinkedIn:hover {
+  color: #ffffff;
+  border-color: rgba(10, 102, 194, 0.7);
+  background: rgba(10, 102, 194, 0.18);
+}
+
 .footerColumn {
   display: flex;
   flex-direction: column;

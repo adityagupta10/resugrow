@@ -4,16 +4,37 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './results.module.css';
 
 // Reusing the Elite slab logic but tailored for LinkedIn
 const LINKEDIN_SLABS = [
-  { min: 81, max: 100, title: 'Hiring Magnet', color: '#16a34a', desc: 'Flawless Profile. You command attention.' },
-  { min: 61, max: 80, title: 'Industry Authority', color: '#3b82f6', desc: 'Highly visible and optimized.' },
-  { min: 41, max: 60, title: 'Emerging Brand', color: '#f59e0b', desc: 'Good foundation, needs polish.' },
-  { min: 21, max: 40, title: 'Passive Presence', color: '#fb923c', desc: 'Missing critical data points.' },
-  { min: 0, max: 20, title: 'Ghost Profile', color: '#ef4444', desc: 'Virtually invisible to recruiters.' }
+  { min: 81, max: 100, title: 'Final Polish Opportunity', color: '#16a34a', desc: 'Your profile is strong. Expert refinement can push premium outcomes.' },
+  { min: 61, max: 80, title: 'High Potential, Under-Leveraged', color: '#3b82f6', desc: 'Visible profile, but not positioned to convert at highest value.' },
+  { min: 41, max: 60, title: 'Optimization Required', color: '#f59e0b', desc: 'Core assets exist, but strategic rewriting is needed for recruiter traction.' },
+  { min: 21, max: 40, title: 'Low Recruiter Visibility', color: '#fb923c', desc: 'Current profile structure is limiting discoverability and trust.' },
+  { min: 0, max: 20, title: 'Critical Profile Fix Needed', color: '#ef4444', desc: 'Profile is likely being skipped. Full optimization is recommended.' }
 ];
+
+const SECTION_EXPLANATIONS = {
+  'Identity & Branding': 'How clearly your profile communicates who you are and what you do.',
+  'The Hook (About)': 'How strong your summary narrative is for recruiter and search visibility.',
+  'Professional Proof': 'How well your experience proves outcomes with quantifiable evidence.',
+  'Skills & Credibility': 'How complete and trustworthy your core skills and foundation signals are.'
+};
+
+const SUB_SECTION_EXPLANATIONS = {
+  'Profile URL': 'Checks whether your public URL looks professional and custom.',
+  'Headline Depth': 'Measures whether your headline has enough specificity and context.',
+  'Brand Formatting': 'Checks for structured formatting that improves scannability.',
+  'Narrative Length': 'Measures if your About section has enough depth to build authority.',
+  'Keyword Density': 'Checks whether important recruiter keywords are naturally present.',
+  'Role Count': 'Evaluates the visible breadth of your experience history.',
+  'Impact Metrics': 'Checks for numbers, percentages, and measurable outcomes.',
+  'Portfolio Bonus': 'Rewards added proof from projects and volunteer contributions.',
+  'Skill Volume': 'Measures breadth of skills available for search and matching.',
+  'Education & Certs': 'Checks for foundational trust signals from learning credentials.'
+};
 
 export default function LinkedInResults() {
   const [results, setResults] = useState(null);
@@ -25,7 +46,12 @@ export default function LinkedInResults() {
       router.push('/linkedin-review');
       return;
     }
-    setResults(JSON.parse(stored));
+
+    const hydrateTimer = setTimeout(() => {
+      setResults(JSON.parse(stored));
+    }, 0);
+
+    return () => clearTimeout(hydrateTimer);
   }, [router]);
 
   if (!results) return (
@@ -34,11 +60,28 @@ export default function LinkedInResults() {
     </div>
   );
 
-  const { overallScore, breakdown, issues, suggestions, completeness, extractedData } = results;
+  const { overallScore, breakdown, issues, completeness, extractedData = {} } = results;
+  const parsingConfidence = Number.isFinite(extractedData.confidence) ? extractedData.confidence : null;
 
   const currentSlab = LINKEDIN_SLABS.find(s => overallScore >= s.min && overallScore <= s.max) || LINKEDIN_SLABS[LINKEDIN_SLABS.length - 1];
-  const nextSlab = LINKEDIN_SLABS.find(s => s.min > overallScore) || currentSlab;
-  const gapToNext = nextSlab !== currentSlab ? `You are ${nextSlab.min - overallScore} points away from ${nextSlab.title}` : 'You have reached the pinnacle.';
+  const nextSlab = LINKEDIN_SLABS
+    .filter((s) => s.min > overallScore)
+    .sort((a, b) => a.min - b.min)[0] || currentSlab;
+  const gapToNext = nextSlab !== currentSlab
+    ? `You are ${nextSlab.min - overallScore} points away from ${nextSlab.title}.`
+    : 'You are in the highest band. Expert optimization can still improve conversion quality.';
+  const completenessHint = completeness >= 80 && overallScore < 60
+    ? 'Most sections are present, but weak positioning and proof are pulling your total score down.'
+    : completeness < 50
+      ? 'Critical sections are missing, which is heavily limiting your score potential.'
+      : 'Coverage is decent. Stronger proof, sharper keywords, and clearer positioning will raise this further.';
+
+  const categoryItems = [
+    { key: 'identity', title: 'Identity & Branding', data: breakdown.identity },
+    { key: 'content', title: 'The Hook (About)', data: breakdown.content },
+    { key: 'experience', title: 'Professional Proof', data: breakdown.experience },
+    { key: 'credibility', title: 'Skills & Credibility', data: breakdown.credibility }
+  ];
 
   return (
     <div className={styles.resultsPage}>
@@ -47,7 +90,7 @@ export default function LinkedInResults() {
         <div className={styles.headerContainer}>
           <Link href="/linkedin-review" className={styles.backButton}>← New Scan</Link>
           <div className={styles.headerActions}>
-            <Link href="/linkedin-makeover" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '14px' }}>
+            <Link href="/payment?service=linkedin-makeover&source=results-top-cta" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '14px' }}>
               Want us to fix this for you?
             </Link>
           </div>
@@ -57,36 +100,43 @@ export default function LinkedInResults() {
       <main className={styles.mainContent}>
         {/* Profile Context Banner */}
         {extractedData && (
-          <div style={{ 
-            background: 'white', 
-            borderRadius: '12px', 
-            padding: '16px 24px', 
-            marginBottom: '24px', 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '20px',
-            border: '1px solid #e2e8f0'
-          }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #0077b5, #00a0dc)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>
-              👤
+          <div className={styles.profileBanner}>
+            <div className={styles.profileBannerIcon}>
+              <Image
+                src="/LinkedIn_icon.svg"
+                alt="LinkedIn profile review icon for AI-powered profile scoring and optimization results"
+                width={34}
+                height={34}
+                priority
+              />
             </div>
-            <div style={{ flex: 1 }}>
-              <h4 style={{ margin: 0, fontSize: '14px', color: '#64748b', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Analyzed Profile</h4>
-              <p style={{ margin: '4px 0 0 0', fontSize: '16px', fontWeight: '700', color: '#1e293b' }}>
-                {extractedData.headline}
-                {extractedData.language === 'Non-English' && <span style={{ marginLeft: '12px', fontSize: '12px', background: '#fee2e2', color: '#b91c1c', padding: '2px 8px', borderRadius: '4px' }}>Non-English</span>}
+            <div className={styles.profileBannerMain}>
+              <h4 className={styles.profileBannerLabel}>Analyzed Profile</h4>
+              <p className={styles.profileBannerHeadline}>
+                {extractedData.fullName || extractedData.headline || 'Unknown Profile'}
+                {extractedData.language === 'Non-English' && <span className={styles.nonEnglishBadge}>Non-English</span>}
               </p>
-            </div>
-            <div style={{ textAlign: 'center', borderLeft: '1px solid #e2e8f0', padding: '0 20px' }}>
-              <h4 style={{ margin: 0, fontSize: '14px', color: '#64748b', fontWeight: '500' }}>Roles Detected</h4>
-              <p style={{ margin: '4px 0 0 0', fontSize: '16px', fontWeight: '700', color: '#1e293b' }}>
-                {extractedData.expCount} Roles
+              <p className={styles.profileBannerRole}>
+                {extractedData.currentPosition || 'Current position not detected'}
               </p>
+              {extractedData.linkedinUrl && extractedData.linkedinUrl !== 'Not found' && (
+                <a
+                  href={extractedData.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.profileBannerUrl}
+                >
+                  {extractedData.linkedinUrl}
+                </a>
+              )}
             </div>
-            <div style={{ textAlign: 'right', borderLeft: '1px solid #e2e8f0', paddingLeft: '20px' }}>
-              <h4 style={{ margin: 0, fontSize: '14px', color: '#64748b', fontWeight: '500' }}>Parsing Confidence</h4>
-              <p style={{ margin: '4px 0 0 0', fontSize: '16px', fontWeight: '700', color: extractedData.confidence > 80 ? '#16a34a' : '#f59e0b' }}>
-                {extractedData.confidence}%
+            <div className={styles.profileBannerMeta}>
+              <h4 className={styles.profileBannerMetaLabel}>Parsing Confidence</h4>
+              <p
+                className={styles.profileBannerMetaValue}
+                style={{ color: parsingConfidence !== null && parsingConfidence > 80 ? '#16a34a' : '#f59e0b' }}
+              >
+                {parsingConfidence !== null ? `${parsingConfidence}%` : 'N/A'}
               </p>
             </div>
           </div>
@@ -104,19 +154,37 @@ export default function LinkedInResults() {
                 <p className={styles.slabDesc}>{currentSlab.desc}</p>
               </div>
               
-              <div style={{ marginTop: '24px', padding: '16px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontWeight: '600', color: '#1e293b' }}>Completeness</span>
-                  <span style={{ fontWeight: '700', color: '#3b82f6' }}>{completeness}%</span>
-                </div>
-                <div style={{ height: '6px', background: '#e2e8f0', borderRadius: '3px' }}>
-                  <div style={{ height: '100%', width: `${completeness}%`, background: '#3b82f6', borderRadius: '3px' }}></div>
-                </div>
-                {completeness < 100 && (
-                  <p style={{ fontSize: '12px', color: '#64748b', marginTop: '8px', marginBottom: 0 }}>
-                    Missing sections are severely capping your score potential.
+              <div className={styles.scoreInsightsStack}>
+                <div className={styles.completenessCard}>
+                  <div className={styles.completenessHeader}>
+                    <span className={styles.completenessTitle}>Profile Completeness</span>
+                    <span className={styles.completenessValue}>{completeness}%</span>
+                  </div>
+                  <div className={styles.completenessTrack}>
+                    <div className={styles.completenessBar} style={{ width: `${completeness}%` }} />
+                  </div>
+                  <p className={styles.completenessHint}>
+                    {completenessHint}
                   </p>
-                )}
+                </div>
+
+                <div className={styles.basicDetailsCard}>
+                  <h4 className={styles.basicDetailsTitle}>Profile Basics</h4>
+                  <div className={styles.basicDetailsList}>
+                    <div className={styles.basicDetailsRow}>
+                      <span className={styles.basicDetailsKey}>Full Name</span>
+                      <span className={styles.basicDetailsValue}>{extractedData.fullName || 'Not found'}</span>
+                    </div>
+                    <div className={styles.basicDetailsRow}>
+                      <span className={styles.basicDetailsKey}>Email ID</span>
+                      <span className={styles.basicDetailsValue}>{extractedData.email || 'Not found'}</span>
+                    </div>
+                    <div className={styles.basicDetailsRow}>
+                      <span className={styles.basicDetailsKey}>Current Position</span>
+                      <span className={styles.basicDetailsValue}>{extractedData.currentPosition || 'Not found'}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -124,73 +192,60 @@ export default function LinkedInResults() {
               <div className={styles.radialProgress} style={{ '--progress': `${overallScore}%`, '--track-color': currentSlab.color }}>
                 <span className={styles.scoreText}>{overallScore}<span className={styles.scoreMax}>/100</span></span>
               </div>
-              <p style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', marginTop: '16px', fontWeight: '500' }}>
+              <p className={styles.scoreGapText}>
                 {gapToNext}
               </p>
             </div>
           </div>
         </section>
 
-        <div className={styles.detailedAnalysis}>
-          {/* Left Column - Category Breakdown */}
-          <div className={styles.categoriesColumn}>
-            <h2 className={styles.columnTitle}>Core Pillar Breakdown</h2>
-            
-            <CategoryScore title="Identity & Branding" score={breakdown.identity.score} max={breakdown.identity.max} />
-            <CategoryScore title="The Hook (About)" score={breakdown.content.score} max={breakdown.content.max} />
-            <CategoryScore title="Professional Proof (Experience)" score={breakdown.experience.score} max={breakdown.experience.max} />
-            <CategoryScore title="Skills & Credibility" score={breakdown.credibility.score} max={breakdown.credibility.max} />
-            
+        <section className={styles.promoSection}>
+          <div className={styles.promoBox}>
+            <div className={styles.promoContent}>
+              <h4>Precision Makeover?</h4>
+              <p>Use our Futuristic AI + expert strategy stack to rebuild your profile into a high-conversion recruiter magnet.</p>
+              <Link href="/payment?service=linkedin-makeover&source=results-promo-cta" className="btn btn-primary" style={{ width: '100%', marginTop: '16px', borderRadius: '10px' }}>
+                ✨ Optimize LinkedIn Profile
+              </Link>
+            </div>
           </div>
+        </section>
 
-          {/* Right Column - Actionable Fixes */}
-          <div className={styles.actionColumn}>
-            
-            {issues.length > 0 && (
-              <div className={styles.issuesBox}>
-                <h3 className={styles.actionTitle} style={{ color: '#b91c1c' }}>
-                  <span style={{ marginRight: '8px' }}>⚠️</span> Critical Flags Detected
-                </h3>
-                <ul className={styles.actionList}>
-                  {issues.map((i, idx) => (
-                    <li key={idx} className={styles.issueItem}>{i}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            <div className={styles.suggestionsBox} style={{ marginTop: '24px' }}>
-              <h3 className={styles.actionTitle} style={{ color: '#16a34a' }}>
-                <span style={{ marginRight: '8px' }}>💡</span> Top Fixes Generator
+        {issues.length > 0 && (
+          <section className={styles.flagsSection}>
+            <div className={styles.issuesBox}>
+              <h3 className={styles.actionTitle} style={{ color: '#b91c1c' }}>
+                <span style={{ marginRight: '10px' }}>⚠️</span> Critical Flags
               </h3>
-              {suggestions.length > 0 ? (
-                <ul className={styles.actionList}>
-                  {suggestions.map((s, idx) => (
-                    <li key={idx} className={styles.suggestionItem}>{s}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p style={{ color: '#64748b', fontSize: '14px' }}>Your profile is perfectly optimized!</p>
-              )}
+              <ul className={styles.actionList}>
+                {issues.map((i, idx) => (
+                  <li key={idx} className={styles.issueItem}>{i}</li>
+                ))}
+              </ul>
             </div>
+          </section>
+        )}
 
-            <div className={styles.promoBox}>
-              <div className={styles.promoContent}>
-                <h4>Tired of guessing?</h4>
-                <p>Let our experts rewrite your entire profile to guarantee a 95+ score.</p>
-                <Link href="/linkedin-makeover" className="btn btn-primary" style={{ width: '100%', marginTop: '16px' }}>
-                  View Makeover Service
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+        <section className={styles.breakdownSection}>
+          <h2 className={styles.columnTitle}>Core Pillar Breakdown</h2>
+          {categoryItems.map((item, idx) => (
+            <CategoryScore
+              key={item.key}
+              title={item.title}
+              score={item.data.score}
+              max={item.data.max}
+              subSections={item.data.subSections}
+              locked={idx === categoryItems.length - 1}
+              partialLocked={item.key === 'experience'}
+            />
+          ))}
+        </section>
       </main>
     </div>
   );
 }
 
-function CategoryScore({ title, score, max }) {
+function CategoryScore({ title, score, max, subSections, locked = false, partialLocked = false }) {
   const percentage = (score / max) * 100;
   
   let color = '#22c55e'; // green
@@ -198,18 +253,65 @@ function CategoryScore({ title, score, max }) {
   else if (percentage < 80) color = '#f59e0b'; // orange
 
   return (
-    <div className={styles.moduleCard} style={{ marginBottom: '16px' }}>
-      <div className={styles.moduleHeader}>
-        <div>
-          <h4 className={styles.moduleTitle}>{title}</h4>
+    <div className={`${styles.moduleCard} ${locked ? styles.lockedCard : ''} ${partialLocked && !locked ? styles.partialLockedCard : ''}`}>
+      <div className={locked ? styles.lockedContent : undefined}>
+        <div className={styles.moduleHeader}>
+          <div>
+            <h4 className={styles.moduleTitle}>{title}</h4>
+            <p className={styles.moduleOneLiner}>
+              {SECTION_EXPLANATIONS[title] || 'This section reflects one core pillar of your LinkedIn quality.'}
+            </p>
+          </div>
+          <div className={styles.moduleScoreBadge} style={{ backgroundColor: `${color}15`, color: color }}>
+            {Math.round(percentage)}%
+          </div>
         </div>
-        <div className={styles.moduleScoreBadge} style={{ backgroundColor: `${color}15`, color: color, width: 'auto', padding: '4px 12px' }}>
-          {score} / {max}
+
+        <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', position: 'relative', overflow: 'hidden', marginBottom: '24px' }}>
+          <div style={{ height: '100%', width: `${percentage}%`, background: `linear-gradient(90deg, ${color}88, ${color})`, borderRadius: '4px', transition: 'width 1.5s cubic-bezier(0.1, 0.5, 0.2, 1)' }}></div>
         </div>
+
+        {subSections && subSections.length > 0 && (
+          <div className={styles.subSectionList}>
+            {subSections.map((sub, idx) => (
+              <div key={idx} className={styles.subItem}>
+                <div className={styles.subSectionRow}>
+                  <span className={styles.subLabel}>{sub.label}</span>
+                  <span className={styles.subValue}>{Math.round((sub.max > 0 ? sub.score / sub.max : 0) * 10)}/10</span>
+                </div>
+                <p className={styles.subHint}>
+                  {SUB_SECTION_EXPLANATIONS[sub.label] || 'Detailed check for one specific profile signal.'}
+                </p>
+                <div className={styles.subProgressTrack}>
+                  <div
+                    className={styles.subProgressBar}
+                    style={{
+                      width: `${(sub.score / sub.max) * 100}%`,
+                      backgroundColor: (sub.score / sub.max) >= 0.8 ? '#22c55e' : (sub.score / sub.max) >= 0.5 ? '#f59e0b' : '#ef4444'
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-      <div style={{ height: '6px', background: '#f1f5f9', borderRadius: '3px', marginTop: '12px' }}>
-        <div style={{ height: '100%', width: `${percentage}%`, background: color, borderRadius: '3px' }}></div>
-      </div>
+
+      {partialLocked && !locked && (
+        <div className={styles.partialBlurOverlay}>
+          <span className={styles.partialBlurHint}>Advanced proof insights continue in the full AI makeover.</span>
+        </div>
+      )}
+
+      {locked && (
+        <div className={styles.lockOverlay}>
+          <h5 className={styles.lockOverlayTitle}>Unlock Full Skills Breakdown</h5>
+          <p className={styles.lockOverlayText}>Get complete credibility insights with the LinkedIn optimization plan.</p>
+          <Link href="/payment?service=linkedin-makeover&source=results-lock-cta" className="btn btn-primary" style={{ borderRadius: '10px', padding: '10px 20px', fontSize: '14px' }}>
+            🚀 Unlock My LinkedIn Advantage
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

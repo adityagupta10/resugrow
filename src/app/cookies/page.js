@@ -1,9 +1,12 @@
 import styles from '../legal.module.css';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
+export const metadata = createPageMetadata({
     title: 'Cookie Policy | ResuGrow',
-    description: 'How ResuGrow uses cookies to improve your experience on our resume building platform.',
-};
+    description: 'Read how ResuGrow uses cookies and analytics technologies on the website.',
+    path: '/cookies',
+    keywords: ['cookie policy', 'website cookies', 'resugrow cookies']
+});
 
 export default function Cookies() {
     return (
@@ -28,7 +31,7 @@ export default function Cookies() {
                     <p>We use cookies and similar tracking technologies for the following purposes:</p>
                     <ul>
                         <li><strong>Essential Cookies:</strong> These are strictly necessary to provide you with services available through our website, such as secure login areas and remembering your resume session data while you build.</li>
-                        <li><strong>Performance and Analytics Cookies:</strong> These cookies collect information that is used to help us understand how our website is being used, so we can improve the platform's performance and design.</li>
+                        <li><strong>Performance and Analytics Cookies:</strong> These cookies collect information that is used to help us understand how our website is being used, so we can improve the platform&apos;s performance and design.</li>
                         <li><strong>Functionality Cookies:</strong> These are used to recognize you when you return to our website. This enables us to personalize our content for you and remember your preferences (e.g., your choice of language or template preferences).</li>
                     </ul>
                 </section>

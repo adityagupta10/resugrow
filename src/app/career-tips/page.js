@@ -1,10 +1,14 @@
 import Link from 'next/link';
 import styles from '../subpage.module.css';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
-    title: 'Career Tips & Advice | ResuGrow',
-    description: 'Expert career advice, interview tips, and resume writing guides to help you land your dream job.',
-};
+export const metadata = createPageMetadata({
+    title: 'Career Tips, Resume Advice & Interview Guides | ResuGrow',
+    description:
+      'Read practical career tips, ATS resume advice, and interview strategies to improve your job search outcomes.',
+    path: '/career-tips',
+    keywords: ['career tips', 'resume advice', 'interview preparation', 'job search guidance']
+});
 
 const articles = [
     {

@@ -24,9 +24,13 @@ export default function ATSResultsPage() {
   useEffect(() => {
     const stored = sessionStorage.getItem('atsResults');
     const preview = sessionStorage.getItem('resumePreview');
-    if (stored) setResults(JSON.parse(stored));
-    if (preview) setPreviewUrl(preview);
-    setLoading(false);
+    const hydrateTimer = setTimeout(() => {
+      if (stored) setResults(JSON.parse(stored));
+      if (preview) setPreviewUrl(preview);
+      setLoading(false);
+    }, 0);
+
+    return () => clearTimeout(hydrateTimer);
   }, []);
 
   if (loading) {
@@ -302,7 +306,7 @@ export default function ATSResultsPage() {
                     {modId === 'linkedinPolish' && (
                       <div style={{ marginTop: '16px' }}>
                         <Link
-                          href="/linkedin-review"
+                          href="/payment?service=linkedin-makeover&source=ats-results-cta"
                           className="btn btn-primary"
                           style={{
                             fontSize: '13px',
@@ -326,7 +330,7 @@ export default function ATSResultsPage() {
             <p className={styles.aiFixDesc}>
               Our AI Resume Builder can automatically fix the gaps identified above while maintaining the perfect ATS format.
             </p>
-            <Link href="/resume/builder" className={styles.aiFixBtn}>Optimize My Resume with AI</Link>
+            <Link href="/resume/ai-builder" className={styles.aiFixBtn}>Optimize My Resume with AI</Link>
           </div>
         </div>
 

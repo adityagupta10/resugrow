@@ -19,9 +19,6 @@ const coverLetterItems = [
 const linkedinItems = [
   { label: 'LinkedIn Profile Boost', href: '/linkedin-makeover' },
   { label: 'Profile Review & Score', href: '/linkedin-review' },
-];
-
-const toolItems = [
   { label: 'AI SAR Bullet Rewriter', href: '/tools/sar-rewriter' },
 ];
 
@@ -99,7 +96,7 @@ export default function Navbar() {
         <Link href="/" className={styles.logo}>
           <Image
             src="/resugrow-logo.png"
-            alt="ResuGrow - AI Resume Builder"
+            alt="ResuGrow logo for AI resume builder, ATS resume checker, and LinkedIn profile optimization platform"
             width={180}
             height={48}
             style={{ objectFit: 'contain' }}
@@ -218,43 +215,22 @@ export default function Navbar() {
             )}
           </div>
           
-          {/* Tools Dropdown */}
-          <div 
-            className={styles.dropdownWrapper}
-            onMouseEnter={() => handleMouseEnter('tools')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button
-              className={`${styles.navLink} ${activeDropdown === 'tools' ? styles.active : ''}`}
-              onClick={() => toggleDropdown('tools')}
-            >
-              Tools
-              <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            {activeDropdown === 'tools' && (
-              <div className={styles.dropdown}>
-                {toolItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={styles.dropdownItem}
-                    onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
-                  >
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
           <Link href="/about" className={styles.navLink} onClick={() => setMobileOpen(false)}>
             About Us
           </Link>
           <Link href="/contact" className={styles.navLink} onClick={() => setMobileOpen(false)}>
             Contact Us
           </Link>
+
+          <a
+            href="https://www.linkedin.com/company/resugrow-com/"
+            className={styles.linkedinFollow}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileOpen(false)}
+          >
+            Follow on LinkedIn
+          </a>
 
           <Link href="/resume/ai-builder" className={`btn btn-primary ${styles.ctaBtn}`} onClick={() => setMobileOpen(false)}>
             Build My Resume

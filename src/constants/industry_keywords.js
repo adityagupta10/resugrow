@@ -3,7 +3,7 @@
  * If a user selects "Product Management", the ATS scanner will specifically hunt
  * for these Product Management keywords to calculate the Hard Skills relevance score.
  */
-export const INDUSTRY_MAPPINGS = {
+const BASE_INDUSTRY_MAPPINGS = {
   "Software Engineering (General)": ["Python", "JavaScript", "TypeScript", "Java", "C++", "C#", "Golang", "Rust", "Swift", "Kotlin", "PHP", "Ruby", "SQL", "React", "Next.js", "Node.js", "Vue", "Angular", "Express", "Django", "Flask", "Spring Boot", "Laravel", "Flutter"],
   "Frontend Development": ["UI", "User Interface", "Client-side", "React", "Vue", "Angular", "HTML5", "CSS3", "Next.js", "Svelte", "Tailwind CSS", "Redux", "Webpack", "Vite"],
   "Backend Development": ["Server-side", "Infrastructure", "Node.js", "Python", "Java", "Ruby", "Golang", "Microservices", "REST API", "GraphQL", "PostgreSQL", "MongoDB", "Redis"],
@@ -39,4 +39,11 @@ export const INDUSTRY_MAPPINGS = {
   "Paid Media & Growth": ["Google Ads", "PPC", "Facebook Ads", "Meta Ads", "Media Buying", "ROAS", "CPC", "CPA", "A/B Testing", "Conversion Rate Optimization", "CRO", "Funnel Optimization", "User Acquisition"],
   "Analytics & Business Intelligence": ["Google Analytics", "GA4", "Mixpanel", "Amplitude", "Tag Manager", "GTM", "Tracking", "BI", "Tableau", "Power BI", "Looker", "Dashboards", "Data Visualization", "SQL"],
   "Executive & Leadership": ["P&L Responsibility", "Strategic Planning", "Board of Directors", "M&A", "Mergers and Acquisitions", "Cross-functional Leadership", "Stakeholder Management", "Resource Allocation", "Risk Mitigation", "Organizational Design"]
+};
+
+const GENERAL_KEYWORDS = [...new Set(Object.values(BASE_INDUSTRY_MAPPINGS).flat())];
+
+export const INDUSTRY_MAPPINGS = {
+  "General": GENERAL_KEYWORDS,
+  ...BASE_INDUSTRY_MAPPINGS
 };

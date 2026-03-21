@@ -1,560 +1,479 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
 import { templates as templateData } from '../data/templates';
 
-const features = [
+const productPillars = [
   {
-    icon: '🎨',
-    color: 'blue',
-    title: 'Pick a template',
-    desc: 'ATS-friendly, recruiter-approved resume templates.',
-    items: ['ATS-friendly, recruiter-approved', 'Flexible layouts', 'Job and industry match'],
+    tag: 'ATS',
+    title: 'ATS Resume Checker',
+    desc: 'Scan your resume like a recruiter system and pinpoint keyword, structure, and formatting leaks instantly.',
+    points: ['Deterministic scoring', 'Industry-aware keyword mapping', 'Priority fixes in one view'],
+    href: '/resume/ats-checker',
+    cta: 'Run ATS Check'
   },
   {
-    icon: '🤖',
-    color: 'purple',
-    title: 'Add content with AI',
-    desc: 'Let AI write your resume content for you.',
-    items: ["Writer's block solution", 'Enhance skills and bullets with AI', 'Quick updates for skills, work history, and more'],
+    tag: 'Resume',
+    title: 'AI powered Resume builder',
+    desc: 'Create a job-ready resume with AI guidance, clean formatting, and ATS-safe structure in minutes.',
+    points: ['Smart section suggestions', 'ATS-friendly formatting', 'One-click export workflow'],
+    href: '/resume/ai-builder',
+    cta: 'Build My Resume'
   },
   {
-    icon: '📤',
-    color: 'amber',
-    title: 'Download & send',
-    desc: 'Export in popular formats and share instantly.',
-    items: ['Popular file formats (ie. Word, PDF)', 'Instant digital profile', 'Unlimited versions'],
-  },
-  {
-    icon: '⚡',
-    color: 'green',
-    title: 'Finish resume in minutes',
-    desc: 'Fast, guided builder gets you results quickly.',
-    items: ['Step-by-step guidance', 'Pre-written phrases', 'Real-time preview'],
-  },
+    tag: 'LinkedIn',
+    title: 'LinkedIn Profile Reviewer',
+    desc: 'Upload PDF or paste profile text for a strict, section-wise score that highlights visibility blockers.',
+    points: ['PDF + direct paste modes', 'Core pillar breakdown', 'Action-ready optimization path'],
+    href: '/linkedin-review',
+    cta: 'Scan LinkedIn Profile'
+  }
 ];
 
-const templates = templateData.slice(0, 4); // Keep a small selection if needed for other sections, but we will use templateData directly for carousel
+const workflowSteps = [
+  {
+    step: '01',
+    title: 'Start With a Scan',
+    desc: 'Analyze your current resume or LinkedIn profile to identify bottlenecks first.'
+  },
+  {
+    step: '02',
+    title: 'Apply High-Impact Fixes',
+    desc: 'Use targeted recommendations and AI rewrites to strengthen recruiter-facing signals.'
+  },
+  {
+    step: '03',
+    title: 'Ship Job-Ready Assets',
+    desc: 'Export optimized documents and apply with a profile built for modern filters.'
+  }
+];
 
-const whyFeatures = [
-  { icon: '🎯', title: 'Beat the ATS', desc: 'Our templates are designed to pass Applicant Tracking Systems used by 98% of Fortune 500 companies.' },
-  { icon: '⚡', title: 'AI-Powered Writing', desc: 'Get intelligent suggestions for your professional summary, skills, and work experience descriptions.' },
-  { icon: '🔄', title: 'One-Click Tailoring', desc: 'Instantly customize your resume for any job posting with our AI job-matching technology.' },
-  { icon: '📊', title: 'Real-Time Scoring', desc: 'See your resume score improve in real-time as you make changes and optimizations.' },
+const proofStats = [
+  { value: '21K+', label: 'Interview wins tracked monthly' },
+  { value: '98%', label: 'ATS parser readability on premium templates' },
+  { value: '5,126', label: 'Verified product reviews' },
+  { value: '< 30 sec', label: 'Average first score generation' }
 ];
 
 const testimonials = [
   {
-    text: "ResuGrow completely transformed my job search. I went from zero callbacks to 5 interviews in my first week after using their AI builder. The ATS optimization is incredible!",
+    text: 'I stopped guessing. The ATS checker showed exactly what was missing and my response rate changed within one week.',
     name: 'Sarah Chen',
     role: 'Software Engineer',
-    avatar: '#2563eb',
-    initials: 'SC',
+    initials: 'SC'
   },
   {
-    text: "The AI writing suggestions are spot-on. It helped me articulate my experience in ways I never could have on my own. Landed my dream job within a month!",
+    text: 'LinkedIn review made the gaps obvious. After rewriting my About and headline, recruiter messages picked up fast.',
     name: 'Marcus Johnson',
     role: 'Marketing Director',
-    avatar: '#7c3aed',
-    initials: 'MJ',
+    initials: 'MJ'
   },
   {
-    text: "I was skeptical about AI resume builders, but ResuGrow blew me away. The templates are beautiful and the ATS checker gave me confidence that my resume would actually be seen.",
+    text: 'The SAR rewriter is practical, not generic. It transformed my vague bullets into strong impact statements I could use directly.',
     name: 'Emily Rodriguez',
     role: 'Product Manager',
-    avatar: '#059669',
-    initials: 'ER',
-  },
+    initials: 'ER'
+  }
 ];
 
 const faqData = [
   {
-    q: 'Is ResuGrow free to use?',
-    a: 'Yes, ResuGrow offers a robust free tier that allows you to build a professional resume from start to finish. Our free plan includes access to select recruiter-approved templates, document generation in plain text formats, and basic AI content suggestions to help you overcome writer\'s block. For advanced features like unlimited ATS checks, full AI writer capabilities, one-click job tailoring, and premium file formats (PDF and Word document downloads designed pixel-perfect), you can upgrade to one of our premium plans at your convenience.',
+    q: 'Is ResuGrow beginner-friendly?',
+    a: 'Yes. ResuGrow is designed as a guided workflow, not a blank editor. You can start with your existing resume, run a scan, and apply fixes in priority order without needing professional writing experience.'
   },
   {
-    q: 'How does the AI resume builder work?',
-    a: 'Our AI is powered by large language models that have been specifically trained on millions of successful, high-performing resumes across various industries. When you use the builder, you simply input brief context about your past role or basic bullets. The AI instantly generates powerful, metrics-driven professional summaries, bullet points, and skills that highlight your accomplishments. It ensures your phrasing is impactful, error-free, and aligned with industry standards, cutting writing time from hours down to just minutes.',
+    q: 'What should I use first: Builder, ATS Checker, or LinkedIn tools?',
+    a: 'For most users, the best sequence is: build or upload your resume, run ATS Checker, then optimize LinkedIn. This creates alignment across documents so recruiters see a consistent professional narrative across every touchpoint.'
   },
   {
-    q: 'What is an ATS and why does it matter?',
-    a: 'An Applicant Tracking System (ATS) is recruitment software used by over 98% of Fortune 500 companies—and increasingly small to mid-sized businesses—to collect, sort, scan, and rank resumes before a human recruiter ever sees them. If your resume lacks the right keywords or uses an unreadable format (like complex tables, graphs, or unusual fonts), the ATS will reject it. ResuGrow guarantees ATS compatibility by using systematically parsed templates and helping you incorporate the exact keywords from your target job description to score high.',
+    q: 'How accurate are the scores?',
+    a: 'Scores are deterministic and rule-based, so the same input returns the same result. That makes progress trackable because each content change has a clear impact on specific scoring modules.'
   },
   {
-    q: 'Can I download my resume in different formats?',
-    a: 'Absolutely! Flexibility is key to your job search. You can export your finished resume into multiple formats depending on the employer\'s requirements. We offer high-resolution PDF exports which preserve your formatting exactly and are preferred for most direct applications. We also offer standard Microsoft Word (.docx) downloads which maintain full formatting for easy editing later on, as well as plain text (.txt) exports for restrictive legacy application portals.',
+    q: 'Can I optimize for a specific industry?',
+    a: 'Yes. Industry targeting is built into ATS analysis, so your report prioritizes keywords and language patterns relevant to your target sector instead of generic advice.'
   },
   {
-    q: 'How is ResuGrow different from other resume builders?',
-    a: 'While traditional builders just provide static templates, ResuGrow functions as an intelligent career copilot. We uniquely combine AI-powered content generation, real-time Applicant Tracking System (ATS) scoring, and one-click job tailoring within a single platform. Instead of guessing how strong your resume is, ResuGrow analyzes it against your target job description and gives you actionable scoring and feedback on what to fix. Our templates are actively vetted by current HR professionals to ensure they align with hiring trends.',
+    q: 'How is this different from a normal resume template website?',
+    a: 'Most template websites stop at design. ResuGrow combines templates with scoring, rewrite logic, and keyword gap analysis so you can improve quality with data-backed direction rather than guesswork.'
   },
   {
-    q: 'Can I create multiple versions of my resume for different jobs?',
-    a: 'Yes, and we highly encourage it! Best practice states you should tailor your resume for every application to maximize your chances of getting an interview. With ResuGrow, you can duplicate your base resume with a single click and use our "Job Tailoring" feature to instantly optimize the new version for a specific job description. The AI will reprioritize your skills, rewrite bullets to match the job\'s vocabulary, and identify missing keywords—allowing you to manage dozens of highly-targeted resumes effortlessly.',
+    q: 'Can ResuGrow help me improve weak bullet points quickly?',
+    a: 'Yes. The SAR Rewriter transforms weak responsibility-style bullets into measurable achievement statements. You can then tune them with your exact numbers for stronger recruiter impact.'
   },
+  {
+    q: 'Will this help with both ATS and human recruiters?',
+    a: 'That is the core goal. ResuGrow improves machine readability for ATS while also strengthening clarity, positioning, and quantified outcomes for human decision-makers.'
+  },
+  {
+    q: 'Do I need to rewrite everything manually after scanning?',
+    a: 'No. The platform highlights highest-impact fixes first and provides rewrite support so you can focus only on sections that materially improve your score and conversion quality.'
+  }
 ];
 
+const templates = templateData.slice(0, 4);
+
 const heroPhrases = [
-  "Get hired faster",
-  "Unlock the dream job",
-  "Increase your salary",
-  "Level up your career",
-  "Ace your job search",
-  "Beat the hiring bots",
-  "Secure your future",
-  "Land more interviews",
-  "Skip the waitlist"
+  'Get hired faster',
+  'Unlock the dream job',
+  'Increase your salary',
+  'Level up your career',
+  'Ace your job search',
+  'Beat the hiring bots',
+  'Secure your future',
+  'Land more interviews',
+  'Skip the waitlist'
+];
+
+const heroResumeSlides = [
+  {
+    src: '/hero-images/hero-resume1.png',
+    alt: 'AI resume builder sample with ATS-optimized professional resume layout for job seekers'
+  },
+  {
+    src: '/hero-images/hero-resume2.png',
+    alt: 'ATS-friendly resume template example designed to pass applicant tracking systems'
+  },
+  {
+    src: '/hero-images/hero-resume3.png',
+    alt: 'Professional resume format template for high-converting job applications and recruiter screening'
+  },
+  {
+    src: '/hero-images/hero-resume4.png',
+    alt: 'Best resume template preview to improve interview call rate and hiring visibility'
+  }
 ];
 
 const appJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "ResuGrow",
-  "alternateName": "ResuGrow AI",
-  "url": "https://www.resugrow.com",
-  "logo": "https://www.resugrow.com/resugrow-logo.png",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Web",
-  "description": "An advanced AI-powered resume builder and ATS optimization tool trusted by 25 million professionals.",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "reviewCount": "1250"
-  },
-  "offers": {
-    "@type": "Offer",
-    "price": "0.00",
-    "priceCurrency": "USD"
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'ResuGrow',
+  alternateName: 'ResuGrow AI',
+  url: 'https://www.resugrow.com',
+  logo: 'https://www.resugrow.com/resugrow-logo.png',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  description:
+    'An advanced AI-powered resume builder and ATS optimization platform for modern job seekers.',
+  offers: {
+    '@type': 'Offer',
+    price: '0.00',
+    priceCurrency: 'USD'
   }
 };
 
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "ResuGrow",
-  "alternateName": ["ResuGrow AI", "ResuGrow Resume Builder"],
-  "url": "https://www.resugrow.com/"
-};
-
 export default function Home() {
-  const carouselRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-
-    let animationFrameId;
-    const speed = 0.5; // Smooth scroll speed
-
-    const scroll = () => {
-      if (!isHovered) {
-        carousel.scrollLeft += speed;
-
-        // Loop logic: If we reach near the end of the second set of items, reset seamlessly
-        const maxScroll = carousel.scrollWidth / 3;
-        if (carousel.scrollLeft >= maxScroll * 2) {
-          carousel.scrollLeft = maxScroll;
-        }
-      }
-      animationFrameId = requestAnimationFrame(scroll);
-    };
-
-    animationFrameId = requestAnimationFrame(scroll);
-
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [isHovered]);
-
-  const handleNav = (direction) => {
-    if (carouselRef.current) {
-      const scrollAmount = 350;
-      carouselRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
-    }
-  };
-  const [openFaq, setOpenFaq] = useState(null);
+  const [openFaq, setOpenFaq] = useState(0);
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [currentText, setCurrentText] = useState("");
+  const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
-    const typeSpeed = isDeleting ? 40 : 80;
-    const currentPhrase = heroPhrases[currentPhraseIndex];
+    const phrase = heroPhrases[currentPhraseIndex];
+    const speed = isDeleting ? 32 : 58;
 
-    let timer;
-    if (isDeleting) {
-      if (currentText === "") {
+    const timer = setTimeout(() => {
+      if (!isDeleting && currentText === phrase) {
+        setIsDeleting(true);
+        return;
+      }
+
+      if (isDeleting && currentText.length === 0) {
         setIsDeleting(false);
         setCurrentPhraseIndex((prev) => (prev + 1) % heroPhrases.length);
-        timer = setTimeout(() => { }, 500); // pause before starting to type new phrase
-      } else {
-        timer = setTimeout(() => {
-          setCurrentText(currentPhrase.substring(0, currentText.length - 1));
-        }, typeSpeed);
+        return;
       }
-    } else {
-      if (currentText === currentPhrase) {
-        timer = setTimeout(() => setIsDeleting(true), 2000); // pause before deleting
-      } else {
-        timer = setTimeout(() => {
-          setCurrentText(currentPhrase.substring(0, currentText.length + 1));
-        }, typeSpeed);
-      }
-    }
+
+      const nextText = isDeleting
+        ? phrase.substring(0, currentText.length - 1)
+        : phrase.substring(0, currentText.length + 1);
+      setCurrentText(nextText);
+    }, currentText === phrase && !isDeleting ? 1300 : speed);
 
     return () => clearTimeout(timer);
-  }, [currentText, isDeleting, currentPhraseIndex]);
+  }, [currentText, currentPhraseIndex, isDeleting]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % heroResumeSlides.length);
+    }, 2600);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
-      <link rel="icon" href="/favicon.png" sizes="48x48" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-      />
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <div className={styles.heroContainer}>
-          <div className={styles.heroContent}>
-            <div className={styles.heroBadge}>
-              <span>#1 AI Resume Builder</span>
-            </div>
-            <h1 className={styles.heroTitle}>
-              <span className={styles.typewriterText}>
-                {currentText}
-                <span className={styles.cursor}>|</span>
-              </span>
-              <br />
-              with <span className={styles.heroHighlight}>ResuGrow&apos;s</span> Resume Builder
-            </h1>
-            <p className={styles.heroDesc}>
-              ATS Check, AI Writer, and One-Click Job Tailoring make your resume stand out to recruiters.
-            </p>
-            <div className={styles.heroButtons}>
-              <Link href="/resume/ai-builder" className="btn btn-primary">
-                Build your resume
-              </Link>
-              <Link href="/resume/ats-checker" className="btn btn-secondary">
-                Get your resume Score
-              </Link>
-            </div>
-            <div className={styles.heroStats}>
-              <div className={styles.statItem}>
-                <div className={styles.statText}>
-                  <strong>5,126</strong> Reviews
-                </div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statText}>
-                  <strong>21,452</strong> users landed interviews last month
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div className={styles.heroImage}>
-            <div className={styles.heroImageStack}>
-              {/* Group 1 */}
-              <div className={`${styles.heroImageGroup} ${styles.group1}`}>
-                <Image src="/hero-resume1/1.png" alt="Modern professional resume template with clean typography and blue highlights" width={520} height={620} className={styles.mainImg} priority />
-                <Image src="/hero-resume1/2.png" alt="ATS-friendly resume layout showing skills and experience sections" width={520} height={620} className={styles.support1} priority />
-                <Image src="/hero-resume1/3.png" alt="Executive resume format for high-level management positions" width={520} height={620} className={styles.support2} priority />
-              </div>
-
-              {/* Group 2 */}
-              <div className={`${styles.heroImageGroup} ${styles.group2}`}>
-                <Image src="/hero-resume2/1.png" alt="Minimalist creative resume design for modern job seekers" width={520} height={620} className={styles.mainImg} priority />
-                <Image src="/hero-resume2/2.png" alt="Clean and elegant resume structure with clear contact information" width={520} height={620} className={styles.support1} priority />
-              </div>
-
-              {/* Group 3 */}
-              <div className={`${styles.heroImageGroup} ${styles.group3}`}>
-                <Image src="/hero-resume3/1.png" alt="Premium resume template with professional branding and impact statements" width={520} height={620} className={styles.mainImg} priority />
-                <Image src="/hero-resume3/2.png" alt="Well-structured professional summary and work history on a resume" width={520} height={620} className={styles.support1} priority />
-                <Image src="/hero-resume3/3.png" alt="ATS-optimized professional resume showing achievement-driven bullet points" width={520} height={620} className={styles.support2} priority />
-              </div>
-
-              {/* Group 4 */}
-              <div className={`${styles.heroImageGroup} ${styles.group4}`}>
-                <Image src="/hero-resume4/1.png" alt="Technical resume template optimized for software engineers and developers" width={520} height={620} className={styles.mainImg} priority />
-                <Image src="/hero-resume4/3.png" alt="Project-focused resume layout highlighting technical stack and contributions" width={520} height={620} className={styles.support2} priority />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section - Make a Resume That Gets You Hired */}
-      <section className={styles.features}>
-        <div className={styles.featuresContainer}>
-          <div className={styles.featuresHeader}>
-            <h2 className={styles.featuresTitle}>
-              Make a Resume That Gets You <span className="gradient-text">Hired</span>
-            </h2>
-            <p className={styles.featuresSubtitle}>
-              Our step-by-step process makes it easy to create a winning resume in minutes.
-            </p>
-          </div>
-
-          <div className={styles.featuresGrid}>
-            {features.map((feature) => (
-              <div key={feature.title} className={styles.featureCard}>
-                <div className={`${styles.featureIcon} ${styles[feature.color]}`}>
-                  {feature.icon}
-                </div>
-                <h3 className={styles.featureCardTitle}>{feature.title}</h3>
-                <p className={styles.featureCardDesc}>{feature.desc}</p>
-                <div className={styles.featureList}>
-                  {feature.items.map((item) => (
-                    <div key={item} className={styles.featureListItem}>
-                      <span className={styles.featureCheck}>✓</span>
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Templates Section */}
-      <section className={styles.templates}>
-        <div className={styles.templatesContainer}>
-          <div className={styles.templatesHeader}>
-            <h2 className={styles.templatesTitle}>
-              Tested Resume <span className="gradient-text">Templates</span>
-            </h2>
-            <p className={styles.templatesSubtitle}>
-              Use the templates recruiters like. Download to Word or PDF.
-            </p>
-          </div>
-        </div>
-
-        <div className={styles.templatesCarouselWrapper}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}>
-          <button
-            className={`${styles.carouselNav} ${styles.prev}`}
-            onClick={() => handleNav('left')}
-            aria-label="Previous Template"
-          >
-            ←
-          </button>
-
-          <div className={styles.templatesCarousel} ref={carouselRef}>
-            <div className={styles.carouselTrack}>
-              {[...templateData, ...templateData, ...templateData].map((template, index) => (
-                <div key={`${template.id}-${index}`} className={styles.templateCarouselCard}>
-                  <div className={styles.templatePreview}>
-                    <div className={styles.templateDoc}>
-                      <Image
-                        src={template.image}
-                        alt={`Modern ATS-friendly resume template: ${template.name}`}
-                        width={280}
-                        height={380}
-                        className={styles.templateImg}
-                        style={{ objectFit: 'cover' }}
-                      />
-                    </div>
-                    {template.badge && (
-                      <span className={`${styles.templateBadge} ${styles[template.badge]}`}>
-                        {template.badge}
-                      </span>
-                    )}
-                  </div>
-                  <div className={styles.templateInfo}>
-                    <h3 className={styles.templateName}>{template.name}</h3>
-                    <p className={styles.templateCategory}>{template.category}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button
-            className={`${styles.carouselNav} ${styles.next}`}
-            onClick={() => handleNav('right')}
-            aria-label="Next Template"
-          >
-            →
-          </button>
-        </div>
-
-        <div className={styles.templatesContainer}>
-          <div className={styles.templatesBtn}>
-            <Link href="/resume/templates" className="btn btn-primary">
-              View All Templates
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Why ResuGrow Section */}
-      <section className={styles.whySection}>
-        <div className={styles.whyContainer}>
-          <div className={styles.whyGrid}>
-            <div className={styles.whyContent}>
-              <div className={styles.whyBadge}>Why ResuGrow?</div>
-              <h2 className={styles.whyTitle}>
-                Why Use ResuGrow&apos;s <span className="gradient-text">AI Powered</span> Resume Builder
-              </h2>
-              <p className={styles.whyDesc}>
-                Our AI-powered platform combines cutting-edge technology with recruiter insights
-                to help you create the perfect resume that lands more interviews.
+      <section className={styles.heroSection}>
+        <div className={styles.container}>
+          <div className={styles.heroGrid}>
+            <div className={styles.heroContent}>
+              <p className={styles.heroKicker}>#1 AI Career Advancement Platform</p>
+              <h1 className={styles.heroTitle}>
+                <span className={styles.typewriterWrap}>
+                  <span className={styles.typewriterText}>{currentText}</span>
+                  <span className={styles.typewriterCursor}>|</span>
+                </span>
+                <br />
+                with <span className="gradient-text">ResuGrow</span> Platform
+              </h1>
+              <p className={styles.heroSubtitle}>
+                The AI-powered career engine trusted by 25M+ pros to get hired at Google, Tesla, Microsoft and beyond.
+                <br />
+                Build ATS-optimized resumes in 5 minutes with one-click job tailoring, AI-driven scoring, and a LinkedIn profile that ranks in the top 2%.
               </p>
-              <div className={styles.whyFeatures}>
-                {whyFeatures.map((f) => (
-                  <div key={f.title} className={styles.whyFeature}>
-                    <div className={styles.whyFeatureIcon}>{f.icon}</div>
-                    <div className={styles.whyFeatureText}>
-                      <h4>{f.title}</h4>
-                      <p>{f.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className={styles.whyImage}>
-              <div className={styles.whyImageWrapper}>
-                <div className={styles.whyImageBg}>
-                  <svg className={styles.whyIllustration} viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    {/* Resume Document */}
-                    <rect x="80" y="30" width="240" height="240" rx="12" fill="white" stroke="#e2e8f0" strokeWidth="2" />
-                    <rect x="100" y="55" width="200" height="8" rx="4" fill="#2563eb" />
-                    <rect x="100" y="75" width="160" height="6" rx="3" fill="#e2e8f0" />
-                    <rect x="100" y="90" width="180" height="6" rx="3" fill="#e2e8f0" />
-                    <rect x="100" y="105" width="120" height="6" rx="3" fill="#e2e8f0" />
-                    <rect x="100" y="130" width="80" height="6" rx="3" fill="#2563eb" opacity="0.3" />
-                    <rect x="100" y="145" width="190" height="6" rx="3" fill="#e2e8f0" />
-                    <rect x="100" y="160" width="170" height="6" rx="3" fill="#e2e8f0" />
-                    <rect x="100" y="175" width="200" height="6" rx="3" fill="#e2e8f0" />
-                    <rect x="100" y="200" width="80" height="6" rx="3" fill="#2563eb" opacity="0.3" />
-                    <rect x="100" y="215" width="180" height="6" rx="3" fill="#e2e8f0" />
-                    <rect x="100" y="230" width="150" height="6" rx="3" fill="#e2e8f0" />
-                    {/* AI sparkle */}
-                    <circle cx="340" cy="60" r="24" fill="#7c3aed" opacity="0.1" />
-                    <text x="332" y="67" fontSize="20">✨</text>
-                    {/* Check mark */}
-                    <circle cx="340" cy="140" r="20" fill="#10b981" opacity="0.15" />
-                    <text x="332" y="147" fontSize="18">✓</text>
-                    {/* Score indicator */}
-                    <rect x="60" y="180" width="50" height="28" rx="14" fill="#2563eb" />
-                    <text x="72" y="199" fontSize="12" fill="white" fontWeight="bold">98%</text>
-                  </svg>
+
+              <div className={styles.heroActions}>
+                <Link href="/resume/ai-builder" className={`btn btn-primary ${styles.heroPrimaryBtn}`}>
+                  Build my AI Powered resume
+                </Link>
+                <div className={styles.heroSecondaryActions}>
+                  <Link href="/resume/ats-checker" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
+                    ATS Resume Checker
+                  </Link>
+                  <Link href="/linkedin-makeover" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
+                    Linkedin Profile Makeover
+                  </Link>
                 </div>
               </div>
-              <div className={styles.whyStats}>
+
+              <div className={styles.heroSignals}>
+                <span>Trusted by candidates targeting:</span>
+                <div className={styles.signalChips}>
+                  <span>Meta</span>
+                  <span>Google</span>
+                  <span>Amazon</span>
+                  <span>Microsoft</span>
+                  <span>Stripe</span>
+                </div>
+              </div>
+
+              <a
+                href="https://www.linkedin.com/company/resugrow-com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.linkedinHint}
+              >
+                Follow product updates on LinkedIn →
+              </a>
+            </div>
+
+            <div className={styles.heroPanel}>
+              <div className={styles.panelTop}>
+                <span>ResuGrow Overview</span>
+                <span>Live</span>
+              </div>
+
+              <div className={styles.panelScoreCard}>
                 <div>
-                  <div className={styles.whyStatsNumber}>3x</div>
-                  <div className={styles.whyStatsLabel}>More Interview Calls</div>
+                  <p>Composite Readiness</p>
+                  <h3>89/100</h3>
                 </div>
+                <div className={styles.scoreRing}>+18</div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Testimonials Section - 92% Recommend */}
-      <section className={styles.testimonials}>
-        <div className={styles.testimonialsContainer}>
-          <div className={styles.testimonialsHeader}>
-            <h2 className={styles.testimonialsTitle}>
-              <span className="gradient-text">92%</span> of customers recommend us
-            </h2>
-          </div>
-          <div className={styles.ratingOverall}>
-            <div className={styles.ratingStars}>
-              {'★★★★★'.split('').map((star, i) => (
-                <span key={i}>{star}</span>
-              ))}
-            </div>
-            <span className={styles.ratingScore}>4.8/5</span>
-            <span className={styles.ratingCount}>Based on 5,126 reviews</span>
-          </div>
-
-          <div className={styles.testimonialsGrid}>
-            {testimonials.map((t) => (
-              <div key={t.name} className={styles.testimonialCard}>
-                <div className={styles.testimonialStars}>
-                  {'★★★★★'.split('').map((star, i) => (
-                    <span key={i}>{star}</span>
+              <div className={styles.panelImageWrap}>
+                <div className={styles.panelSlides}>
+                  {heroResumeSlides.map((slide, index) => (
+                    <Image
+                      key={slide.src}
+                      src={slide.src}
+                      alt={slide.alt}
+                      width={520}
+                      height={620}
+                      className={`${styles.panelImage} ${index === activeSlide ? styles.panelImageActive : ''}`}
+                      priority={index === 0}
+                    />
                   ))}
                 </div>
-                <p className={styles.testimonialText}>&ldquo;{t.text}&rdquo;</p>
-                <div className={styles.testimonialAuthor}>
-                  <div className={styles.testimonialAvatar} style={{ background: t.avatar }}>
-                    {t.initials}
-                  </div>
-                  <div>
-                    <div className={styles.testimonialName}>{t.name}</div>
-                    <div className={styles.testimonialRole}>{t.role}</div>
-                  </div>
+                <div className={styles.slideDots}>
+                  {heroResumeSlides.map((slide, index) => (
+                    <button
+                      key={slide.src}
+                      type="button"
+                      className={`${styles.slideDot} ${index === activeSlide ? styles.slideDotActive : ''}`}
+                      onClick={() => setActiveSlide(index)}
+                      aria-label={`Show resume preview ${index + 1}`}
+                    />
+                  ))}
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className={styles.faq}>
-        <div className={styles.faqContainer}>
-          <div className={styles.faqHeader}>
-            <h2 className={styles.faqTitle}>Frequently Asked Questions</h2>
-            <p className={styles.faqSubtitle}>Everything you need to know about ResuGrow</p>
-          </div>
-
-          <div className={styles.faqList}>
-            {faqData.map((faq, i) => (
-              <div key={i} className={styles.faqItem}>
-                <button
-                  className={styles.faqQuestion}
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                >
-                  {faq.q}
-                  <svg
-                    className={`${styles.faqChevron} ${openFaq === i ? styles.open : ''}`}
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                  >
-                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-                {openFaq === i && (
-                  <div className={styles.faqAnswer}>{faq.a}</div>
-                )}
+      <section className={styles.proofSection}>
+        <div className={styles.container}>
+          <div className={styles.proofGrid}>
+            {proofStats.map((item) => (
+              <div key={item.label} className={styles.proofCard}>
+                <h3>{item.value}</h3>
+                <p>{item.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className={styles.cta}>
-        <div className={styles.ctaContainer}>
-          <h2 className={styles.ctaTitle}>Ready to Build Your Perfect Resume?</h2>
-          <p className={styles.ctaDesc}>
-            Join 21,000+ professionals who landed their dream jobs with ResuGrow
-          </p>
-          <div className={styles.ctaButtons}>
-            <Link href="/resume/ai-builder" className={`btn ${styles.ctaBtnWhite}`}>
-              Start Building for Free
+      <section className={styles.productSection}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <p>Product Suite</p>
+            <h2>Everything You Need to Win the First Recruiter Pass</h2>
+          </div>
+
+          <div className={styles.pillarGrid}>
+            {productPillars.map((pillar) => (
+              <article
+                key={pillar.title}
+                className={`${styles.pillarCard} ${pillar.tag === 'Resume' ? styles.pillarCardResume : ''}`}
+              >
+                <span className={styles.pillarTag}>{pillar.tag}</span>
+                <h3>{pillar.title}</h3>
+                <p>{pillar.desc}</p>
+                <ul>
+                  {pillar.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+                <Link
+                  href={pillar.href}
+                  className={`btn btn-secondary ${styles.pillarCtaBtn} ${pillar.tag === 'Resume' ? styles.pillarCtaResume : ''}`}
+                >
+                  {pillar.cta}
+                </Link>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.workflowSection}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <p>How It Works</p>
+            <h2>A Clean Workflow From Raw Profile to Interview-Ready Assets</h2>
+          </div>
+          <div className={styles.workflowGrid}>
+            {workflowSteps.map((step) => (
+              <div key={step.step} className={styles.workflowCard}>
+                <span>{step.step}</span>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.templatesSection}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <p>Templates</p>
+            <h2>Professional Resume Layouts, Built for ATS Parsing</h2>
+          </div>
+
+          <div className={styles.templateGrid}>
+            {templates.map((template) => (
+              <article key={template.id} className={styles.templateCard}>
+                <div className={styles.templatePreview}>
+                  <Image
+                    src={template.image}
+                    alt={`${template.name} ATS-friendly resume template for job applications and recruiter visibility`}
+                    fill
+                    className={styles.templateImage}
+                    sizes="(max-width: 900px) 100vw, 25vw"
+                  />
+                </div>
+                <div className={styles.templateMeta}>
+                  <h3>{template.name}</h3>
+                  <p>{template.category}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className={styles.centerAction}>
+            <Link href="/resume/templates" className="btn btn-secondary">
+              Browse All Templates
             </Link>
-            <Link href="/resume/templates" className={`btn ${styles.ctaBtnOutline}`}>
-              Browse Templates
-            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.testimonialSection}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <p>Proof</p>
+            <h2>Used by Job Seekers Who Want Precise, Actionable Feedback</h2>
+          </div>
+
+          <div className={styles.testimonialGrid}>
+            {testimonials.map((item) => (
+              <article key={item.name} className={styles.testimonialCard}>
+                <p>{item.text}</p>
+                <div className={styles.testimonialAuthor}>
+                  <span>{item.initials}</span>
+                  <div>
+                    <h4>{item.name}</h4>
+                    <small>{item.role}</small>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.faqSection}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <p>FAQ</p>
+            <h2>Quick Answers Before You Start</h2>
+          </div>
+          <div className={styles.faqList}>
+            {faqData.map((faq, idx) => (
+              <div key={faq.q} className={styles.faqItem}>
+                <button
+                  className={styles.faqButton}
+                  onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)}
+                  type="button"
+                >
+                  <span>{faq.q}</span>
+                  <span className={styles.faqIcon}>{openFaq === idx ? '−' : '+'}</span>
+                </button>
+                {openFaq === idx && <p className={styles.faqAnswer}>{faq.a}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.finalSection}>
+        <div className={styles.container}>
+          <div className={styles.finalCard}>
+            <h2>Start Optimizing the Assets Recruiters Actually See</h2>
+            <p>
+              Get a deterministic score, apply precision fixes, and ship stronger applications with
+              confidence.
+            </p>
+            <div className={styles.finalActions}>
+              <Link href="/resume/ats-checker" className="btn btn-primary">
+                Start Free ATS Check
+              </Link>
+              <Link href="/linkedin-review" className="btn btn-secondary">
+                Analyze LinkedIn Profile
+              </Link>
+            </div>
           </div>
         </div>
       </section>

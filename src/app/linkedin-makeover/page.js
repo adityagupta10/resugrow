@@ -53,9 +53,10 @@ export default function LinkedinMakeover() {
     let timer;
     if (isDeleting) {
       if (currentText === "") {
-        setIsDeleting(false);
-        setCurrentPhraseIndex((prev) => (prev + 1) % heroPhrases.length);
-        timer = setTimeout(() => { }, 500); // pause before starting to type new phrase
+        timer = setTimeout(() => {
+          setIsDeleting(false);
+          setCurrentPhraseIndex((prev) => (prev + 1) % heroPhrases.length);
+        }, 500); // pause before starting to type new phrase
       } else {
         timer = setTimeout(() => {
           setCurrentText(currentPhrase.substring(0, currentText.length - 1));
@@ -95,7 +96,7 @@ export default function LinkedinMakeover() {
               Your LinkedIn profile is either opening doors—or being ignored. We completely rewrite every section so your profile sells your value and gets you noticed.
             </p>
             <div className={styles.heroButtons}>
-              <Link href="/coming-soon" className="btn btn-primary btn-lg">
+              <Link href="/payment?service=linkedin-makeover&source=makeover-hero" className="btn btn-primary btn-lg">
                 Yes, I want a Professional makeover
               </Link>
             </div>
@@ -104,7 +105,7 @@ export default function LinkedinMakeover() {
             <div className={styles.imageStack}>
               <Image
                 src="/linkedin-makeover.png"
-                alt="Professional LinkedIn profile makeover example highlighting optimized headline and about sections"
+                alt="LinkedIn profile makeover example with AI optimization for headline, about section, and recruiter visibility"
                 width={500}
                 height={500}
                 className={styles.bouncingImage}
@@ -214,7 +215,7 @@ export default function LinkedinMakeover() {
           <p className={styles.ctaDesc}>
             Don&apos;t let a poor LinkedIn profile be the reason you miss out on your dream job.
           </p>
-          <Link href="/coming-soon" className={`btn btn-lg ${styles.ctaBtnWhite}`}>
+          <Link href="/payment?service=linkedin-makeover&source=makeover-bottom-cta" className={`btn btn-lg ${styles.ctaBtnWhite}`}>
             Claim Your Makeover Now
           </Link>
         </div>

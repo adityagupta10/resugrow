@@ -1,9 +1,12 @@
 import styles from '../legal.module.css';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
+export const metadata = createPageMetadata({
     title: 'Privacy Policy | ResuGrow',
-    description: 'How ResuGrow collects, uses, and protects your data when you use our AI resume builder services.',
-};
+    description: 'Read how ResuGrow collects, uses, and protects data across resume and LinkedIn tools.',
+    path: '/privacy-policy',
+    keywords: ['privacy policy', 'data protection', 'resugrow privacy']
+});
 
 export default function PrivacyPolicy() {
     return (

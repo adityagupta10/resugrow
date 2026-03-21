@@ -498,7 +498,7 @@ export async function POST(request) {
     const formData = await request.formData();
     const file = formData.get('resume');
     const jd = formData.get('jobDescription') || '';
-    const industryMode = formData.get('industryMode') || 'Standard';
+    const industryMode = formData.get('industryMode') || 'General';
     
     if (!file) return NextResponse.json({ error: 'No file uploaded.' }, { status: 400 });
 
@@ -514,7 +514,7 @@ export async function POST(request) {
       text = await parsePDF(buffer);
     } catch (err) {
       console.error('PDF Parse Error:', err);
-      return NextResponse.json({ error: 'PDF parsing failed' }, { status: 200 });
+      return NextResponse.json({ error: 'PDF parsing failed' }, { status: 500 });
     }
 
     // 1.5. Validate Document Type

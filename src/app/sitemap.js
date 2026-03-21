@@ -1,42 +1,25 @@
 export default function sitemap() {
-  const baseUrl = 'https://www.resugrow.com'
+  const baseUrl = 'https://www.resugrow.com';
+  const lastModified = new Date();
 
   return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/resume/templates`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/resume/ai-builder`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/resume/ats-checker`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-  ]
+    { url: baseUrl, changeFrequency: 'daily', priority: 1.0, lastModified },
+    { url: `${baseUrl}/resume/ats-checker`, changeFrequency: 'weekly', priority: 0.95, lastModified },
+    { url: `${baseUrl}/resume/ai-builder`, changeFrequency: 'weekly', priority: 0.9, lastModified },
+    { url: `${baseUrl}/resume/templates`, changeFrequency: 'weekly', priority: 0.9, lastModified },
+    { url: `${baseUrl}/linkedin-review`, changeFrequency: 'weekly', priority: 0.9, lastModified },
+    { url: `${baseUrl}/linkedin-review/paste`, changeFrequency: 'weekly', priority: 0.85, lastModified },
+    { url: `${baseUrl}/linkedin-makeover`, changeFrequency: 'weekly', priority: 0.85, lastModified },
+    { url: `${baseUrl}/tools/sar-rewriter`, changeFrequency: 'weekly', priority: 0.8, lastModified },
+    { url: `${baseUrl}/cover-letter/builder`, changeFrequency: 'weekly', priority: 0.8, lastModified },
+    { url: `${baseUrl}/cover-letter/templates`, changeFrequency: 'weekly', priority: 0.8, lastModified },
+    { url: `${baseUrl}/resume-examples`, changeFrequency: 'weekly', priority: 0.75, lastModified },
+    { url: `${baseUrl}/career-tips`, changeFrequency: 'weekly', priority: 0.75, lastModified },
+    { url: `${baseUrl}/help-center`, changeFrequency: 'monthly', priority: 0.7, lastModified },
+    { url: `${baseUrl}/about`, changeFrequency: 'monthly', priority: 0.7, lastModified },
+    { url: `${baseUrl}/contact`, changeFrequency: 'monthly', priority: 0.7, lastModified },
+    { url: `${baseUrl}/privacy-policy`, changeFrequency: 'yearly', priority: 0.3, lastModified },
+    { url: `${baseUrl}/terms-of-service`, changeFrequency: 'yearly', priority: 0.3, lastModified },
+    { url: `${baseUrl}/cookies`, changeFrequency: 'yearly', priority: 0.3, lastModified }
+  ];
 }

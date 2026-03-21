@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Testimonials from '@/components/Testimonials/Testimonials';
@@ -16,14 +16,78 @@ const features = [
   { icon: '📈', title: 'Score Tracking', desc: 'Track your resume score improvements over time. See how each change affects your ATS compatibility.' },
 ];
 
+function getElasticScore(query, candidate) {
+  const q = query.trim().toLowerCase();
+  const text = candidate.toLowerCase();
+  if (!q) return 1;
+  if (text === q) return 120;
+  if (text.startsWith(q)) return 100 - Math.min(20, text.length - q.length);
+  if (text.includes(q)) return 75 - Math.min(25, text.indexOf(q));
+
+  const qTokens = q.split(/\s+/).filter(Boolean);
+  const tokenHits = qTokens.reduce((hits, token) => hits + (text.includes(token) ? 1 : 0), 0);
+
+  let subsequenceHits = 0;
+  let qIndex = 0;
+  for (const ch of text) {
+    if (qIndex < q.length && ch === q[qIndex]) {
+      subsequenceHits += 1;
+      qIndex += 1;
+    }
+  }
+
+  const subsequenceScore = q.length > 0 ? (subsequenceHits / q.length) * 35 : 0;
+  const tokenScore = tokenHits * 20;
+  const combined = tokenScore + subsequenceScore - Math.max(0, text.length - q.length) * 0.08;
+  return combined > 18 ? combined : 0;
+}
+
 export default function ATSChecker() {
   const router = useRouter();
   const [file, setFile] = useState(null);
   const [jobDescription, setJobDescription] = useState('');
-  const [industryMode, setIndustryMode] = useState('Software Engineering (General)');
+  const [industryMode, setIndustryMode] = useState('General');
+  const [industryQuery, setIndustryQuery] = useState('General');
+  const [showIndustryOptions, setShowIndustryOptions] = useState(false);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
+
+  const industryOptions = useMemo(() => Object.keys(INDUSTRY_MAPPINGS), []);
+  const filteredIndustries = useMemo(() => {
+    return industryOptions
+      .map((industry) => ({ industry, score: getElasticScore(industryQuery, industry) }))
+      .filter(({ score }) => score > 0)
+      .sort((a, b) => b.score - a.score || a.industry.localeCompare(b.industry))
+      .slice(0, 12)
+      .map(({ industry }) => industry);
+  }, [industryOptions, industryQuery]);
+
+  const handleFileChange = (selectedFile) => {
+    if (selectedFile && selectedFile.type === 'application/pdf') {
+      setFile(selectedFile);
+      setError('');
+    } else {
+      setError('Please upload a valid PDF file.');
+      setFile(null);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const droppedFile = e.dataTransfer.files[0];
+    handleFileChange(droppedFile);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const selectIndustry = (industry) => {
+    setIndustryMode(industry);
+    setIndustryQuery(industry);
+    setShowIndustryOptions(false);
+  };
 
   const handleScan = async () => {
     if (!file) {
@@ -52,7 +116,12 @@ export default function ATSChecker() {
       if (jobDescription.trim()) {
         formData.append('jobDescription', jobDescription);
       }
-      formData.append('industryMode', industryMode);
+      const resolvedIndustry = INDUSTRY_MAPPINGS[industryQuery]
+        ? industryQuery
+        : filteredIndustries[0] || industryMode;
+      setIndustryMode(resolvedIndustry);
+      setIndustryQuery(resolvedIndustry);
+      formData.append('industryMode', resolvedIndustry);
 
       const res = await fetch('/api/ats-scan', {
         method: 'POST',
@@ -112,12 +181,35 @@ export default function ATSChecker() {
             {/* File Upload */}
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Upload Your Resume (PDF)</label>
-              <input
-                type="file"
-                className={styles.formInput}
-                accept=".pdf"
-                onChange={(e) => { setFile(e.target.files[0]); setError(''); }}
-              />
+              <div
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                style={{
+                  border: '2px dashed #cbd5e1',
+                  borderRadius: '12px',
+                  padding: '32px 24px',
+                  textAlign: 'center',
+                  backgroundColor: file ? '#f0fdf4' : '#f8fafc',
+                  transition: 'all 0.2s ease',
+                  cursor: 'pointer'
+                }}
+                onClick={() => document.getElementById('ats-pdf-upload').click()}
+              >
+                <input
+                  type="file"
+                  id="ats-pdf-upload"
+                  accept="application/pdf"
+                  onChange={(e) => handleFileChange(e.target.files[0])}
+                  style={{ display: 'none' }}
+                />
+                <div style={{ fontSize: '32px', marginBottom: '12px' }}>{file ? '📄' : '📥'}</div>
+                <h4 style={{ margin: '0 0 8px 0', fontSize: '16px', color: '#0f172a' }}>
+                  {file ? file.name : 'Click to Upload or Drag & Drop'}
+                </h4>
+                <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>
+                  {file ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : 'PDF files only (Max 5MB)'}
+                </p>
+              </div>
             </div>
 
             {/* Job Description (Optional) */}
@@ -136,16 +228,70 @@ export default function ATSChecker() {
             {/* Industry Mode */}
             <div className={styles.formGroup} style={{ marginTop: '16px' }}>
               <label className={styles.formLabel}>Target Industry <span style={{ color: 'var(--text-muted)', fontWeight: '400' }}>(Optional)</span></label>
-              <select
-                className={styles.formInput}
-                value={industryMode}
-                onChange={(e) => setIndustryMode(e.target.value)}
-                style={{ padding: '12px', cursor: 'pointer', appearance: 'auto' }}
-              >
-                {Object.keys(INDUSTRY_MAPPINGS).map((industry) => (
-                  <option key={industry} value={industry}>{industry}</option>
-                ))}
-              </select>
+              <div style={{ position: 'relative' }}>
+                <input
+                  className={styles.formInput}
+                  type="text"
+                  value={industryQuery}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setIndustryQuery(value);
+                    setShowIndustryOptions(true);
+                    if (INDUSTRY_MAPPINGS[value]) {
+                      setIndustryMode(value);
+                    }
+                  }}
+                  onFocus={() => setShowIndustryOptions(true)}
+                  onBlur={() => {
+                    setTimeout(() => {
+                      setShowIndustryOptions(false);
+                      if (!INDUSTRY_MAPPINGS[industryQuery]) {
+                        setIndustryQuery(industryMode);
+                      }
+                    }, 120);
+                  }}
+                  placeholder="Search industry (e.g. FinTech, Healthcare, SaaS)"
+                  autoComplete="off"
+                />
+
+                {showIndustryOptions && filteredIndustries.length > 0 && (
+                  <div style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 6px)',
+                    left: 0,
+                    right: 0,
+                    maxHeight: '240px',
+                    overflowY: 'auto',
+                    background: '#fff',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '10px',
+                    boxShadow: '0 12px 24px -8px rgba(15, 23, 42, 0.18)',
+                    zIndex: 30
+                  }}>
+                    {filteredIndustries.map((industry) => (
+                      <button
+                        key={industry}
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => selectIndustry(industry)}
+                        style={{
+                          width: '100%',
+                          textAlign: 'left',
+                          background: industry === industryMode ? '#eff6ff' : '#fff',
+                          color: '#0f172a',
+                          border: 'none',
+                          borderBottom: '1px solid #f1f5f9',
+                          padding: '10px 12px',
+                          fontSize: '13px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {industry}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Error */}
@@ -176,9 +322,10 @@ export default function ATSChecker() {
                 <button
                   className="btn btn-primary"
                   onClick={handleScan}
-                  style={{ minWidth: '220px' }}
+                  style={{ width: '100%', opacity: file ? 1 : 0.6 }}
+                  disabled={!file}
                 >
-                  Scan My Resume
+                  {file ? 'Scan My Resume' : 'Upload PDF to Begin'}
                 </button>
               ) : (
                 <div style={{ width: '100%', maxWidth: '400px', margin: '0 auto', textAlign: 'left' }}>

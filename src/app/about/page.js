@@ -1,9 +1,13 @@
 import styles from '../subpage.module.css';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'About Us | ResuGrow',
-  description: 'Learn about ResuGrow\'s mission to help job seekers create professional resumes and land their dream jobs with AI-powered tools.',
-};
+export const metadata = createPageMetadata({
+  title: 'About ResuGrow | AI Career Platform Mission & Team',
+  description:
+    'Learn about ResuGrow, our mission, and how we help job seekers improve resumes, ATS performance, and LinkedIn outcomes with AI.',
+  path: '/about',
+  keywords: ['about resugrow', 'career platform mission', 'AI resume company']
+});
 
 const stats = [
   { number: '500K+', label: 'Resumes Created' },

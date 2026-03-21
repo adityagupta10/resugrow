@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from '../subpage.module.css';
 
 
@@ -189,11 +190,25 @@ export default function ProfileReview() {
                   <button onClick={handleScan} className="btn btn-primary" style={{ width: '100%', opacity: file ? 1 : 0.6 }} disabled={!file}>
                     {file ? 'Analyze My Profile' : 'Upload PDF to Begin'}
                   </button>
+
+                  <p style={{ margin: '10px 0 0', fontSize: '12px', color: '#64748b', fontWeight: '600', textAlign: 'center' }}>
+                    Exact path: LinkedIn Profile → More → Save to PDF
+                  </p>
                   
                   <div style={{ textAlign: 'center', marginTop: '16px' }}>
                     <p style={{ fontSize: '13px', color: '#64748b', margin: '0' }}>
                       PDF not working? <Link href="/linkedin-review/paste" style={{ color: 'var(--primary)', fontWeight: '600', textDecoration: 'underline' }}>Use Direct Paste instead</Link>
                     </p>
+                  </div>
+
+                  <div style={{ marginTop: '14px', borderRadius: '10px', overflow: 'hidden', border: '1px solid #cbd5e1', background: '#ffffff' }}>
+                    <Image
+                      src="/linkedin-save-pdf-guide.png"
+                      alt="Step-by-step LinkedIn profile PDF download guide using More menu and Save to PDF option"
+                      width={1194}
+                      height={896}
+                      style={{ width: '100%', height: 'auto', display: 'block' }}
+                    />
                   </div>
                 </>
               ) : (
@@ -204,7 +219,7 @@ export default function ProfileReview() {
             </div>
             
             <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '16px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-              <span>🔒</span> LinkedIn’s "Save to PDF" is working in 2026. 100% private.
+              <span>🔒</span> LinkedIn&rsquo;s &quot;Save to PDF&quot; is working in 2026. 100% private.
             </p>
           </div>
         </div>

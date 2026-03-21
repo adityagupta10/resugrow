@@ -1,7 +1,11 @@
-export const metadata = {
+import { createPageMetadata } from '@/lib/seo';
+
+export const metadata = createPageMetadata({
   title: 'ATS Scan Results | ResuGrow',
-  description: 'Your resume analysis and ATS match score. See missing keywords and formatting errors.',
-};
+  description: 'Your resume ATS analysis results and module-wise breakdown.',
+  path: '/resume/ats-checker/results',
+  noindex: true
+});
 
 export default function ATSResultsLayout({ children }) {
   return children;

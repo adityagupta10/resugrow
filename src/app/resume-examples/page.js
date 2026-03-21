@@ -1,10 +1,14 @@
 import Link from 'next/link';
 import styles from '../subpage.module.css';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
-    title: 'Resume Examples & Samples | ResuGrow',
-    description: 'Browse our library of successful resume examples by industry and role. Proven templates that passed ATS and landed interviews.',
-};
+export const metadata = createPageMetadata({
+    title: 'Resume Examples by Role & Industry | ResuGrow',
+    description:
+      'Explore ATS-friendly resume examples and role-specific sample layouts to benchmark your resume structure.',
+    path: '/resume-examples',
+    keywords: ['resume examples', 'resume samples', 'industry resume templates']
+});
 
 const examples = [
     { role: 'Software Engineer', industry: 'Technology', experience: 'Mid-Level', color: '#2563eb' },

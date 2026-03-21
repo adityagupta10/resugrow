@@ -1,10 +1,14 @@
 import Link from 'next/link';
 import styles from '../../subpage.module.css';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Cover Letter Builder | ResuGrow',
-  description: 'Create professional cover letters with ResuGrow\'s AI-powered builder. Tailored content, professional formatting, and instant downloads.',
-};
+export const metadata = createPageMetadata({
+  title: 'AI Cover Letter Builder | Create Job-Specific Letters Fast',
+  description:
+    'Create professional, job-tailored cover letters with AI assistance, clean formatting, and export-ready output.',
+  path: '/cover-letter/builder',
+  keywords: ['cover letter builder', 'AI cover letter generator', 'job tailored cover letter']
+});
 
 const features = [
   { icon: '✍️', title: 'AI Writing Assistant', desc: 'Our AI crafts compelling cover letters tailored to your target position. Just provide the job details and let AI do the heavy lifting.' },

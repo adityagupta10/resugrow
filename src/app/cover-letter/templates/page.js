@@ -2,11 +2,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from '../../subpage.module.css';
 import { coverLetters } from '../../../data/coverLetters';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Cover Letter Templates | ResuGrow',
-  description: 'Browse professional cover letter templates designed for every industry. ATS-friendly, customizable, and paired with matching resume templates.',
-};
+export const metadata = createPageMetadata({
+  title: 'Cover Letter Templates for Every Industry | ResuGrow',
+  description:
+    'Browse ATS-friendly cover letter templates and choose a design that matches your resume and target role.',
+  path: '/cover-letter/templates',
+  keywords: ['cover letter templates', 'professional cover letter format', 'ATS cover letter']
+});
 
 const templates = coverLetters;
 
@@ -38,7 +42,7 @@ export default function CoverLetterTemplates() {
                   <div className={styles.galleryDoc}>
                     <Image
                       src={t.image}
-                      alt={`Clean and professional cover letter template: ${t.name}`}
+                      alt={`${t.name} professional cover letter template for job applications and interview callbacks`}
                       fill
                       className={styles.templateImg}
                       style={{ objectFit: 'cover' }}

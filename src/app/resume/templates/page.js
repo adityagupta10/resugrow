@@ -3,11 +3,15 @@ import styles from '../../subpage.module.css';
 import Image from 'next/image';
 import { templates as templateData } from '../../../data/templates';
 import Testimonials from '@/components/Testimonials/Testimonials';
+import { createPageMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'High Impact Resume Templates | ResuGrow',
-  description: 'Browse ResuGrow\'s collection of professional, ATS-friendly resume templates. Designed by experts and tested with real recruiters.',
-};
+export const metadata = createPageMetadata({
+  title: 'ATS-Friendly Resume Templates | Modern & Recruiter-Tested',
+  description:
+    'Browse resume templates optimized for ATS parsing and clean recruiter readability across industries.',
+  path: '/resume/templates',
+  keywords: ['resume templates', 'ATS templates', 'professional resume layout']
+});
 
 const templates = templateData;
 
@@ -39,7 +43,7 @@ export default function Templates() {
                   <div className={styles.galleryDoc}>
                     <Image
                       src={t.image}
-                      alt={`Modern ATS-optimized resume template: ${t.name}`}
+                      alt={`${t.name} modern ATS resume template for professional job applications and recruiter screening`}
                       fill
                       className={styles.templateImg}
                       style={{ objectFit: 'cover' }}

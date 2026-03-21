@@ -3,11 +3,48 @@ import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import {
+  SITE_NAME,
+  SITE_URL,
+  createPageMetadata,
+  getOrganizationJsonLd,
+  getWebsiteJsonLd
+} from '@/lib/seo';
+
+const homeMetadata = createPageMetadata({
+  title: 'ResuGrow | AI Resume Builder, ATS Checker & LinkedIn Optimization',
+  description:
+    'Build ATS-friendly resumes, improve LinkedIn visibility, and optimize career documents with ResuGrow AI tools.',
+  path: '/',
+  keywords: [
+    'resume builder',
+    'ATS checker',
+    'AI resume writer',
+    'resume templates',
+    'LinkedIn optimization',
+    'cover letter builder',
+    'job application tools'
+  ]
+});
 
 export const metadata = {
-  title: 'ResuGrow | #1 AI Resume Builder & ATS Optimization Tool',
-  description: 'Unlock your dream job with ResuGrow\'s AI Resume Builder. ATS Check, AI Writer, and One-Click Job Tailoring make your resume stand out to recruiters.',
-  keywords: 'resume builder, AI resume, ATS checker, cover letter, job application, linkedin makeover, resume templates, resume checker, resume writer, resume optimization, resume scoring, resume tailoring, resume formats, resume PDF, resume Word, resume plain text, resume builder free, resume builder AI, resume builder ATS, resume builder job application',
+  ...homeMetadata,
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
+  title: {
+    default: 'ResuGrow | AI Resume Builder, ATS Checker & LinkedIn Optimization',
+    template: '%s'
+  },
+  authors: [{ name: 'ResuGrow Team' }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: 'Career Development',
+  referrer: 'origin-when-cross-origin',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false
+  },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -27,9 +64,20 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const organizationJsonLd = getOrganizationJsonLd();
+  const websiteJsonLd = getWebsiteJsonLd();
+
   return (
     <html lang="en">
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <Navbar />
         <main style={{ paddingTop: '72px' }}>
           {children}

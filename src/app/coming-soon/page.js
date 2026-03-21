@@ -23,8 +23,8 @@ export default function ComingSoon() {
         </h1>
         
         <p className={styles.description}>
-          We're currently crafting this feature with care to ensure you get the best 
-          experience possible. It's almost ready to take your career to the next level.
+          We&apos;re currently crafting this feature with care to ensure you get the best
+          experience possible. It&apos;s almost ready to take your career to the next level.
         </p>
         
         <div className={styles.actions}>

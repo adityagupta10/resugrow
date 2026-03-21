@@ -15,6 +15,7 @@ const footerLinks = {
   'LinkedIn': [
     { label: 'LinkedIn Profile Boost', href: '/linkedin-makeover' },
     { label: 'Profile Review & Score', href: '/linkedin-review' },
+    { label: 'AI SAR Bullet Rewriter', href: '/tools/sar-rewriter' },
   ],
   'Company': [
     { label: 'About Us', href: '/about' },
@@ -39,7 +40,7 @@ export default function Footer() {
             <Link href="/" className={styles.logoWrapper}>
               <Image
                 src="/resugrow-logo.png"
-                alt="ResuGrow - AI Powered Resume Builder and ATS Checker Logo"
+                alt="ResuGrow AI resume builder and ATS checker logo for job seekers and career growth"
                 width={180}
                 height={48}
                 style={{ objectFit: 'contain' }}
@@ -71,6 +72,14 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
+            <a
+              href="https://www.linkedin.com/company/resugrow-com/"
+              className={styles.followLinkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Follow ResuGrow on LinkedIn
+            </a>
           </div>
 
           {Object.entries(footerLinks).map(([category, links]) => (
