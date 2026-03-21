@@ -1,53 +1,55 @@
 import Link from 'next/link';
-import styles from '../../subpage.module.css';
 import { createPageMetadata } from '@/lib/seo';
+import CoverLetterBuilderClient from './CoverLetterBuilderClient';
+import styles from '../../subpage.module.css';
+import landingStyles from './landing.module.css';
 
 export const metadata = createPageMetadata({
-  title: 'AI Cover Letter Builder | Create Job-Specific Letters Fast',
+  title: 'Cover Letter Generator | Build Job-Tailored Letters Fast',
   description:
-    'Create professional, job-tailored cover letters with AI assistance, clean formatting, and export-ready output.',
+    'Build deterministic, job-ready cover letters with live preview, smart prefill, and one-click PDF export.',
   path: '/cover-letter/builder',
-  keywords: ['cover letter builder', 'AI cover letter generator', 'job tailored cover letter']
+  keywords: ['cover letter builder', 'cover letter generator', 'job tailored cover letter']
 });
 
 const features = [
-  { icon: '✍️', title: 'AI Writing Assistant', desc: 'Our AI crafts compelling cover letters tailored to your target position. Just provide the job details and let AI do the heavy lifting.' },
-  { icon: '🎨', title: 'Professional Templates', desc: 'Choose from a variety of professionally designed cover letter templates that complement your resume style.' },
-  { icon: '🎯', title: 'Job-Specific Tailoring', desc: 'Paste any job description and our AI will customize your cover letter to match the requirements and company culture.' },
-  { icon: '📝', title: 'Paragraph Suggestions', desc: 'Get AI-powered suggestions for each paragraph — from the opening hook to the compelling closing statement.' },
-  { icon: '🔗', title: 'Resume Matching', desc: 'Your cover letter is automatically coordinated with your resume for a consistent, professional application package.' },
-  { icon: '📤', title: 'Easy Export', desc: 'Download your cover letter as PDF or Word. Share directly via email or copy the text for online applications.' },
+  { icon: '⚡', title: 'Deterministic Generator', desc: 'No API wait time. Generate structured, polished letters instantly with rule-based logic.' },
+  { icon: '🪄', title: 'Live A4 Preview', desc: 'See your cover letter update in real time while you complete the guided wizard.' },
+  { icon: '🎯', title: 'Role Tailoring', desc: 'Personalize by target role, experience level, strengths, and working style.' },
+  { icon: '🛡️', title: 'Gap Handler', desc: 'Handle career breaks positively with pre-written professional framing options.' },
+  { icon: '✍️', title: 'Signature Modes', desc: 'Use typed script-style signatures or upload your own signature image.' },
+  { icon: '📤', title: 'Export Ready', desc: 'Fine-tune in the editor, then download as PDF and continue to ATS check.' }
 ];
 
 export default function CoverLetterBuilder() {
   return (
     <>
-      <section className={styles.subpageHero}>
+      <section className={`${styles.subpageHero} ${landingStyles.compactHero}`}>
         <div className={styles.subpageContainer}>
-          <div className={styles.subpageHeroBadge}>AI-Powered</div>
+          <div className={styles.subpageHeroBadge}>Cover Letter Studio</div>
           <h1 className={styles.subpageTitle}>
-            Cover Letter <span className="gradient-text">Builder</span>
+            Build Your <span className="gradient-text">Cover Letter</span>
           </h1>
           <p className={styles.subpageDesc}>
-            Create compelling, personalized cover letters that complement your resume and
-            help you stand out from the competition.
+            Use our guided generator to create a job-tailored cover letter in minutes,
+            or start from professionally designed templates.
           </p>
           <div className={styles.subpageBtn}>
-            <Link href="/coming-soon" className="btn btn-primary">Build Your Cover Letter</Link>
+            <Link href="#cover-letter-builder" className="btn btn-primary">Build Your Cover Letter</Link>
             <Link href="/cover-letter/templates" className="btn btn-secondary">Browse Templates</Link>
           </div>
         </div>
       </section>
 
-      <section className={styles.subpage}>
+      <section className={`${styles.subpage} ${landingStyles.compactSection}`}>
         <div className={styles.subpageContainer}>
           <div className="section-header">
-            <h2 className="section-title">Smart <span className="gradient-text">Features</span></h2>
-            <p className="section-subtitle">Everything you need to write the perfect cover letter.</p>
+            <h2 className="section-title">What You Get</h2>
+            <p className="section-subtitle">Fast generation, strong structure, and editable output.</p>
           </div>
-          <div className={styles.featureGrid}>
+          <div className={`${styles.featureGrid} ${landingStyles.compactFeatureGrid}`}>
             {features.map((f) => (
-              <div key={f.title} className={styles.featureCard}>
+              <div key={f.title} className={`${styles.featureCard} ${landingStyles.compactFeatureCard}`}>
                 <div className={styles.featureCardIcon}>{f.icon}</div>
                 <h3 className={styles.featureCardTitle}>{f.title}</h3>
                 <p className={styles.featureCardDesc}>{f.desc}</p>
@@ -57,26 +59,8 @@ export default function CoverLetterBuilder() {
         </div>
       </section>
 
-      <section className={styles.stepsSection}>
-        <div className={styles.subpageContainer}>
-          <div className="section-header">
-            <h2 className="section-title">How It <span className="gradient-text">Works</span></h2>
-            <p className="section-subtitle">Write a winning cover letter in minutes.</p>
-          </div>
-          <div className={styles.stepsGrid}>
-            {[
-              { num: '1', title: 'Select a Template', desc: 'Choose from our collection of professional cover letter templates designed for every industry.' },
-              { num: '2', title: 'Add Job Details', desc: 'Paste the job description and let our AI generate tailored content for your application.' },
-              { num: '3', title: 'Download & Send', desc: 'Review, customize, and download your cover letter. Apply with confidence.' },
-            ].map((s) => (
-              <div key={s.num} className={styles.stepCard}>
-                <div className={styles.stepNumber}>{s.num}</div>
-                <h3 className={styles.stepTitle}>{s.title}</h3>
-                <p className={styles.stepDesc}>{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+      <section id="cover-letter-builder">
+        <CoverLetterBuilderClient />
       </section>
     </>
   );

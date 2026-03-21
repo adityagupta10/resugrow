@@ -1,0 +1,61 @@
+.compactHero {
+  padding: 52px 0 36px;
+}
+
+.compactSection {
+  padding: 24px 0 10px;
+}
+
+.compactFeatureGrid {
+  gap: 12px;
+  padding: 14px 0 8px;
+}
+
+.compactSection :global(.section-header) {
+  margin-bottom: 8px;
+}
+
+.compactSection :global(.section-title) {
+  margin-bottom: 4px;
+}
+
+.compactSection :global(.section-subtitle) {
+  margin-bottom: 0;
+}
+
+.compactFeatureCard {
+  padding: 18px 16px;
+  border-radius: 14px;
+}
+
+.compactFeatureCard :global(div[class*="featureCardIcon"]) {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.compactFeatureCard :global(h3[class*="featureCardTitle"]) {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+.compactFeatureCard :global(p[class*="featureCardDesc"]) {
+  line-height: 1.45;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .compactHero {
+    padding: 36px 0 24px;
+  }
+
+  .compactSection {
+    padding: 18px 0 8px;
+  }
+
+  .compactFeatureGrid {
+    padding: 10px 0 4px;
+    gap: 10px;
+  }
+}

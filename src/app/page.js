@@ -147,6 +147,59 @@ const heroResumeSlides = [
   }
 ];
 
+const targetCompanies = [
+  {
+    name: 'Meta',
+    logo: '/company-logos/meta.svg',
+    alt: 'Meta company for top tech job targeting with ATS optimized resumes'
+  },
+  {
+    name: 'Google',
+    logo: '/company-logos/google.svg',
+    alt: 'Google company for software engineering and product role applications'
+  },
+  {
+    name: 'Amazon',
+    logo: '/company-logos/amazon.svg',
+    alt: 'Amazon company for competitive resume and interview preparation'
+  },
+  {
+    name: 'Microsoft',
+    logo: '/company-logos/microsoft.svg',
+    alt: 'Microsoft company for AI resume builder and ATS profile optimization'
+  },
+  {
+    name: 'Stripe',
+    logo: '/company-logos/stripe.svg',
+    alt: 'Stripe company for fintech career opportunities and recruiter visibility'
+  },
+  {
+    name: 'Apple',
+    logo: '/company-logos/apple.svg',
+    alt: 'Apple company for premium tech resume targeting and hiring pipelines'
+  },
+  {
+    name: 'Netflix',
+    logo: '/company-logos/netflix.svg',
+    alt: 'Netflix company for product and engineering job seeker targeting'
+  },
+  {
+    name: 'Salesforce',
+    logo: '/company-logos/salesforce.svg',
+    alt: 'Salesforce company for cloud and SaaS career resume optimization'
+  },
+  {
+    name: 'Adobe',
+    logo: '/company-logos/adobe.svg',
+    alt: 'Adobe company for design, marketing, and product role applications'
+  },
+  {
+    name: 'Uber',
+    logo: '/company-logos/uber.svg',
+    alt: 'Uber company for operations and engineering hiring target companies'
+  }
+];
+
 const appJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -237,8 +290,10 @@ export default function Home() {
                 </Link>
                 <div className={styles.heroSecondaryActions}>
                   <Link href="/resume/ats-checker" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
-                    ATS Resume Checker
+                    ATS-Pro Resume Score
                   </Link>
+                </div>
+                <div className={styles.heroSecondaryActions}>
                   <Link href="/linkedin-makeover" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
                     Linkedin Profile Makeover
                   </Link>
@@ -248,11 +303,11 @@ export default function Home() {
               <div className={styles.heroSignals}>
                 <span>Trusted by candidates targeting:</span>
                 <div className={styles.signalChips}>
-                  <span>Meta</span>
-                  <span>Google</span>
-                  <span>Amazon</span>
-                  <span>Microsoft</span>
-                  <span>Stripe</span>
+                  {targetCompanies.map((company) => (
+                    <span key={company.name} className={styles.signalLogo} title={company.name}>
+                      <Image src={company.logo} alt={company.alt} width={22} height={22} />
+                    </span>
+                  ))}
                 </div>
               </div>
 
