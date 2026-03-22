@@ -1,20 +1,31 @@
 'use client';
 
 import Link from 'next/link';
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from './page.module.css';
 
 export default function ComingSoon() {
   return (
     <div className={styles.container}>
       {/* Animated Background Elements */}
-      <div className={styles.sparkle} style={{ top: '10%', left: '20%', animationDelay: '0s' }}>✨</div>
-      <div className={styles.sparkle} style={{ top: '30%', right: '25%', animationDelay: '1s' }}>✨</div>
-      <div className={styles.sparkle} style={{ bottom: '20%', left: '15%', animationDelay: '2s' }}>✨</div>
-      <div className={styles.sparkle} style={{ bottom: '15%', right: '10%', animationDelay: '0.5s' }}>✨</div>
+      <div className={styles.sparkle} style={{ top: '10%', left: '20%', animationDelay: '0s' }}>
+        <EmojiImage emoji="✨" size={24} />
+      </div>
+      <div className={styles.sparkle} style={{ top: '30%', right: '25%', animationDelay: '1s' }}>
+        <EmojiImage emoji="✨" size={24} />
+      </div>
+      <div className={styles.sparkle} style={{ bottom: '20%', left: '15%', animationDelay: '2s' }}>
+        <EmojiImage emoji="✨" size={24} />
+      </div>
+      <div className={styles.sparkle} style={{ bottom: '15%', right: '10%', animationDelay: '0.5s' }}>
+        <EmojiImage emoji="✨" size={24} />
+      </div>
       
       <div className={styles.glassCard}>
         <div className={styles.iconWrapper}>
-          <div className={styles.magicWand}>🪄</div>
+          <div className={styles.magicWand}>
+            <EmojiImage emoji="🪄" size={48} />
+          </div>
         </div>
         
         <h1 className={styles.title}>

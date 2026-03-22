@@ -1,0 +1,117 @@
+.page { background: #f8fafc; min-height: 100vh; padding-bottom: 80px; }
+
+.container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex; align-items: center; gap: 8px;
+  padding: 24px 0 0; font-size: 13px; color: #64748b;
+}
+.breadcrumb a { color: #2563eb; text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+
+/* Article header */
+.article { background: white; border-radius: 20px; overflow: hidden; margin-top: 20px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+
+.header { padding: 40px 48px 32px; }
+.headerMeta { display: flex; align-items: center; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+
+.catBadge {
+  display: inline-block; padding: 3px 10px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 600; color: #2563eb;
+  background: #eff6ff; border: 1px solid #bfdbfe;
+}
+.metaDot { color: #cbd5e1; }
+.metaText { font-size: 13px; color: #64748b; }
+
+.title {
+  font-size: 34px; font-weight: 800; color: #0f172a;
+  letter-spacing: -1px; line-height: 1.25; margin-bottom: 16px;
+}
+.excerpt {
+  font-size: 17px; color: #475569; line-height: 1.7;
+  border-left: 3px solid #2563eb; padding-left: 16px; margin-bottom: 24px;
+}
+
+.authorBlock { display: flex; align-items: center; gap: 12px; padding-top: 20px; border-top: 1px solid #f1f5f9; }
+.authorAvatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 700; color: white; flex-shrink: 0;
+}
+.authorName { display: block; font-size: 14px; font-weight: 600; color: #1e293b; }
+.authorRole { display: block; font-size: 12px; color: #64748b; }
+
+/* Cover banner */
+.coverBanner {
+  background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+  padding: 40px; display: flex; align-items: center; justify-content: center;
+}
+.coverEmoji { font-size: 72px; }
+
+/* Body */
+.body { padding: 40px 48px 32px; }
+
+.p {
+  font-size: 16px; color: #334155; line-height: 1.85;
+  margin-bottom: 20px; font-family: Georgia, serif;
+}
+.h2 {
+  font-size: 22px; font-weight: 800; color: #0f172a;
+  margin: 36px 0 14px; letter-spacing: -0.3px;
+  font-family: 'Inter', sans-serif;
+}
+.h3 {
+  font-size: 17px; font-weight: 700; color: #1e293b;
+  margin: 24px 0 10px; font-family: 'Inter', sans-serif;
+}
+.pullQuote {
+  font-size: 16px; color: #64748b; font-style: italic;
+  border-left: 3px solid #e2e8f0; padding-left: 16px;
+  margin: 20px 0; line-height: 1.7; font-family: Georgia, serif;
+}
+
+/* Tags */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 48px 40px; }
+.tag {
+  padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;
+  color: #475569; background: #f1f5f9; border: 1px solid #e2e8f0;
+}
+
+/* CTA */
+.cta {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  border-radius: 20px; padding: 36px 40px; margin: 32px 0;
+}
+.ctaInner { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.ctaEmoji { font-size: 36px; flex-shrink: 0; }
+.ctaTitle { font-size: 18px; font-weight: 700; color: white; margin-bottom: 4px; }
+.ctaDesc { font-size: 14px; color: #bfdbfe; }
+.ctaBtns { display: flex; gap: 10px; flex-wrap: wrap; margin-left: auto; }
+
+/* Related */
+.related { margin: 40px 0 24px; }
+.relatedTitle { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 20px; }
+.relatedGrid { display: flex; flex-direction: column; gap: 12px; }
+.relatedCard {
+  display: flex; align-items: flex-start; gap: 16px;
+  background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 16px 20px; text-decoration: none; transition: all 0.15s;
+}
+.relatedCard:hover { border-color: #2563eb; background: #f8fafc; }
+.relatedEmoji { font-size: 28px; flex-shrink: 0; }
+.relatedCardTitle { font-size: 15px; font-weight: 600; color: #0f172a; margin: 4px 0 6px; line-height: 1.4; }
+
+/* Back link */
+.backRow { padding: 8px 0 40px; }
+.backLink { font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500; }
+.backLink:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .header, .body { padding: 24px; }
+  .tags { padding: 0 24px 24px; }
+  .title { font-size: 26px; }
+  .ctaInner { flex-direction: column; }
+  .ctaBtns { margin-left: 0; }
+}

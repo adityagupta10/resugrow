@@ -1,5 +1,6 @@
 import styles from '../subpage.module.css';
 import { createPageMetadata } from '@/lib/seo';
+import EmojiImage from '@/components/UI/EmojiImage';
 
 export const metadata = createPageMetadata({
   title: 'About ResuGrow | AI Career Platform Mission & Team',
@@ -68,9 +69,13 @@ export default function About() {
                 <rect x="70" y="190" width="70" height="5" rx="2.5" fill="#2563eb" opacity="0.3" />
                 <rect x="70" y="205" width="150" height="5" rx="2.5" fill="#e2e8f0" />
                 <circle cx="260" cy="40" r="20" fill="#7c3aed" opacity="0.1" />
-                <text x="253" y="46" fontSize="16">🚀</text>
+                <foreignObject x="250" y="30" width="20" height="20">
+                  <EmojiImage emoji="🚀" size={20} />
+                </foreignObject>
                 <circle cx="40" cy="200" r="18" fill="#10b981" opacity="0.1" />
-                <text x="33" y="206" fontSize="14">✨</text>
+                <foreignObject x="30" y="190" width="20" height="20">
+                  <EmojiImage emoji="✨" size={20} />
+                </foreignObject>
               </svg>
             </div>
           </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../subpage.module.css';
 
 const helpCategories = [
@@ -37,7 +38,7 @@ export default function HelpCenter() {
                             }}
                         />
                         <span style={{ position: 'absolute', left: '24px', top: '50%', transform: 'translateY(-50%)', fontSize: '20px' }}>
-                            🔍
+                            <EmojiImage emoji="🔍" size={24} />
                         </span>
                         <button className="btn btn-primary" style={{ position: 'absolute', right: '8px', top: '8px', bottom: '8px', padding: '0 24px' }}>
                             Search
@@ -75,9 +76,11 @@ export default function HelpCenter() {
                             >
                                 <div style={{
                                     fontSize: '40px',
-                                    marginBottom: '20px'
+                                    marginBottom: '20px',
+                                    display: 'flex',
+                                    justifyContent: 'center'
                                 }}>
-                                    {cat.icon}
+                                    <EmojiImage emoji={cat.icon} size={48} />
                                 </div>
                                 <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '8px', color: 'var(--text-primary)' }}>
                                     {cat.title}

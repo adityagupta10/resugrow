@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Testimonials from '@/components/Testimonials/Testimonials';
 import { INDUSTRY_MAPPINGS } from '@/constants/industry_keywords';
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../../subpage.module.css';
 
 const features = [
@@ -145,8 +146,8 @@ export default function ATSChecker() {
       // Convert file to Data URL for preview on the results page
       const reader = new FileReader();
       reader.onloadend = () => {
-        sessionStorage.setItem('resumePreview', reader.result);
-        sessionStorage.setItem('atsResults', JSON.stringify(data));
+        localStorage.setItem('resumePreview', reader.result);
+        localStorage.setItem('atsResults', JSON.stringify(data));
         
         // Brief delay so user sees the 100% completion
         setTimeout(() => {
@@ -202,7 +203,9 @@ export default function ATSChecker() {
                   onChange={(e) => handleFileChange(e.target.files[0])}
                   style={{ display: 'none' }}
                 />
-                <div style={{ fontSize: '32px', marginBottom: '12px' }}>{file ? '📄' : '📥'}</div>
+                <div style={{ fontSize: '32px', marginBottom: '12px', display: 'flex', justifyContent: 'center' }}>
+                  <EmojiImage emoji={file ? '📄' : '📥'} size={40} alt={file ? 'PDF resume file selected for ATS scan' : 'Upload area icon for resume PDF file'} />
+                </div>
                 <h4 style={{ margin: '0 0 8px 0', fontSize: '16px', color: '#0f172a' }}>
                   {file ? file.name : 'Click to Upload or Drag & Drop'}
                 </h4>
@@ -306,7 +309,7 @@ export default function ATSChecker() {
                 alignItems: 'flex-start',
                 gap: '12px'
               }}>
-                <span style={{ fontSize: '20px' }}>⚠️</span>
+                <EmojiImage emoji="⚠️" size={22} alt="Warning icon for ATS scan error" />
                 <div>
                   <h4 style={{ color: '#991b1b', fontSize: '14px', fontWeight: '700', margin: '0 0 4px 0' }}>Scan Halted</h4>
                   <p style={{ color: '#b91c1c', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>
@@ -385,13 +388,11 @@ export default function ATSChecker() {
             <p className="section-subtitle">Comprehensive analysis to ensure your resume gets past ATS filters.</p>
           </div>
           <div className={styles.featureGrid}>
-            {[
-              { icon: '🔍', title: 'Keyword Optimization', desc: 'Don\'t guess which skills matter. We highlight the exact industry terms missing from your bullet points.' },
-              { icon: '📝', title: 'Format Verification', desc: 'We detect "unreadable" elements like tables, graphics, or headers that crash older ATS systems.' },
-              { icon: '⚡', title: 'One-Click Tailoring', desc: 'Use our AI to instantly rewrite sections of your resume to increase your score for a specific job.' },
-            ].map((f) => (
+            {features.map((f) => (
               <div key={f.title} className={styles.featureCard}>
-                <div className={styles.featureCardIcon}>{f.icon}</div>
+                <div className={styles.featureCardIcon}>
+                  <EmojiImage emoji={f.icon} size={32} />
+                </div>
                 <h3 className={styles.featureCardTitle}>{f.title}</h3>
                 <p className={styles.featureCardDesc}>{f.desc}</p>
               </div>
@@ -427,7 +428,9 @@ export default function ATSChecker() {
             </div>
             <div className={styles.aboutImage}>
               {/* Illustration or Graphic could go here */}
-              <div style={{ fontSize: '100px' }}>🤖</div>
+              <div style={{ fontSize: '100px', display: 'flex', justifyContent: 'center' }}>
+                <EmojiImage emoji="🤖" size={120} />
+              </div>
             </div>
           </div>
         </div>

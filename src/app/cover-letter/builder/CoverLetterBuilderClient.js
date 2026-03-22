@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from './builder.module.css';
 
 const STEPS = [
@@ -567,7 +568,7 @@ export default function CoverLetterBuilderClient() {
 
           <div className={styles.aiRewriteSection}>
             <Link href="/payment?service=cover-letter-ai-rewrite&source=cover-letter-builder-ai-rewrite" className={styles.aiRewriteBtn}>
-              <span className={styles.aiIcon}>✨</span> Re-write with AI
+              <EmojiImage emoji="✨" size={20} /> Re-write with AI
             </Link>
             <p className={styles.aiNote}>Upgrade to an AI-polished, role-tailored rewrite of your cover letter.</p>
           </div>
@@ -579,7 +580,9 @@ export default function CoverLetterBuilderClient() {
               <button type="button" className="btn btn-primary" onClick={downloadLetterPdf}>Download PDF</button>
             </div>
             <div className={styles.toolbarCenter}>
-              <button type="button" className={styles.randomBtn} onClick={() => setRandomKey((k) => k + 1)}>🎲 RANDOM</button>
+              <button type="button" className={styles.randomBtn} onClick={() => setRandomKey((k) => k + 1)}>
+                <EmojiImage emoji="🎲" size={20} /> RANDOM
+              </button>
             </div>
             <div className={styles.toolbarRight}>
               <div className={styles.quickActions}>

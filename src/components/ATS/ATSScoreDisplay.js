@@ -1,6 +1,7 @@
 import React from 'react';
 import { ATS_SLABS } from '@/constants/ats';
 import Link from 'next/link';
+import EmojiImage from '@/components/UI/EmojiImage';
 
 const ATSScoreDisplay = ({ score }) => {
   // Find the slab that matches the current score
@@ -128,9 +129,20 @@ const ATSScoreDisplay = ({ score }) => {
               border: 'none',
               cursor: 'pointer',
               background: score < 80 ? '#2563eb' : '#0f172a',
-              transition: 'transform 0.2s active'
+              transition: 'transform 0.2s active',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
             }}>
-              {score < 80 ? '🤖 Boost Score with AI' : '✨ Final Polish & Download'}
+              {score < 80 ? (
+                <>
+                  <EmojiImage emoji="🤖" size={20} /> Boost Score with AI
+                </>
+              ) : (
+                <>
+                  <EmojiImage emoji="✨" size={20} /> Final Polish & Download
+                </>
+              )}
             </button>
           </Link>
         </div>

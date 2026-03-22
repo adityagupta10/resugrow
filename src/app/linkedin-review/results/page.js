@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from './results.module.css';
 
 // Reusing the Elite slab logic but tailored for LinkedIn
@@ -41,7 +42,7 @@ export default function LinkedInResults() {
   const router = useRouter();
 
   useEffect(() => {
-    const stored = sessionStorage.getItem('linkedinResults');
+    const stored = localStorage.getItem('linkedinResults');
     if (!stored) {
       router.push('/linkedin-review');
       return;
@@ -204,8 +205,8 @@ export default function LinkedInResults() {
             <div className={styles.promoContent}>
               <h4>Precision Makeover?</h4>
               <p>Use our Futuristic AI + expert strategy stack to rebuild your profile into a high-conversion recruiter magnet.</p>
-              <Link href="/payment?service=linkedin-makeover&source=results-promo-cta" className="btn btn-primary" style={{ width: '100%', marginTop: '16px', borderRadius: '10px' }}>
-                ✨ Optimize LinkedIn Profile
+              <Link href="/payment?service=linkedin-makeover&source=results-promo-cta" className="btn btn-primary" style={{ width: '100%', marginTop: '16px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <EmojiImage emoji="✨" size={20} /> Optimize LinkedIn Profile
               </Link>
             </div>
           </div>
@@ -214,8 +215,8 @@ export default function LinkedInResults() {
         {issues.length > 0 && (
           <section className={styles.flagsSection}>
             <div className={styles.issuesBox}>
-              <h3 className={styles.actionTitle} style={{ color: '#b91c1c' }}>
-                <span style={{ marginRight: '10px' }}>⚠️</span> Critical Flags
+              <h3 className={styles.actionTitle} style={{ color: '#b91c1c', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <EmojiImage emoji="⚠️" size={24} /> Critical Flags
               </h3>
               <ul className={styles.actionList}>
                 {issues.map((i, idx) => (
@@ -307,8 +308,9 @@ function CategoryScore({ title, score, max, subSections, locked = false, partial
         <div className={styles.lockOverlay}>
           <h5 className={styles.lockOverlayTitle}>Unlock Full Skills Breakdown</h5>
           <p className={styles.lockOverlayText}>Get complete credibility insights with the LinkedIn optimization plan.</p>
-          <Link href="/payment?service=linkedin-makeover&source=results-lock-cta" className="btn btn-primary" style={{ borderRadius: '10px', padding: '10px 20px', fontSize: '14px' }}>
-            🚀 Unlock My LinkedIn Advantage
+          <Link href="/payment?service=linkedin-makeover&source=results-lock-cta" className="btn btn-primary" style={{ borderRadius: '10px', padding: '10px 20px', fontSize: '14px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <EmojiImage emoji="🚀" size={18} alt="" />
+            Unlock My LinkedIn Advantage
           </Link>
         </div>
       )}

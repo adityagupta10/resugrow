@@ -1,0 +1,191 @@
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+.page { min-height: 100vh; background: #f5f7fa; font-family: 'Inter', sans-serif; }
+
+.header {
+  position: sticky; top: 0; z-index: 50;
+  background: white; border-bottom: 1px solid #e5e7eb;
+  backdrop-filter: blur(8px);
+}
+.headerInner {
+  max-width: 1400px; margin: 0 auto; padding: 0 24px;
+  height: 56px; display: flex; align-items: center; justify-content: space-between;
+}
+.logo { display: flex; align-items: center; gap: 8px; }
+.logoText { font-weight: 600; font-size: 15px; color: #111; }
+.headerActions { display: flex; align-items: center; gap: 10px; }
+
+.downloadBtn {
+  background: #2563eb; color: white; border: none;
+  padding: 8px 18px; border-radius: 8px; font-size: 14px;
+  font-weight: 500; cursor: pointer; transition: background 0.15s;
+}
+.downloadBtn:hover { background: #1d4ed8; }
+.downloadBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.atsBtn {
+  background: white; color: #374151; border: 1px solid #d1d5db;
+  padding: 8px 14px; border-radius: 8px; font-size: 13px;
+  font-weight: 500; cursor: pointer; transition: background 0.15s;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+}
+.atsBtn:hover { background: #f9fafb; }
+
+/* ── Main layout ─────────────────────────────────────────────────────────── */
+.layout {
+  max-width: 1400px; margin: 0 auto; padding: 32px 24px;
+  display: flex; gap: 32px;
+}
+
+/* ── Editor panel ────────────────────────────────────────────────────────── */
+.editor { width: 480px; flex-shrink: 0; }
+
+.section { margin-bottom: 8px; }
+.sectionHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.sectionTitle {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; color: #6b7280; margin: 0 0 16px;
+}
+.sectionHeader .sectionTitle { margin: 0; }
+.divider { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.label { display: block; font-size: 11.5px; font-weight: 500; color: #374151; margin-bottom: 4px; }
+.input {
+  width: 100%; padding: 7px 10px; border: 1px solid #d1d5db;
+  border-radius: 6px; font-size: 13px; color: #111;
+  background: white; box-sizing: border-box; transition: border-color 0.15s;
+}
+.input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.input:disabled { background: #f3f4f6; color: #9ca3af; }
+
+.textarea {
+  width: 100%; padding: 7px 10px; border: 1px solid #d1d5db;
+  border-radius: 6px; font-size: 13px; color: #111;
+  background: white; box-sizing: border-box; resize: vertical;
+  font-family: inherit; transition: border-color 0.15s;
+}
+.textarea:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+
+.card {
+  border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 16px; margin-bottom: 12px; position: relative; background: white;
+}
+.deleteBtn {
+  position: absolute; top: 10px; right: 10px;
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; color: #9ca3af; padding: 4px;
+  border-radius: 4px; transition: color 0.15s;
+}
+.deleteBtn:hover { color: #ef4444; }
+
+.checkRow { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
+.checkLabel { font-size: 12px; color: #4b5563; cursor: pointer; }
+
+.addBtn {
+  background: white; color: #374151; border: 1px solid #d1d5db;
+  padding: 5px 12px; border-radius: 6px; font-size: 12px;
+  font-weight: 500; cursor: pointer; white-space: nowrap; transition: background 0.15s;
+}
+.addBtn:hover { background: #f9fafb; }
+
+.tagList { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
+  padding: 3px 8px; border-radius: 20px; font-size: 12px;
+}
+.tagOutline {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: white; color: #374151; border: 1px solid #d1d5db;
+  padding: 3px 8px; border-radius: 20px; font-size: 12px;
+}
+.tagRemove { background: none; border: none; cursor: pointer; font-size: 14px; color: inherit; opacity: 0.6; padding: 0; }
+.tagRemove:hover { opacity: 1; }
+.addRow { display: flex; gap: 8px; }
+.empty { font-size: 12px; color: #9ca3af; margin: 0; }
+
+/* ── Score badge ─────────────────────────────────────────────────────────── */
+.scoreBadge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;
+  cursor: pointer; transition: all 0.15s; text-decoration: none;
+}
+.scoreBadge:hover { background: #dcfce7; }
+.scoreBadgeLow { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+.scoreBadgeMid { background: #fffbeb; color: #d97706; border-color: #fde68a; }
+
+/* ── Preview panel ───────────────────────────────────────────────────────── */
+.preview { flex: 1; min-width: 0; }
+.previewLabel {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; color: #6b7280; margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.previewCard {
+  border: 1px solid #e5e7eb; border-radius: 12px;
+  overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  background: white; position: sticky; top: 72px;
+}
+
+/* ── Resume document ─────────────────────────────────────────────────────── */
+.resumeDoc {
+  background: white; padding: 40px; min-height: 900px;
+  font-family: Georgia, serif; font-size: 13px; line-height: 1.5; color: #1a1a1a;
+}
+.resumeHeader { border-bottom: 2px solid #1a1a1a; padding-bottom: 16px; margin-bottom: 20px; }
+.resumeName { font-size: 26px; font-weight: 700; margin: 0; color: #1a1a1a; letter-spacing: -0.5px; }
+.resumePosition {
+  font-size: 13.5px; color: #444; margin: 4px 0 0;
+  font-family: Arial, sans-serif; font-style: italic;
+}
+.resumeContact {
+  margin-top: 6px; display: flex; flex-wrap: wrap; gap: 14px;
+  font-size: 11.5px; color: #555; font-family: Arial, sans-serif;
+}
+.resumeSection { margin-bottom: 20px; }
+.resumeSectionTitle {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: #333; margin: 0 0 8px;
+  border-bottom: 1px solid #ddd; padding-bottom: 4px; font-family: Arial, sans-serif;
+}
+.resumeText { margin: 0; color: #333; line-height: 1.65; white-space: pre-line; }
+.resumeEntry { margin-bottom: 14px; }
+.resumeEntryHeader {
+  display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px;
+}
+.resumeDate { font-size: 11.5px; color: #666; white-space: nowrap; margin-left: 12px; font-family: Arial, sans-serif; }
+.resumeCompany { color: #555; font-size: 12.5px; }
+.resumeDesc { margin: 4px 0 0; color: #333; white-space: pre-line; line-height: 1.65; font-size: 13px; }
+.resumeSkills { display: flex; flex-wrap: wrap; gap: 6px; }
+.resumeSkillTag {
+  background: #f0f0f0; border-radius: 4px;
+  padding: 2px 8px; font-size: 11.5px; color: #333; font-family: Arial, sans-serif;
+}
+.resumeCertList { margin: 4px 0 0; padding-left: 16px; color: #333; }
+.resumeCertList li { margin-bottom: 3px; font-size: 12.5px; }
+.resumeBulletList { margin: 4px 0 0; padding-left: 16px; color: #333; }
+.resumeBulletList li { margin-bottom: 4px; font-size: 12.5px; line-height: 1.6; }
+
+/* ── Tip banner ──────────────────────────────────────────────────────────── */
+.tipBanner {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+  padding: 10px 14px; margin-bottom: 20px; font-size: 12px; color: #1e40af;
+  display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
+}
+
+/* ── Print iframe overlay ────────────────────────────────────────────────── */
+.printFrame {
+  position: fixed; top: -9999px; left: -9999px;
+  width: 210mm; height: 297mm; border: none; visibility: hidden;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .layout { flex-direction: column; padding: 16px; }
+  .editor { width: 100%; }
+  .previewCard { position: static; }
+}

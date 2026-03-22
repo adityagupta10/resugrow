@@ -5,14 +5,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Testimonials from '@/components/Testimonials/Testimonials';
 import ATSScoreDisplay from '@/components/ATS/ATSScoreDisplay';
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from './results.module.css';
 
 // Status icon helper
 function StatusIcon({ status }) {
-  if (status === 'pass') return <span style={{ color: 'var(--success)' }}>✓</span>;
-  if (status === 'error') return <span style={{ color: '#dc2626' }}>●</span>;
-  if (status === 'warning') return <span style={{ color: '#d97706' }}>⚠</span>;
-  return <span style={{ color: 'var(--text-muted)' }}>ℹ</span>;
+  if (status === 'pass') return <EmojiImage emoji="✓" size={16} />;
+  if (status === 'error') return <EmojiImage emoji="●" size={16} />;
+  if (status === 'warning') return <EmojiImage emoji="⚠" size={16} />;
+  return <EmojiImage emoji="ℹ" size={16} />;
 }
 
 export default function ATSResultsPage() {
@@ -22,8 +23,8 @@ export default function ATSResultsPage() {
   const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem('atsResults');
-    const preview = sessionStorage.getItem('resumePreview');
+    const stored = localStorage.getItem('atsResults');
+    const preview = localStorage.getItem('resumePreview');
     const hydrateTimer = setTimeout(() => {
       if (stored) setResults(JSON.parse(stored));
       if (preview) setPreviewUrl(preview);
@@ -36,7 +37,9 @@ export default function ATSResultsPage() {
   if (loading) {
     return (
       <div className={styles.resultsPage} style={{ textAlign: 'center', paddingTop: '120px' }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>
+          <EmojiImage emoji="🔍" size={48} />
+        </div>
         <h2 style={{ fontSize: '24px', fontWeight: '700' }}>Analyzing your resume...</h2>
         <p style={{ color: 'var(--text-secondary)' }}>This usually takes a few seconds.</p>
       </div>
@@ -46,7 +49,9 @@ export default function ATSResultsPage() {
   if (!results) {
     return (
       <div className={styles.resultsPage} style={{ textAlign: 'center', paddingTop: '120px' }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>📄</div>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>
+          <EmojiImage emoji="📄" size={48} />
+        </div>
         <h2 style={{ fontSize: '24px', fontWeight: '700' }}>No Scan Data Found</h2>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
           Please upload your resume on the ATS Checker page first.
@@ -222,7 +227,7 @@ export default function ATSResultsPage() {
             <section key={catId} id={catId} className={styles.categorySection} style={{ scrollMarginTop: '100px' }}>
               <div className={styles.categoryHeader}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '24px' }}>{categoryIcons[catId]}</span>
+                  <EmojiImage emoji={categoryIcons[catId]} size={24} alt={`${cat.title} category icon for ATS scan breakdown`} />
                   <h2 style={{ fontSize: '20px', fontWeight: '800' }}>{cat.title}</h2>
                 </div>
                 <SubScore score={cat.score} max={cat.max} type="category" />
@@ -235,7 +240,7 @@ export default function ATSResultsPage() {
                   <div key={modId} className={styles.issueCard}>
                     <div className={styles.issueHeader} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <span style={{ fontSize: '20px' }}>{moduleIcons[modId] || 'ℹ️'}</span>
+                        <EmojiImage emoji={moduleIcons[modId] || 'ℹ️'} size={22} alt={`Icon for ${modId} ATS module`} />
                         <h3 style={{ fontSize: '16px', fontWeight: '700' }}>
                           {modId.split(/(?=[A-Z])/).join(' ').replace(/^\w/, c => c.toUpperCase())}
                         </h3>
@@ -254,7 +259,13 @@ export default function ATSResultsPage() {
                       <div className={styles.checkList} style={{ marginTop: '16px' }}>
                         {Object.entries(extractedData.contact).map(([label, value]) => (
                           <div key={label} className={styles.checkItem} style={{ display: 'flex', gap: '8px', fontSize: '13px', marginBottom: '4px' }}>
-                            <span style={{ color: value === 'Not found' ? '#ef4444' : '#22c55e' }}>{value === 'Not found' ? '✗' : '✓'}</span>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', color: value === 'Not found' ? '#ef4444' : '#22c55e' }}>
+                              {value === 'Not found' ? (
+                                <EmojiImage emoji="✗" size={14} alt={`Missing ${label} on resume`} />
+                              ) : (
+                                <EmojiImage emoji="✓" size={14} alt={`${label} found on resume`} />
+                              )}
+                            </span>
                             <span style={{ textTransform: 'capitalize', width: '70px', fontWeight: '600' }}>{label}:</span>
                             <span style={{ color: value === 'Not found' ? '#94a3b8' : 'inherit' }}>{value}</span>
                           </div>
@@ -279,13 +290,16 @@ export default function ATSResultsPage() {
 
                     {modId === 'kwMatch' && gapAnalysis?.length > 0 && (
                       <div style={{ marginTop: '16px', background: '#ffe4e6', border: '1px solid #fecdd3', padding: '12px', borderRadius: '8px' }}>
-                        <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#be123c', marginBottom: '8px' }}>🚀 Keyword Gap Analysis</h4>
+                        <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#be123c', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <EmojiImage emoji="🚀" size={16} alt="Rocket icon for keyword gap analysis versus job description" />
+                          Keyword Gap Analysis
+                        </h4>
                         {gapAnalysis.map((gap, idx) => (
                           <div key={idx} style={{ marginBottom: '8px', fontSize: '13px' }}>
                             <span style={{ fontWeight: '700', color: '#9f1239' }}>&quot;{gap.missing}&quot;</span>
                             <p style={{ margin: '4px 0 8px', color: '#881337', fontStyle: 'italic' }}>{gap.suggestion}</p>
                             <Link href={`/tools/sar-rewriter?keyword=${encodeURIComponent(gap.missing)}`}>
-                              <button style={{ 
+                              <button type="button" style={{ 
                                 background: '#be123c', 
                                 color: 'white', 
                                 border: 'none', 
@@ -293,9 +307,13 @@ export default function ATSResultsPage() {
                                 borderRadius: '6px', 
                                 fontSize: '11px', 
                                 fontWeight: '700',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px'
                               }}>
-                                🤖 Fix with AI
+                                <EmojiImage emoji="🤖" size={14} alt="" />
+                                Fix with AI
                               </button>
                             </Link>
                           </div>
@@ -311,10 +329,14 @@ export default function ATSResultsPage() {
                           style={{
                             fontSize: '13px',
                             padding: '10px 24px',
-                            marginTop: '8px'
+                            marginTop: '8px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px'
                           }}
                         >
-                          ✨ Optimize LinkedIn Profile
+                          <EmojiImage emoji="✨" size={18} alt="" />
+                          Optimize LinkedIn Profile
                         </Link>
                       </div>
                     )}
@@ -337,7 +359,10 @@ export default function ATSResultsPage() {
         {/* Right Side: Resume Preview */}
         <aside className={styles.previewPanel}>
           <div style={{ padding: '12px 16px', background: '#f1f5f9', borderBottom: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '12px', fontWeight: '700' }}>📄 LIVE PREVIEW</span>
+            <span style={{ fontSize: '12px', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <EmojiImage emoji="📄" size={14} alt="" />
+              LIVE PREVIEW
+            </span>
             {fileInfo && <span style={{ fontSize: '11px', color: '#64748b' }}>{fileInfo.type} • {fileInfo.size}</span>}
           </div>
           {previewUrl ? (

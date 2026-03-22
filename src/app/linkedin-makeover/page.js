@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from './page.module.css';
 
 const heroPhrases = [
@@ -128,7 +129,9 @@ export default function LinkedinMakeover() {
           <div className={styles.painGrid}>
             {painPoints.map((point) => (
               <div key={point.title} className={styles.painCard}>
-                <div className={styles.painIcon}>{point.icon}</div>
+                <div className={styles.painIcon}>
+                  <EmojiImage emoji={point.icon} size={40} />
+                </div>
                 <h3 className={styles.painCardTitle}>{point.title}</h3>
                 <p className={styles.painCardDesc}>{point.desc}</p>
               </div>

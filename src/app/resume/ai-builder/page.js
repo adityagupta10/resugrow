@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styles from '../../subpage.module.css';
 import { createPageMetadata } from '@/lib/seo';
+import EmojiImage from '@/components/UI/EmojiImage';
 
 export const metadata = createPageMetadata({
   title: 'AI Resume Builder | Build ATS-Friendly Resumes Faster',
@@ -39,7 +40,7 @@ export default function AIBuilder() {
             intelligent content suggestions and ATS optimization.
           </p>
           <div className={styles.subpageBtn}>
-            <Link href="/coming-soon" className="btn btn-primary">Start Building Free</Link>
+            <Link href="/resume/builder" className="btn btn-primary">Start Building Free</Link>
             <Link href="/resume/ats-checker" className="btn btn-secondary">Check Your ATS Score</Link>
           </div>
         </div>
@@ -54,7 +55,9 @@ export default function AIBuilder() {
           <div className={styles.featureGrid}>
             {features.map((f) => (
               <div key={f.title} className={styles.featureCard}>
-                <div className={styles.featureCardIcon}>{f.icon}</div>
+                <div className={styles.featureCardIcon}>
+                  <EmojiImage emoji={f.icon} size={40} />
+                </div>
                 <h3 className={styles.featureCardTitle}>{f.title}</h3>
                 <p className={styles.featureCardDesc}>{f.desc}</p>
               </div>

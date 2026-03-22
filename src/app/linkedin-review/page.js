@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../subpage.module.css';
 
 
@@ -113,7 +114,7 @@ export default function ProfileReview() {
 
       clearInterval(progressInterval);
       setProgress(100);
-      sessionStorage.setItem('linkedinResults', JSON.stringify(data));
+      localStorage.setItem('linkedinResults', JSON.stringify(data));
       
       setTimeout(() => {
         router.push('/linkedin-review/results');
@@ -144,7 +145,7 @@ export default function ProfileReview() {
             {/* INSTRUCTIONS */}
             <div style={{ marginBottom: '24px', padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
               <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span>📋</span> How to get your PDF
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><EmojiImage emoji="📋" size={18} alt="" /> How to get your PDF</span>
               </h3>
               <ol style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: '#475569', lineHeight: '1.6' }}>
                 <li>Open your <strong>LinkedIn profile</strong></li>
@@ -178,7 +179,9 @@ export default function ProfileReview() {
                       onChange={handleFileChange} 
                       style={{ display: 'none' }} 
                     />
-                    <div style={{ fontSize: '32px', marginBottom: '12px' }}>{file ? '📄' : '📥'}</div>
+                    <div style={{ fontSize: '32px', marginBottom: '12px', display: 'flex', justifyContent: 'center' }}>
+                      <EmojiImage emoji={file ? '📄' : '📥'} size={40} alt={file ? 'PDF document ready for LinkedIn profile scan' : 'Upload inbox icon for LinkedIn PDF file'} />
+                    </div>
                     <h4 style={{ margin: '0 0 8px 0', fontSize: '16px', color: '#0f172a' }}>
                       {file ? file.name : 'Click to Upload or Drag & Drop'}
                     </h4>
@@ -219,7 +222,7 @@ export default function ProfileReview() {
             </div>
             
             <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '16px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-              <span>🔒</span> LinkedIn&rsquo;s &quot;Save to PDF&quot; is working in 2026. 100% private.
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><EmojiImage emoji="🔒" size={18} alt="" /> LinkedIn&rsquo;s &quot;Save to PDF&quot; is working in 2026. 100% private.</span>
             </p>
           </div>
         </div>
@@ -234,7 +237,9 @@ export default function ProfileReview() {
           <div className={styles.featureGrid}>
             {analysisCategories.map((f) => (
               <div key={f.title} className={styles.featureCard}>
-                <div className={styles.featureCardIcon}>{f.icon}</div>
+                <div className={styles.featureCardIcon}>
+                  <EmojiImage emoji={f.icon} size={32} />
+                </div>
                 <h3 className={styles.featureCardTitle}>{f.title}</h3>
                 <p className={styles.featureCardDesc}>{f.desc}</p>
               </div>
@@ -272,7 +277,7 @@ function ErrorBox({ error }) {
       alignItems: 'flex-start',
       gap: '12px'
     }}>
-      <span style={{ fontSize: '16px' }}>⚠️</span>
+      <EmojiImage emoji="⚠️" size={20} alt="Warning icon for LinkedIn scan error" />
       <div>
         <h4 style={{ color: '#991b1b', fontSize: '13px', fontWeight: '700', margin: '0 0 2px 0' }}>Scan Halted</h4>
         <p style={{ color: '#b91c1c', fontSize: '13px', margin: 0, lineHeight: '1.4' }}>

@@ -18,7 +18,7 @@ import { parsePDF } from '@/lib/pdf-extract';
 import { detectDocumentType } from '@/lib/documentAnalyzer';
 
 function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return string.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
 
 // ---------------------------------------------------------------------------

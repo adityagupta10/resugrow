@@ -36,7 +36,7 @@ export default function LinkedInPastePage() {
         return;
       }
 
-      sessionStorage.setItem('linkedinResults', JSON.stringify(data));
+      localStorage.setItem('linkedinResults', JSON.stringify(data));
       router.push('/linkedin-review/results');
     } catch (scanError) {
       console.error('LinkedIn paste scan failed:', scanError);

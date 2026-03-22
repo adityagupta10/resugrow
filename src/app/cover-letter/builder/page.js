@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createPageMetadata } from '@/lib/seo';
 import CoverLetterBuilderClient from './CoverLetterBuilderClient';
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../../subpage.module.css';
 import landingStyles from './landing.module.css';
 
@@ -50,7 +51,9 @@ export default function CoverLetterBuilder() {
           <div className={`${styles.featureGrid} ${landingStyles.compactFeatureGrid}`}>
             {features.map((f) => (
               <div key={f.title} className={`${styles.featureCard} ${landingStyles.compactFeatureCard}`}>
-                <div className={styles.featureCardIcon}>{f.icon}</div>
+                <div className={styles.featureCardIcon}>
+                  <EmojiImage emoji={f.icon} size={32} />
+                </div>
                 <h3 className={styles.featureCardTitle}>{f.title}</h3>
                 <p className={styles.featureCardDesc}>{f.desc}</p>
               </div>

@@ -2,6 +2,7 @@
 
 import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import EmojiImage from '@/components/UI/EmojiImage';
 import styles from './page.module.css';
 
 const SAMPLE_BULLETS = [
@@ -160,7 +161,13 @@ const SARContent = () => {
             </div>
 
             <button className={styles.primaryBtn} onClick={handleRewrite} disabled={loading}>
-              {loading ? 'Optimizing Bullet...' : '✨ Generate Advanced Rewrites'}
+              {loading ? (
+                'Optimizing Bullet...'
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <EmojiImage emoji="✨" size={20} /> Generate Advanced Rewrites
+                </div>
+              )}
             </button>
 
             {error && <p className={styles.error}>{error}</p>}
@@ -272,6 +279,19 @@ const SARContent = () => {
                       ))}
                     </ul>
                   </div>
+                </div>
+
+                <div style={{
+                  marginTop: '16px',
+                  padding: '12px 14px',
+                  background: '#fffbeb',
+                  border: '1px solid #fcd34d',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  color: '#92400e',
+                  lineHeight: '1.6'
+                }}>
+                  <strong>⚠ Heads up on metrics:</strong> Numbers like percentages, dollar amounts, and timeframes in the rewrites above are illustrative placeholders generated to show structure. Replace every metric with your real data before using these bullets on your resume. Fabricated numbers on a resume are a red flag to recruiters.
                 </div>
               </div>
             )}
