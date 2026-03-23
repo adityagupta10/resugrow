@@ -1,12 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
-import Testimonials from '@/components/Testimonials/Testimonials';
-import ATSScoreDisplay from '@/components/ATS/ATSScoreDisplay';
 import EmojiImage from '@/components/UI/EmojiImage';
 import styles from './results.module.css';
+
+const Testimonials = dynamic(() => import('@/components/Testimonials/Testimonials'), {
+  ssr: false,
+  loading: () => <div className="animate-pulse bg-gray-100 h-64 rounded-xl" />
+});
+
+const ATSScoreDisplay = dynamic(() => import('@/components/ATS/ATSScoreDisplay'), {
+  ssr: false,
+  loading: () => <div className="animate-pulse bg-gray-100 h-48 rounded-xl" />
+});
 
 // Status icon helper
 function StatusIcon({ status }) {

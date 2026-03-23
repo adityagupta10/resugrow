@@ -26,7 +26,7 @@ const footerLinks = {
   'Resources': [
     { label: 'Blog', href: '/blog' },
     { label: 'Career Tips', href: '/career-tips' },
-    { label: 'Resume Examples', href: '/resume-examples' },
+    { label: 'Resume Examples', href: '/resume/templates' },
     { label: 'Help Center', href: '/help-center' },
   ],
 };
@@ -84,7 +84,7 @@ export default function Footer() {
 
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category} className={styles.footerColumn}>
-              <h4 className={styles.columnTitle}>{category}</h4>
+              <h3 className={styles.columnTitle}>{category}</h3>
               <ul className={styles.columnLinks}>
                 {links.map((link) => (
                   <li key={link.href + link.label}>

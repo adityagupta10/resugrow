@@ -91,7 +91,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={styles.navbarWrapper} ref={navRef}>
+    <nav className={`${styles.navbarWrapper} ${mobileOpen ? styles.mobileNavOpen : ''}`} ref={navRef}>
       <div className={styles.navContainer}>
         <Link href="/" className={styles.logo}>
           <Image
@@ -113,11 +113,6 @@ export default function Navbar() {
           <span></span>
           <span></span>
         </button>
-
-        <div 
-          className={`${styles.backdrop} ${mobileOpen ? styles.active : ''}`}
-          onClick={() => setMobileOpen(false)}
-        />
 
       </div>
       <div className={`${styles.navLinks} ${mobileOpen ? styles.open : ''}`}>

@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 :root {
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --primary: #2563eb;
   --primary-dark: #1d4ed8;
   --primary-light: #3b82f6;
@@ -50,15 +49,22 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-x: hidden;
   width: 100%;
 }
 
 body.menu-open {
-  transform: translateX(-280px);
   overflow: hidden;
-  height: 100vh;
+}
+
+body.menu-open main {
+  filter: blur(8px);
+  transition: filter 0.3s ease;
+}
+
+body.menu-open footer {
+  filter: blur(8px);
+  transition: filter 0.3s ease;
 }
 
 a {

@@ -243,7 +243,8 @@
 
 .panelSlides {
   position: relative;
-  height: 436px;
+  aspect-ratio: 520 / 436;
+  width: 100%;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -274,16 +275,27 @@
 }
 
 .slideDot {
+  width: 48px; /* Increased hit area to 48px for mobile users */
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+
+.slideDot::after {
+  content: '';
   width: 8px;
   height: 8px;
   border-radius: 999px;
   background: #cbd5e1;
-  border: 0;
-  cursor: pointer;
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.slideDotActive {
+.slideDotActive::after {
   background: #2563eb;
   transform: scale(1.16);
 }

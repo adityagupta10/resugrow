@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
@@ -344,6 +345,7 @@ export default function Home() {
                       alt={slide.alt}
                       width={520}
                       height={620}
+                      sizes="(max-width: 768px) 318px, 520px"
                       className={`${styles.panelImage} ${index === activeSlide ? styles.panelImageActive : ''}`}
                       priority={index === 0}
                     />

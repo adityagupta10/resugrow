@@ -1,3 +1,4 @@
+import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
@@ -10,6 +11,13 @@ import {
   getOrganizationJsonLd,
   getWebsiteJsonLd
 } from '@/lib/seo';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-inter',
+});
 
 const homeMetadata = createPageMetadata({
   title: 'ResuGrow | AI Resume Builder, ATS Checker & LinkedIn Optimization',
@@ -68,8 +76,8 @@ export default function RootLayout({ children }) {
   const websiteJsonLd = getWebsiteJsonLd();
 
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={inter.variable}>
+      <body className={inter.className}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
