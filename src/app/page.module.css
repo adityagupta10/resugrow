@@ -292,12 +292,17 @@
   height: 8px;
   border-radius: 999px;
   background: #cbd5e1;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  opacity: 0.6;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 
 .slideDotActive::after {
   background: #2563eb;
-  transform: scale(1.16);
+  transform: scale(1.25) translateZ(0);
+  opacity: 1;
 }
 
 .proofSection {

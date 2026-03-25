@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
+import AuthProvider from '@/components/Providers/AuthProvider';
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
@@ -76,23 +77,29 @@ export default function RootLayout({ children }) {
   const websiteJsonLd = getWebsiteJsonLd();
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://www.resugrow.com" />
+        <link rel="dns-prefetch" href="https://www.resugrow.com" />
+      </head>
       <body className={inter.className}>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
-        <Navbar />
-        <main style={{ paddingTop: '72px' }}>
-          {children}
-        </main>
-        <Footer />
-        <Analytics />
-        <SpeedInsights />
+        <AuthProvider>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          />
+          <Navbar />
+          <main style={{ paddingTop: '72px' }}>
+            {children}
+          </main>
+          <Footer />
+          <Analytics />
+          <SpeedInsights />
+        </AuthProvider>
       </body>
     </html>
   );

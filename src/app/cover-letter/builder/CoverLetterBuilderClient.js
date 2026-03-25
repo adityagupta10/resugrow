@@ -540,14 +540,31 @@ export default function CoverLetterBuilderClient() {
 
   return (
     <div className={styles.builderPage}>
+      {/* ── Top Header Bar ── */}
+      <header className={styles.builderHeader}>
+        <div className={styles.builderHeaderInner}>
+          <Link href="/cover-letter/builder" className={styles.builderLogo}>
+            ← Cover Letter Studio
+          </Link>
+          <div className={styles.builderHeaderActions}>
+            <button type="button" className="btn btn-primary" onClick={downloadLetterPdf} style={{ padding: '8px 18px', fontSize: '13px' }}>
+              Download PDF
+            </button>
+            <Link href="/resume/ats-checker" className="btn btn-secondary" style={{ padding: '8px 14px', fontSize: '13px' }}>
+              Run ATS Scanner
+            </Link>
+          </div>
+        </div>
+      </header>
+
       <div className={styles.container}>
         <aside className={styles.leftPane}>
           <div className={styles.leftHeader}>
             <h2>Build Your Cover Letter</h2>
-            <p>Deterministic + 1000+ random variations. Always recruiter-ready.</p>
+            <p>1000+ Unique Variations. Recruiter-ready output.</p>
             <div className={styles.progressWrap}>
               <div className={styles.progressTrack}><span style={{ width: `${progress}%` }} /></div>
-              <small>{progress}% completed</small>
+              <small>Step {currentStep + 1} of {STEPS.length} — {progress}% complete</small>
             </div>
           </div>
 
@@ -562,8 +579,8 @@ export default function CoverLetterBuilderClient() {
           {stepContent[currentStep]}
 
           <div className={styles.navActions}>
-            <button type="button" className="btn btn-secondary" disabled={currentStep === 0} onClick={() => setCurrentStep((s) => Math.max(0, s - 1))}>Back</button>
-            <button type="button" className="btn btn-primary" disabled={currentStep === STEPS.length - 1} onClick={() => setCurrentStep((s) => Math.min(STEPS.length - 1, s + 1))}>Next</button>
+            <button type="button" className="btn btn-secondary" disabled={currentStep === 0} onClick={() => setCurrentStep((s) => Math.max(0, s - 1))}>← Back</button>
+            <button type="button" className="btn btn-primary" disabled={currentStep === STEPS.length - 1} onClick={() => setCurrentStep((s) => Math.min(STEPS.length - 1, s + 1))}>Next →</button>
           </div>
 
           <div className={styles.aiRewriteSection}>
@@ -577,20 +594,19 @@ export default function CoverLetterBuilderClient() {
         <section className={styles.rightPane}>
           <div className={styles.previewToolbar}>
             <div className={styles.toolbarLeft}>
-              <button type="button" className="btn btn-primary" onClick={downloadLetterPdf}>Download PDF</button>
+              <span style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: '#6b7280' }}>Live Preview</span>
             </div>
             <div className={styles.toolbarCenter}>
               <button type="button" className={styles.randomBtn} onClick={() => setRandomKey((k) => k + 1)}>
-                <EmojiImage emoji="🎲" size={20} /> RANDOM
+                <EmojiImage emoji="🎲" size={20} /> RANDOMIZE
               </button>
             </div>
             <div className={styles.toolbarRight}>
               <div className={styles.quickActions}>
                 {isManualOverride && (
-                  <button type="button" onClick={() => { setIsManualOverride(false); setManualHtml(previewHtml); setPolishMode(''); }}>Sync from wizard</button>
+                  <button type="button" onClick={() => { setIsManualOverride(false); setManualHtml(previewHtml); setPolishMode(''); }}>↺ Sync from wizard</button>
                 )}
               </div>
-              <Link href="/resume/ats-checker" className="btn btn-primary">Run ATS Scanner</Link>
             </div>
           </div>
 

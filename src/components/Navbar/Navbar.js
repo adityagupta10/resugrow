@@ -3,10 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import styles from './Navbar.module.css';
 
 const resumeItems = [
-  { label: 'AI Powered Resume Builder', href: '/resume/ai-builder' },
+  { label: 'AI Powered Resume Builder', href: '/resume/builder' },
   { label: 'ATS Score Checker', href: '/resume/ats-checker' },
   { label: 'High Impact Templates', href: '/resume/templates' },
 ];
@@ -23,9 +24,12 @@ const linkedinItems = [
 ];
 
 export default function Navbar() {
+  const { data: session, status } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const navRef = useRef(null);
+  const userRef = useRef(null);
 
   useEffect(() => {
     if (mobileOpen) {
@@ -40,6 +44,9 @@ export default function Navbar() {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setActiveDropdown(null);
         setMobileOpen(false);
+      }
+      if (userRef.current && !userRef.current.contains(e.target)) {
+        setUserDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -63,8 +70,6 @@ export default function Navbar() {
 
   const handleMouseLeave = () => {
     isHovered.current = false;
-    // If a click-timer is running, don't close immediately. 
-    // The timer will check isHovered when it fires.
     if (!clickTimeoutRef.current) {
       setActiveDropdown(null);
     }
@@ -96,7 +101,7 @@ export default function Navbar() {
         <Link href="/" className={styles.logo}>
           <Image
             src="/resugrow-logo.png"
-            alt="ResuGrow logo for AI resume builder, ATS resume checker, and LinkedIn profile optimization platform"
+            alt="ResuGrow logo"
             width={180}
             height={48}
             style={{ objectFit: 'contain' }}
@@ -113,124 +118,174 @@ export default function Navbar() {
           <span></span>
           <span></span>
         </button>
-
       </div>
+
       <div className={`${styles.navLinks} ${mobileOpen ? styles.open : ''}`}>
-          {/* Resume Dropdown */}
-          <div 
-            className={styles.dropdownWrapper}
-            onMouseEnter={() => handleMouseEnter('resume')}
-            onMouseLeave={handleMouseLeave}
+        {/* Resume Dropdown */}
+        <div 
+          className={styles.dropdownWrapper}
+          onMouseEnter={() => handleMouseEnter('resume')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <button
+            className={`${styles.navLink} ${activeDropdown === 'resume' ? styles.active : ''}`}
+            onClick={() => toggleDropdown('resume')}
           >
-            <button
-              className={`${styles.navLink} ${activeDropdown === 'resume' ? styles.active : ''}`}
-              onClick={() => toggleDropdown('resume')}
-            >
-              Resume
-              <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            {activeDropdown === 'resume' && (
-              <div className={styles.dropdown}>
-                {resumeItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={styles.dropdownItem}
-                    onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
-                  >
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Cover Letter Dropdown */}
-          <div 
-            className={styles.dropdownWrapper}
-            onMouseEnter={() => handleMouseEnter('cover')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button
-              className={`${styles.navLink} ${activeDropdown === 'cover' ? styles.active : ''}`}
-              onClick={() => toggleDropdown('cover')}
-            >
-              Cover Letter
-              <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            {activeDropdown === 'cover' && (
-              <div className={styles.dropdown}>
-                {coverLetterItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={styles.dropdownItem}
-                    onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
-                  >
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* LinkedIn Dropdown */}
-          <div 
-            className={styles.dropdownWrapper}
-            onMouseEnter={() => handleMouseEnter('linkedin')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button
-              className={`${styles.navLink} ${activeDropdown === 'linkedin' ? styles.active : ''}`}
-              onClick={() => toggleDropdown('linkedin')}
-            >
-              LinkedIn
-              <span className={styles.navBadgeNew}>New</span>
-              <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            {activeDropdown === 'linkedin' && (
-              <div className={styles.dropdown}>
-                {linkedinItems.map((item) => (
-                  <Link
-                    key={item.href + item.label}
-                    href={item.href}
-                    className={styles.dropdownItem}
-                    onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
-                  >
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-          
-          <Link href="/about" className={styles.navLink} onClick={() => setMobileOpen(false)}>
-            About Us
-          </Link>
-          <Link href="/contact" className={styles.navLink} onClick={() => setMobileOpen(false)}>
-            Contact Us
-          </Link>
-
-          <a
-            href="https://www.linkedin.com/company/resugrow-com/"
-            className={styles.linkedinFollow}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMobileOpen(false)}
-          >
-            Follow on LinkedIn
-          </a>
-
-          <Link href="/resume/ai-builder" className={`btn btn-primary ${styles.ctaBtn}`} onClick={() => setMobileOpen(false)}>
-            Build My Resume
-          </Link>
+            Resume
+            <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          {activeDropdown === 'resume' && (
+            <div className={styles.dropdown}>
+              {resumeItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={styles.dropdownItem}
+                  onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
+                >
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* Cover Letter Dropdown */}
+        <div 
+          className={styles.dropdownWrapper}
+          onMouseEnter={() => handleMouseEnter('cover')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <button
+            className={`${styles.navLink} ${activeDropdown === 'cover' ? styles.active : ''}`}
+            onClick={() => toggleDropdown('cover')}
+          >
+            Cover Letter
+            <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          {activeDropdown === 'cover' && (
+            <div className={styles.dropdown}>
+              {coverLetterItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={styles.dropdownItem}
+                  onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
+                >
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* LinkedIn Dropdown */}
+        <div 
+          className={styles.dropdownWrapper}
+          onMouseEnter={() => handleMouseEnter('linkedin')}
+          onMouseLeave={handleMouseLeave}
+        >
+          <button
+            className={`${styles.navLink} ${activeDropdown === 'linkedin' ? styles.active : ''}`}
+            onClick={() => toggleDropdown('linkedin')}
+          >
+            LinkedIn
+            <span className={styles.navBadgeNew}>New</span>
+            <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          {activeDropdown === 'linkedin' && (
+            <div className={styles.dropdown}>
+              {linkedinItems.map((item) => (
+                <Link
+                  key={item.href + item.label}
+                  href={item.href}
+                  className={styles.dropdownItem}
+                  onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
+                >
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <Link href="/about" className={styles.navLink} onClick={() => setMobileOpen(false)}>
+          About Us
+        </Link>
+        <Link href="/contact" className={styles.navLink} onClick={() => setMobileOpen(false)}>
+          Contact Us
+        </Link>
+
+        {/* Auth Section */}
+        {status === 'loading' ? (
+          <div className={styles.navLoading}>...</div>
+        ) : session ? (
+          <div className={styles.userSection} ref={userRef}>
+            <button 
+              className={styles.userProfileBtn}
+              onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+            >
+              <div className={styles.avatarWrapper}>
+                {session.user.image ? (
+                  <Image 
+                    src={session.user.image} 
+                    alt={session.user.name || 'User'} 
+                    width={32} 
+                    height={32} 
+                    className={styles.avatar}
+                  />
+                ) : (
+                  <div className={styles.avatarPlaceholder}>
+                    {session.user.name ? session.user.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                )}
+              </div>
+              <span className={styles.userName}>{session.user.name?.split(' ')[0]}</span>
+              <svg className={`${styles.chevron} ${userDropdownOpen ? styles.chevronRotate : ''}`} width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 4L5 7L8 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            
+            {userDropdownOpen && (
+              <div className={styles.userDropdown}>
+                <div className={styles.userDropdownHeader}>
+                  <p className={styles.userEmail}>{session.user.email}</p>
+                </div>
+                <Link href="/dashboard" className={styles.dropdownItem} onClick={() => setUserDropdownOpen(false)}>
+                  <span>My Dashboard</span>
+                </Link>
+                <Link href="/settings" className={styles.dropdownItem} onClick={() => setUserDropdownOpen(false)}>
+                  <span>Settings</span>
+                </Link>
+                <div className={styles.dropdownDivider} />
+                <button 
+                  className={`${styles.dropdownItem} ${styles.signOutBtn}`}
+                  onClick={() => signOut()}
+                >
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button 
+            className={styles.loginBtn}
+            onClick={() => signIn('google')}
+          >
+            Sign In
+          </button>
+        )}
+
+        <Link href="/resume/builder" className={`btn btn-primary ${styles.ctaBtn}`} onClick={() => setMobileOpen(false)}>
+          Build My Resume
+        </Link>
+      </div>
     </nav>
   );
 }

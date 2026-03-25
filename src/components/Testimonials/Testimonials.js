@@ -72,7 +72,7 @@ export default function Testimonials({ title = "Success Stories", subtitle = "Re
               <div className={styles.footer}>
                 <div className={styles.avatar}>{t.name[0]}</div>
                 <div>
-                  <div className={styles.name}>{t.name}</div>
+                  <h3 className={styles.name}>{t.name}</h3>
                   <div className={styles.role}>{t.role}</div>
                 </div>
               </div>

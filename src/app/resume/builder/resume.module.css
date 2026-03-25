@@ -131,44 +131,80 @@
   background: white; position: sticky; top: 72px;
 }
 
-/* ── Resume document ─────────────────────────────────────────────────────── */
+/* ── Resume document (Professional Blue Theme) ───────────────────────────── */
 .resumeDoc {
-  background: white; padding: 40px; min-height: 900px;
-  font-family: Georgia, serif; font-size: 13px; line-height: 1.5; color: #1a1a1a;
+  background: white; padding: 36px 40px; min-height: 900px;
+  font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+  font-size: 13px; line-height: 1.55; color: #2d2d2d;
 }
-.resumeHeader { border-bottom: 2px solid #1a1a1a; padding-bottom: 16px; margin-bottom: 20px; }
-.resumeName { font-size: 26px; font-weight: 700; margin: 0; color: #1a1a1a; letter-spacing: -0.5px; }
+
+/* Name + subtitle */
+.resumeHeader { padding-bottom: 14px; margin-bottom: 0; border-bottom: none; }
+.resumeName {
+  font-size: 28px; font-weight: 800; margin: 0;
+  color: #1a5276; letter-spacing: 0.5px; text-transform: uppercase;
+}
 .resumePosition {
-  font-size: 13.5px; color: #444; margin: 4px 0 0;
-  font-family: Arial, sans-serif; font-style: italic;
+  font-size: 15px; color: #2c3e50; margin: 2px 0 0;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
 }
+
+/* Contact bar */
 .resumeContact {
-  margin-top: 6px; display: flex; flex-wrap: wrap; gap: 14px;
-  font-size: 11.5px; color: #555; font-family: Arial, sans-serif;
+  margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px;
+  font-size: 11.5px; color: #555;
+  padding-bottom: 14px; border-bottom: none;
 }
-.resumeSection { margin-bottom: 20px; }
+.resumeContact span { white-space: nowrap; }
+.resumeContact span + span::before {
+  content: '|'; margin-right: 6px; color: #bbb;
+}
+
+/* Section blocks */
+.resumeSection { margin-bottom: 16px; }
 .resumeSectionTitle {
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 1.5px; color: #333; margin: 0 0 8px;
-  border-bottom: 1px solid #ddd; padding-bottom: 4px; font-family: Arial, sans-serif;
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: #1a5276; margin: 0 0 10px;
+  padding: 5px 10px; background: #dce9f4; border-left: 4px solid #1a5276;
+  border-bottom: none;
 }
-.resumeText { margin: 0; color: #333; line-height: 1.65; white-space: pre-line; }
-.resumeEntry { margin-bottom: 14px; }
+
+/* Summary text */
+.resumeText { margin: 0; color: #333; line-height: 1.7; font-size: 12.5px; }
+
+/* Experience / Education entries */
+.resumeEntry { margin-bottom: 12px; }
 .resumeEntryHeader {
-  display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px;
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 13px; margin-bottom: 2px;
 }
-.resumeDate { font-size: 11.5px; color: #666; white-space: nowrap; margin-left: 12px; font-family: Arial, sans-serif; }
-.resumeCompany { color: #555; font-size: 12.5px; }
-.resumeDesc { margin: 4px 0 0; color: #333; white-space: pre-line; line-height: 1.65; font-size: 13px; }
-.resumeSkills { display: flex; flex-wrap: wrap; gap: 6px; }
+.resumeDate {
+  font-size: 12px; color: #1a5276; white-space: nowrap;
+  margin-left: 12px; font-weight: 700;
+}
+.resumeCompany { color: #555; font-size: 12px; font-style: italic; }
+
+/* Description (supports bullet lines) */
+.resumeDesc {
+  margin: 4px 0 0 0; color: #333; white-space: pre-line;
+  line-height: 1.65; font-size: 12.5px; padding-left: 14px;
+}
+
+/* Skills grid layout */
+.resumeSkills {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 4px 16px;
+}
 .resumeSkillTag {
-  background: #f0f0f0; border-radius: 4px;
-  padding: 2px 8px; font-size: 11.5px; color: #333; font-family: Arial, sans-serif;
+  background: transparent; border-radius: 0;
+  padding: 2px 0; font-size: 12px; color: #333;
 }
-.resumeCertList { margin: 4px 0 0; padding-left: 16px; color: #333; }
-.resumeCertList li { margin-bottom: 3px; font-size: 12.5px; }
-.resumeBulletList { margin: 4px 0 0; padding-left: 16px; color: #333; }
-.resumeBulletList li { margin-bottom: 4px; font-size: 12.5px; line-height: 1.6; }
+
+/* Cert + achievement lists */
+.resumeCertList { margin: 4px 0 0; padding-left: 18px; color: #333; list-style-type: disc; }
+.resumeCertList li { margin-bottom: 3px; font-size: 12px; line-height: 1.6; }
+.resumeBulletList { margin: 4px 0 0; padding-left: 18px; color: #333; list-style-type: disc; }
+.resumeBulletList li { margin-bottom: 4px; font-size: 12px; line-height: 1.6; }
 
 /* ── Tip banner ──────────────────────────────────────────────────────────── */
 .tipBanner {

@@ -7,6 +7,17 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import { templates as templateData } from '../data/templates';
 
+// Dynamic imports for components below the fold
+const Hero = dynamic(() => import('@/components/Home/Hero'), {
+  ssr: false,
+  loading: () => <div className="bg-gray-50 h-[600px] w-full animate-pulse" />
+});
+
+const Testimonials = dynamic(() => import('@/components/Testimonials/Testimonials'), {
+  ssr: false,
+  loading: () => <div className="animate-pulse bg-gray-50 h-96 rounded-2xl" />
+});
+
 const productPillars = [
   {
     tag: 'ATS',
@@ -56,28 +67,7 @@ const proofStats = [
   { value: '21K+', label: 'Interview wins tracked monthly' },
   { value: '98%', label: 'ATS parser readability on premium templates' },
   { value: '5,126', label: 'Verified product reviews' },
-  { value: '< 30 sec', label: 'Average first score generation' }
-];
-
-const testimonials = [
-  {
-    text: 'I stopped guessing. The ATS checker showed exactly what was missing and my response rate changed within one week.',
-    name: 'Sarah Chen',
-    role: 'Software Engineer',
-    initials: 'SC'
-  },
-  {
-    text: 'LinkedIn review made the gaps obvious. After rewriting my About and headline, recruiter messages picked up fast.',
-    name: 'Marcus Johnson',
-    role: 'Marketing Director',
-    initials: 'MJ'
-  },
-  {
-    text: 'The SAR rewriter is practical, not generic. It transformed my vague bullets into strong impact statements I could use directly.',
-    name: 'Emily Rodriguez',
-    role: 'Product Manager',
-    initials: 'ER'
-  }
+  { value: '30 sec', label: 'Average score generation' }
 ];
 
 const faqData = [
@@ -117,90 +107,6 @@ const faqData = [
 
 const templates = templateData.slice(0, 4);
 
-const heroPhrases = [
-  'Get hired faster',
-  'Unlock the dream job',
-  'Increase your salary',
-  'Level up your career',
-  'Ace your job search',
-  'Beat the hiring bots',
-  'Secure your future',
-  'Land more interviews',
-  'Skip the waitlist'
-];
-
-const heroResumeSlides = [
-  {
-    src: '/hero-images/hero-resume1.png',
-    alt: 'AI resume builder sample with ATS-optimized professional resume layout for job seekers'
-  },
-  {
-    src: '/hero-images/hero-resume2.png',
-    alt: 'ATS-friendly resume template example designed to pass applicant tracking systems'
-  },
-  {
-    src: '/hero-images/hero-resume3.png',
-    alt: 'Professional resume format template for high-converting job applications and recruiter screening'
-  },
-  {
-    src: '/hero-images/hero-resume4.png',
-    alt: 'Best resume template preview to improve interview call rate and hiring visibility'
-  }
-];
-
-const targetCompanies = [
-  {
-    name: 'Meta',
-    logo: '/company-logos/meta.svg',
-    alt: 'Meta company for top tech job targeting with ATS optimized resumes'
-  },
-  {
-    name: 'Google',
-    logo: '/company-logos/google.svg',
-    alt: 'Google company for software engineering and product role applications'
-  },
-  {
-    name: 'Amazon',
-    logo: '/company-logos/amazon.svg',
-    alt: 'Amazon company for competitive resume and interview preparation'
-  },
-  {
-    name: 'Microsoft',
-    logo: '/company-logos/microsoft.svg',
-    alt: 'Microsoft company for AI resume builder and ATS profile optimization'
-  },
-  {
-    name: 'Stripe',
-    logo: '/company-logos/stripe.svg',
-    alt: 'Stripe company for fintech career opportunities and recruiter visibility'
-  },
-  {
-    name: 'Apple',
-    logo: '/company-logos/apple.svg',
-    alt: 'Apple company for premium tech resume targeting and hiring pipelines'
-  },
-  {
-    name: 'Netflix',
-    logo: '/company-logos/netflix.svg',
-    alt: 'Netflix company for product and engineering job seeker targeting'
-  },
-  {
-    name: 'Salesforce',
-    logo: '/company-logos/salesforce.svg',
-    alt: 'Salesforce company for cloud and SaaS career resume optimization'
-  },
-  {
-    name: 'Adobe',
-    logo: '/company-logos/adobe.svg',
-    alt: 'Adobe company for design, marketing, and product role applications'
-  },
-  {
-    name: 'Uber',
-    logo: '/company-logos/uber.svg',
-    alt: 'Uber company for operations and engineering hiring target companies'
-  }
-];
-
 const appJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -221,43 +127,6 @@ const appJsonLd = {
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState(0);
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [currentText, setCurrentText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [activeSlide, setActiveSlide] = useState(0);
-
-  useEffect(() => {
-    const phrase = heroPhrases[currentPhraseIndex];
-    const speed = isDeleting ? 32 : 58;
-
-    const timer = setTimeout(() => {
-      if (!isDeleting && currentText === phrase) {
-        setIsDeleting(true);
-        return;
-      }
-
-      if (isDeleting && currentText.length === 0) {
-        setIsDeleting(false);
-        setCurrentPhraseIndex((prev) => (prev + 1) % heroPhrases.length);
-        return;
-      }
-
-      const nextText = isDeleting
-        ? phrase.substring(0, currentText.length - 1)
-        : phrase.substring(0, currentText.length + 1);
-      setCurrentText(nextText);
-    }, currentText === phrase && !isDeleting ? 1300 : speed);
-
-    return () => clearTimeout(timer);
-  }, [currentText, currentPhraseIndex, isDeleting]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % heroResumeSlides.length);
-    }, 2600);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <>
@@ -266,107 +135,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
       />
 
-      <section className={styles.heroSection}>
-        <div className={styles.container}>
-          <div className={styles.heroGrid}>
-            <div className={styles.heroContent}>
-              <p className={styles.heroKicker}>#1 AI Career Advancement Platform</p>
-              <h1 className={styles.heroTitle}>
-                <span className={styles.typewriterWrap}>
-                  <span className={styles.typewriterText}>{currentText}</span>
-                  <span className={styles.typewriterCursor}>|</span>
-                </span>
-                <br />
-                with <span className="gradient-text">ResuGrow</span> Platform
-              </h1>
-              <p className={styles.heroSubtitle}>
-                The AI-powered career engine trusted by 25M+ pros to get hired at Google, Tesla, Microsoft and beyond.
-                <br />
-                Build ATS-optimized resumes in 5 minutes with one-click job tailoring, AI-driven scoring, and a LinkedIn profile that ranks in the top 2%.
-              </p>
-
-              <div className={styles.heroActions}>
-                <Link href="/resume/ai-builder" className={`btn btn-primary ${styles.heroPrimaryBtn}`}>
-                  Build my AI Powered resume
-                </Link>
-                <div className={styles.heroSecondaryActions}>
-                  <Link href="/resume/ats-checker" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
-                    ATS-Pro Resume Score
-                  </Link>
-                </div>
-                <div className={styles.heroSecondaryActions}>
-                  <Link href="/linkedin-makeover" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
-                    Linkedin Profile Makeover
-                  </Link>
-                </div>
-              </div>
-
-              <div className={styles.heroSignals}>
-                <span>Trusted by candidates targeting:</span>
-                <div className={styles.signalChips}>
-                  {targetCompanies.map((company) => (
-                    <span key={company.name} className={styles.signalLogo} title={company.name}>
-                      <Image src={company.logo} alt={company.alt} width={22} height={22} />
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <a
-                href="https://www.linkedin.com/company/resugrow-com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.linkedinHint}
-              >
-                Follow product updates on LinkedIn →
-              </a>
-            </div>
-
-            <div className={styles.heroPanel}>
-              <div className={styles.panelTop}>
-                <span>ResuGrow Overview</span>
-                <span>Live</span>
-              </div>
-
-              <div className={styles.panelScoreCard}>
-                <div>
-                  <p>Composite Readiness</p>
-                  <h3>89/100</h3>
-                </div>
-                <div className={styles.scoreRing}>+18</div>
-              </div>
-
-              <div className={styles.panelImageWrap}>
-                <div className={styles.panelSlides}>
-                  {heroResumeSlides.map((slide, index) => (
-                    <Image
-                      key={slide.src}
-                      src={slide.src}
-                      alt={slide.alt}
-                      width={520}
-                      height={620}
-                      sizes="(max-width: 768px) 318px, 520px"
-                      className={`${styles.panelImage} ${index === activeSlide ? styles.panelImageActive : ''}`}
-                      priority={index === 0}
-                    />
-                  ))}
-                </div>
-                <div className={styles.slideDots}>
-                  {heroResumeSlides.map((slide, index) => (
-                    <button
-                      key={slide.src}
-                      type="button"
-                      className={`${styles.slideDot} ${index === activeSlide ? styles.slideDotActive : ''}`}
-                      onClick={() => setActiveSlide(index)}
-                      aria-label={`Show resume preview ${index + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       <section className={styles.proofSection}>
         <div className={styles.container}>
@@ -474,20 +243,10 @@ export default function Home() {
             <h2>Used by Job Seekers Who Want Precise, Actionable Feedback</h2>
           </div>
 
-          <div className={styles.testimonialGrid}>
-            {testimonials.map((item) => (
-              <article key={item.name} className={styles.testimonialCard}>
-                <p>{item.text}</p>
-                <div className={styles.testimonialAuthor}>
-                  <span>{item.initials}</span>
-                  <div>
-                    <h4>{item.name}</h4>
-                    <small>{item.role}</small>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+          <Testimonials 
+            title="Success Stories" 
+            subtitle="Real results from job seekers who beat the bots." 
+          />
         </div>
       </section>
 

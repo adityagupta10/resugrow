@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { createPageMetadata } from '@/lib/seo';
-import CoverLetterBuilderClient from './CoverLetterBuilderClient';
 import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../../subpage.module.css';
 import landingStyles from './landing.module.css';
@@ -36,7 +35,7 @@ export default function CoverLetterBuilder() {
             or start from professionally designed templates.
           </p>
           <div className={styles.subpageBtn}>
-            <Link href="#cover-letter-builder" className="btn btn-primary">Build Your Cover Letter</Link>
+            <Link href="/cover-letter/create" className="btn btn-primary">Start Building</Link>
             <Link href="/cover-letter/templates" className="btn btn-secondary">Browse Templates</Link>
           </div>
         </div>
@@ -60,10 +59,6 @@ export default function CoverLetterBuilder() {
             ))}
           </div>
         </div>
-      </section>
-
-      <section id="cover-letter-builder">
-        <CoverLetterBuilderClient />
       </section>
     </>
   );

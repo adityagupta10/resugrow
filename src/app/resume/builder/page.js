@@ -85,9 +85,21 @@ function TagSection({ title, items, newVal, setNewVal, onAdd, onRemove, placehol
   );
 }
 
+// ── Bullet parser: splits description text into bullet items ──────────────
+function parseBullets(text) {
+  if (!text) return [];
+  return text
+    .split(/\n|(?=•)|(?=\*\s)|(?=-\s)/)
+    .map((line) => line.replace(/^[•*\-]\s*/, '').trim())
+    .filter((line) => line.length > 0);
+}
+
 // ── Resume preview ────────────────────────────────────────────────────────
 function ResumeDoc({ data }) {
   const p = data.personal;
+
+  const hasAdditionalInfo = data.languages.length > 0 || data.certifications.length > 0 || data.extracurricular.length > 0;
+
   return (
     <div className={styles.resumeDoc}>
       {/* Header */}
@@ -97,9 +109,9 @@ function ResumeDoc({ data }) {
           <p className={styles.resumePosition}>{p.currentPosition}</p>
         )}
         <div className={styles.resumeContact}>
-          {p.email && <span>{p.email}</span>}
-          {p.phone && <span>{p.phone}</span>}
           {p.location && <span>{p.location}</span>}
+          {p.phone && <span>{p.phone}</span>}
+          {p.email && <span>{p.email}</span>}
           {p.website && <span>{p.website}</span>}
           {p.linkedin && <span>{p.linkedin}</span>}
         </div>
@@ -107,27 +119,56 @@ function ResumeDoc({ data }) {
 
       {p.summary && (
         <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Professional Summary</h2>
+          <h2 className={styles.resumeSectionTitle}>Summary</h2>
           <p className={styles.resumeText}>{p.summary}</p>
         </div>
       )}
 
       {data.experience.length > 0 && (
         <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Work Experience</h2>
-          {data.experience.map((exp) => (
-            <div key={exp.id} className={styles.resumeEntry}>
+          <h2 className={styles.resumeSectionTitle}>Professional Experience</h2>
+          {data.experience.map((exp) => {
+            const bullets = parseBullets(exp.description);
+            return (
+              <div key={exp.id} className={styles.resumeEntry}>
+                <div className={styles.resumeEntryHeader}>
+                  <div>
+                    <strong>{exp.position || 'Position'},{' '}</strong>
+                    {exp.company && <span>{exp.company}</span>}
+                  </div>
+                  <span className={styles.resumeDate}>
+                    {exp.startDate}{(exp.startDate || exp.endDate || exp.current) ? ' — ' : ''}
+                    {exp.current ? 'Present' : exp.endDate}
+                  </span>
+                </div>
+                {bullets.length > 0 && (
+                  <ul className={styles.resumeBulletList}>
+                    {bullets.map((b, i) => <li key={i}>{b}</li>)}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {data.education.length > 0 && (
+        <div className={styles.resumeSection}>
+          <h2 className={styles.resumeSectionTitle}>Education</h2>
+          {data.education.map((edu) => (
+            <div key={edu.id} className={styles.resumeEntry}>
               <div className={styles.resumeEntryHeader}>
                 <div>
-                  <strong>{exp.position || 'Position'}</strong>
-                  {exp.company && <span className={styles.resumeCompany}> — {exp.company}</span>}
+                  <strong>{edu.degree || 'Degree'}{edu.field ? ` in ${edu.field}` : ''}</strong>
                 </div>
                 <span className={styles.resumeDate}>
-                  {exp.startDate}{(exp.startDate || exp.endDate || exp.current) ? ' – ' : ''}
-                  {exp.current ? 'Present' : exp.endDate}
+                  {edu.startDate}{(edu.startDate || edu.endDate) ? ' — ' : ''}{edu.endDate}
                 </span>
               </div>
-              {exp.description && <p className={styles.resumeDesc}>{exp.description}</p>}
+              <div className={styles.resumeCompany}>
+                {edu.institution || 'Institution'}
+                {edu.gpa ? ` · GPA: ${edu.gpa}` : ''}
+              </div>
             </div>
           ))}
         </div>
@@ -136,15 +177,22 @@ function ResumeDoc({ data }) {
       {data.projects.length > 0 && (
         <div className={styles.resumeSection}>
           <h2 className={styles.resumeSectionTitle}>Projects</h2>
-          {data.projects.map((proj) => (
-            <div key={proj.id} className={styles.resumeEntry}>
-              <div className={styles.resumeEntryHeader}>
-                <strong>{proj.name || 'Project Name'}</strong>
-                {proj.link && <span className={styles.resumeDate}>{proj.link}</span>}
+          {data.projects.map((proj) => {
+            const bullets = parseBullets(proj.description);
+            return (
+              <div key={proj.id} className={styles.resumeEntry}>
+                <div className={styles.resumeEntryHeader}>
+                  <strong>{proj.name || 'Project Name'}</strong>
+                  {proj.link && <span className={styles.resumeDate}>{proj.link}</span>}
+                </div>
+                {bullets.length > 0 && (
+                  <ul className={styles.resumeBulletList}>
+                    {bullets.map((b, i) => <li key={i}>{b}</li>)}
+                  </ul>
+                )}
               </div>
-              {proj.description && <p className={styles.resumeDesc}>{proj.description}</p>}
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -157,29 +205,9 @@ function ResumeDoc({ data }) {
         </div>
       )}
 
-      {data.education.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Education</h2>
-          {data.education.map((edu) => (
-            <div key={edu.id} className={styles.resumeEntry}>
-              <div className={styles.resumeEntryHeader}>
-                <strong>{edu.institution || 'Institution'}</strong>
-                <span className={styles.resumeDate}>
-                  {edu.startDate}{(edu.startDate || edu.endDate) ? ' – ' : ''}{edu.endDate}
-                </span>
-              </div>
-              <div className={styles.resumeCompany}>
-                {edu.degree}{edu.field ? `, ${edu.field}` : ''}
-                {edu.gpa ? ` · GPA: ${edu.gpa}` : ''}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
       {data.skills.length > 0 && (
         <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Skills</h2>
+          <h2 className={styles.resumeSectionTitle}>Technical Skills</h2>
           <div className={styles.resumeSkills}>
             {data.skills.map((skill, i) => (
               <span key={i} className={styles.resumeSkillTag}>{skill}</span>
@@ -190,7 +218,7 @@ function ResumeDoc({ data }) {
 
       {data.strengths.length > 0 && (
         <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Strengths</h2>
+          <h2 className={styles.resumeSectionTitle}>Core Strengths</h2>
           <div className={styles.resumeSkills}>
             {data.strengths.map((s, i) => (
               <span key={i} className={styles.resumeSkillTag}>{s}</span>
@@ -199,32 +227,27 @@ function ResumeDoc({ data }) {
         </div>
       )}
 
-      {data.certifications.length > 0 && (
+      {hasAdditionalInfo && (
         <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Certifications</h2>
-          <ul className={styles.resumeCertList}>
-            {data.certifications.map((cert, i) => <li key={i}>{cert}</li>)}
-          </ul>
-        </div>
-      )}
-
-      {data.languages.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Languages</h2>
-          <div className={styles.resumeSkills}>
-            {data.languages.map((lang, i) => (
-              <span key={i} className={styles.resumeSkillTag}>{lang}</span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {data.extracurricular.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Extra-Curricular Activities</h2>
-          <ul className={styles.resumeBulletList}>
-            {data.extracurricular.map((item, i) => <li key={i}>{item}</li>)}
-          </ul>
+          <h2 className={styles.resumeSectionTitle}>Additional Information</h2>
+          {data.languages.length > 0 && (
+            <div style={{ marginBottom: '6px' }}>
+              <strong style={{ fontSize: '12px' }}>Languages: </strong>
+              <span style={{ fontSize: '12px' }}>{data.languages.join(', ')}</span>
+            </div>
+          )}
+          {data.certifications.length > 0 && (
+            <div style={{ marginBottom: '6px' }}>
+              <strong style={{ fontSize: '12px' }}>Certifications: </strong>
+              <span style={{ fontSize: '12px' }}>{data.certifications.join(', ')}</span>
+            </div>
+          )}
+          {data.extracurricular.length > 0 && (
+            <div>
+              <strong style={{ fontSize: '12px' }}>Activities: </strong>
+              <span style={{ fontSize: '12px' }}>{data.extracurricular.join(', ')}</span>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -291,45 +314,55 @@ export default function ResumeBuilderPage() {
   const removeProject = (id) =>
     setData((d) => ({ ...d, projects: d.projects.filter((p) => p.id !== id) }));
 
-  // ── PDF download via hidden iframe ────────────────────────────────────
+  // ── PDF download via print window ──────────────────────────────────────
   const handleDownloadPDF = () => {
     const docHtml = previewRef.current?.innerHTML;
     if (!docHtml) return;
+
+    // Build CSS using the actual hashed CSS module class names
+    const S = styles;
+    const printCSS = `
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+        font-size: 13px; line-height: 1.55; color: #2d2d2d;
+        padding: 36px 40px; background: white;
+      }
+      .${S.resumeDoc} { background: white; min-height: auto; padding: 0; font-family: 'Segoe UI', Calibri, Arial, sans-serif; font-size: 13px; line-height: 1.55; color: #2d2d2d; }
+      .${S.resumeHeader} { padding-bottom: 14px; margin-bottom: 0; border-bottom: none; }
+      .${S.resumeName} { font-size: 28px; font-weight: 800; color: #1a5276; letter-spacing: 0.5px; text-transform: uppercase; margin: 0; }
+      .${S.resumePosition} { font-size: 15px; color: #2c3e50; margin: 2px 0 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+      .${S.resumeContact} { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; font-size: 11.5px; color: #555; padding-bottom: 14px; }
+      .${S.resumeContact} span { white-space: nowrap; }
+      .${S.resumeContact} span + span::before { content: '|'; margin-right: 6px; color: #bbb; }
+      .${S.resumeSection} { margin-bottom: 16px; }
+      .${S.resumeSectionTitle} { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #1a5276; margin: 0 0 10px; padding: 5px 10px; background: #dce9f4; border-left: 4px solid #1a5276; }
+      .${S.resumeText} { color: #333; line-height: 1.7; font-size: 12.5px; margin: 0; }
+      .${S.resumeEntry} { margin-bottom: 12px; }
+      .${S.resumeEntryHeader} { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; margin-bottom: 2px; }
+      .${S.resumeDate} { font-size: 12px; color: #1a5276; white-space: nowrap; margin-left: 12px; font-weight: 700; }
+      .${S.resumeCompany} { color: #555; font-size: 12px; font-style: italic; }
+      .${S.resumeSkills} { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 16px; }
+      .${S.resumeSkillTag} { font-size: 12px; color: #333; padding: 2px 0; }
+      .${S.resumeBulletList}, .${S.resumeCertList} { margin: 4px 0 0; padding-left: 18px; color: #333; list-style-type: disc; }
+      .${S.resumeBulletList} li, .${S.resumeCertList} li { margin-bottom: 3px; font-size: 12px; line-height: 1.6; }
+      h1 { font-size: 28px; font-weight: 800; color: #1a5276; letter-spacing: 0.5px; text-transform: uppercase; margin: 0; }
+      h2 { margin: 0; }
+      p { margin: 0; }
+      ul { margin: 0; }
+      @media print {
+        body { padding: 15mm 20mm; }
+        @page { margin: 0; size: A4; }
+      }
+    `;
 
     const printWindow = window.open('', '_blank', 'width=900,height=700');
     printWindow.document.write(`<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Resume</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: Georgia, serif; font-size: 13px;
-      line-height: 1.5; color: #1a1a1a;
-      padding: 40px; background: white;
-    }
-    .resumeHeader { border-bottom: 2px solid #1a1a1a; padding-bottom: 16px; margin-bottom: 20px; }
-    .resumeName { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
-    .resumePosition { font-size: 13.5px; color: #444; margin-top: 4px; font-family: Arial, sans-serif; font-style: italic; }
-    .resumeContact { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 14px; font-size: 11.5px; color: #555; font-family: Arial, sans-serif; }
-    .resumeSection { margin-bottom: 20px; }
-    .resumeSectionTitle { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #333; margin: 0 0 8px; border-bottom: 1px solid #ddd; padding-bottom: 4px; font-family: Arial, sans-serif; }
-    .resumeText { margin: 0; color: #333; line-height: 1.65; white-space: pre-line; }
-    .resumeEntry { margin-bottom: 14px; }
-    .resumeEntryHeader { display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; }
-    .resumeDate { font-size: 11.5px; color: #666; white-space: nowrap; margin-left: 12px; font-family: Arial, sans-serif; }
-    .resumeCompany { color: #555; font-size: 12.5px; }
-    .resumeDesc { margin: 4px 0 0; color: #333; white-space: pre-line; line-height: 1.65; font-size: 13px; }
-    .resumeSkills { display: flex; flex-wrap: wrap; gap: 6px; }
-    .resumeSkillTag { background: #f0f0f0; border-radius: 4px; padding: 2px 8px; font-size: 11.5px; color: #333; font-family: Arial, sans-serif; }
-    .resumeCertList, .resumeBulletList { margin: 4px 0 0; padding-left: 16px; color: #333; }
-    .resumeCertList li, .resumeBulletList li { margin-bottom: 3px; font-size: 12.5px; line-height: 1.6; }
-    @media print {
-      body { padding: 15mm 20mm; }
-      @page { margin: 0; size: A4; }
-    }
-  </style>
+  <title>Resume — ${data.personal.fullName || 'Download'}</title>
+  <style>${printCSS}</style>
 </head>
 <body>${docHtml}</body>
 </html>`);

@@ -4,9 +4,9 @@ Check off these items as the corresponding buttons/links are wired up to their f
 ## Heavy Lifting for Claud and Pro
 - [ ]  1. Template - Clicking on Template in Templates page should open the template in the builder.
 
-- [ ]  2. ATS Score Checker - uploaded resume should be checked by a logic and rated 
+- [X]  2. ATS Score Checker - uploaded resume should be checked by a logic and rated 
 
-- [ ]  3. LinkedIn Profile Review & Score - uploaded resume should be checked by a logic and rated 
+- [X]  3. LinkedIn Profile Review & Score - uploaded resume should be checked by a logic and rated 
 
 - [ ]  4. Cover letter Builder - A cover letter should be made according to given prompt
 
