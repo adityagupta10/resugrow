@@ -109,7 +109,7 @@ export default function CareerTips() {
                     </div>
 
                     <div style={{ textAlign: 'center', marginTop: '40px' }}>
-                        <Link href="/coming-soon" className="btn btn-secondary">Load More Articles</Link>
+                        <Link href="/blog" className="btn btn-secondary">Load More Articles</Link>
                     </div>
                 </div>
             </section>
