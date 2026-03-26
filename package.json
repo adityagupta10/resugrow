@@ -18,11 +18,13 @@
     "@vercel/speed-insights": "^2.0.0",
     "compromise": "^14.15.0",
     "critters": "^0.0.25",
+    "lucide-react": "^1.7.0",
     "next": "16.1.6",
     "next-auth": "^5.0.0-beta.30",
     "pdf-parse": "^1.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-to-print": "^3.3.0",
     "stopword": "^3.1.5"
   },
   "devDependencies": {

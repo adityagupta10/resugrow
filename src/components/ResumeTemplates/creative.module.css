@@ -1,0 +1,145 @@
+.container {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: #34495e;
+  color: white;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.name {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.title {
+  font-size: 18px;
+  opacity: 0.9;
+  margin: 5px 0 0;
+}
+
+.headerRight {
+  text-align: right;
+  font-size: 13px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: 220px;
+  background: #f8f9fa;
+  padding: 30px 25px;
+  border-right: 1px solid #eee;
+}
+
+.sideTitle {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #34495e;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+.summary {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.skillsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skillBadge {
+  background: #ecf0f1;
+  color: #34495e;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.main {
+  flex: 1;
+  padding: 30px 40px;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #34495e;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+
+.item {
+  margin-bottom: 20px;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.company {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.dates {
+  font-size: 12px;
+  color: #95a5a6;
+}
+
+.position {
+  font-size: 14px;
+  color: #e67e22;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.bullets {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.bullets li {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+@media print {
+  .header {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

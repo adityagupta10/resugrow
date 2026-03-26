@@ -23,7 +23,7 @@ export function middleware(req) {
 
     if (!sessionToken) {
       const url = req.nextUrl.clone();
-      url.pathname = '/api/auth/signin';
+      url.pathname = '/login';
       url.searchParams.set('callbackUrl', req.url);
       return NextResponse.redirect(url);
     }

@@ -1,0 +1,53 @@
+.resumeDoc {
+  padding: 25mm 20mm;
+  background: white;
+  font-family: 'Playfair Display', serif; /* Use Google Fonts */
+  color: #1a1a1a;
+  line-height: 1.4;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.watermark {
+  position: absolute;
+  top: 10mm;
+  right: 10mm;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  color: #ccc;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.header { text-align: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
+.name { font-size: 32px; text-transform: uppercase; letter-spacing: 2px; margin: 0; color: #000; }
+.contactRow { font-family: 'Inter', sans-serif; font-size: 12px; color: #555; margin-top: 8px; }
+.link { font-family: 'Inter', sans-serif; font-size: 12px; color: #3b82f6; margin-top: 4px; }
+
+.sectionTitle { 
+  font-size: 14px; 
+  text-transform: uppercase; 
+  border-bottom: 1px solid #eee; 
+  margin: 20px 0 10px; 
+  color: #555;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.bodyText { font-size: 14px; color: #333; }
+
+.entry { margin-bottom: 15px; }
+.entryTop { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; color: #000; }
+.company { font-style: italic; color: #666; font-size: 13px; margin-bottom: 4px; }
+
+.list { padding-left: 20px; margin: 5px 0; }
+.list li { font-size: 13px; color: #444; margin-bottom: 4px; }
+
+@media print {
+  .resumeDoc { padding: 20mm; width: 210mm; height: 297mm; }
+  .watermark { display: none; }
+}

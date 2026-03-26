@@ -1,0 +1,137 @@
+.resumeDoc {
+  display: flex;
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  margin: 0 auto;
+  font-family: 'Open Sans', 'Inter', sans-serif;
+  color: #1a1a1a;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.watermark {
+  position: absolute;
+  top: 10mm;
+  left: 10mm;
+  font-size: 9px;
+  color: #eee;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.mainContent {
+  width: 70%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar {
+  width: 30%;
+  background: #2d3436;
+  color: white;
+  padding: 40px 25px;
+}
+
+.header { margin-bottom: 30px; }
+
+.name {
+  font-size: 34px;
+  font-weight: 800;
+  color: #2d3436;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.tagline {
+  font-size: 16px;
+  color: #636e72;
+  font-weight: 600;
+  margin: 5px 0 0;
+}
+
+.section { margin-bottom: 30px; }
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #2d3436;
+  border-bottom: 3px solid #dfe6e9;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+.summary {
+  font-size: 13.5px;
+  color: #2d3436;
+  line-height: 1.6;
+}
+
+.item { margin-bottom: 25px; }
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.companyInfo { display: flex; flex-direction: column; }
+.company { font-size: 16px; font-weight: 800; color: #2d3436; }
+.position { font-size: 14px; font-weight: 600; color: #0984e3; }
+.dates { font-size: 12px; color: #636e72; font-weight: 600; }
+
+.bullets { padding-left: 20px; margin: 0; }
+.bullets li {
+  font-size: 13px;
+  color: #2d3436;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.sideBlock { margin-bottom: 35px; }
+
+.sideTitle {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #0984e3;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+.contactItem {
+  font-size: 12px;
+  color: #dfe6e9;
+  margin-bottom: 8px;
+  overflow-wrap: break-word;
+}
+
+.skillRow {
+  font-size: 12px;
+  color: white;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eduItem { margin-bottom: 15px; }
+.eduDegree { font-size: 13px; font-weight: 700; color: white; }
+.eduInstitution { font-size: 11px; color: #b2bec3; }
+
+.achievements { padding-left: 15px; margin: 0; list-style: square; }
+.achievements li {
+  font-size: 12px;
+  color: #dfe6e9;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+@media print {
+  .resumeDoc { width: 210mm; height: 297mm; }
+  .sidebar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

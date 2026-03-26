@@ -2,6 +2,10 @@
 
 import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import { useReactToPrint } from 'react-to-print';
+import { RESUME_TEMPLATES } from '@/components/ResumeTemplates/TemplateConfig';
+import TemplateSwitcherModal from '@/components/ResumeTemplates/TemplateSwitcherModal';
+import ResumeStartModal from '@/components/ResumeTemplates/ResumeStartModal';
 import styles from './resume.module.css';
 
 function uid() {
@@ -143,17 +147,6 @@ function SuggestionsPopup({ anchor, onSelect, onClose }) {
   );
 }
 
-// ── Preview Watermark ─────────────────────────────────────────────────────
-function Watermark() {
-  return (
-    <div className={styles.watermark}>
-      <span>RESUGROW</span>
-      <span>RESUGROW</span>
-      <span>RESUGROW</span>
-    </div>
-  );
-}
-
 // ── Tag-based section editor (skills, strengths, languages, etc.) ─────────
 function TagSection({ title, items, newVal, setNewVal, onAdd, onRemove, placeholder, variant = 'blue' }) {
   return (
@@ -182,204 +175,15 @@ function TagSection({ title, items, newVal, setNewVal, onAdd, onRemove, placehol
   );
 }
 
-// ── Bullet parser: splits description text into bullet items ──────────────
-function parseBullets(text) {
-  if (!text) return [];
-  return text
-    .split(/\n|(?=•)|(?=\*\s)|(?=-\s)/)
-    .map((line) => line.replace(/^[•*\-]\s*/, '').trim())
-    .filter((line) => line.length > 0);
-}
-
-// ── Resume preview ────────────────────────────────────────────────────────
-function ResumeDoc({ data }) {
-  const p = data.personal;
-
-  const hasAdditionalInfo = data.languages.length > 0 || data.extracurricular.length > 0;
-
-  return (
-    <div className={styles.resumeDoc}>
-      {/* Header */}
-      <div className={styles.resumeHeader}>
-        <h1 className={styles.resumeName}>{p.fullName || 'Your Name'}</h1>
-        {p.currentPosition && (
-          <p className={styles.resumePosition}>{p.currentPosition}</p>
-        )}
-        <div className={styles.resumeContact}>
-          {p.location && <span>{p.location}</span>}
-          {p.phone && <span>{p.phone}</span>}
-          {p.email && <span>{p.email}</span>}
-          {p.website && <span>{p.website}</span>}
-          {p.linkedin && <span>{p.linkedin}</span>}
-        </div>
-      </div>
-
-      {p.summary && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Summary</h2>
-          <p className={styles.resumeText}>{p.summary}</p>
-        </div>
-      )}
-
-      {data.experience.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Professional Experience</h2>
-          {data.experience.map((exp) => {
-            const bullets = parseBullets(exp.description);
-            return (
-              <div key={exp.id} className={styles.resumeEntry}>
-                <div className={styles.resumeEntryHeader}>
-                  <div>
-                    <strong style={{ fontSize: '13.5px', color: '#1a1a1a' }}>{exp.position || 'Position'}</strong>
-                    {exp.company && (
-                      <span style={{ fontSize: '13px', fontWeight: 600, color: '#2563eb', marginLeft: '6px' }}>
-                        @ {exp.company}
-                      </span>
-                    )}
-                  </div>
-                  <span className={styles.resumeDate}>
-                    {exp.startDate}{(exp.startDate || exp.endDate || exp.current) ? ' — ' : ''}
-                    {exp.current ? 'Present' : exp.endDate}
-                  </span>
-                </div>
-                {bullets.length > 0 && (
-                  <ul className={styles.resumeBulletList}>
-                    {bullets.map((b, i) => <li key={i}>{b}</li>)}
-                  </ul>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {data.education.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Education</h2>
-          {data.education.map((edu) => (
-            <div key={edu.id} className={styles.resumeEntry}>
-              <div className={styles.resumeEntryHeader}>
-                <div>
-                  <strong>{edu.degree || 'Degree'}{edu.field ? ` in ${edu.field}` : ''}</strong>
-                </div>
-                <span className={styles.resumeDate}>
-                  {edu.startDate}{(edu.startDate || edu.endDate) ? ' — ' : ''}{edu.endDate}
-                </span>
-              </div>
-              <div className={styles.resumeCompany}>
-                {edu.institution || 'Institution'}
-                {edu.gpa ? ` · GPA: ${edu.gpa}` : ''}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {data.skills.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Technical Skills</h2>
-          <div className={styles.resumeSkills}>
-            {data.skills.map((skill, i) => (
-              <span key={i} className={styles.resumeSkillTag}>{skill}</span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {data.strengths.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Core Strengths</h2>
-          <div className={styles.resumeSkills}>
-            {data.strengths.map((s, i) => (
-              <span key={i} className={styles.resumeSkillTag}>{s}</span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {data.projects.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Projects</h2>
-          {data.projects.map((proj) => {
-            const bullets = parseBullets(proj.description);
-            return (
-              <div key={proj.id} className={styles.resumeEntry}>
-                <div className={styles.resumeEntryHeader}>
-                  <strong>{proj.name || 'Project Name'}</strong>
-                  {proj.link && <span className={styles.resumeDate}>{proj.link}</span>}
-                </div>
-                {bullets.length > 0 && (
-                  <ul className={styles.resumeBulletList}>
-                    {bullets.map((b, i) => <li key={i}>{b}</li>)}
-                  </ul>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {data.achievements.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Key Achievements</h2>
-          <div className={styles.resumeSkills}>
-            {data.achievements.map((a, i) => (
-              <span key={i} className={styles.resumeSkillTag}>{a}</span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {data.certifications.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Certifications</h2>
-          {data.certifications.map((c, i) => (
-            <div key={c.id || i} className={styles.resumeCertEntry}>
-              <span className={styles.resumeCertTitle}>{c.title || 'Certification'}</span>
-              {c.issuer && <span className={styles.resumeCertIssuer}>{c.issuer}</span>}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {hasAdditionalInfo && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Additional Information</h2>
-          {data.languages.length > 0 && (
-            <div style={{ marginBottom: '6px' }}>
-              <strong style={{ fontSize: '12px' }}>Languages: </strong>
-              <span style={{ fontSize: '12px' }}>
-                {data.languages.map((l, i) => (
-                  <span key={i}>
-                    {l.name}{l.proficiency ? ` (${l.proficiency})` : ''}{i < data.languages.length - 1 ? ' · ' : ''}
-                  </span>
-                ))}
-              </span>
-            </div>
-          )}
-          {data.extracurricular.length > 0 && (
-            <div>
-              <strong style={{ fontSize: '12px' }}>Activities: </strong>
-              <span style={{ fontSize: '12px' }}>{data.extracurricular.join(' · ')}</span>
-            </div>
-          )}
-        </div>
-      )}
-
-      {(data.customSection.title || data.customSection.content) && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>{data.customSection.title || 'Custom Section'}</h2>
-          <p className={styles.resumeText} style={{ whiteSpace: 'pre-wrap' }}>{data.customSection.content}</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ── Main page ─────────────────────────────────────────────────────────────
 export default function ResumeBuilderPage() {
   const [data, setData] = useState(defaultData);
   const previewRef = useRef(null);
+  const [activeTemplateId, setActiveTemplateId] = useState('classic');
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [showStartModal, setShowStartModal] = useState(true);
+
+  const SelectedTemplate = RESUME_TEMPLATES[activeTemplateId]?.component || RESUME_TEMPLATES['classic'].component;
 
   // tag input states
   const [newSkill, setNewSkill] = useState('');
@@ -436,65 +240,11 @@ export default function ResumeBuilderPage() {
   const removeProject = (id) =>
     setData((d) => ({ ...d, projects: d.projects.filter((p) => p.id !== id) }));
 
-  // ── PDF download via print window ──────────────────────────────────────
-  const handleDownloadPDF = () => {
-    const docHtml = previewRef.current?.innerHTML;
-    if (!docHtml) return;
-
-    // Build CSS using the actual hashed CSS module class names
-    const S = styles;
-    const printCSS = `
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body {
-        font-family: 'Segoe UI', Calibri, Arial, sans-serif;
-        font-size: 13px; line-height: 1.55; color: #2d2d2d;
-        padding: 36px 40px; background: white;
-      }
-      .${S.resumeDoc} { background: white; min-height: auto; padding: 0; font-family: 'Segoe UI', Calibri, Arial, sans-serif; font-size: 13px; line-height: 1.55; color: #2d2d2d; }
-      .${S.resumeHeader} { padding-bottom: 14px; margin-bottom: 0; border-bottom: none; }
-      .${S.resumeName} { font-size: 28px; font-weight: 800; color: #1a5276; letter-spacing: 0.5px; text-transform: uppercase; margin: 0; }
-      .${S.resumePosition} { font-size: 15px; color: #2c3e50; margin: 2px 0 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
-      .${S.resumeContact} { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; font-size: 11.5px; color: #555; padding-bottom: 14px; }
-      .${S.resumeContact} span { white-space: nowrap; }
-      .${S.resumeContact} span + span::before { content: '|'; margin-right: 6px; color: #bbb; }
-      .${S.resumeSection} { margin-bottom: 16px; }
-      .${S.resumeSectionTitle} { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #1a5276; margin: 0 0 10px; padding: 5px 10px; background: #dce9f4; border-left: 4px solid #1a5276; }
-      .${S.resumeText} { color: #333; line-height: 1.7; font-size: 12.5px; margin: 0; }
-      .${S.resumeEntry} { margin-bottom: 12px; }
-      .${S.resumeEntryHeader} { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; margin-bottom: 2px; }
-      .${S.resumeDate} { font-size: 12px; color: #1a5276; white-space: nowrap; margin-left: 12px; font-weight: 700; }
-      .${S.resumeCompany} { color: #555; font-size: 12px; font-style: italic; }
-      .${S.resumeSkills} { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 16px; }
-      .${S.resumeSkillTag} { font-size: 12px; color: #333; padding: 2px 0; }
-      .${S.resumeBulletList}, .${S.resumeCertList} { margin: 4px 0 0; padding-left: 18px; color: #333; list-style-type: disc; }
-      .${S.resumeBulletList} li, .${S.resumeCertList} li { margin-bottom: 3px; font-size: 12px; line-height: 1.6; }
-      h1 { font-size: 28px; font-weight: 800; color: #1a5276; letter-spacing: 0.5px; text-transform: uppercase; margin: 0; }
-      h2 { margin: 0; }
-      p { margin: 0; }
-      ul { margin: 0; }
-      @media print {
-        body { padding: 15mm 20mm; }
-        @page { margin: 0; size: A4; }
-      }
-    `;
-
-    const printWindow = window.open('', '_blank', 'width=900,height=700');
-    printWindow.document.write(`<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Resume — ${data.personal.fullName || 'Download'}</title>
-  <style>${printCSS}</style>
-</head>
-<body>${docHtml}</body>
-</html>`);
-    printWindow.document.close();
-    printWindow.focus();
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 400);
-  };
+  // ── PDF download via react-to-print ──────────────────────────────────────
+  const handleDownloadPDF = useReactToPrint({
+    contentRef: previewRef,
+    documentTitle: `Resume_${data.personal.fullName ? data.personal.fullName.replace(/\s+/g, '_') : 'Download'}`
+  });
 
   return (
     <div className={styles.page}>
@@ -508,6 +258,7 @@ export default function ResumeBuilderPage() {
           <div className={styles.headerActions}>
             <ScoreBadge data={data} />
             <Link href="/resume/ats-checker" className={styles.atsBtn}>🔍 ATS Check</Link>
+            <button className={styles.atsBtn} onClick={() => setShowTemplateModal(true)}>🎨 Change Template</button>
             <button className={styles.downloadBtn} onClick={handleDownloadPDF}>⬇ Download PDF</button>
           </div>
         </div>
@@ -893,9 +644,8 @@ export default function ResumeBuilderPage() {
             </button>
           </div>
           <div className={styles.previewCard}>
-            <Watermark />
             <div ref={previewRef}>
-              <ResumeDoc data={data} />
+              <SelectedTemplate data={data} />
             </div>
           </div>
         </div>
@@ -910,6 +660,28 @@ export default function ResumeBuilderPage() {
           setSuggestionAnchor(null);
         }} 
       />
+
+      {showTemplateModal && (
+        <TemplateSwitcherModal
+          activeId={activeTemplateId}
+          onSelect={(id) => {
+            setActiveTemplateId(id);
+            setShowTemplateModal(false);
+          }}
+          onClose={() => setShowTemplateModal(false)}
+        />
+      )}
+
+      {showStartModal && (
+        <ResumeStartModal
+          onFresh={() => setShowStartModal(false)}
+          onImport={(importedData) => {
+            setData({ ...defaultData, ...importedData });
+            setShowStartModal(false);
+          }}
+          onClose={() => setShowStartModal(false)}
+        />
+      )}
     </div>
   );
 }

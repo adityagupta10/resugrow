@@ -1,7 +1,6 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/Navbar/Navbar';
-import Footer from '@/components/Footer/Footer';
+import LayoutWrapper from '@/components/LayoutWrapper';
 import AuthProvider from '@/components/Providers/AuthProvider';
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -92,11 +91,9 @@ export default function RootLayout({ children }) {
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
           />
-          <Navbar />
-          <main style={{ paddingTop: '72px' }}>
+          <LayoutWrapper>
             {children}
-          </main>
-          <Footer />
+          </LayoutWrapper>
           <Analytics />
           <SpeedInsights />
         </AuthProvider>
