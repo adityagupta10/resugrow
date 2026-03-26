@@ -28,6 +28,7 @@ const defaultData = {
   languages: [],
   extracurricular: [],
   projects: [],
+  customSection: { title: '', content: '' },
 };
 
 // ── Score badge ───────────────────────────────────────────────────────────
@@ -54,6 +55,102 @@ function ScoreBadge({ data }) {
     <Link href="/resume/ats-checker" className={`${styles.scoreBadge} ${cls}`} title="Run full ATS scan">
       {label} · {score}/100
     </Link>
+  );
+}// ── AI Suggestions by field ───────────────────────────────────────────────
+const AI_SUGGESTIONS = [
+  {
+    field: '🎯 Impact & Results',
+    items: [
+      'Increased team productivity by 28% by introducing weekly sprint retrospectives and async standups.',
+      'Reduced customer churn by 18% through proactive outreach program targeting at-risk accounts.',
+      'Delivered $1.4M in cost savings by renegotiating vendor contracts and consolidating tooling.',
+      'Grew monthly active users from 12K to 47K in 9 months through targeted growth experiments.',
+      'Achieved 99.97% uptime SLA across 3 production services by implementing automated failover.',
+    ],
+  },
+  {
+    field: '🚀 Leadership & Ownership',
+    items: [
+      'Spearheaded end-to-end redesign of onboarding flow, reducing time-to-value from 14 days to 3.',
+      'Led cross-functional team of 8 (engineering, design, data) to ship v2.0 two weeks ahead of schedule.',
+      'Mentored 4 junior engineers, 2 of whom were promoted within 12 months.',
+      'Owned product roadmap for a $3M ARR product line, prioritising features based on NPS and usage data.',
+      'Championed migration from monolith to microservices, enabling 3x faster independent deployments.',
+    ],
+  },
+  {
+    field: '🛠 Technical Execution',
+    items: [
+      'Architected and deployed a real-time data pipeline processing 2M+ events/day using Kafka and Spark.',
+      'Automated CI/CD workflows using GitHub Actions, cutting release cycle from 2 weeks to 2 days.',
+      'Engineered RESTful APIs consumed by 15+ internal teams, with 99.9% availability over 18 months.',
+      'Optimised SQL query performance by 60% through indexing strategy and query plan analysis.',
+      'Built ML-based recommendation engine that increased average order value by 22%.',
+    ],
+  },
+  {
+    field: '📊 Strategy & Analysis',
+    items: [
+      'Conducted competitive analysis across 12 market players, informing a pivot that added $800K ARR.',
+      'Developed financial model projecting 3-year revenue scenarios, used in Series B fundraise.',
+      'Analysed 6 months of support tickets to identify top 3 friction points, reducing ticket volume by 34%.',
+      'Defined and tracked 12 KPIs across product, marketing, and ops — presented monthly to C-suite.',
+      'Designed A/B testing framework that ran 40+ experiments, lifting conversion rate by 11%.',
+    ],
+  },
+  {
+    field: '🤝 Collaboration & Communication',
+    items: [
+      'Partnered with Sales and Marketing to launch go-to-market strategy for 3 new product tiers.',
+      'Facilitated quarterly OKR planning sessions across 5 departments, aligning 60+ stakeholders.',
+      'Produced weekly executive briefings distilling complex technical progress into business outcomes.',
+      'Coordinated with 3 external agencies to deliver rebrand on time and 8% under budget.',
+      'Established cross-team knowledge-sharing programme, reducing duplicated work by an estimated 20%.',
+    ],
+  },
+];
+
+function SuggestionsPopup({ anchor, onSelect, onClose }) {
+  const [activeField, setActiveField] = useState(0);
+  if (!anchor) return null;
+  return (
+    <div className={styles.suggestionsPopup} style={{ top: anchor.top, left: anchor.left }}>
+      <div className={styles.suggestionsHeader}>
+        <span>✨ AI Suggestions</span>
+        <button className={styles.suggestionsClose} onClick={onClose} aria-label="Close">×</button>
+      </div>
+      <p className={styles.suggestionsSubtitle}>Pick a category, then click any bullet to insert it.</p>
+      <div className={styles.suggestionsFieldTabs}>
+        {AI_SUGGESTIONS.map((group, i) => (
+          <button
+            key={i}
+            className={`${styles.suggestionsFieldTab} ${activeField === i ? styles.suggestionsFieldTabActive : ''}`}
+            onClick={() => setActiveField(i)}
+          >
+            {group.field}
+          </button>
+        ))}
+      </div>
+      <div className={styles.suggestionsList}>
+        {AI_SUGGESTIONS[activeField].items.map((s, i) => (
+          <button key={i} className={styles.suggestionItem} onClick={() => onSelect(s)}>
+            <span className={styles.suggestionBullet}>+</span>
+            <span>{s}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Preview Watermark ─────────────────────────────────────────────────────
+function Watermark() {
+  return (
+    <div className={styles.watermark}>
+      <span>RESUGROW</span>
+      <span>RESUGROW</span>
+      <span>RESUGROW</span>
+    </div>
   );
 }
 
@@ -98,7 +195,7 @@ function parseBullets(text) {
 function ResumeDoc({ data }) {
   const p = data.personal;
 
-  const hasAdditionalInfo = data.languages.length > 0 || data.certifications.length > 0 || data.extracurricular.length > 0;
+  const hasAdditionalInfo = data.languages.length > 0 || data.extracurricular.length > 0;
 
   return (
     <div className={styles.resumeDoc}>
@@ -133,8 +230,12 @@ function ResumeDoc({ data }) {
               <div key={exp.id} className={styles.resumeEntry}>
                 <div className={styles.resumeEntryHeader}>
                   <div>
-                    <strong>{exp.position || 'Position'},{' '}</strong>
-                    {exp.company && <span>{exp.company}</span>}
+                    <strong style={{ fontSize: '13.5px', color: '#1a1a1a' }}>{exp.position || 'Position'}</strong>
+                    {exp.company && (
+                      <span style={{ fontSize: '13px', fontWeight: 600, color: '#2563eb', marginLeft: '6px' }}>
+                        @ {exp.company}
+                      </span>
+                    )}
                   </div>
                   <span className={styles.resumeDate}>
                     {exp.startDate}{(exp.startDate || exp.endDate || exp.current) ? ' — ' : ''}
@@ -174,6 +275,28 @@ function ResumeDoc({ data }) {
         </div>
       )}
 
+      {data.skills.length > 0 && (
+        <div className={styles.resumeSection}>
+          <h2 className={styles.resumeSectionTitle}>Technical Skills</h2>
+          <div className={styles.resumeSkills}>
+            {data.skills.map((skill, i) => (
+              <span key={i} className={styles.resumeSkillTag}>{skill}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {data.strengths.length > 0 && (
+        <div className={styles.resumeSection}>
+          <h2 className={styles.resumeSectionTitle}>Core Strengths</h2>
+          <div className={styles.resumeSkills}>
+            {data.strengths.map((s, i) => (
+              <span key={i} className={styles.resumeSkillTag}>{s}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {data.projects.length > 0 && (
         <div className={styles.resumeSection}>
           <h2 className={styles.resumeSectionTitle}>Projects</h2>
@@ -199,31 +322,23 @@ function ResumeDoc({ data }) {
       {data.achievements.length > 0 && (
         <div className={styles.resumeSection}>
           <h2 className={styles.resumeSectionTitle}>Key Achievements</h2>
-          <ul className={styles.resumeBulletList}>
-            {data.achievements.map((a, i) => <li key={i}>{a}</li>)}
-          </ul>
-        </div>
-      )}
-
-      {data.skills.length > 0 && (
-        <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Technical Skills</h2>
           <div className={styles.resumeSkills}>
-            {data.skills.map((skill, i) => (
-              <span key={i} className={styles.resumeSkillTag}>{skill}</span>
+            {data.achievements.map((a, i) => (
+              <span key={i} className={styles.resumeSkillTag}>{a}</span>
             ))}
           </div>
         </div>
       )}
 
-      {data.strengths.length > 0 && (
+      {data.certifications.length > 0 && (
         <div className={styles.resumeSection}>
-          <h2 className={styles.resumeSectionTitle}>Core Strengths</h2>
-          <div className={styles.resumeSkills}>
-            {data.strengths.map((s, i) => (
-              <span key={i} className={styles.resumeSkillTag}>{s}</span>
-            ))}
-          </div>
+          <h2 className={styles.resumeSectionTitle}>Certifications</h2>
+          {data.certifications.map((c, i) => (
+            <div key={c.id || i} className={styles.resumeCertEntry}>
+              <span className={styles.resumeCertTitle}>{c.title || 'Certification'}</span>
+              {c.issuer && <span className={styles.resumeCertIssuer}>{c.issuer}</span>}
+            </div>
+          ))}
         </div>
       )}
 
@@ -233,21 +348,28 @@ function ResumeDoc({ data }) {
           {data.languages.length > 0 && (
             <div style={{ marginBottom: '6px' }}>
               <strong style={{ fontSize: '12px' }}>Languages: </strong>
-              <span style={{ fontSize: '12px' }}>{data.languages.join(', ')}</span>
-            </div>
-          )}
-          {data.certifications.length > 0 && (
-            <div style={{ marginBottom: '6px' }}>
-              <strong style={{ fontSize: '12px' }}>Certifications: </strong>
-              <span style={{ fontSize: '12px' }}>{data.certifications.join(', ')}</span>
+              <span style={{ fontSize: '12px' }}>
+                {data.languages.map((l, i) => (
+                  <span key={i}>
+                    {l.name}{l.proficiency ? ` (${l.proficiency})` : ''}{i < data.languages.length - 1 ? ' · ' : ''}
+                  </span>
+                ))}
+              </span>
             </div>
           )}
           {data.extracurricular.length > 0 && (
             <div>
               <strong style={{ fontSize: '12px' }}>Activities: </strong>
-              <span style={{ fontSize: '12px' }}>{data.extracurricular.join(', ')}</span>
+              <span style={{ fontSize: '12px' }}>{data.extracurricular.join(' · ')}</span>
             </div>
           )}
+        </div>
+      )}
+
+      {(data.customSection.title || data.customSection.content) && (
+        <div className={styles.resumeSection}>
+          <h2 className={styles.resumeSectionTitle}>{data.customSection.title || 'Custom Section'}</h2>
+          <p className={styles.resumeText} style={{ whiteSpace: 'pre-wrap' }}>{data.customSection.content}</p>
         </div>
       )}
     </div>
@@ -261,11 +383,11 @@ export default function ResumeBuilderPage() {
 
   // tag input states
   const [newSkill, setNewSkill] = useState('');
-  const [newCert, setNewCert] = useState('');
   const [newStrength, setNewStrength] = useState('');
   const [newAchievement, setNewAchievement] = useState('');
-  const [newLanguage, setNewLanguage] = useState('');
   const [newExtra, setNewExtra] = useState('');
+  const [suggestionAnchor, setSuggestionAnchor] = useState(null);
+  const [activeExpId, setActiveExpId] = useState(null);
 
   // ── Personal ──────────────────────────────────────────────────────────
   const updatePersonal = useCallback((field, value) => {
@@ -492,7 +614,19 @@ export default function ResumeBuilderPage() {
                   <label htmlFor={`cur-${exp.id}`} className={styles.checkLabel}>Currently working here</label>
                 </div>
                 <div>
-                  <label className={styles.label}>Description <span style={{ fontWeight: 400, color: '#9ca3af' }}>— bullet points + metrics</span></label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                    <label className={styles.label} style={{ marginBottom: 0 }}>Description <span style={{ fontWeight: 400, color: '#9ca3af' }}>— bullet points + metrics</span></label>
+                    <button 
+                      className={styles.suggestionsToggle}
+                      onClick={(e) => {
+                        const rect = e.target.getBoundingClientRect();
+                        setSuggestionAnchor(suggestionAnchor ? null : { top: rect.top + window.scrollY + 30, left: rect.left + window.scrollX - 280 });
+                        setActiveExpId(exp.id);
+                      }}
+                    >
+                      ✨ AI Suggestions
+                    </button>
+                  </div>
                   <textarea className={styles.textarea} value={exp.description}
                     onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
                     rows={5} placeholder={'• Spearheaded X initiative, increasing Y by 32%\n• Automated Z process, saving 8 hrs/week\n• Led team of 5 to deliver...'} />
@@ -500,54 +634,6 @@ export default function ResumeBuilderPage() {
               </div>
             ))}
           </section>
-
-          <hr className={styles.divider} />
-
-          {/* Projects */}
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>Projects</h2>
-              <button className={styles.addBtn} onClick={addProject}>+ Add</button>
-            </div>
-            {data.projects.length === 0 && <p className={styles.empty}>No projects added yet.</p>}
-            {data.projects.map((proj) => (
-              <div key={proj.id} className={styles.card}>
-                <button className={styles.deleteBtn} onClick={() => removeProject(proj.id)} aria-label="Remove">🗑</button>
-                <div className={styles.grid2}>
-                  <div>
-                    <label className={styles.label}>Project Name</label>
-                    <input className={styles.input} value={proj.name}
-                      onChange={(e) => updateProject(proj.id, 'name', e.target.value)} placeholder="Project Title" />
-                  </div>
-                  <div>
-                    <label className={styles.label}>Link (optional)</label>
-                    <input className={styles.input} value={proj.link}
-                      onChange={(e) => updateProject(proj.id, 'link', e.target.value)} placeholder="github.com/you/project" />
-                  </div>
-                </div>
-                <div style={{ marginTop: '10px' }}>
-                  <label className={styles.label}>Description</label>
-                  <textarea className={styles.textarea} value={proj.description}
-                    onChange={(e) => updateProject(proj.id, 'description', e.target.value)}
-                    rows={3} placeholder="What you built, tech used, and impact..." />
-                </div>
-              </div>
-            ))}
-          </section>
-
-          <hr className={styles.divider} />
-
-          {/* Key Achievements */}
-          <TagSection
-            title="Key Achievements"
-            items={data.achievements}
-            newVal={newAchievement}
-            setNewVal={setNewAchievement}
-            onAdd={() => addToList('achievements', newAchievement, setNewAchievement)}
-            onRemove={(i) => removeFromList('achievements', i)}
-            placeholder="e.g. Grew revenue by 40% in Q3 2024..."
-            variant="outline"
-          />
 
           <hr className={styles.divider} />
 
@@ -626,30 +712,124 @@ export default function ResumeBuilderPage() {
 
           <hr className={styles.divider} />
 
-          {/* Certifications */}
+          {/* Projects */}
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Projects</h2>
+              <button className={styles.addBtn} onClick={addProject}>+ Add</button>
+            </div>
+            {data.projects.length === 0 && <p className={styles.empty}>No projects added yet.</p>}
+            {data.projects.map((proj) => (
+              <div key={proj.id} className={styles.card}>
+                <button className={styles.deleteBtn} onClick={() => removeProject(proj.id)} aria-label="Remove">🗑</button>
+                <div className={styles.grid2}>
+                  <div>
+                    <label className={styles.label}>Project Name</label>
+                    <input className={styles.input} value={proj.name}
+                      onChange={(e) => updateProject(proj.id, 'name', e.target.value)} placeholder="Project Title" />
+                  </div>
+                  <div>
+                    <label className={styles.label}>Link (optional)</label>
+                    <input className={styles.input} value={proj.link}
+                      onChange={(e) => updateProject(proj.id, 'link', e.target.value)} placeholder="github.com/you/project" />
+                  </div>
+                </div>
+                <div style={{ marginTop: '10px' }}>
+                  <label className={styles.label}>Description</label>
+                  <textarea className={styles.textarea} value={proj.description}
+                    onChange={(e) => updateProject(proj.id, 'description', e.target.value)}
+                    rows={3} placeholder="What you built, tech used, and impact..." />
+                </div>
+              </div>
+            ))}
+          </section>
+
+          <hr className={styles.divider} />
+
+          {/* Key Achievements */}
           <TagSection
-            title="Certifications"
-            items={data.certifications}
-            newVal={newCert}
-            setNewVal={setNewCert}
-            onAdd={() => addToList('certifications', newCert, setNewCert)}
-            onRemove={(i) => removeFromList('certifications', i)}
-            placeholder="e.g. AWS Certified Solutions Architect..."
+            title="Key Achievements"
+            items={data.achievements}
+            newVal={newAchievement}
+            setNewVal={setNewAchievement}
+            onAdd={() => addToList('achievements', newAchievement, setNewAchievement)}
+            onRemove={(i) => removeFromList('achievements', i)}
+            placeholder="e.g. Grew revenue by 40% in Q3 2024..."
             variant="outline"
           />
 
           <hr className={styles.divider} />
 
+          {/* Certifications */}
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Certifications</h2>
+              <button className={styles.addBtn} onClick={() =>
+                setData(d => ({ ...d, certifications: [...d.certifications, { id: uid(), title: '', issuer: '' }] }))
+              }>+ Add</button>
+            </div>
+            {data.certifications.length === 0 && <p className={styles.empty}>No certifications added yet.</p>}
+            {data.certifications.map((cert) => (
+              <div key={cert.id} className={styles.card}>
+                <button className={styles.deleteBtn} onClick={() =>
+                  setData(d => ({ ...d, certifications: d.certifications.filter(c => c.id !== cert.id) }))
+                } aria-label="Remove">🗑</button>
+                <div className={styles.grid2}>
+                  <div>
+                    <label className={styles.label}>Certification Title</label>
+                    <input className={styles.input} value={cert.title}
+                      onChange={(e) => setData(d => ({ ...d, certifications: d.certifications.map(c => c.id === cert.id ? { ...c, title: e.target.value } : c) }))}
+                      placeholder="e.g. AWS Solutions Architect" />
+                  </div>
+                  <div>
+                    <label className={styles.label}>Issuing Organization</label>
+                    <input className={styles.input} value={cert.issuer}
+                      onChange={(e) => setData(d => ({ ...d, certifications: d.certifications.map(c => c.id === cert.id ? { ...c, issuer: e.target.value } : c) }))}
+                      placeholder="e.g. Amazon Web Services" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </section>
+
+          <hr className={styles.divider} />
+
           {/* Languages */}
-          <TagSection
-            title="Languages"
-            items={data.languages}
-            newVal={newLanguage}
-            setNewVal={setNewLanguage}
-            onAdd={() => addToList('languages', newLanguage, setNewLanguage)}
-            onRemove={(i) => removeFromList('languages', i)}
-            placeholder="e.g. English (Native), Spanish (Fluent)..."
-          />
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Languages</h2>
+              <button className={styles.addBtn} onClick={() =>
+                setData(d => ({ ...d, languages: [...d.languages, { id: uid(), name: '', proficiency: 'Fluent' }] }))
+              }>+ Add</button>
+            </div>
+            {data.languages.length === 0 && <p className={styles.empty}>No languages added yet.</p>}
+            {data.languages.map((lang) => (
+              <div key={lang.id} className={styles.card}>
+                <button className={styles.deleteBtn} onClick={() =>
+                  setData(d => ({ ...d, languages: d.languages.filter(l => l.id !== lang.id) }))
+                } aria-label="Remove">🗑</button>
+                <div className={styles.grid2}>
+                  <div>
+                    <label className={styles.label}>Language</label>
+                    <input className={styles.input} value={lang.name}
+                      onChange={(e) => setData(d => ({ ...d, languages: d.languages.map(l => l.id === lang.id ? { ...l, name: e.target.value } : l) }))}
+                      placeholder="e.g. Spanish" />
+                  </div>
+                  <div>
+                    <label className={styles.label}>Proficiency</label>
+                    <select className={styles.input} value={lang.proficiency}
+                      onChange={(e) => setData(d => ({ ...d, languages: d.languages.map(l => l.id === lang.id ? { ...l, proficiency: e.target.value } : l) }))}>
+                      <option>Native</option>
+                      <option>Fluent</option>
+                      <option>Advanced</option>
+                      <option>Intermediate</option>
+                      <option>Basic</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </section>
 
           <hr className={styles.divider} />
 
@@ -664,6 +844,34 @@ export default function ResumeBuilderPage() {
             placeholder="e.g. Volunteer at local food bank, Chess club captain..."
             variant="outline"
           />
+
+          <hr className={styles.divider} />
+
+          {/* Custom Section */}
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>Custom Section</h2>
+            <div className={styles.grid2}>
+              <div>
+                <label className={styles.label}>Section Title</label>
+                <input
+                  className={styles.input}
+                  value={data.customSection.title}
+                  onChange={(e) => setData(d => ({ ...d, customSection: { ...d.customSection, title: e.target.value } }))}
+                  placeholder="e.g. Military Service, Volunteer Work"
+                />
+              </div>
+            </div>
+            <div style={{ marginTop: '12px' }}>
+              <label className={styles.label}>Content</label>
+              <textarea
+                className={styles.textarea}
+                value={data.customSection.content}
+                onChange={(e) => setData(d => ({ ...d, customSection: { ...d.customSection, content: e.target.value } }))}
+                rows={4}
+                placeholder="Details for your custom section..."
+              />
+            </div>
+          </section>
 
           {/* Bottom CTA */}
           <div style={{ marginTop: '32px', padding: '20px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', textAlign: 'center' }}>
@@ -685,12 +893,23 @@ export default function ResumeBuilderPage() {
             </button>
           </div>
           <div className={styles.previewCard}>
+            <Watermark />
             <div ref={previewRef}>
               <ResumeDoc data={data} />
             </div>
           </div>
         </div>
       </div>
+      <SuggestionsPopup 
+        anchor={suggestionAnchor} 
+        onClose={() => setSuggestionAnchor(null)} 
+        onSelect={(s) => {
+          const current = data.experience.find(e => e.id === activeExpId)?.description || '';
+          const prefix = current.trim() ? (current.endsWith('\n') ? '• ' : '\n• ') : '• ';
+          updateExperience(activeExpId, 'description', current + prefix + s);
+          setSuggestionAnchor(null);
+        }} 
+      />
     </div>
   );
 }
