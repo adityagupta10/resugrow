@@ -321,7 +321,7 @@ export default function ATSResultsPage() {
                                 alignItems: 'center',
                                 gap: '6px'
                               }}>
-                                <EmojiImage emoji="🤖" size={14} alt="" />
+                                <EmojiImage emoji="🤖" size={14} alt="AI resume assistant icon for keyword gap fixes" />
                                 Fix with AI
                               </button>
                             </Link>
@@ -344,7 +344,7 @@ export default function ATSResultsPage() {
                             gap: '8px'
                           }}
                         >
-                          <EmojiImage emoji="✨" size={18} alt="" />
+                          <EmojiImage emoji="✨" size={18} alt="LinkedIn profile polish icon promoting premium makeover" />
                           Optimize LinkedIn Profile
                         </Link>
                       </div>
@@ -369,7 +369,7 @@ export default function ATSResultsPage() {
         <aside className={styles.previewPanel}>
           <div style={{ padding: '12px 16px', background: '#f1f5f9', borderBottom: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '12px', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-              <EmojiImage emoji="📄" size={14} alt="" />
+              <EmojiImage emoji="📄" size={14} alt="Document icon marking the live resume preview panel" />
               LIVE PREVIEW
             </span>
             {fileInfo && <span style={{ fontSize: '11px', color: '#64748b' }}>{fileInfo.type} • {fileInfo.size}</span>}

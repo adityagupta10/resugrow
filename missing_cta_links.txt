@@ -8,9 +8,9 @@ Check off these items as the corresponding buttons/links are wired up to their f
 
 - [X]  3. LinkedIn Profile Review & Score - uploaded resume should be checked by a logic and rated 
 
-- [ ]  4. Cover letter Builder - A cover letter should be made according to given prompt
+- [X]  4. Cover letter Builder - A cover letter should be made according to given prompt
 
-- [ ]  5. AI Resume Builder - A resume should be made according to given prompt
+- [X]  5. AI Resume Builder - A resume should be made according to given prompt
 
-- [ ]  6. Guest Mode and Login - Guest users should be able to use the tools without login and their data should be saved in local storage. 
+- [X]  6. Guest Mode and Login - Guest users should be able to use the tools without login and their data should be saved in local storage. 
 

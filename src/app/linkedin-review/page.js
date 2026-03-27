@@ -4,17 +4,16 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import EmojiImage from '@/components/UI/EmojiImage';
+import { ClipboardList, FileText, Inbox, Lock, AlertTriangle, FileSignature, UserCircle, Briefcase, Target, BarChart2, Lightbulb } from 'lucide-react';
 import styles from '../subpage.module.css';
 
-
 const analysisCategories = [
-  { icon: '📝', title: 'Headline Analysis', desc: 'We check if your headline is keyword-rich and clearly states your value proposition to recruiters.' },
-  { icon: '👤', title: 'About Section', desc: 'Our AI analyzes your summary for storytelling, keywords, and a clear call to action.' },
-  { icon: '💼', title: 'Experience Depth', desc: 'Verifying if your experience highlights achievements rather than just listing responsibilities.' },
-  { icon: '🎯', title: 'Keyword Optimization', desc: 'Identifying missing industry keywords that LinkedIn algorithms look for in search results.' },
-  { icon: '📊', title: 'Engagement Score', desc: 'Evaluating how likely your profile is to convert profile views into meaningful connections.' },
-  { icon: '💡', title: 'Visual Impression', desc: 'Providing tips for your profile picture and banner to ensure a professional first look.' },
+  { icon: FileSignature, title: 'Headline Analysis', desc: 'We check if your headline is keyword-rich and clearly states your value proposition to recruiters.' },
+  { icon: UserCircle, title: 'About Section', desc: 'Our AI analyzes your summary for storytelling, keywords, and a clear call to action.' },
+  { icon: Briefcase, title: 'Experience Depth', desc: 'Verifying if your experience highlights achievements rather than just listing responsibilities.' },
+  { icon: Target, title: 'Keyword Optimization', desc: 'Identifying missing industry keywords that LinkedIn algorithms look for in search results.' },
+  { icon: BarChart2, title: 'Engagement Score', desc: 'Evaluating how likely your profile is to convert profile views into meaningful connections.' },
+  { icon: Lightbulb, title: 'Visual Impression', desc: 'Providing tips for your profile picture and banner to ensure a professional first look.' },
 ];
 
 const steps = [
@@ -145,7 +144,7 @@ export default function ProfileReview() {
             {/* INSTRUCTIONS */}
             <div style={{ marginBottom: '24px', padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
               <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><EmojiImage emoji="📋" size={18} alt="" /> How to get your PDF</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><ClipboardList size={18} aria-hidden="true" /> How to get your PDF</span>
               </h3>
               <ol style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: '#475569', lineHeight: '1.6' }}>
                 <li>Open your <strong>LinkedIn profile</strong></li>
@@ -180,7 +179,7 @@ export default function ProfileReview() {
                       style={{ display: 'none' }} 
                     />
                     <div style={{ fontSize: '32px', marginBottom: '12px', display: 'flex', justifyContent: 'center' }}>
-                      <EmojiImage emoji={file ? '📄' : '📥'} size={40} alt={file ? 'PDF document ready for LinkedIn profile scan' : 'Upload inbox icon for LinkedIn PDF file'} />
+                      {file ? <FileText size={40} aria-label="PDF document ready for LinkedIn profile scan" /> : <Inbox size={40} aria-label="Upload inbox icon for LinkedIn PDF file" />}
                     </div>
                     <h4 style={{ margin: '0 0 8px 0', fontSize: '16px', color: '#0f172a' }}>
                       {file ? file.name : 'Click to Upload or Drag & Drop'}
@@ -222,7 +221,7 @@ export default function ProfileReview() {
             </div>
             
             <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '16px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><EmojiImage emoji="🔒" size={18} alt="" /> LinkedIn&rsquo;s &quot;Save to PDF&quot; is working in 2026. 100% private.</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Lock size={18} aria-hidden="true" /> LinkedIn&rsquo;s &quot;Save to PDF&quot; is working in 2026. 100% private.</span>
             </p>
           </div>
         </div>
@@ -238,7 +237,7 @@ export default function ProfileReview() {
             {analysisCategories.map((f) => (
               <div key={f.title} className={styles.featureCard}>
                 <div className={styles.featureCardIcon}>
-                  <EmojiImage emoji={f.icon} size={32} />
+                  <f.icon size={32} aria-hidden="true" />
                 </div>
                 <h3 className={styles.featureCardTitle}>{f.title}</h3>
                 <p className={styles.featureCardDesc}>{f.desc}</p>
@@ -277,7 +276,7 @@ function ErrorBox({ error }) {
       alignItems: 'flex-start',
       gap: '12px'
     }}>
-      <EmojiImage emoji="⚠️" size={20} alt="Warning icon for LinkedIn scan error" />
+      <AlertTriangle size={20} aria-label="Warning icon for LinkedIn scan error" />
       <div>
         <h4 style={{ color: '#991b1b', fontSize: '13px', fontWeight: '700', margin: '0 0 2px 0' }}>Scan Halted</h4>
         <p style={{ color: '#b91c1c', fontSize: '13px', margin: 0, lineHeight: '1.4' }}>

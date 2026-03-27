@@ -78,6 +78,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PNP4M5Y49H" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-PNP4M5Y49H');`
+          }}
+        />
         <link rel="preconnect" href="https://www.resugrow.com" />
         <link rel="dns-prefetch" href="https://www.resugrow.com" />
       </head>

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
-import EmojiImage from '@/components/UI/EmojiImage';
+import { Mail, MapPin, Clock, MessageSquare, CheckCircle, XCircle } from 'lucide-react';
 import styles from '../subpage.module.css';
 
 export default function Contact() {
@@ -61,7 +61,7 @@ export default function Contact() {
 
               <div className={styles.contactInfoItem}>
                 <div className={styles.contactIcon}>
-                  <EmojiImage emoji="📧" size={24} alt="Email ResuGrow at info@resugrow.com for career product support" />
+                  <Mail size={24} aria-label="Email ResuGrow at info@resugrow.com for career product support" />
                 </div>
                 <div>
                   <div className={styles.contactLabel}>Email</div>
@@ -71,7 +71,7 @@ export default function Contact() {
 
               <div className={styles.contactInfoItem}>
                 <div className={styles.contactIcon}>
-                  <EmojiImage emoji="📍" size={24} alt="ResuGrow office location pin for New Delhi India headquarters" />
+                  <MapPin size={24} aria-label="ResuGrow office location pin for New Delhi India headquarters" />
                 </div>
                 <div>
                   <div className={styles.contactLabel}>Office</div>
@@ -81,7 +81,7 @@ export default function Contact() {
 
               <div className={styles.contactInfoItem}>
                 <div className={styles.contactIcon}>
-                  <EmojiImage emoji="🕐" size={24} alt="Business hours clock for ResuGrow customer support availability" />
+                  <Clock size={24} aria-label="Business hours clock for ResuGrow customer support availability" />
                 </div>
                 <div>
                   <div className={styles.contactLabel}>Business Hours</div>
@@ -91,7 +91,7 @@ export default function Contact() {
 
               <div className={styles.contactInfoItem}>
                 <div className={styles.contactIcon}>
-                  <EmojiImage emoji="💬" size={24} alt="Live chat balloon icon for instant help during business hours" />
+                  <MessageSquare size={24} aria-label="Live chat balloon icon for instant help during business hours" />
                 </div>
                 <div>
                   <div className={styles.contactLabel}>Live Chat</div>
@@ -125,13 +125,13 @@ export default function Contact() {
                 {status === 'loading' ? 'Sending...' :
                   status === 'success' ? (
                     <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                      <EmojiImage emoji="✓" size={18} alt="Message sent successfully to ResuGrow support" />
+                      <CheckCircle size={18} aria-label="Message sent successfully to ResuGrow support" />
                       Message Sent!
                     </span>
                   ) :
                     status === 'error' ? (
                       <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                        <EmojiImage emoji="❌" size={18} alt="Contact form failed to send — please try again or email info@resugrow.com" />
+                        <XCircle size={18} aria-label="Contact form failed to send — please try again or email info@resugrow.com" />
                         Error Sending
                       </span>
                     ) :

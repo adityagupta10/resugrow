@@ -674,10 +674,14 @@ export default function ResumeBuilderPage() {
 
       {showStartModal && (
         <ResumeStartModal
-          onFresh={() => setShowStartModal(false)}
+          onFresh={() => {
+            setShowStartModal(false);
+            setShowTemplateModal(true);
+          }}
           onImport={(importedData) => {
             setData({ ...defaultData, ...importedData });
             setShowStartModal(false);
+            setShowTemplateModal(true);
           }}
           onClose={() => setShowStartModal(false)}
         />

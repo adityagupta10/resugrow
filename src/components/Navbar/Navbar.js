@@ -101,7 +101,7 @@ export default function Navbar() {
         <Link href="/" className={styles.logo}>
           <Image
             src="/resugrow-logo.png"
-            alt="ResuGrow logo"
+            alt="ResuGrow career platform logo for AI resume builder, ATS checker, and LinkedIn makeover"
             width={180}
             height={48}
             style={{ objectFit: 'contain' }}
