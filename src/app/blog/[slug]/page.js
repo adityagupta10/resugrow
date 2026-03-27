@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { posts } from '../data';
 import { createPageMetadata } from '@/lib/seo';
 import styles from './post.module.css';
@@ -9,7 +10,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const post = posts.find((p) => p.slug === params.slug);
+  const { slug } = await params;
+  const post = posts.find((p) => p.slug === slug);
   if (!post) return {};
   return createPageMetadata({
     title: `${post.title} | ResuGrow Blog`,
@@ -29,11 +31,23 @@ function renderContent(content) {
     if (block.startsWith('**') && block.endsWith('**') && !block.slice(2).includes('\n')) {
       return <h3 key={i} className={styles.h3}>{block.slice(2, -2)}</h3>;
     }
-    // Inline bold within paragraph
-    const parts = block.split(/(\*\*[^*]+\*\*)/g);
+    // Inline bold + markdown links within paragraph
+    const parts = block.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
     const rendered = parts.map((part, j) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return <strong key={j}>{part.slice(2, -2)}</strong>;
+      }
+      const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (linkMatch) {
+        const [, label, href] = linkMatch;
+        if (href.startsWith('/')) {
+          return <Link key={j} href={href}>{label}</Link>;
+        }
+        return (
+          <a key={j} href={href} target="_blank" rel="noopener noreferrer">
+            {label}
+          </a>
+        );
       }
       return part;
     });
@@ -45,15 +59,113 @@ function renderContent(content) {
   });
 }
 
-export default function BlogPost({ params }) {
-  const post = posts.find((p) => p.slug === params.slug);
+const defaultToolLinks = [
+  { label: 'Check Resume Score', href: '/resume/ats-checker' },
+  { label: 'Build Resume', href: '/resume/builder' },
+  { label: 'Review LinkedIn', href: '/linkedin-review' },
+  { label: 'Create Cover Letter', href: '/cover-letter/builder' }
+];
+
+const defaultScreenshots = [
+  {
+    src: '/templates/template-3.png',
+    alt: 'ATS-friendly resume template screenshot with clean one-column format',
+    caption: 'ATS-friendly resume layout example'
+  },
+  {
+    src: '/linkedin-makeover.png',
+    alt: 'LinkedIn profile optimization example from ResuGrow tool experience',
+    caption: 'LinkedIn optimization workflow preview'
+  }
+];
+
+function buildFaqSchema(post) {
+  const fallbackFaqs = [
+    {
+      q: `How does this ${post.category.toLowerCase()} strategy improve interview chances?`,
+      a: 'It improves clarity, keyword alignment, and recruiter confidence, which typically increases first-pass response rates.'
+    },
+    {
+      q: 'Which ResuGrow tool should I use first after reading this?',
+      a: 'Start with ATS Checker for diagnostics, then apply edits in Resume Builder and validate again before applying.'
+    }
+  ];
+
+  const faqs = post.faqs?.length ? post.faqs : fallbackFaqs;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a
+      }
+    }))
+  };
+}
+
+function buildHowToSchema(post) {
+  const fallbackSteps = [
+    { title: 'Run ATS score check', text: 'Upload your resume and inspect weak sections before rewriting.' },
+    { title: 'Apply high-impact edits', text: 'Update summary, bullets, and keyword alignment based on scan output.' },
+    { title: 'Re-validate and submit', text: 'Scan again, then apply with the highest-quality version.' }
+  ];
+
+  const steps = post.howToSteps?.length ? post.howToSteps : fallbackSteps;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: post.title,
+    description: post.excerpt,
+    step: steps.map((step, idx) => ({
+      '@type': 'HowToStep',
+      name: step.title,
+      text: step.text,
+      url: `https://www.resugrow.com/blog/${post.slug}#step-${idx + 1}`
+    }))
+  };
+}
+
+function ToolCtaStrip({ title, links }) {
+  return (
+    <div className={styles.inlineCta}>
+      <p>{title}</p>
+      <div className={styles.inlineCtaLinks}>
+        {links.map((item) => (
+          <Link key={item.href + item.label} href={item.href} className="btn btn-secondary">
+            {item.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default async function BlogPost({ params }) {
+  const { slug } = await params;
+  const post = posts.find((p) => p.slug === slug);
   if (!post) notFound();
 
   const related = posts.filter((p) => p.slug !== post.slug && p.tags.some((t) => post.tags.includes(t))).slice(0, 3);
+  const toolLinks = post.toolLinks?.length ? post.toolLinks : defaultToolLinks;
+  const screenshots = post.screenshots?.length ? post.screenshots : defaultScreenshots;
+  const faqSchema = buildFaqSchema(post);
+  const howToSchema = buildHowToSchema(post);
 
   return (
     <div className={styles.page}>
       <div className={styles.container}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+        />
+
         {/* Breadcrumb */}
         <nav className={styles.breadcrumb}>
           <Link href="/blog">Blog</Link>
@@ -86,13 +198,47 @@ export default function BlogPost({ params }) {
 
           {/* Cover emoji banner */}
           <div className={styles.coverBanner}>
-            <span className={styles.coverEmoji}>{post.coverEmoji}</span>
+            {post.coverImage ? (
+              <div className={styles.coverMedia}>
+                {/* Use a responsive <img> here to preserve each cover image's natural aspect ratio (no cropping). */}
+                <img
+                  src={post.coverImage}
+                  alt={post.coverAlt || `${post.title} cover image`}
+                  className={styles.coverImg}
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+            ) : (
+              <span className={styles.coverEmoji}>{post.coverEmoji}</span>
+            )}
+          </div>
+
+          <ToolCtaStrip title="Apply this guide immediately with ResuGrow tools" links={toolLinks} />
+
+          <div className={styles.screenshotGrid}>
+            {screenshots.map((shot) => (
+              <figure key={shot.src + shot.caption} className={styles.screenshotCard}>
+                <div className={styles.screenshotMedia}>
+                  <Image
+                    src={shot.src}
+                    alt={shot.alt}
+                    fill
+                    className={styles.screenshotImage}
+                    sizes="(max-width: 800px) 100vw, 340px"
+                  />
+                </div>
+                <figcaption>{shot.caption}</figcaption>
+              </figure>
+            ))}
           </div>
 
           {/* Body */}
           <div className={styles.body}>
             {renderContent(post.content)}
           </div>
+
+          <ToolCtaStrip title="Ready to improve your score?" links={toolLinks.slice(0, 3)} />
 
           {/* Tags */}
           <div className={styles.tags}>
@@ -108,11 +254,12 @@ export default function BlogPost({ params }) {
             <div className={styles.ctaEmoji}>🚀</div>
             <div>
               <h3 className={styles.ctaTitle}>Put this into practice</h3>
-              <p className={styles.ctaDesc}>Run your resume through our ATS checker and see exactly what to fix — in under 30 seconds.</p>
+              <p className={styles.ctaDesc}>Run your resume through our ATS checker and see exactly what to fix in under 30 seconds.</p>
             </div>
             <div className={styles.ctaBtns}>
               <Link href="/resume/ats-checker" className="btn btn-primary">Check My Resume</Link>
               <Link href="/resume/builder" className="btn btn-secondary">Build a New Resume</Link>
+              <Link href="/linkedin-review" className="btn btn-secondary">Scan LinkedIn</Link>
             </div>
           </div>
         </div>

@@ -1,4 +1,8 @@
-export const posts = [
+import { strategicPosts } from './strategicPosts';
+import { programmaticPosts } from './programmaticPosts';
+import { attachBlogImagesToPost } from './blogImages';
+
+const corePosts = [
   {
     slug: 'how-ats-systems-work-2025',
     title: 'How ATS Systems Actually Work in 2025 (And Why Most Resumes Fail)',
@@ -517,4 +521,217 @@ A career change typically takes 3–6 months longer than a same-field job search
 
 The candidates who succeed are the ones who treat the transition as a project: with a plan, milestones, and consistent execution. Not a hope.`,
   },
+  {
+    slug: 'ats-keywords-tech-roles-2026',
+    title: 'The Top 10 ATS Keywords for Tech Roles in 2026',
+    category: 'ATS Optimization',
+    date: 'March 24, 2026',
+    readTime: '8 min read',
+    author: 'Priya Nair',
+    authorRole: 'Head of Product, ResuGrow',
+    authorInitials: 'PN',
+    authorColor: '#2563eb',
+    excerpt: 'Hiring teams still search for skills, but modern ATS systems now reward context as much as keyword presence. Here are the ten terms that consistently improve match scores for tech applications.',
+    coverEmoji: '🧠',
+    tags: ['ATS', 'Tech Careers', 'Resume Keywords'],
+    content: `If you are applying for tech roles in 2026, keyword strategy is still critical. The difference now is that ATS engines evaluate where and how keywords appear, not just whether they exist.
+
+## The 10 High-Impact Keywords
+
+**1. System Design**
+Use this in headline, summary, and experience bullets when you have designed architecture decisions.
+
+**2. Scalable Architecture**
+Recruiters and ATS both look for signals that your work handled growth.
+
+**3. Cloud Infrastructure**
+Mention your cloud stack directly: AWS, Azure, or GCP.
+
+**4. CI/CD**
+Deployment automation still maps strongly to engineering maturity.
+
+**5. Observability**
+Include metrics, monitoring, tracing, or incident response outcomes.
+
+**6. Performance Optimization**
+This term performs better when tied to measurable results like latency or throughput.
+
+**7. Cross-Functional Collaboration**
+Tech hiring in 2026 heavily values communication across product, design, and data teams.
+
+**8. Security and Compliance**
+Especially important for fintech, healthtech, and enterprise SaaS roles.
+
+**9. Data-Driven Decision Making**
+Use this alongside metrics ownership, A/B testing, or analytics tooling.
+
+**10. Ownership**
+A strong signal in both startup and large-company role descriptions.
+
+## How to Place Keywords Naturally
+
+Add primary terms in your summary, secondary terms in relevant bullets, and stack-specific terms in skills. Do not create a keyword dump section. ATS quality improves when terms appear in meaningful context.
+
+## Quick Rewrite Pattern
+
+Take a weak line like: "Worked on backend services."
+Rewrite as: "Owned backend system design for payment APIs, improving p95 latency by 31% through performance optimization and CI/CD automation."
+
+One precise sentence can satisfy keyword relevance, impact evidence, and technical depth at once.`,
+  },
+  {
+    slug: 'tell-me-about-yourself-answer-guide',
+    title: 'Answering "Tell Me About Yourself" in Interviews',
+    category: 'Interview Prep',
+    date: 'March 21, 2026',
+    readTime: '6 min read',
+    author: 'James Okafor',
+    authorRole: 'Senior Career Coach',
+    authorInitials: 'JO',
+    authorColor: '#7c3aed',
+    excerpt: 'This is still the first filter in most interviews. A clear 90-second answer can set the entire tone of the conversation and improve your close rate.',
+    coverEmoji: '🎤',
+    tags: ['Interview Prep', 'Career Advice', 'Communication'],
+    content: `Most candidates either ramble or overshare. The best answers are structured, focused, and easy to follow.
+
+## The 90-Second Framework
+
+**Present**
+Start with who you are now, your role, and your core responsibility area.
+
+**Past**
+Give one short line on what led you here and one achievement that proves credibility.
+
+**Future**
+Explain why this role is the logical next step and how you can create value quickly.
+
+## Example Structure
+
+"I am currently a Product Manager at a fintech platform where I lead checkout and payments optimization. Over the last two years, I shipped three major initiatives that improved conversion by 18% and reduced failed transactions by 22%. Before that, I worked in growth analytics, which gave me a strong data foundation. I am now looking for a role where I can own higher-scale product strategy, and this position stands out because it combines product depth with global payment complexity."
+
+## Common Mistakes to Remove
+
+**Too much personal history**
+You do not need your full biography. Keep relevance tight.
+
+**No measurable proof**
+Without one metric, your answer sounds generic.
+
+**No link to the target role**
+Always end by connecting your background to the role in front of you.
+
+## Prep Drill
+
+Write your answer, record it, and trim until it stays under 90 seconds. Then prepare a 45-second version for tighter interviewers and a 2-minute version for conversational panels.`,
+  },
+  {
+    slug: 'how-to-explain-employment-gap-resume',
+    title: 'How to Explain an Employment Gap on Your Resume',
+    category: 'Career Advice',
+    date: 'March 19, 2026',
+    readTime: '5 min read',
+    author: 'Aisha Mensah',
+    authorRole: 'LinkedIn Growth Strategist',
+    authorInitials: 'AM',
+    authorColor: '#0891b2',
+    excerpt: 'Employment gaps are normal in modern careers. The key is transparent framing, confidence, and proof that you are ready to contribute now.',
+    coverEmoji: '🧭',
+    tags: ['Career Advice', 'Resume Writing', 'Job Search'],
+    content: `A gap is only risky when it looks hidden or unexplained. Recruiters respond better to clarity than to avoidance.
+
+## How to Handle Gaps on the Resume
+
+Use month and year format consistently for every role. Keep one short line if needed:
+
+**Career Break | Jan 2025 - Oct 2025**
+Focused on family care, professional upskilling, and certification completion.
+
+## What to Emphasize in Interviews
+
+1. State the reason briefly.
+2. Share what you did to stay current.
+3. Pivot to what you can deliver now.
+
+Do not over-defend. Calm clarity creates trust.
+
+## Strong Supporting Signals
+
+Add recent projects, volunteer contributions, certifications, or contract work. Even one current artifact can neutralize concern.
+
+## What Not to Do
+
+Do not remove dates to hide the gap. ATS systems and recruiters both flag date inconsistency quickly. Honest, concise context always performs better than vague formatting tricks.`,
+  },
+  {
+    slug: 'when-to-use-two-page-resume',
+    title: 'When to Use a Two-Page Resume',
+    category: 'Resume Formatting',
+    date: 'March 16, 2026',
+    readTime: '4 min read',
+    author: 'Priya Nair',
+    authorRole: 'Head of Product, ResuGrow',
+    authorInitials: 'PN',
+    authorColor: '#2563eb',
+    excerpt: 'One-page resumes are not a universal rule. The right length depends on relevance density, seniority, and whether each line supports the job target.',
+    coverEmoji: '📚',
+    tags: ['Resume Formatting', 'ATS', 'Resume Writing'],
+    content: `The real rule is not one page or two pages. The rule is relevance.
+
+## Use One Page If
+
+- You have under five years of experience.
+- You are changing careers and need only targeted highlights.
+- You are applying to high-volume roles with short recruiter review windows.
+
+## Use Two Pages If
+
+- You have deep role history with measurable outcomes.
+- You need space for patents, publications, projects, or leadership scope.
+- You are applying to senior, managerial, or specialist roles.
+
+## Quality Filter
+
+If page two is mostly filler, remove it. If page two contains high-value impact proof, keep it.
+
+## ATS Tip
+
+Length itself does not hurt ATS performance. Poor structure does. Keep headings standard, avoid decorative layouts, and ensure critical keywords appear in relevant experience bullets.`,
+  },
+  {
+    slug: 'follow-up-after-interview-templates',
+    title: 'Following Up After an Interview (With Templates)',
+    category: 'Networking',
+    date: 'March 12, 2026',
+    readTime: '6 min read',
+    author: 'Marcus Webb',
+    authorRole: 'Executive Recruiter, 12 years',
+    authorInitials: 'MW',
+    authorColor: '#059669',
+    excerpt: 'Most candidates either follow up too late or with vague messages. These concise templates improve response rates while keeping your profile top-of-mind.',
+    coverEmoji: '📬',
+    tags: ['Interview Prep', 'Networking', 'Job Search'],
+    content: `A follow-up should reinforce fit, not ask for status repeatedly. Timing and clarity matter more than long messages.
+
+## 24-Hour Thank-You Template
+
+"Hi [Name], thank you for the conversation today. I especially enjoyed discussing [specific topic]. The role aligns strongly with my experience in [relevant area], especially [metric/result]. I remain very excited about the opportunity and would be happy to share anything else that helps your decision."
+
+## 3-Day Value Add Template
+
+"Hi [Name], I wanted to share a short follow-up thought on [problem discussed]. If helpful, I can outline a quick approach based on what worked in my previous role where we achieved [result]. Happy to send details."
+
+## 7-Day Polite Check-In
+
+"Hi [Name], checking in on timeline and next steps for the [Role] process. I remain highly interested and appreciate your time."
+
+## Rules That Increase Replies
+
+Keep each message under 120 words. Reference one specific discussion point. Avoid pressure language like "urgent update needed." Stay professional and confident.
+
+## Final Reminder
+
+Good follow-ups are respectful and strategic. They show consistency, communication quality, and genuine interest without sounding desperate.`,
+  },
 ];
+
+export const posts = [...corePosts, ...strategicPosts, ...programmaticPosts].map(attachBlogImagesToPost);

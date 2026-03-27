@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styles from '../subpage.module.css';
 import { createPageMetadata } from '@/lib/seo';
+import { strategicPosts } from '../blog/strategicPosts';
 
 export const metadata = createPageMetadata({
     title: 'Career Tips, Resume Advice & Interview Guides | ResuGrow',
@@ -10,44 +11,13 @@ export const metadata = createPageMetadata({
     keywords: ['career tips', 'resume advice', 'interview preparation', 'job search guidance']
 });
 
-const articles = [
-    {
-        title: 'How to Write a Resume Summary That Gets Noticed',
-        category: 'Resume Writing',
-        readTime: '5 min read',
-        excerpt: 'Your resume summary is the first thing recruiters read. Learn how to make it compelling, actionable, and tailored to your target role.',
-    },
-    {
-        title: 'The Top 10 ATS Keywords for Tech Roles in 2024',
-        category: 'ATS Optimization',
-        readTime: '8 min read',
-        excerpt: 'Discover the exact keywords applicant tracking systems are scanning for when hiring software engineers, product managers, and designers.',
-    },
-    {
-        title: 'Answering "Tell Me About Yourself" in Interviews',
-        category: 'Interview Prep',
-        readTime: '6 min read',
-        excerpt: 'Master the most common interview question with our proven formula for highlighting your experience without rambling.',
-    },
-    {
-        title: 'How to Explain an Employment Gap on Your Resume',
-        category: 'Career Advice',
-        readTime: '4 min read',
-        excerpt: 'Employment gaps happen. Here is how to format your resume and phrase your experience to turn a gap into a non-issue.',
-    },
-    {
-        title: 'When to Use a Two-Page Resume',
-        category: 'Resume Formatting',
-        readTime: '3 min read',
-        excerpt: 'The one-page rule isn\'t absolute anymore. Find out exactly when expanding to a second page helps or hurts your chances.',
-    },
-    {
-        title: 'Following Up After an Interview (With Templates)',
-        category: 'Networking',
-        readTime: '5 min read',
-        excerpt: 'Grab our proven email templates for following up 24 hours, 3 days, and 1 week after your interview.',
-    },
-];
+const articles = strategicPosts.map((post) => ({
+  slug: post.slug,
+  title: post.title,
+  category: post.category,
+  readTime: post.readTime,
+  excerpt: post.excerpt
+}));
 
 export default function CareerTips() {
     return (
@@ -67,14 +37,13 @@ export default function CareerTips() {
             <section className={styles.subpage}>
                 <div className={styles.subpageContainer}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px', padding: '40px 0' }}>
-                        {articles.map((article, index) => (
-                            <div key={index} style={{
+                        {articles.map((article) => (
+                            <article key={article.slug} style={{
                                 background: 'white',
                                 borderRadius: 'var(--radius-xl)',
                                 padding: '32px',
                                 border: '1px solid var(--border-light)',
                                 transition: 'var(--transition)',
-                                cursor: 'pointer',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 height: '100%',
@@ -101,10 +70,14 @@ export default function CareerTips() {
                                 <p style={{ fontSize: '15px', color: 'var(--text-secondary)', lineHeight: '1.7', marginBottom: '24px', flexGrow: '1' }}>
                                     {article.excerpt}
                                 </p>
-                                <div style={{ display: 'flex', alignItems: 'center', color: 'var(--primary)', fontWeight: '600', fontSize: '14px' }}>
-                                    Read Article
-                                </div>
-                            </div>
+                                <Link
+                                  href={`/blog/${article.slug}`}
+                                  className="btn btn-secondary"
+                                  style={{ width: 'fit-content', fontSize: '13px', padding: '9px 14px' }}
+                                >
+                                  Read Article
+                                </Link>
+                            </article>
                         ))}
                     </div>
 

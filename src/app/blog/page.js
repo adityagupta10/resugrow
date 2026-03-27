@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { posts } from './data';
 import { createPageMetadata } from '@/lib/seo';
 import styles from './blog.module.css';
@@ -11,7 +12,21 @@ export const metadata = createPageMetadata({
   keywords: ['resume tips', 'career advice', 'job search', 'ATS optimization', 'LinkedIn tips', 'salary negotiation'],
 });
 
-const categories = ['All', 'ATS Optimization', 'Resume Writing', 'LinkedIn', 'Career Advice', 'Job Search', 'Interview Prep', 'Cover Letters', 'Career Change'];
+const categories = [
+  'All',
+  'ATS Optimization',
+  'Resume Guides',
+  'Skills Optimization',
+  'Templates',
+  'Resume Writing',
+  'LinkedIn Optimization',
+  'LinkedIn',
+  'Career Advice',
+  'Job Search',
+  'Interview Prep',
+  'Cover Letters',
+  'Career Change',
+];
 
 const featured = posts[0];
 const rest = posts.slice(1);
@@ -27,7 +42,7 @@ export default function BlogPage() {
             Career Insights That <span className="gradient-text">Actually Move the Needle</span>
           </h1>
           <p className={styles.heroDesc}>
-            Practical guides on resumes, LinkedIn, interviews, and job search strategy — written by recruiters and career coaches who've seen thousands of applications.
+            Practical guides on resumes, LinkedIn, interviews, and job search strategy — written by recruiters and career coaches who have seen thousands of applications.
           </p>
         </div>
       </section>
@@ -44,7 +59,20 @@ export default function BlogPage() {
 
         {/* Featured post */}
         <Link href={`/blog/${featured.slug}`} className={styles.featured}>
-          <div className={styles.featuredEmoji}>{featured.coverEmoji}</div>
+          <div className={styles.featuredEmoji}>
+            {featured.coverImage ? (
+              <Image
+                src={featured.coverImage}
+                alt={featured.coverAlt || `${featured.title} cover image`}
+                fill
+                className={styles.coverImage}
+                sizes="(max-width: 900px) 100vw, 280px"
+                priority
+              />
+            ) : (
+              <span className={styles.coverEmojiFallback}>{featured.coverEmoji}</span>
+            )}
+          </div>
           <div className={styles.featuredBody}>
             <div className={styles.featuredMeta}>
               <span className={styles.catBadge}>{featured.category}</span>
@@ -71,7 +99,19 @@ export default function BlogPage() {
         <div className={styles.grid}>
           {rest.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`} className={styles.card}>
-              <div className={styles.cardEmoji}>{post.coverEmoji}</div>
+              <div className={styles.cardEmoji}>
+                {post.coverImage ? (
+                  <Image
+                    src={post.coverImage}
+                    alt={post.coverAlt || `${post.title} cover image`}
+                    fill
+                    className={styles.coverImage}
+                    sizes="(max-width: 600px) 100vw, 360px"
+                  />
+                ) : (
+                  <span className={styles.coverEmojiFallback}>{post.coverEmoji}</span>
+                )}
+              </div>
               <div className={styles.cardBody}>
                 <div className={styles.cardMeta}>
                   <span className={styles.catBadge}>{post.category}</span>

@@ -85,7 +85,7 @@ export default function Navbar() {
     } else {
       setActiveDropdown(name);
       if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
-      
+
       clickTimeoutRef.current = setTimeout(() => {
         if (!isHovered.current) {
           setActiveDropdown(null);
@@ -122,7 +122,7 @@ export default function Navbar() {
 
       <div className={`${styles.navLinks} ${mobileOpen ? styles.open : ''}`}>
         {/* Resume Dropdown */}
-        <div 
+        <div
           className={styles.dropdownWrapper}
           onMouseEnter={() => handleMouseEnter('resume')}
           onMouseLeave={handleMouseLeave}
@@ -153,7 +153,7 @@ export default function Navbar() {
         </div>
 
         {/* Cover Letter Dropdown */}
-        <div 
+        <div
           className={styles.dropdownWrapper}
           onMouseEnter={() => handleMouseEnter('cover')}
           onMouseLeave={handleMouseLeave}
@@ -184,7 +184,7 @@ export default function Navbar() {
         </div>
 
         {/* LinkedIn Dropdown */}
-        <div 
+        <div
           className={styles.dropdownWrapper}
           onMouseEnter={() => handleMouseEnter('linkedin')}
           onMouseLeave={handleMouseLeave}
@@ -227,17 +227,17 @@ export default function Navbar() {
           <div className={styles.navLoading}>...</div>
         ) : session ? (
           <div className={styles.userSection} ref={userRef}>
-            <button 
+            <button
               className={styles.userProfileBtn}
               onClick={() => setUserDropdownOpen(!userDropdownOpen)}
             >
               <div className={styles.avatarWrapper}>
                 {session.user.image ? (
-                  <Image 
-                    src={session.user.image} 
-                    alt={session.user.name || 'User'} 
-                    width={32} 
-                    height={32} 
+                  <Image
+                    src={session.user.image}
+                    alt={session.user.name || 'User'}
+                    width={32}
+                    height={32}
                     className={styles.avatar}
                   />
                 ) : (
@@ -251,7 +251,7 @@ export default function Navbar() {
                 <path d="M2 4L5 7L8 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            
+
             {userDropdownOpen && (
               <div className={styles.userDropdown}>
                 <div className={styles.userDropdownHeader}>
@@ -264,7 +264,7 @@ export default function Navbar() {
                   <span>Settings</span>
                 </Link>
                 <div className={styles.dropdownDivider} />
-                <button 
+                <button
                   className={`${styles.dropdownItem} ${styles.signOutBtn}`}
                   onClick={() => signOut()}
                 >
@@ -274,7 +274,7 @@ export default function Navbar() {
             )}
           </div>
         ) : (
-          <button 
+          <button
             className={styles.loginBtn}
             onClick={() => signIn('google')}
           >

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
 import { templates as templateData } from '../data/templates';
+import { platformFaqs } from '../data/faqs';
 
 // Dynamic imports for components below the fold
 const Hero = dynamic(() => import('@/components/Home/Hero'), {
@@ -68,41 +69,6 @@ const proofStats = [
   { value: '98%', label: 'ATS parser readability on premium templates' },
   { value: '5,126', label: 'Verified product reviews' },
   { value: '30 sec', label: 'Average score generation' }
-];
-
-const faqData = [
-  {
-    q: 'Is ResuGrow beginner-friendly?',
-    a: 'Yes. ResuGrow is designed as a guided workflow, not a blank editor. You can start with your existing resume, run a scan, and apply fixes in priority order without needing professional writing experience.'
-  },
-  {
-    q: 'What should I use first: Builder, ATS Checker, or LinkedIn tools?',
-    a: 'For most users, the best sequence is: build or upload your resume, run ATS Checker, then optimize LinkedIn. This creates alignment across documents so recruiters see a consistent professional narrative across every touchpoint.'
-  },
-  {
-    q: 'How accurate are the scores?',
-    a: 'Scores are deterministic and rule-based, so the same input returns the same result. That makes progress trackable because each content change has a clear impact on specific scoring modules.'
-  },
-  {
-    q: 'Can I optimize for a specific industry?',
-    a: 'Yes. Industry targeting is built into ATS analysis, so your report prioritizes keywords and language patterns relevant to your target sector instead of generic advice.'
-  },
-  {
-    q: 'How is this different from a normal resume template website?',
-    a: 'Most template websites stop at design. ResuGrow combines templates with scoring, rewrite logic, and keyword gap analysis so you can improve quality with data-backed direction rather than guesswork.'
-  },
-  {
-    q: 'Can ResuGrow help me improve weak bullet points quickly?',
-    a: 'Yes. The SAR Rewriter transforms weak responsibility-style bullets into measurable achievement statements. You can then tune them with your exact numbers for stronger recruiter impact.'
-  },
-  {
-    q: 'Will this help with both ATS and human recruiters?',
-    a: 'That is the core goal. ResuGrow improves machine readability for ATS while also strengthening clarity, positioning, and quantified outcomes for human decision-makers.'
-  },
-  {
-    q: 'Do I need to rewrite everything manually after scanning?',
-    a: 'No. The platform highlights highest-impact fixes first and provides rewrite support so you can focus only on sections that materially improve your score and conversion quality.'
-  }
 ];
 
 const templates = templateData.slice(0, 4);
@@ -257,7 +223,7 @@ export default function Home() {
             <h2>Quick Answers Before You Start</h2>
           </div>
           <div className={styles.faqList}>
-            {faqData.map((faq, idx) => (
+            {platformFaqs.map((faq, idx) => (
               <div key={faq.q} className={styles.faqItem}>
                 <button
                   className={styles.faqButton}

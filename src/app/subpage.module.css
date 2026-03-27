@@ -324,6 +324,159 @@
   margin-top: 8px;
 }
 
+.aboutNarrative {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 24px;
+  padding-top: 20px;
+}
+
+.aboutNarrativeMain {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.aboutNarrativeMain h2 {
+  margin: 0 0 12px;
+  font-size: 32px;
+  color: var(--text-primary);
+}
+
+.aboutNarrativeMain p {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.aboutNarrativeAside {
+  background: linear-gradient(160deg, #eef6ff 0%, #f8fbff 100%);
+  border: 1px solid var(--primary-100);
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.aboutNarrativeAside h3 {
+  margin: 0 0 12px;
+  color: var(--text-primary);
+  font-size: 20px;
+}
+
+.aboutNarrativeAside ul {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 10px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.aboutValues {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.aboutValueCard {
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  padding: 22px;
+}
+
+.aboutValueIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--primary-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.aboutValueCard h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: var(--text-primary);
+}
+
+.aboutValueCard p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.aboutJourney {
+  margin-top: 28px;
+}
+
+.aboutJourney h2 {
+  margin: 0 0 14px;
+  font-size: 30px;
+  color: var(--text-primary);
+}
+
+.aboutJourneyGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.aboutJourneyCard {
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  padding: 18px;
+}
+
+.aboutJourneyCard span {
+  display: inline-flex;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  padding: 4px 10px;
+}
+
+.aboutJourneyCard h3 {
+  margin: 10px 0 8px;
+  color: var(--text-primary);
+  font-size: 20px;
+}
+
+.aboutJourneyCard p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.aboutManifesto {
+  margin-top: 28px;
+  border-radius: 20px;
+  border: 1px solid #dbeafe;
+  background: linear-gradient(130deg, #f8fbff 0%, #eff6ff 55%, #f8fafc 100%);
+  padding: 30px;
+  text-align: center;
+}
+
+.aboutManifesto h2 {
+  margin: 0 0 12px;
+  font-size: 32px;
+  color: var(--text-primary);
+}
+
+.aboutManifesto p {
+  margin: 0 auto 12px;
+  max-width: 860px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
 /* Team */
 .teamGrid {
   display: grid;
@@ -454,6 +607,259 @@
   color: var(--primary);
 }
 
+.helpSearchWrap {
+  max-width: 760px;
+  margin: 28px auto 0;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  box-shadow: var(--shadow-md);
+}
+
+.helpSearchIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.helpSearchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.helpSearchCount {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  border-radius: var(--radius-full);
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+.helpGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.helpTopicCard {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 20px;
+  transition: var(--transition);
+}
+
+.helpTopicCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.helpTopicIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--primary-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.helpTopicCard h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  color: var(--text-primary);
+}
+
+.helpTopicCard p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.helpActions {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.helpActionCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.helpActionCard:hover {
+  border-color: var(--primary-100);
+  background: var(--primary-50);
+}
+
+.helpActionIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+}
+
+.helpFaqLayout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.helpFaqSidebar {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 18px;
+  position: sticky;
+  top: 92px;
+  align-self: start;
+}
+
+.helpFaqSidebar h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.helpSidebarLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.helpSidebarLink:hover {
+  background: var(--primary-50);
+  color: var(--primary);
+}
+
+.helpFaqContent {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.helpFaqGroup {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.helpFaqGroup h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+}
+
+.helpFaqList {
+  display: grid;
+  gap: 10px;
+}
+
+.helpFaqCard {
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.helpFaqButton {
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.helpFaqAnswer {
+  margin: 0;
+  padding: 0 14px 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.helpEmptyState {
+  border: 1px dashed var(--border);
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+}
+
+.helpEmptyState h3 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.helpEmptyState p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.helpSupportBanner {
+  margin-top: 26px;
+  padding: 30px;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #eff6ff 0%, #f8fafc 100%);
+  border: 1px solid var(--primary-100);
+  text-align: center;
+}
+
+.helpSupportBanner h2 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.helpSupportBanner p {
+  margin: 0 auto 16px;
+  max-width: 640px;
+  color: var(--text-secondary);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .featureGrid {
@@ -473,12 +879,34 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .aboutNarrative,
+  .aboutValues {
+    grid-template-columns: 1fr;
+  }
+
+  .aboutJourneyGrid {
+    grid-template-columns: 1fr;
+  }
+
   .teamGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .templatesGallery {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .helpGrid,
+  .helpActions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .helpFaqLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .helpFaqSidebar {
+    position: static;
   }
 }
 
@@ -501,11 +929,39 @@
     gap: 16px;
   }
 
+  .aboutManifesto,
+  .aboutNarrativeMain,
+  .aboutNarrativeAside,
+  .aboutValueCard,
+  .aboutJourneyCard {
+    padding: 18px;
+  }
+
+  .aboutManifesto h2,
+  .aboutNarrativeMain h2,
+  .aboutJourney h2 {
+    font-size: 24px;
+  }
+
   .teamGrid {
     grid-template-columns: 1fr;
   }
 
   .templatesGallery {
+    grid-template-columns: 1fr;
+  }
+
+  .helpSearchWrap {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .helpSearchInput {
+    min-width: 200px;
+  }
+
+  .helpGrid,
+  .helpActions {
     grid-template-columns: 1fr;
   }
 
