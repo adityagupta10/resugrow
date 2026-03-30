@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Testimonials from '@/components/Testimonials/Testimonials';
 import { INDUSTRY_MAPPINGS } from '@/constants/industry_keywords';
 import EmojiImage from '@/components/UI/EmojiImage';
+import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
 import styles from '../../subpage.module.css';
 
 const features = [
@@ -53,6 +54,18 @@ export default function ATSChecker() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
+
+  const softwareJsonLd = useMemo(
+    () =>
+      getSoftwareAppJsonLd({
+        name: 'ResuGrow ATS Resume Checker',
+        description:
+          'Upload a resume PDF and get an ATS compatibility score, keyword gaps, and actionable fixes.',
+        url: `${SITE_URL}/resume/ats-checker`,
+        price: '0.00',
+      }),
+    []
+  );
 
   const industryOptions = useMemo(() => Object.keys(INDUSTRY_MAPPINGS), []);
   const filteredIndustries = useMemo(() => {
@@ -164,6 +177,10 @@ export default function ATSChecker() {
   };
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+      />
       {/* 1. Hero Section (The Hook) */}
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>

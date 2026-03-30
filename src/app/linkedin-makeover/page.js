@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import EmojiImage from '@/components/UI/EmojiImage';
+import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
 import styles from './page.module.css';
 
 const heroPhrases = [
@@ -78,6 +79,20 @@ export default function LinkedinMakeover() {
 
   return (
     <div className={styles.makeoverPage}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getSoftwareAppJsonLd({
+              name: 'ResuGrow LinkedIn Professional Makeover',
+              description:
+                'Premium LinkedIn optimization service with expert rewriting and AI-assisted positioning for recruiter visibility.',
+              url: `${SITE_URL}/linkedin-makeover`,
+              price: '99.00',
+            })
+          ),
+        }}
+      />
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContainer}>

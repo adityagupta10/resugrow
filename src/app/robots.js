@@ -4,7 +4,17 @@ export default function robots() {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/payment', '/linkedin-review/results', '/resume/ats-checker/results']
+        disallow: [
+          '/api/',
+          '/payment',
+          '/linkedin-review/results',
+          '/resume/ats-checker/results',
+          '/dashboard',
+          '/settings',
+          '/login',
+          '/example-supabase',
+          '/cover-letter/create'
+        ]
       }
     ],
     host: 'https://www.resugrow.com',

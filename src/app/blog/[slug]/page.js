@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { posts } from '../data';
-import { createPageMetadata } from '@/lib/seo';
+import { createPageMetadata, getArticleJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
 import styles from './post.module.css';
 
 export async function generateStaticParams() {
@@ -18,6 +18,9 @@ export async function generateMetadata({ params }) {
     description: post.excerpt,
     path: `/blog/${post.slug}`,
     keywords: post.tags,
+    type: 'article',
+    image: post.coverImage || undefined,
+    imageAlt: post.coverAlt || undefined,
   });
 }
 
@@ -154,6 +157,24 @@ export default async function BlogPost({ params }) {
   const faqSchema = buildFaqSchema(post);
   const howToSchema = buildHowToSchema(post);
 
+  const articleSchema = getArticleJsonLd({
+    title: post.title,
+    description: post.excerpt,
+    slug: post.slug,
+    date: post.date,
+    authorName: post.author,
+    authorRole: post.authorRole,
+    imageUrl: post.coverImage ? `${SITE_URL}${post.coverImage}` : undefined,
+    imageAlt: post.coverAlt || post.title,
+  });
+
+  const breadcrumbSchema = getBreadcrumbJsonLd([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Blog', url: `${SITE_URL}/blog` },
+    { name: post.category, url: `${SITE_URL}/blog` },
+    { name: post.title, url: `${SITE_URL}/blog/${post.slug}` },
+  ]);
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
@@ -164,6 +185,14 @@ export default async function BlogPost({ params }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
 
         {/* Breadcrumb */}
@@ -200,7 +229,7 @@ export default async function BlogPost({ params }) {
           <div className={styles.coverBanner}>
             {post.coverImage ? (
               <div className={styles.coverMedia}>
-                {/* Use a responsive <img> here to preserve each cover image's natural aspect ratio (no cropping). */}
+                {/* Use a responsive img here to preserve each cover image's natural aspect ratio (no cropping). */}
                 <img
                   src={post.coverImage}
                   alt={post.coverAlt || `${post.title} cover image`}

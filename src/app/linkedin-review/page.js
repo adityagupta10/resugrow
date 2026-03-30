@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ClipboardList, FileText, Inbox, Lock, AlertTriangle, FileSignature, UserCircle, Briefcase, Target, BarChart2, Lightbulb } from 'lucide-react';
+import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
 import styles from '../subpage.module.css';
 
 const analysisCategories = [
@@ -129,6 +130,20 @@ export default function ProfileReview() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getSoftwareAppJsonLd({
+              name: 'ResuGrow LinkedIn Profile Review',
+              description:
+                'Upload your official LinkedIn PDF export to get a 0-100 score with actionable fixes to improve recruiter visibility.',
+              url: `${SITE_URL}/linkedin-review`,
+              price: '0.00',
+            })
+          ),
+        }}
+      />
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
           <div className={styles.subpageHeroBadge}>LinkedIn Security Priority</div>

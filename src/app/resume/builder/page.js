@@ -257,9 +257,9 @@ export default function ResumeBuilderPage() {
           </div>
           <div className={styles.headerActions}>
             <ScoreBadge data={data} />
-            <Link href="/resume/ats-checker" className={styles.atsBtn}>🔍 ATS Check</Link>
-            <button className={styles.atsBtn} onClick={() => setShowTemplateModal(true)}>🎨 Change Template</button>
-            <button className={styles.downloadBtn} onClick={handleDownloadPDF}>⬇ Download PDF</button>
+            <Link href="/resume/ats-checker" className={`btn btn-secondary ${styles.headerActionBtn}`}>🔍 ATS Check</Link>
+            <button className={`btn btn-secondary ${styles.headerActionBtn}`} onClick={() => setShowTemplateModal(true)}>🎨 Change Template</button>
+            <button className={`btn btn-primary ${styles.headerActionBtn}`} onClick={handleDownloadPDF}>⬇ Download PDF</button>
           </div>
         </div>
       </header>
@@ -624,13 +624,17 @@ export default function ResumeBuilderPage() {
             </div>
           </section>
 
-          {/* Bottom CTA */}
-          <div style={{ marginTop: '32px', padding: '20px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', textAlign: 'center' }}>
-            <p style={{ fontSize: '13px', color: '#166534', fontWeight: 600, margin: '0 0 8px' }}>
-              Done? Run a full ATS scan to see your score.
+          <div className={styles.rewriteBanner}>
+            <p className={styles.rewriteKicker}>Premium AI Upgrade</p>
+            <h3 className={styles.rewriteTitle}>Turn this draft into a recruiter-ready resume in one click</h3>
+            <p className={styles.rewriteDesc}>
+              Our AI rewrite layer improves clarity, impact metrics, keyword match, and structure while keeping ATS-safe formatting.
             </p>
-            <Link href="/resume/ats-checker" className={styles.downloadBtn} style={{ display: 'inline-block', textDecoration: 'none' }}>
-              🔍 Scan My Resume
+            <Link
+              href="/payment?service=resume-ai-rewrite&source=resume-builder-bottom-cta"
+              className={`btn btn-primary ${styles.rewriteBtn}`}
+            >
+              ✨ AI Re-Write Resume
             </Link>
           </div>
         </div>
@@ -644,7 +648,7 @@ export default function ResumeBuilderPage() {
             </button>
           </div>
           <div className={styles.previewCard}>
-            <div ref={previewRef}>
+            <div ref={previewRef} className={styles.printArea}>
               <SelectedTemplate data={data} />
             </div>
           </div>

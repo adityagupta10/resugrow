@@ -40,7 +40,17 @@ export default function TemplateSwitcherModal({ activeId, onSelect, onClose }) {
                     <span className={styles.noPreview}>Preview unavailable</span>
                   )}
                 </div>
-                <span className={styles.name}>{tmpl.name}</span>
+                <div className={styles.cardInfo}>
+                  <span className={styles.name}>{tmpl.name}</span>
+                  <p className={styles.category}>{tmpl.category || 'Professional'}</p>
+                  <div className={styles.tagRow}>
+                    {(tmpl.tags || []).slice(0, 2).map((tag) => (
+                      <span key={`${tmpl.id}-${tag}`} className={styles.tag}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </button>
             ))}
           </div>

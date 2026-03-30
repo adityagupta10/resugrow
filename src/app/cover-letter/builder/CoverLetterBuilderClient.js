@@ -584,7 +584,7 @@ export default function CoverLetterBuilderClient() {
           </div>
 
           <div className={styles.aiRewriteSection}>
-            <Link href="/payment?service=cover-letter-ai-rewrite&source=cover-letter-builder-ai-rewrite" className={styles.aiRewriteBtn}>
+            <Link href="/payment?service=cover-letter-ai-rewrite&source=cover-letter-builder-ai-rewrite" className={`btn btn-primary ${styles.aiRewriteBtn}`}>
               <EmojiImage emoji="✨" size={20} /> Re-write with AI
             </Link>
             <p className={styles.aiNote}>Upgrade to an AI-polished, role-tailored rewrite of your cover letter.</p>

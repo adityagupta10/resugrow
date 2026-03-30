@@ -45,6 +45,25 @@ const SERVICE_CONFIG = {
       { href: '/cover-letter/builder', label: 'Back to Cover Letter Builder' },
       { href: '/resume/ats-checker', label: 'Run ATS Scanner' }
     ]
+  },
+  'resume-ai-rewrite': {
+    kicker: 'Secure Checkout (Dummy)',
+    title: 'AI Resume Rewrite',
+    subtitle:
+      'Upgrade your resume with a premium AI rewrite that sharpens positioning, metrics, and ATS alignment. Placeholder checkout — payment gateway coming soon.',
+    planName: 'AI Resume Rewrite',
+    planMeta: 'One-time add-on',
+    price: '$49',
+    checkoutItems: [
+      { label: 'Role-Aligned Resume Rewrite', value: 'Included' },
+      { label: 'ATS Keyword Optimization', value: 'Included' },
+      { label: 'Impact & Metrics Upgrade', value: 'Included' },
+      { label: 'Delivery Window', value: '1-3 business days' }
+    ],
+    footerLinks: [
+      { href: '/resume/builder', label: 'Back to Resume Builder' },
+      { href: '/resume/ats-checker', label: 'Run ATS Checker' }
+    ]
   }
 };
 

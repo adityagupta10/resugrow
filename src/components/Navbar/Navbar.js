@@ -275,7 +275,7 @@ export default function Navbar() {
           </div>
         ) : (
           <button
-            className={styles.loginBtn}
+            className={`btn btn-secondary ${styles.loginBtn}`}
             onClick={() => signIn('google')}
           >
             Sign In

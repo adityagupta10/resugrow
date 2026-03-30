@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { createPageMetadata } from '@/lib/seo';
+import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
 import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../../subpage.module.css';
 import landingStyles from './landing.module.css';
@@ -22,8 +22,20 @@ const features = [
 ];
 
 export default function CoverLetterBuilder() {
+  const softwareJsonLd = getSoftwareAppJsonLd({
+    name: 'ResuGrow Cover Letter Studio',
+    description:
+      'Generate job-tailored cover letters with live preview, deterministic structure, and one-click PDF export.',
+    url: `${SITE_URL}/cover-letter/builder`,
+    price: '0.00',
+  });
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+      />
       <section className={`${styles.subpageHero} ${landingStyles.compactHero}`}>
         <div className={styles.subpageContainer}>
           <div className={styles.subpageHeroBadge}>Cover Letter Studio</div>

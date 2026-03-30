@@ -3,7 +3,7 @@ import styles from '../../subpage.module.css';
 import Image from 'next/image';
 import { templates as templateData } from '../../../data/templates';
 import Testimonials from '@/components/Testimonials/Testimonials';
-import { createPageMetadata } from '@/lib/seo';
+import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
   title: 'ATS-Friendly Resume Templates | Modern & Recruiter-Tested',
@@ -16,8 +16,20 @@ export const metadata = createPageMetadata({
 const templates = templateData;
 
 export default function Templates() {
+  const softwareJsonLd = getSoftwareAppJsonLd({
+    name: 'ResuGrow Resume Templates',
+    description:
+      'Browse ATS-friendly resume templates optimized for recruiter readability across industries.',
+    url: `${SITE_URL}/resume/templates`,
+    price: '0.00',
+  });
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+      />
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
           <div className={styles.subpageHeroBadge}>Templates</div>

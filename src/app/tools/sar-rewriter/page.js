@@ -3,6 +3,7 @@
 import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import EmojiImage from '@/components/UI/EmojiImage';
+import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
 import styles from './page.module.css';
 
 const SAMPLE_BULLETS = [
@@ -96,6 +97,20 @@ const SARContent = () => {
 
   return (
     <div className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getSoftwareAppJsonLd({
+              name: 'ResuGrow SAR Bullet Rewriter',
+              description:
+                'Rewrite resume bullets into Situation-Action-Result format with measurable outcomes and recruiter-ready language.',
+              url: `${SITE_URL}/tools/sar-rewriter`,
+              price: '0.00',
+            })
+          ),
+        }}
+      />
       <main className={styles.main}>
         <section className={styles.hero}>
           <p className={styles.kicker}>AI Rewrite Studio</p>

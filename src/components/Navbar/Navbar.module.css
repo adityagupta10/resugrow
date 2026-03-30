@@ -363,23 +363,14 @@
 /* ── Auth UI Styles ────────────────────────────────────────────────────── */
 
 .loginBtn {
-  display: inline-flex;
-  align-items: center;
   padding: 10px 20px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--primary);
-  background: white;
-  border: 1.5px solid var(--primary);
-  border-radius: 999px;
-  cursor: pointer;
-  transition: var(--transition);
   white-space: nowrap;
   margin-left: 12px;
 }
 
 .loginBtn:hover {
-  background: var(--primary-50);
   transform: translateY(-1px);
 }
 
