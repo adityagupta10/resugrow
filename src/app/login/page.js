@@ -29,29 +29,34 @@ function LoginContent() {
     setIsLoading(true);
     setOauthError('');
 
-    const supabase = createSupabaseClient();
-    let nextPath = '/dashboard';
     try {
-      const parsed = new URL(callbackUrl, window.location.origin);
-      if (parsed.origin === window.location.origin) {
-        nextPath = `${parsed.pathname}${parsed.search}${parsed.hash}`;
+      const supabase = createSupabaseClient();
+      let nextPath = '/dashboard';
+      try {
+        const parsed = new URL(callbackUrl, window.location.origin);
+        if (parsed.origin === window.location.origin) {
+          nextPath = `${parsed.pathname}${parsed.search}${parsed.hash}`;
+        }
+      } catch {
+        nextPath = '/dashboard';
+      }
+      const resolvedRedirectTo =
+        `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'linkedin_oidc',
+        options: {
+          // After Supabase OAuth, exchange code server-side and then redirect.
+          redirectTo: resolvedRedirectTo,
+        },
+      });
+
+      if (error) {
+        setOauthError(error.message || 'LinkedIn login failed. Please try again.');
+        setIsLoading(false);
       }
     } catch {
-      nextPath = '/dashboard';
-    }
-    const resolvedRedirectTo =
-      `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
-
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'linkedin_oidc',
-      options: {
-        // After Supabase OAuth, exchange code server-side and then redirect.
-        redirectTo: resolvedRedirectTo,
-      },
-    });
-
-    if (error) {
-      setOauthError(error.message || 'LinkedIn login failed. Please try again.');
+      setOauthError('Supabase is not configured on this environment. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY.');
       setIsLoading(false);
     }
   };

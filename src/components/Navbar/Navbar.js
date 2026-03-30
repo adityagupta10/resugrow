@@ -79,25 +79,30 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const supabase = createSupabaseClient();
     let mounted = true;
+    let subscription = null;
 
-    supabase.auth.getUser().then(({ data }) => {
-      if (!mounted) return;
-      setSupabaseUser(data?.user || null);
-      setSupabaseLoading(false);
-    });
+    try {
+      const supabase = createSupabaseClient();
+      supabase.auth.getUser().then(({ data }) => {
+        if (!mounted) return;
+        setSupabaseUser(data?.user || null);
+        setSupabaseLoading(false);
+      });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, sessionData) => {
-      setSupabaseUser(sessionData?.user || null);
+      const authSubscription = supabase.auth.onAuthStateChange((_event, sessionData) => {
+        setSupabaseUser(sessionData?.user || null);
+        setSupabaseLoading(false);
+      });
+      subscription = authSubscription.data.subscription;
+    } catch {
+      setSupabaseUser(null);
       setSupabaseLoading(false);
-    });
+    }
 
     return () => {
       mounted = false;
-      subscription.unsubscribe();
+      if (subscription) subscription.unsubscribe();
     };
   }, []);
 
@@ -313,8 +318,10 @@ export default function Navbar() {
                   className={`${styles.dropdownItem} ${styles.signOutBtn}`}
                   onClick={async () => {
                     if (supabaseUser) {
-                      const supabase = createSupabaseClient();
-                      await supabase.auth.signOut();
+                      try {
+                        const supabase = createSupabaseClient();
+                        await supabase.auth.signOut();
+                      } catch {}
                       setUserDropdownOpen(false);
                       router.refresh();
                       return;
