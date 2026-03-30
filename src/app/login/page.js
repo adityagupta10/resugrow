@@ -5,16 +5,55 @@ import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { createClient as createSupabaseClient } from '@/utils/supabase/client';
 import styles from './login.module.css';
 
 function LoginContent() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
   const [isLoading, setIsLoading] = useState(false);
+  const [oauthError, setOauthError] = useState('');
 
   const handleLogin = async (provider) => {
     setIsLoading(true);
-    await signIn(provider, { callbackUrl });
+    setOauthError('');
+    try {
+      await signIn(provider, { callbackUrl });
+    } finally {
+      // signIn usually redirects; this prevents a stuck loading state on failure.
+      setIsLoading(false);
+    }
+  };
+
+  const handleLinkedInWithSupabase = async () => {
+    setIsLoading(true);
+    setOauthError('');
+
+    const supabase = createSupabaseClient();
+    let nextPath = '/dashboard';
+    try {
+      const parsed = new URL(callbackUrl, window.location.origin);
+      if (parsed.origin === window.location.origin) {
+        nextPath = `${parsed.pathname}${parsed.search}${parsed.hash}`;
+      }
+    } catch {
+      nextPath = '/dashboard';
+    }
+    const resolvedRedirectTo =
+      `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'linkedin_oidc',
+      options: {
+        // After Supabase OAuth, exchange code server-side and then redirect.
+        redirectTo: resolvedRedirectTo,
+      },
+    });
+
+    if (error) {
+      setOauthError(error.message || 'LinkedIn login failed. Please try again.');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -88,7 +127,7 @@ function LoginContent() {
               Continue with Google
             </button>
 
-            <button className={styles.socialBtn} onClick={() => handleLogin('google')} disabled={isLoading}>
+            <button className={styles.socialBtn} onClick={handleLinkedInWithSupabase} disabled={isLoading}>
             <svg
               viewBox="0 0 24 24"
               fill="#0077b5"
@@ -97,9 +136,10 @@ function LoginContent() {
             >
               <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
             </svg>
-              Continue with Linkedin
+              Continue with LinkedIn
             </button>
           </div>
+          {oauthError ? <p className={styles.oauthError}>{oauthError}</p> : null}
 
           <div className={styles.termsContainer}>
             <p>

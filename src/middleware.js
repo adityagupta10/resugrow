@@ -20,8 +20,13 @@ export function middleware(req) {
                          req.cookies.get('__Secure-authjs.session-token')?.value || 
                          req.cookies.get('next-auth.session-token')?.value || 
                          req.cookies.get('__Secure-next-auth.session-token')?.value;
+    // Supabase auth cookie keys look like:
+    // sb-<project-ref>-auth-token, sb-<project-ref>-auth-token.0, sb-<project-ref>-auth-token.1
+    const hasSupabaseSession = req.cookies
+      .getAll()
+      .some((cookie) => /^sb-.*-auth-token(?:\.\d+)?$/.test(cookie.name));
 
-    if (!sessionToken) {
+    if (!sessionToken && !hasSupabaseSession) {
       const url = req.nextUrl.clone();
       url.pathname = '/login';
       url.searchParams.set('callbackUrl', req.url);

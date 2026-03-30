@@ -3,7 +3,9 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
+import { createClient as createSupabaseClient } from '@/utils/supabase/client';
 import styles from './Navbar.module.css';
 
 const resumeItems = [
@@ -25,11 +27,31 @@ const linkedinItems = [
 
 export default function Navbar() {
   const { data: session, status } = useSession();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [supabaseUser, setSupabaseUser] = useState(null);
+  const [supabaseLoading, setSupabaseLoading] = useState(true);
   const navRef = useRef(null);
   const userRef = useRef(null);
+
+  const userFromSupabase = supabaseUser
+    ? {
+        name: supabaseUser.user_metadata?.full_name || supabaseUser.user_metadata?.name || supabaseUser.email || 'User',
+        email: supabaseUser.email,
+        image: supabaseUser.user_metadata?.avatar_url || supabaseUser.user_metadata?.picture || null,
+      }
+    : null;
+  const activeUser = userFromSupabase || session?.user || null;
+  const isLoggedIn = Boolean(activeUser);
+  const isAuthLoading = status === 'loading' || supabaseLoading;
+
+  const handleSignInRedirect = () => {
+    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    router.push(`/login?callbackUrl=${encodeURIComponent(currentPath || '/')}`);
+    setMobileOpen(false);
+  };
 
   useEffect(() => {
     if (mobileOpen) {
@@ -53,6 +75,29 @@ export default function Navbar() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.body.classList.remove('menu-open');
+    };
+  }, []);
+
+  useEffect(() => {
+    const supabase = createSupabaseClient();
+    let mounted = true;
+
+    supabase.auth.getUser().then(({ data }) => {
+      if (!mounted) return;
+      setSupabaseUser(data?.user || null);
+      setSupabaseLoading(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, sessionData) => {
+      setSupabaseUser(sessionData?.user || null);
+      setSupabaseLoading(false);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
     };
   }, []);
 
@@ -223,30 +268,30 @@ export default function Navbar() {
         </Link>
 
         {/* Auth Section */}
-        {status === 'loading' ? (
+        {isAuthLoading ? (
           <div className={styles.navLoading}>...</div>
-        ) : session ? (
+        ) : isLoggedIn ? (
           <div className={styles.userSection} ref={userRef}>
             <button
               className={styles.userProfileBtn}
               onClick={() => setUserDropdownOpen(!userDropdownOpen)}
             >
               <div className={styles.avatarWrapper}>
-                {session.user.image ? (
+                {activeUser.image ? (
                   <Image
-                    src={session.user.image}
-                    alt={session.user.name || 'User'}
+                    src={activeUser.image}
+                    alt={activeUser.name || 'User'}
                     width={32}
                     height={32}
                     className={styles.avatar}
                   />
                 ) : (
                   <div className={styles.avatarPlaceholder}>
-                    {session.user.name ? session.user.name.charAt(0).toUpperCase() : 'U'}
+                    {activeUser.name ? activeUser.name.charAt(0).toUpperCase() : 'U'}
                   </div>
                 )}
               </div>
-              <span className={styles.userName}>{session.user.name?.split(' ')[0]}</span>
+              <span className={styles.userName}>{activeUser.name?.split(' ')[0]}</span>
               <svg className={`${styles.chevron} ${userDropdownOpen ? styles.chevronRotate : ''}`} width="10" height="10" viewBox="0 0 10 10" fill="none">
                 <path d="M2 4L5 7L8 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -255,7 +300,7 @@ export default function Navbar() {
             {userDropdownOpen && (
               <div className={styles.userDropdown}>
                 <div className={styles.userDropdownHeader}>
-                  <p className={styles.userEmail}>{session.user.email}</p>
+                  <p className={styles.userEmail}>{activeUser.email}</p>
                 </div>
                 <Link href="/dashboard" className={styles.dropdownItem} onClick={() => setUserDropdownOpen(false)}>
                   <span>My Dashboard</span>
@@ -266,7 +311,16 @@ export default function Navbar() {
                 <div className={styles.dropdownDivider} />
                 <button
                   className={`${styles.dropdownItem} ${styles.signOutBtn}`}
-                  onClick={() => signOut()}
+                  onClick={async () => {
+                    if (supabaseUser) {
+                      const supabase = createSupabaseClient();
+                      await supabase.auth.signOut();
+                      setUserDropdownOpen(false);
+                      router.refresh();
+                      return;
+                    }
+                    await signOut();
+                  }}
                 >
                   <span>Sign Out</span>
                 </button>
@@ -276,7 +330,8 @@ export default function Navbar() {
         ) : (
           <button
             className={`btn btn-secondary ${styles.loginBtn}`}
-            onClick={() => signIn('google')}
+            onClick={handleSignInRedirect}
+            type="button"
           >
             Sign In
           </button>
