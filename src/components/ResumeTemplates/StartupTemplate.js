@@ -59,6 +59,39 @@ export default function StartupTemplate({ data }) {
             ))}
           </section>
         )}
+
+        {data.projects?.length > 0 && (
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>Projects</h3>
+            {data.projects.map((proj, i) => (
+              <div key={i} className={styles.experienceItem}>
+                <div className={styles.expHeader}>
+                  <span className={styles.company}>{proj.name}</span>
+                  <span className={styles.dates}>{proj.link}</span>
+                </div>
+                <p className={styles.bio}>{proj.description}</p>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {data.achievements?.length > 0 && (
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>Key Achievements</h3>
+            <ul className={styles.bullets}>
+              {data.achievements.map((a, i) => (
+                <li key={i}>{a}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {(data.customSection?.title || data.customSection?.content) && (
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>{data.customSection.title || 'Other Info'}</h3>
+            <p className={styles.bio} style={{ whiteSpace: 'pre-wrap' }}>{data.customSection.content}</p>
+          </section>
+        )}
       </div>
 
       <div className={styles.sidebar}>
@@ -70,6 +103,40 @@ export default function StartupTemplate({ data }) {
                 <span key={i} className={styles.tag}>{s}</span>
               ))}
             </div>
+          </div>
+        )}
+
+        {data.strengths?.length > 0 && (
+          <div className={styles.sideBlock}>
+            <h3 className={styles.sideTitle}>Strengths</h3>
+            <div className={styles.skillsGrid}>
+              {data.strengths.map((s, i) => (
+                <span key={i} className={styles.tag} style={{ borderColor: '#10b981', color: '#10b981' }}>{s}</span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {data.languages?.length > 0 && (
+          <div className={styles.sideBlock}>
+            <h3 className={styles.sideTitle}>Languages</h3>
+            {data.languages.map((l, i) => (
+              <div key={i} style={{ fontSize: '12px', marginBottom: '4px', color: '#666' }}>
+                {l.name} ({l.proficiency})
+              </div>
+            ))}
+          </div>
+        )}
+
+        {data.certifications?.length > 0 && (
+          <div className={styles.sideBlock}>
+            <h3 className={styles.sideTitle}>Certs</h3>
+            {data.certifications.map((c, i) => (
+              <div key={i} style={{ fontSize: '12px', marginBottom: '8px', borderLeft: '2px solid #3b82f6', paddingLeft: '8px' }}>
+                <div style={{ fontWeight: 600, color: '#333' }}>{c.title}</div>
+                {c.issuer && <div style={{ fontSize: '10px' }}>{c.issuer}</div>}
+              </div>
+            ))}
           </div>
         )}
 

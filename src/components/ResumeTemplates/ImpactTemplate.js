@@ -43,6 +43,28 @@ export default function ImpactTemplate({ data }) {
             ))}
           </section>
         )}
+
+        {data.projects?.length > 0 && (
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>Strategic Projects</h2>
+            {data.projects.map((proj, i) => (
+              <div key={i} className={styles.item}>
+                <div className={styles.itemHeader}>
+                  <span className={styles.company}>{proj.name}</span>
+                  <span className={styles.dates}>{proj.link}</span>
+                </div>
+                <p className={styles.summary}>{proj.description}</p>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {(data.customSection?.title || data.customSection?.content) && (
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>{data.customSection.title || 'Additional Value'}</h2>
+            <p className={styles.summary} style={{ whiteSpace: 'pre-wrap' }}>{data.customSection.content}</p>
+          </section>
+        )}
       </div>
 
       <aside className={styles.sidebar}>
@@ -86,6 +108,40 @@ export default function ImpactTemplate({ data }) {
                 <li key={i}>{a}</li>
               ))}
             </ul>
+          </div>
+        )}
+
+        {data.strengths?.length > 0 && (
+          <div className={styles.sideBlock}>
+            <h3 className={styles.sideTitle}>Strengths</h3>
+            <div className={styles.skillsList}>
+              {data.strengths.map((s, i) => (
+                <div key={i} className={styles.skillRow}>
+                  <span className={styles.skillName}>{s}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {data.certifications?.length > 0 && (
+          <div className={styles.sideBlock}>
+            <h3 className={styles.sideTitle}>Certifications</h3>
+            {data.certifications.map((c, i) => (
+              <div key={i} style={{ fontSize: '11px', marginBottom: '6px' }}>
+                <div style={{ fontWeight: 600, color: '#fff' }}>{c.title}</div>
+                {c.issuer && <div style={{ opacity: 0.7 }}>{c.issuer}</div>}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {data.languages?.length > 0 && (
+          <div className={styles.sideBlock}>
+            <h3 className={styles.sideTitle}>Languages</h3>
+            <div style={{ fontSize: '11px', lineHeight: 1.4 }}>
+              {data.languages.map(l => `${l.name} (${l.proficiency})`).join(' • ')}
+            </div>
           </div>
         )}
       </aside>

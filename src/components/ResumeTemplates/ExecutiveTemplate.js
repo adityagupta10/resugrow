@@ -63,7 +63,77 @@ export default function ExecutiveTemplate({ data }) {
       {data.skills?.length > 0 && (
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Technical Skills</h2>
-          <p className={styles.bodyText}>{data.skills.join(', ')}</p>
+          <p className={styles.bodyText}>{data.skills.join(' • ')}</p>
+        </section>
+      )}
+
+      {data.strengths?.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Core Strengths</h2>
+          <p className={styles.bodyText}>{data.strengths.join(' • ')}</p>
+        </section>
+      )}
+
+      {data.projects?.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Projects</h2>
+          {data.projects.map((proj, i) => (
+            <div key={i} className={styles.entry}>
+              <div className={styles.entryTop}>
+                <strong>{proj.name}</strong>
+                {proj.link && <span className={styles.link}>{proj.link}</span>}
+              </div>
+              <p className={styles.bodyText}>{proj.description}</p>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {data.achievements?.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Key Achievements</h2>
+          <ul className={styles.list}>
+            {data.achievements.map((a, i) => (
+              <li key={i}>{a}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {data.certifications?.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Certifications</h2>
+          {data.certifications.map((c, i) => (
+            <div key={i} className={styles.entry}>
+              <div className={styles.entryTop}>
+                <strong>{c.title}</strong>
+                {c.issuer && <span className={styles.company}>{c.issuer}</span>}
+              </div>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {(data.languages?.length > 0 || data.extracurricular?.length > 0) && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Additional Information</h2>
+          {data.languages?.length > 0 && (
+            <p className={styles.bodyText}>
+              <strong>Languages:</strong> {data.languages.map(l => `${l.name} (${l.proficiency})`).join(', ')}
+            </p>
+          )}
+          {data.extracurricular?.length > 0 && (
+            <p className={styles.bodyText}>
+              <strong>Activities:</strong> {data.extracurricular.join(' • ')}
+            </p>
+          )}
+        </section>
+      )}
+
+      {(data.customSection?.title || data.customSection?.content) && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>{data.customSection.title || 'Other Information'}</h2>
+          <p className={styles.bodyText} style={{ whiteSpace: 'pre-wrap' }}>{data.customSection.content}</p>
         </section>
       )}
     </div>

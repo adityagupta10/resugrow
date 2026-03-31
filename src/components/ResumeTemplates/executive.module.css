@@ -48,6 +48,6 @@
 .list li { font-size: 13px; color: #444; margin-bottom: 4px; }
 
 @media print {
-  .resumeDoc { padding: 20mm; width: 210mm; height: 297mm; }
+  .resumeDoc { padding: 20mm; width: 210mm; min-height: 297mm; height: auto; }
   .watermark { display: none; }
 }

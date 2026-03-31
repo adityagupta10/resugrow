@@ -230,3 +230,17 @@ export function getBreadcrumbJsonLd(crumbs) {
     }))
   };
 }
+
+export function getItemListJsonLd({ name, items = [] }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: item.url,
+      name: item.name
+    }))
+  };
+}

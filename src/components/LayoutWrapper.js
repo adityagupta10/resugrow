@@ -6,15 +6,15 @@ import Footer from '@/components/Footer/Footer';
 
 export default function LayoutWrapper({ children }) {
   const pathname = usePathname();
-  const isLoginPage = pathname === '/login';
+  const hideChrome = pathname === '/login' || pathname === '/resume/builder';
 
   return (
     <>
-      {!isLoginPage && <Navbar />}
-      <main style={{ paddingTop: isLoginPage ? '0' : '72px' }}>
+      {!hideChrome && <Navbar />}
+      <main style={{ paddingTop: hideChrome ? '0' : '72px' }}>
         {children}
       </main>
-      {!isLoginPage && <Footer />}
+      {!hideChrome && <Footer />}
     </>
   );
 }

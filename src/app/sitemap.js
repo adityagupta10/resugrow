@@ -3,6 +3,14 @@ import { posts } from './blog/data';
 export default function sitemap() {
   const baseUrl = 'https://www.resugrow.com';
   const now = new Date();
+  const parseDate = (value) => {
+    if (!value || typeof value !== 'string') return null;
+    const direct = new Date(value);
+    if (!Number.isNaN(direct.getTime())) return direct;
+    const normalized = new Date(value.replace(/-/g, ' '));
+    if (!Number.isNaN(normalized.getTime())) return normalized;
+    return null;
+  };
 
   const staticRoutes = [
     // Core — highest priority
@@ -26,6 +34,8 @@ export default function sitemap() {
     { url: `${baseUrl}/about`,                         changeFrequency: 'monthly', priority: 0.70, lastModified: now },
     { url: `${baseUrl}/contact`,                       changeFrequency: 'monthly', priority: 0.70, lastModified: now },
     { url: `${baseUrl}/help-center`,                   changeFrequency: 'monthly', priority: 0.65, lastModified: now },
+    { url: `${baseUrl}/llms.txt`,                      changeFrequency: 'weekly',  priority: 0.60, lastModified: now },
+    { url: `${baseUrl}/llms-full.txt`,                 changeFrequency: 'weekly',  priority: 0.58, lastModified: now },
 
     // Legal — low priority, yearly
     { url: `${baseUrl}/privacy-policy`,                changeFrequency: 'yearly',  priority: 0.30, lastModified: now },
@@ -38,7 +48,7 @@ export default function sitemap() {
     url: `${baseUrl}/blog/${post.slug}`,
     changeFrequency: 'monthly',
     priority: 0.75,
-    lastModified: now,
+    lastModified: parseDate(post.dateModified) || parseDate(post.date) || now,
   }));
 
   return [...staticRoutes, ...blogRoutes];

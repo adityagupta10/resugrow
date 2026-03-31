@@ -81,6 +81,6 @@
 .projectDesc { font-size: 11px; color: #666; line-height: 1.4; }
 
 @media print {
-  .resumeDoc { width: 210mm; height: 297mm; border: none; }
+  .resumeDoc { width: 210mm; min-height: 297mm; height: auto; border: none; }
   .watermark { display: none; }
 }

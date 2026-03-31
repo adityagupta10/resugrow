@@ -55,6 +55,28 @@ export default function SwissTemplate({ data }) {
               </div>
             </section>
           )}
+
+          {data.strengths?.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.sectionHeader}>Attributes</h2>
+              <div className={styles.skillsList}>
+                {data.strengths.map((s, i) => (
+                  <div key={i} className={styles.skillItem} style={{ borderLeftColor: '#059669' }}>{s}</div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {data.languages?.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.sectionHeader}>Languages</h2>
+              {data.languages.map((l, i) => (
+                <div key={i} style={{ fontSize: '11px', marginBottom: '4px' }}>
+                  <strong>{l.name}</strong> <span style={{ opacity: 0.6 }}>({l.proficiency})</span>
+                </div>
+              ))}
+            </section>
+          )}
         </div>
 
         <div className={styles.rightCol}>
@@ -89,6 +111,43 @@ export default function SwissTemplate({ data }) {
                   <p className={styles.projectDesc}>{proj.description}</p>
                 </div>
               ))}
+            </section>
+          )}
+
+          {data.achievements?.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.sectionHeader}>Achievements</h2>
+              <ul className={styles.bullets} style={{ listStyle: 'none', paddingLeft: 0 }}>
+                {data.achievements.map((a, i) => (
+                  <li key={i} style={{ marginBottom: '8px', fontSize: '12px' }}>• {a}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {data.certifications?.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.sectionHeader}>Certifications</h2>
+              {data.certifications.map((c, i) => (
+                <div key={i} style={{ marginBottom: '10px' }}>
+                  <div style={{ fontWeight: 600, fontSize: '12px' }}>{c.title}</div>
+                  {c.issuer && <div style={{ fontSize: '11px', opacity: 0.7 }}>{c.issuer}</div>}
+                </div>
+              ))}
+            </section>
+          )}
+
+          {data.extracurricular?.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.sectionHeader}>Activities</h2>
+              <p className={styles.projectDesc}>{data.extracurricular.join(' · ')}</p>
+            </section>
+          )}
+
+          {(data.customSection?.title || data.customSection?.content) && (
+            <section className={styles.section}>
+              <h2 className={styles.sectionHeader}>{data.customSection.title || 'Other'}</h2>
+              <p className={styles.projectDesc} style={{ whiteSpace: 'pre-wrap' }}>{data.customSection.content}</p>
             </section>
           )}
         </div>

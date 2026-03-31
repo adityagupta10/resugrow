@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import styles from '../subpage.module.css';
-import { createPageMetadata } from '@/lib/seo';
+import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } from '@/lib/seo';
 import { strategicPosts } from '../blog/strategicPosts';
 
 export const metadata = createPageMetadata({
@@ -20,8 +20,28 @@ const articles = strategicPosts.map((post) => ({
 }));
 
 export default function CareerTips() {
+    const breadcrumbSchema = getBreadcrumbJsonLd([
+      { name: 'Home', url: SITE_URL },
+      { name: 'Career Tips', url: `${SITE_URL}/career-tips` }
+    ]);
+    const itemListSchema = getItemListJsonLd({
+      name: 'Career Tips Articles',
+      items: articles.map((article) => ({
+        name: article.title,
+        url: `${SITE_URL}/blog/${article.slug}`
+      }))
+    });
+
     return (
         <>
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+            />
             <section className={styles.subpageHero}>
                 <div className={styles.subpageContainer}>
                     <div className={styles.subpageHeroBadge}>Resources</div>

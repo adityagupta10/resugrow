@@ -122,7 +122,6 @@
 }
 
 @media print {
-  body * { visibility: hidden !important; }
   .resumeDoc, .resumeDoc * { visibility: visible !important; }
   .noPrint { display: none !important; }
   .resumeDoc {

@@ -86,7 +86,6 @@
 
 /* Print specific rules for classic template */
 @media print {
-  body * { visibility: hidden !important; }
   .noPrint { display: none !important; }
   .resumeDoc, .resumeDoc * { visibility: visible !important; }
   .resumeDoc {

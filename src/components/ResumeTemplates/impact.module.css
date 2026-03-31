@@ -132,6 +132,6 @@
 }
 
 @media print {
-  .resumeDoc { width: 210mm; height: 297mm; }
+  .resumeDoc { width: 210mm; min-height: 297mm; height: auto; }
   .sidebar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }

@@ -1,0 +1,6 @@
+.vscode/chrome-debug-profile
+.history
+node_modules
+commit-adjust.sh
+coverage 
+dist

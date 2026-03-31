@@ -73,9 +73,65 @@ export default function AcademicTemplate({ data }) {
           <h2 className={styles.sectionTitle}>V. CERTIFICATIONS & HONORS</h2>
           <ul className={styles.bullets}>
             {certifications.map((c, i) => (
-              <li key={i}>{c}</li>
+              <li key={i}>{typeof c === 'string' ? c : `${c.title} ${c.issuer ? `(@ ${c.issuer})` : ''}`}</li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {projects?.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>VI. RESEARCH PROJECTS</h2>
+          {projects.map((proj, i) => (
+            <div key={i} className={styles.item}>
+              <div className={styles.itemHeader}>
+                <span className={styles.company}>{proj.name}</span>
+                <span className={styles.dates}>{proj.link}</span>
+              </div>
+              <p className={styles.summary}>{proj.description}</p>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {data.achievements?.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>VII. KEY ACHIEVEMENTS</h2>
+          <ul className={styles.bullets}>
+            {data.achievements.map((a, i) => (
+              <li key={i}>{a}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {data.strengths?.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>VIII. PERSONAL STRENGTHS</h2>
+          <p className={styles.summary}>{data.strengths.join('; ')}</p>
+        </section>
+      )}
+
+      {(data.languages?.length > 0 || data.extracurricular?.length > 0) && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>IX. ADDITIONAL FIELDS</h2>
+          {data.languages?.length > 0 && (
+            <div className={styles.summary}>
+              <strong>Languages:</strong> {data.languages.map(l => `${l.name} (${l.proficiency})`).join(', ')}
+            </div>
+          )}
+          {data.extracurricular?.length > 0 && (
+            <div className={styles.summary}>
+              <strong>Activities:</strong> {data.extracurricular.join('; ')}
+            </div>
+          )}
+        </section>
+      )}
+
+      {(data.customSection?.title || data.customSection?.content) && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>X. {data.customSection.title?.toUpperCase() || 'ADDITIONAL INFORMATION'}</h2>
+          <p className={styles.summary} style={{ whiteSpace: 'pre-wrap' }}>{data.customSection.content}</p>
         </section>
       )}
     </div>

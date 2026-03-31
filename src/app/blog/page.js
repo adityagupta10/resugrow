@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { posts } from './data';
-import { createPageMetadata } from '@/lib/seo';
+import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } from '@/lib/seo';
 import styles from './blog.module.css';
 
 export const metadata = createPageMetadata({
@@ -32,8 +32,28 @@ const featured = posts[0];
 const rest = posts.slice(1);
 
 export default function BlogPage() {
+  const breadcrumbSchema = getBreadcrumbJsonLd([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Blog', url: `${SITE_URL}/blog` }
+  ]);
+  const itemListSchema = getItemListJsonLd({
+    name: 'ResuGrow Blog Articles',
+    items: posts.map((post) => ({
+      url: `${SITE_URL}/blog/${post.slug}`,
+      name: post.title
+    }))
+  });
+
   return (
     <div className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
       {/* Hero */}
       <section className={styles.hero}>
         <div className={styles.container}>

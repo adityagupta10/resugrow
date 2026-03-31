@@ -5,6 +5,7 @@ import Link from 'next/link';
 import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../subpage.module.css';
 import { platformFaqs } from '@/data/faqs';
+import { getBreadcrumbJsonLd, getFaqJsonLd, SITE_URL } from '@/lib/seo';
 
 const helpCategories = [
   {
@@ -57,6 +58,15 @@ const quickActions = [
   { title: 'Contact Support', href: '/contact', icon: '💬' }
 ];
 
+const helpBreadcrumbSchema = getBreadcrumbJsonLd([
+  { name: 'Home', url: SITE_URL },
+  { name: 'Help Center', url: `${SITE_URL}/help-center` }
+]);
+
+const helpFaqSchema = getFaqJsonLd(
+  helpCategories.flatMap((group) => group.faqs.map((faq) => ({ q: faq.q, a: faq.a })))
+);
+
 export default function HelpCenter() {
   const [query, setQuery] = useState('');
   const [openId, setOpenId] = useState('getting-started-0');
@@ -82,6 +92,14 @@ export default function HelpCenter() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(helpBreadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(helpFaqSchema) }}
+      />
       <section className={styles.subpageHero}>
         <div className={styles.subpageContainer}>
           <div className={styles.subpageHeroBadge}>Support Hub</div>
