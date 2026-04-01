@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { RESUME_TEMPLATES } from '@/components/ResumeTemplates/TemplateConfig';
@@ -8,27 +8,36 @@ import {
   FileText, Upload, Loader2, ChevronLeft, ChevronRight, Check,
   User, Briefcase, GraduationCap, Wrench, Star, FolderOpen, Trophy,
   Award, Languages, Activity, LayoutGrid, Download, Mail, LinkIcon,
-  FileDown, Trash2, ScanSearch, FileSignature, Home, Copy
+  Home, ScanSearch, FileSignature, Trash2,
+  Wand2,
 } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { generatePDFBlob } from '@/utils/pdfGenerator';
 import styles from './resume.module.css';
+import AISuggestions from '@/components/AISuggestions';
+import { scoreBullet, improveBullet } from '@/lib/ai-suggestions';
 
 function uid() {
   return Math.random().toString(36).slice(2, 10);
 }
 
+const getScoreColor = (score) => {
+  if (score >= 80) return styles.scoreHigh;
+  if (score >= 50) return styles.scoreMid;
+  return styles.scoreLow;
+};
+
 const LinkedinIcon = ({ size = 18, ...props }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width={size} 
-    height={size} 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     {...props}
   >
     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -62,75 +71,366 @@ const defaultData = {
 
 // ── Step Definitions ──────────────────────────────────────────────────────
 const STEPS = [
-  { id: 'start',          label: 'Getting Started', icon: FileText },
-  { id: 'template',       label: 'Template',        icon: LayoutGrid },
-  { id: 'personal',       label: 'Personal Info',   icon: User },
-  { id: 'experience',     label: 'Experience',      icon: Briefcase },
-  { id: 'education',      label: 'Education',       icon: GraduationCap },
-  { id: 'skills',         label: 'Skills',          icon: Wrench },
-  { id: 'strengths',      label: 'Strengths',       icon: Star },
-  { id: 'projects',       label: 'Projects',        icon: FolderOpen },
-  { id: 'achievements',   label: 'Achievements',    icon: Trophy },
-  { id: 'certifications', label: 'Certifications',  icon: Award },
-  { id: 'languages',      label: 'Languages',       icon: Languages },
-  { id: 'extracurricular',label: 'Activities',       icon: Activity },
-  { id: 'custom',         label: 'Custom Section',  icon: LayoutGrid },
-  { id: 'download',       label: 'Download',        icon: Download },
+  { id: 'start', label: 'Getting Started', icon: FileText },
+  { id: 'template', label: 'Template', icon: LayoutGrid },
+  { id: 'personal', label: 'Personal Info', icon: User },
+  { id: 'experience', label: 'Experience', icon: Briefcase },
+  { id: 'education', label: 'Education', icon: GraduationCap },
+  { id: 'skills', label: 'Skills', icon: Wrench },
+  { id: 'strengths', label: 'Strengths', icon: Star },
+  { id: 'projects', label: 'Projects', icon: FolderOpen },
+  { id: 'achievements', label: 'Achievements', icon: Trophy },
+  { id: 'certifications', label: 'Certifications', icon: Award },
+  { id: 'languages', label: 'Languages', icon: Languages },
+  { id: 'extracurricular', label: 'Activities', icon: Activity },
+  { id: 'custom', label: 'Custom Section', icon: LayoutGrid },
+  { id: 'download', label: 'Download', icon: Download },
 ];
 
 // ── AI Suggestions ────────────────────────────────────────────────────────
-const AI_SUGGESTIONS = [
-  {
-    field: 'Impact & Results',
-    items: [
-      'Increased team productivity by 28% by introducing weekly sprint retrospectives and async standups.',
-      'Reduced customer churn by 18% through proactive outreach program targeting at-risk accounts.',
-      'Delivered $1.4M in cost savings by renegotiating vendor contracts and consolidating tooling.',
-      'Grew monthly active users from 12K to 47K in 9 months through targeted growth experiments.',
-      'Achieved 99.97% uptime SLA across 3 production services by implementing automated failover.',
-    ],
-  },
-  {
-    field: 'Leadership & Ownership',
-    items: [
-      'Spearheaded end-to-end redesign of onboarding flow, reducing time-to-value from 14 days to 3.',
-      'Led cross-functional team of 8 (engineering, design, data) to ship v2.0 two weeks ahead of schedule.',
-      'Mentored 4 junior engineers, 2 of whom were promoted within 12 months.',
-      'Owned product roadmap for a $3M ARR product line, prioritising features based on NPS and usage data.',
-      'Championed migration from monolith to microservices, enabling 3x faster independent deployments.',
-    ],
-  },
-  {
-    field: 'Technical Execution',
-    items: [
-      'Architected and deployed a real-time data pipeline processing 2M+ events/day using Kafka and Spark.',
-      'Automated CI/CD workflows using GitHub Actions, cutting release cycle from 2 weeks to 2 days.',
-      'Engineered RESTful APIs consumed by 15+ internal teams, with 99.9% availability over 18 months.',
-      'Optimised SQL query performance by 60% through indexing strategy and query plan analysis.',
-      'Built ML-based recommendation engine that increased average order value by 22%.',
-    ],
-  },
-  {
-    field: 'Strategy & Analysis',
-    items: [
-      'Conducted competitive analysis across 12 market players, informing a pivot that added $800K ARR.',
-      'Developed financial model projecting 3-year revenue scenarios, used in Series B fundraise.',
-      'Analysed 6 months of support tickets to identify top 3 friction points, reducing ticket volume by 34%.',
-      'Defined and tracked 12 KPIs across product, marketing, and ops — presented monthly to C-suite.',
-      'Designed A/B testing framework that ran 40+ experiments, lifting conversion rate by 11%.',
-    ],
-  },
-  {
-    field: 'Collaboration',
-    items: [
-      'Partnered with Sales and Marketing to launch go-to-market strategy for 3 new product tiers.',
-      'Facilitated quarterly OKR planning sessions across 5 departments, aligning 60+ stakeholders.',
-      'Produced weekly executive briefings distilling complex technical progress into business outcomes.',
-      'Coordinated with 3 external agencies to deliver rebrand on time and 8% under budget.',
-      'Established cross-team knowledge-sharing programme, reducing duplicated work by an estimated 20%.',
-    ],
-  },
-];
+const AI_SUGGESTIONS = {
+  experience: [
+    {
+      field: '🎯 Impact & Results',
+      items: [
+        'Increased team productivity by 28% by introducing weekly sprint retrospectives and async standups.',
+        'Reduced customer churn by 18% through proactive outreach program targeting at-risk accounts.',
+        'Delivered $1.4M in cost savings by renegotiating vendor contracts and consolidating tooling.',
+        'Grew monthly active users from 12K to 47K in 9 months through targeted growth experiments.',
+        'Achieved 99.97% uptime SLA across 3 production services by implementing automated failover.',
+        'Boosted revenue by 42% in 6 months by launching a new pricing tier and upselling strategy.',
+        'Cut operational costs by 35% through automation of manual reporting processes.',
+        'Boosted conversion rate by 24% through funnel optimisation and UX improvements.',
+        'Reduced operational costs by 32% by automating manual workflows.',
+        'Improved customer satisfaction (CSAT) from 78% to 91% within 6 months.',
+        'Decreased page load time by 55%, improving SEO rankings and user retention.',
+        'Scaled system to support 5x traffic growth without downtime.',
+        'Increased revenue by $850K through upsell and cross-sell initiatives.',
+        'Shortened sales cycle by 21% by refining qualification processes.',
+      ],
+    },
+    {
+      field: '🚀 Leadership & Ownership',
+      items: [
+        'Spearheaded end-to-end redesign of onboarding flow, reducing time-to-value from 14 days to 3.',
+        'Led cross-functional team of 8 (engineering, design, data) to ship v2.0 two weeks ahead of schedule.',
+        'Mentored 4 junior engineers, 2 of whom were promoted within 12 months.',
+        'Owned product roadmap for a $3M ARR product line, prioritising features based on NPS and usage data.',
+        'Championed migration from monolith to microservices, enabling 3x faster independent deployments.',
+        'Built and scaled a new business unit from 0 to 12 team members in 18 months.',
+        'Built and led a high-performing team from 3 to 12 members across engineering and product.',
+        'Drove company-wide OKR adoption, improving execution visibility and alignment.',
+        'Initiated culture of continuous feedback, improving employee retention by 15%.',
+        'Led crisis response during major outage, restoring services within SLA.',
+        'Managed multi-million dollar budget with consistent ROI improvements.',
+      ],
+    },
+    {
+      field: '🛠 Technical Execution',
+      items: [
+        'Architected and deployed a real-time data pipeline processing 2M+ events/day using Kafka and Spark.',
+        'Automated CI/CD workflows using GitHub Actions, cutting release cycle from 2 weeks to 2 days.',
+        'Engineered RESTful APIs consumed by 15+ internal teams, with 99.9% availability over 18 months.',
+        'Optimised SQL query performance by 60% through indexing strategy and query plan analysis.',
+        'Built ML-based recommendation engine that increased average order value by 22%.',
+        'Developed scalable microservices architecture serving 500K+ daily users.',
+        'Implemented caching strategies reducing API latency by 70%.',
+        'Designed modular frontend architecture improving dev speed by 40%.',
+        'Integrated third-party APIs handling 100K+ daily requests.',
+        'Developed data dashboards enabling real-time business insights.',
+        'Refactored legacy codebase improving maintainability and reducing bugs by 45%.',
+      ],
+    },
+    {
+      field: '📊 Strategy & Analysis',
+      items: [
+        'Conducted competitive analysis across 12 market players, informing a pivot that added $800K ARR.',
+        'Developed financial model projecting 3-year revenue scenarios, used in Series B fundraise.',
+        'Analysed 6 months of support tickets to identify top 3 friction points, reducing ticket volume by 34%.',
+        'Defined and tracked 12 KPIs across product, marketing, and ops — presented monthly to C-suite.',
+        'Designed A/B testing framework that ran 40+ experiments, lifting conversion rate by 11%.',
+        'Identified new market segment driving 18% additional revenue.',
+        'Built pricing strategy increasing profit margins by 12%.',
+        'Led GTM strategy for new feature resulting in 25% adoption in first quarter.',
+        'Conducted cohort analysis to improve retention metrics.',
+      ],
+    },
+    {
+      field: '🤝 Collaboration & Communication',
+      items: [
+        'Partnered with Sales and Marketing to launch go-to-market strategy for 3 new product tiers.',
+        'Facilitated quarterly OKR planning sessions across 5 departments, aligning 60+ stakeholders.',
+        'Produced weekly executive briefings distilling complex technical progress into business outcomes.',
+        'Coordinated with 3 external agencies to deliver rebrand on time and 8% under budget.',
+        'Established cross-team knowledge-sharing programme, reducing duplicated work by 20%.',
+      ],
+    },
+    {
+      field: '📣 Marketing & Growth',
+      items: [
+        'Managed a $250k monthly ad spend across Meta and Google, maintaining a steady 4.2x ROAS.',
+        'Executed an end-to-end SEO strategy that increased organic search traffic by 140% in 6 months.',
+        'Developed a multi-channel lifecycle email sequence that boosted trial-to-paid conversion by 22%.',
+        'Coordinated a 15-person influencer campaign resulting in 2M+ impressions and 45k new signups.',
+        'A/B tested landing page copy and design elements, lifting lead generation efficiency by 30%.',
+      ],
+    },
+    {
+      field: '💼 Sales & Business Development',
+      items: [
+        'Closed $2.1M in new enterprise deals in FY24, exceeding quota by 140%.',
+        'Built and managed a sales pipeline worth $4.8M across 18 accounts.',
+        'Increased win rate from 22% to 47% by implementing structured discovery calls.',
+      ],
+    },
+    {
+      field: '💰 Finance & Operations',
+      items: [
+        'Reduced monthly burn rate by 31% through vendor consolidation and process optimisation.',
+        'Implemented new expense tracking system that saved 120+ hours per month.',
+        'Prepared monthly financial reports and variance analysis for board meetings.',
+      ],
+    },
+  ],
+  summary: [
+    {
+      field: '👔 Management & Leadership',
+      items: [
+        'Dynamic leader with 8+ years of experience in driving operational excellence and team growth.',
+        'Strategic visionary recognised for building high-performing teams and scaling product initiatives.',
+        'Results-oriented manager with a track record of delivering complex projects ahead of schedule.',
+        'Seasoned professional with proven ability to lead cross-functional teams and deliver measurable business outcomes.',
+        'Execution-focused leader with deep experience scaling teams and driving operational excellence.',
+      ],
+    },
+    {
+      field: '💻 Technical & Creative',
+      items: [
+        'Innovative full-stack engineer passionate about building scalable web applications and intuitive UX.',
+        'Creative designer specialised in brand identity, user-centric digital experiences and modern interfaces.',
+        'Data-driven developer with deep expertise in modern JavaScript frameworks and cloud architecture.',
+        'Results-driven engineer with expertise in building scalable, high-performance systems.',
+      ],
+    },
+    {
+      field: '🎓 General / Entry Level',
+      items: [
+        'Ambitious graduate with a strong foundation in data analysis and a hunger to learn.',
+        'Self-motivated professional eager to leverage background in customer service for a sales role.',
+        'Adaptable team player with exceptional communication skills and a focus on problem-solving.',
+        'Highly motivated individual with strong analytical skills and eagerness to learn.',
+        'Detail-oriented graduate with hands-on project experience and strong fundamentals.',
+      ],
+    },
+    {
+      field: '📈 Mid-Senior Level',
+      items: [
+        'Seasoned professional with 7+ years of experience delivering measurable business impact.',
+        'Proven track record of leading cross-functional initiatives in fast-paced environments.',
+      ],
+    },
+    {
+      field: '🏆 Executive Level',
+      items: [
+        'Visionary C-level leader with 15+ years scaling high-growth startups and enterprises.',
+        'Strategic executive known for driving revenue growth, operational efficiency and cultural transformation.',
+      ],
+    },
+  ],
+  skills: [
+    {
+      field: '💻 Technology & Development',
+      items: ['React.js', 'Next.js', 'Node.js', 'TypeScript', 'Python', 'AWS', 'Docker', 'Kubernetes', 'GraphQL', 'PostgreSQL'],
+    },
+    {
+      field: '📊 Data & Analytics',
+      items: ['SQL', 'Python', 'Power BI', 'Tableau', 'Excel', 'Google Analytics', 'Data Visualization', 'Data Modeling', 'A/B Testing'],
+    },
+    {
+      field: '📣 Marketing & Growth',
+      items: ['SEO', 'Content Marketing', 'Social Media Strategy', 'Google Ads', 'Meta Ads', 'Email Marketing', 'Performance Marketing'],
+    },
+    {
+      field: '🎨 Design & UX',
+      items: ['Figma', 'Adobe XD', 'UI/UX Design', 'Wireframing', 'Prototyping', 'Brand Identity'],
+    },
+    {
+      field: '📋 Project & Product Management',
+      items: ['Agile/Scrum', 'JIRA', 'Product Roadmap', 'Stakeholder Management', 'OKR Framework'],
+    },
+    {
+      field: '🤝 Business & Soft Skills',
+      items: ['Strategic Communication', 'Negotiation', 'Public Speaking', 'Mentorship', 'Cross-functional Collaboration'],
+    },
+    {
+      field: '🔧 Engineering Tools',
+      items: ['Git', 'CI/CD', 'Terraform', 'Linux'],
+    },
+    {
+      field: '💼 Sales',
+      items: ['CRM', 'Lead Generation', 'Pipeline Management'],
+    },
+  ],
+  strengths: [
+    {
+      field: '⚡ Core Strengths',
+      items: [
+        'Problem Solving', 'Strategic Thinking', 'Adaptability', 'Resilience', 'Growth Mindset',
+        'Attention to Detail', 'Ownership', 'Execution Excellence', 'Leadership', 'Empathy',
+        'Creativity', 'Analytical Thinking', 'Time Management', 'Decision Making',
+        'Critical Thinking', 'Initiative', 'Accountability', 'Emotional Intelligence', 'Team Leadership',
+      ],
+    },
+  ],
+  achievements: [
+    {
+      field: '🏅 Recognition',
+      items: [
+        'Employee of the Year 2023',
+        'Top Sales Performer (Q4)',
+        'Innovation Award Winner',
+        'Star Performer Award 2024',
+        'Promoted within 12 months for outstanding performance.',
+        'Recognised as top performer across team of 50+ employees.',
+        'Received leadership excellence award for driving key initiatives.',
+      ],
+    },
+    {
+      field: '🚩 Milestones',
+      items: [
+        'Featured in Forbes 30 Under 30',
+        'Speaker at Google I/O 2024',
+        'Published 12 technical articles',
+        'Raised $2.3M in seed funding',
+        'Scaled startup from 0 to 100K users.',
+        'Launched 3 successful products in competitive markets.',
+      ],
+    },
+  ],
+  activities: [
+    {
+      field: '🌍 Community & Volunteer',
+      items: [
+        'Volunteer Mentor at Code.org',
+        'Founder of Local Tech Meetup',
+        'Youth Football Coach',
+        'Blood Donation Camp Organizer',
+        'Organised tech workshops for 200+ students.',
+        'Active contributor to open-source projects.',
+      ],
+    },
+    {
+      field: '🎓 Extra-Curriculars',
+      items: [
+        'Organised university tech fest with 500+ participants.',
+        'Led college coding club and conducted weekly workshops.',
+        'Volunteered at NGOs focused on education and skill development.',
+        'Participated in national-level hackathons and coding competitions.',
+        'Managed college event sponsorships and partnerships.',
+        'Active member of debate and public speaking society.',
+        'Coordinated inter-college cultural events.',
+        'Mentored juniors in programming and career development.',
+        'Organised community outreach programs.',
+        'Participated in startup incubation programs.',
+        'Conducted technical workshops for 100+ students.',
+        'Active contributor to open-source communities.',
+        'Hosted podcasts on technology and career growth.',
+        'Organised sports tournaments and team events.',
+        'Managed social media for college organisations.',
+        'Volunteered in environmental sustainability campaigns.',
+        'Participated in business case competitions.',
+        'Led student council initiatives.',
+        'Conducted peer mentoring sessions.',
+        'Actively involved in entrepreneurship cell activities.'
+      ]
+    },
+    {
+      field: '🎯 Personal & Hobbies',
+      items: [
+        'Marathon Runner',
+        'Blogger (10K+ monthly views)',
+        'Avid Chess Player',
+        'Amateur Photographer',
+        'TEDx Speaker',
+        'Content creator with 50K+ audience across platforms.',
+        'Podcast host discussing technology and careers.',
+      ],
+    },
+  ],
+  projects: [
+    {
+      field: '💡 Project Ideas & Descriptions',
+      items: [
+        'Built a full-stack e-commerce platform with payment integration and admin dashboard.',
+        'Developed a real-time chat application using WebSockets and Node.js.',
+        'Created a machine learning model to predict customer churn with 85% accuracy.',
+        'Designed a portfolio website with modern UI and SEO optimization.',
+        'Built a task management app with authentication and role-based access.',
+        'Developed a REST API for scalable backend services using Express.js.',
+        'Created a recommendation engine for personalized product suggestions.',
+        'Built a data visualization dashboard using Power BI/Tableau.',
+        'Designed a mobile-first web application for booking services.',
+        'Developed a blog platform with CMS functionality and markdown support.',
+        'Built an automated resume parser using NLP techniques.',
+        'Created a weather forecasting app using external APIs.',
+        'Developed a financial tracker with analytics and reporting features.',
+        'Built a job portal with search, filters, and application tracking.',
+        'Created a fitness tracking app with user progress analytics.',
+        'Developed an AI chatbot for customer support automation.',
+        'Built a collaborative document editing platform.',
+        'Designed a SaaS product dashboard with subscription handling.',
+        'Developed a fraud detection system using machine learning.',
+        'Created an event management platform with ticketing system.'
+      ]
+    },
+  ],
+  certifications: [
+    {
+      field: '🏆 Popular Certifications',
+      items: [
+        'AWS Certified Solutions Architect – Associate',
+        'Google Data Analytics Professional Certificate',
+        'Certified Scrum Master (CSM)',
+        'Microsoft Azure Fundamentals (AZ-900)',
+        'Google Cloud Digital Leader Certification',
+        'PMP (Project Management Professional)',
+        'Certified Kubernetes Administrator (CKA)',
+        'Meta Front-End Developer Certificate',
+        'IBM Data Science Professional Certificate',
+        'HubSpot Inbound Marketing Certification',
+        'Oracle Java Certification (OCP)',
+        'Certified Ethical Hacker (CEH)',
+        'Tableau Desktop Specialist Certification',
+        'Six Sigma Green Belt Certification',
+        'Salesforce Administrator Certification',
+        'Google UX Design Professional Certificate',
+        'LinkedIn Learning Advanced Excel Certification',
+        'Docker Certified Associate',
+        'CompTIA Security+ Certification',
+        'Adobe Certified Professional (ACP)'
+      ]
+    },
+  ],
+  languages: [
+    {
+      field: '🌐 Language Proficiency',
+      items: [
+        'English (Native)', 'English (Fluent)', 'Hindi (Native)', 'Hindi (Fluent)',
+        'Spanish (Intermediate)', 'French (Conversational)', 'German (Basic)',
+      ],
+    },
+  ],
+  volunteer: [
+    {
+      field: '❤️ Volunteer & Social Impact',
+      items: [
+        'Taught coding to underprivileged students at an NGO for 18 months.',
+        'Led a team of 12 volunteers to organise a city-wide cleanliness drive.',
+        'Mentored 25+ students through a career guidance program.',
+      ],
+    },
+  ],
+};
 
 // ── Tag Section Component ─────────────────────────────────────────────────
 function TagSection({ items, newVal, setNewVal, onAdd, onRemove, placeholder, variant = 'blue' }) {
@@ -160,36 +460,51 @@ function TagSection({ items, newVal, setNewVal, onAdd, onRemove, placeholder, va
 }
 
 // ── Suggestions Popup ─────────────────────────────────────────────────────
-function SuggestionsPopup({ anchor, onSelect, onClose }) {
+function SuggestionsPopup({ isOpen, section, onSelect, onClose }) {
   const [activeField, setActiveField] = useState(0);
-  if (!anchor) return null;
+
+  // Reset to first tab whenever the section changes
+  useEffect(() => {
+    setActiveField(0);
+  }, [section]);
+
+  if (!isOpen || !section || !AI_SUGGESTIONS[section]) return null;
+
+  const groups = AI_SUGGESTIONS[section];
+  // Safe index — never let activeField exceed the groups length
+  const safeField = Math.min(activeField, groups.length - 1);
+  const activeGroup = groups[safeField];
+
   return (
-    <div className={styles.suggestionsPopup} style={{ top: anchor.top, left: anchor.left }}>
-      <div className={styles.suggestionsHeader}>
-        <span>✨ AI Suggestions</span>
-        <button className={styles.suggestionsClose} onClick={onClose} aria-label="Close">×</button>
+    <>
+      <div className={styles.suggestionsOverlay} onClick={onClose} />
+      <div className={styles.suggestionsPopup}>
+        <div className={styles.suggestionsHeader}>
+          <span>✨ AI Suggestions ({section.charAt(0).toUpperCase() + section.slice(1)})</span>
+          <button className={styles.suggestionsClose} onClick={onClose} aria-label="Close">×</button>
+        </div>
+        <p className={styles.suggestionsSubtitle}>Pick a category, then click any item to insert it.</p>
+        <div className={styles.suggestionsFieldTabs}>
+          {groups.map((group, i) => (
+            <button
+              key={i}
+              className={`${styles.suggestionsFieldTab} ${safeField === i ? styles.suggestionsFieldTabActive : ''}`}
+              onClick={() => setActiveField(i)}
+            >
+              {group.field}
+            </button>
+          ))}
+        </div>
+        <div className={styles.suggestionsList}>
+          {activeGroup?.items.map((s, i) => (
+            <button key={i} className={styles.suggestionItem} onClick={() => onSelect(s)}>
+              <span className={styles.suggestionBullet}>+</span>
+              <span>{s}</span>
+            </button>
+          ))}
+        </div>
       </div>
-      <p className={styles.suggestionsSubtitle}>Pick a category, then click any bullet to insert it.</p>
-      <div className={styles.suggestionsFieldTabs}>
-        {AI_SUGGESTIONS.map((group, i) => (
-          <button
-            key={i}
-            className={`${styles.suggestionsFieldTab} ${activeField === i ? styles.suggestionsFieldTabActive : ''}`}
-            onClick={() => setActiveField(i)}
-          >
-            {group.field}
-          </button>
-        ))}
-      </div>
-      <div className={styles.suggestionsList}>
-        {AI_SUGGESTIONS[activeField].items.map((s, i) => (
-          <button key={i} className={styles.suggestionItem} onClick={() => onSelect(s)}>
-            <span className={styles.suggestionBullet}>+</span>
-            <span>{s}</span>
-          </button>
-        ))}
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -215,7 +530,8 @@ export default function ResumeBuilderPage() {
   const [newExtra, setNewExtra] = useState('');
 
   // AI suggestions
-  const [suggestionAnchor, setSuggestionAnchor] = useState(null);
+  const [isSuggestionOpen, setIsSuggestionOpen] = useState(false);
+  const [suggestionSection, setSuggestionSection] = useState(null);
   const [activeExpId, setActiveExpId] = useState(null);
 
   const SelectedTemplate = RESUME_TEMPLATES[activeTemplateId]?.component || RESUME_TEMPLATES['classic'].component;
@@ -310,7 +626,7 @@ export default function ResumeBuilderPage() {
     styleNodes.forEach((node) => {
       try {
         printWindow.document.head.appendChild(node.cloneNode(true));
-      } catch {}
+      } catch { }
     });
 
     const style = printWindow.document.createElement('style');
@@ -327,7 +643,7 @@ export default function ResumeBuilderPage() {
       if (printWindow.document.fonts?.ready) {
         await printWindow.document.fonts.ready;
       }
-    } catch {}
+    } catch { }
 
     try {
       const imgs = Array.from(printWindow.document.images || []);
@@ -337,13 +653,13 @@ export default function ResumeBuilderPage() {
           img.onerror = res;
         })))
       );
-    } catch {}
+    } catch { }
 
     setTimeout(() => {
       try {
         printWindow.focus();
         printWindow.print();
-      } catch {}
+      } catch { }
     }, 0);
   }, [data.personal.fullName]);
 
@@ -428,7 +744,7 @@ export default function ResumeBuilderPage() {
       const userId = authData.user.id;
       const stableShareId = shareId || `${userId.slice(0, 8)}-${Date.now()}`;
       const fileName = `${userId}/${stableShareId}-${Date.now()}.pdf`;
-      
+
       const { error: uploadError } = await supabase.storage
         .from('public-resumes')
         .upload(fileName, pdfBlob, {
@@ -746,15 +1062,50 @@ export default function ResumeBuilderPage() {
                   onChange={(e) => updatePersonal('website', e.target.value)} placeholder="yoursite.com" />
               </div>
               <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  Professional Summary
-                  <span style={{ fontWeight: 400, color: '#9ca3af', marginLeft: 6, textTransform: 'none', letterSpacing: 0 }}>
-                    ({data.personal.summary.trim().split(/\s+/).filter(Boolean).length} words — aim for 30–60)
-                  </span>
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                  <div className={styles.scoreRow}>
+                    <label className={styles.label} style={{ marginBottom: 0 }}>Professional Summary</label>
+                    {data.personal.summary.trim().length > 10 && (
+                      <div className={`${styles.scoreMeter} ${getScoreColor(scoreBullet(data.personal.summary))}`}>
+                        Score: {scoreBullet(data.personal.summary)}/100
+                      </div>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {data.personal.summary.trim().length > 5 && scoreBullet(data.personal.summary) < 70 && (
+                      <button 
+                        className={styles.magicBtn}
+                        onClick={() => updatePersonal('summary', improveBullet(data.personal.summary, data.personal.currentPosition))}
+                        title="Instant AI Upgrade"
+                      >
+                        <Wand2 size={14} /> Upgrade
+                      </button>
+                    )}
+                    <button
+                      className={styles.suggestionsToggle}
+                      onClick={() => {
+                        setSuggestionSection('summary');
+                        setIsSuggestionOpen(true);
+                      }}
+                    >
+                      ✨ AI Suggestions
+                    </button>
+                  </div>
+                </div>
                 <textarea className={styles.textarea} value={data.personal.summary}
                   onChange={(e) => updatePersonal('summary', e.target.value)}
                   rows={4} placeholder="Results-driven professional with X years of experience in... Highlight your top 2–3 strengths and career focus." />
+
+                <AISuggestions
+                  section="summary"
+                  jobTitle={data.personal.currentPosition}
+                  userText={data.personal.summary}
+                  onSelect={(suggestion) => {
+                    const current = data.personal.summary || '';
+                    const prefix = current.trim() ? (current.endsWith(' ') ? '' : ' ') : '';
+                    updatePersonal('summary', current + prefix + suggestion);
+                  }}
+                />
               </div>
             </div>
           )}
@@ -809,21 +1160,50 @@ export default function ResumeBuilderPage() {
                   </div>
                   <div className={styles.formGroup}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                      <label className={styles.label} style={{ marginBottom: 0 }}>Description</label>
-                      <button
-                        className={styles.suggestionsToggle}
-                        onClick={(e) => {
-                          const rect = e.target.getBoundingClientRect();
-                          setSuggestionAnchor(suggestionAnchor ? null : { top: rect.top + window.scrollY + 30, left: rect.left + window.scrollX - 280 });
-                          setActiveExpId(exp.id);
-                        }}
-                      >
-                        ✨ AI Suggestions
-                      </button>
+                      <div className={styles.scoreRow}>
+                        <label className={styles.label} style={{ marginBottom: 0 }}>Description</label>
+                        {exp.description.trim().length > 10 && (
+                          <div className={`${styles.scoreMeter} ${getScoreColor(scoreBullet(exp.description))}`}>
+                            Score: {scoreBullet(exp.description)}/100
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        {exp.description.trim().length > 5 && scoreBullet(exp.description) < 70 && (
+                          <button 
+                            className={styles.magicBtn}
+                            onClick={() => updateExperience(exp.id, 'description', improveBullet(exp.description, exp.position || data.personal.currentPosition))}
+                            title="Instant AI Upgrade"
+                          >
+                            <Wand2 size={14} /> Upgrade
+                          </button>
+                        )}
+                        <button
+                          className={styles.suggestionsToggle}
+                          onClick={() => {
+                            setSuggestionSection('experience');
+                            setIsSuggestionOpen(true);
+                            setActiveExpId(exp.id);
+                          }}
+                        >
+                          ✨ AI Suggestions
+                        </button>
+                      </div>
                     </div>
                     <textarea className={styles.textarea} value={exp.description}
                       onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
                       rows={5} placeholder={'• Spearheaded X initiative, increasing Y by 32%\n• Automated Z process, saving 8 hrs/week\n• Led team of 5 to deliver...'} />
+
+                    <AISuggestions
+                      section="experience"
+                      jobTitle={exp.position || data.personal.currentPosition}
+                      userText={exp.description}
+                      onSelect={(suggestion) => {
+                        const current = exp.description || '';
+                        const prefix = current.trim() ? (current.endsWith('\n') ? '• ' : '\n• ') : '• ';
+                        updateExperience(exp.id, 'description', current + prefix + suggestion);
+                      }}
+                    />
                   </div>
                 </div>
               ))}
@@ -892,19 +1272,38 @@ export default function ResumeBuilderPage() {
             <div className={styles.stepCard}>
               <div className={styles.stepHeader}>
                 <h2 className={styles.stepTitle}>
-                  <span className={styles.stepTitleIcon} style={{ background: '#e0e7ff', color: '#4f46e5' }}>
+                  <span className={styles.stepTitleIcon} style={{ background: '#3b82f615', color: '#3b82f6' }}>
                     <Wrench size={20} />
                   </span>
                   Skills
                 </h2>
-                <p className={styles.stepSubtitle}>Add your technical and professional skills. Aim for 6–12 for best ATS results.</p>
+                <p className={styles.stepSubtitle}>Highlight your primary tools, software, and specialised expertise.</p>
               </div>
-              <TagSection
-                items={data.skills} newVal={newSkill} setNewVal={setNewSkill}
-                onAdd={() => addToList('skills', newSkill, setNewSkill)}
-                onRemove={(i) => removeFromList('skills', i)}
-                placeholder="e.g. Python, Project Management, SQL..."
-              />
+              <div className={styles.tipBanner}>
+                💡 Group similar skills (e.g. "React, Node, SQL") for better readability.
+              </div>
+              <div className={styles.formGroup}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <label className={styles.label} style={{ marginBottom: 0 }}>Add Skills</label>
+                  <button
+                    className={styles.suggestionsToggle}
+                    onClick={() => {
+                      setSuggestionSection('skills');
+                      setIsSuggestionOpen(true);
+                    }}
+                  >
+                    ✨ AI Suggestions
+                  </button>
+                </div>
+                <TagSection
+                  items={data.skills}
+                  newVal={newSkill}
+                  setNewVal={setNewSkill}
+                  onAdd={() => addToList('skills', newSkill, setNewSkill)}
+                  onRemove={(i) => removeFromList('skills', i)}
+                  placeholder="e.g. Project Management, Figma, Python..."
+                />
+              </div>
             </div>
           )}
 
@@ -913,19 +1312,36 @@ export default function ResumeBuilderPage() {
             <div className={styles.stepCard}>
               <div className={styles.stepHeader}>
                 <h2 className={styles.stepTitle}>
-                  <span className={styles.stepTitleIcon} style={{ background: '#fef3c7', color: '#d97706' }}>
+                  <span className={styles.stepTitleIcon} style={{ background: '#f0f9ff', color: '#0369a1' }}>
                     <Star size={20} />
                   </span>
                   Strengths
                 </h2>
-                <p className={styles.stepSubtitle}>Highlight your key personal and professional strengths.</p>
+                <p className={styles.stepSubtitle}>What makes you stand out? Add your key personality traits and areas of mastery.</p>
               </div>
-              <TagSection
-                items={data.strengths} newVal={newStrength} setNewVal={setNewStrength}
-                onAdd={() => addToList('strengths', newStrength, setNewStrength)}
-                onRemove={(i) => removeFromList('strengths', i)}
-                placeholder="e.g. Strategic Thinking, Problem Solving..."
-              />
+              <div className={styles.formGroup}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <label className={styles.label} style={{ marginBottom: 0 }}>Your Strengths</label>
+                  <button
+                    className={styles.suggestionsToggle}
+                    onClick={() => {
+                      setSuggestionSection('strengths');
+                      setIsSuggestionOpen(true);
+                    }}
+                  >
+                    ✨ AI Suggestions
+                  </button>
+                </div>
+                <TagSection
+                  items={data.strengths}
+                  newVal={newStrength}
+                  setNewVal={setNewStrength}
+                  onAdd={() => addToList('strengths', newStrength, setNewStrength)}
+                  onRemove={(i) => removeFromList('strengths', i)}
+                  placeholder="e.g. Analytical Thinking, Leadership, Adaptability..."
+                  variant="outline"
+                />
+              </div>
             </div>
           )}
 
@@ -940,6 +1356,11 @@ export default function ResumeBuilderPage() {
                   Projects
                 </h2>
                 <p className={styles.stepSubtitle}>Showcase your personal or professional projects.</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
+                <button className={styles.suggestionsToggle} onClick={() => { setSuggestionSection('projects'); setIsSuggestionOpen(true); }}>
+                  ✨ AI Suggestions
+                </button>
               </div>
               {data.projects.map((proj) => (
                 <div key={proj.id} className={styles.card}>
@@ -975,20 +1396,35 @@ export default function ResumeBuilderPage() {
             <div className={styles.stepCard}>
               <div className={styles.stepHeader}>
                 <h2 className={styles.stepTitle}>
-                  <span className={styles.stepTitleIcon} style={{ background: '#fef9c3', color: '#ca8a04' }}>
+                  <span className={styles.stepTitleIcon} style={{ background: '#fcfaf2', color: '#ca8a04' }}>
                     <Trophy size={20} />
                   </span>
-                  Key Achievements
+                  Achievements
                 </h2>
-                <p className={styles.stepSubtitle}>Add notable awards, accomplishments, or recognitions.</p>
+                <p className={styles.stepSubtitle}>List your performance awards, competition wins, or major milestones.</p>
               </div>
-              <TagSection
-                items={data.achievements} newVal={newAchievement} setNewVal={setNewAchievement}
-                onAdd={() => addToList('achievements', newAchievement, setNewAchievement)}
-                onRemove={(i) => removeFromList('achievements', i)}
-                placeholder="e.g. Grew revenue by 40% in Q3 2024..."
-                variant="outline"
-              />
+              <div className={styles.formGroup}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <label className={styles.label} style={{ marginBottom: 0 }}>Notable Wins</label>
+                  <button
+                    className={styles.suggestionsToggle}
+                    onClick={() => {
+                      setSuggestionSection('achievements');
+                      setIsSuggestionOpen(true);
+                    }}
+                  >
+                    ✨ AI Suggestions
+                  </button>
+                </div>
+                <TagSection
+                  items={data.achievements}
+                  newVal={newAchievement}
+                  setNewVal={setNewAchievement}
+                  onAdd={() => addToList('achievements', newAchievement, setNewAchievement)}
+                  onRemove={(i) => removeFromList('achievements', i)}
+                  placeholder="e.g. Employee of the Year, Hackathon Winner..."
+                />
+              </div>
             </div>
           )}
 
@@ -1003,6 +1439,11 @@ export default function ResumeBuilderPage() {
                   Certifications
                 </h2>
                 <p className={styles.stepSubtitle}>Add professional certifications or licenses.</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
+                <button className={styles.suggestionsToggle} onClick={() => { setSuggestionSection('certifications'); setIsSuggestionOpen(true); }}>
+                  ✨ AI Suggestions
+                </button>
               </div>
               {data.certifications.map((cert) => (
                 <div key={cert.id} className={styles.card}>
@@ -1042,6 +1483,11 @@ export default function ResumeBuilderPage() {
                   Languages
                 </h2>
                 <p className={styles.stepSubtitle}>Add languages you speak and your proficiency level.</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
+                <button className={styles.suggestionsToggle} onClick={() => { setSuggestionSection('languages'); setIsSuggestionOpen(true); }}>
+                  ✨ AI Suggestions
+                </button>
               </div>
               {data.languages.map((lang) => (
                 <div key={lang.id} className={styles.card}>
@@ -1086,6 +1532,11 @@ export default function ResumeBuilderPage() {
                   Extra-Curricular Activities
                 </h2>
                 <p className={styles.stepSubtitle}>Add volunteer work, clubs, sports, or other activities.</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
+                <button className={styles.suggestionsToggle} onClick={() => { setSuggestionSection('activities'); setIsSuggestionOpen(true); }}>
+                  ✨ AI Suggestions
+                </button>
               </div>
               <TagSection
                 items={data.extracurricular} newVal={newExtra} setNewVal={setNewExtra}
@@ -1207,14 +1658,14 @@ export default function ResumeBuilderPage() {
                 <div className={styles.shareSection}>
                   <h3 className={styles.shareSectionTitle}>Branded Shareable Link</h3>
                   <div className={styles.shareRow}>
-                    <input 
-                      className={styles.shareInput} 
-                      readOnly 
-                      value={shareUrl || 'Generate a link to share...'} 
+                    <input
+                      className={styles.shareInput}
+                      readOnly
+                      value={shareUrl || 'Generate a link to share...'}
                       onClick={(e) => e.target.select()}
                     />
-                    <button 
-                      className={styles.copyBtn} 
+                    <button
+                      className={styles.copyBtn}
                       onClick={handleCopyLink}
                       disabled={isSharing}
                     >
@@ -1293,13 +1744,37 @@ export default function ResumeBuilderPage() {
 
       {/* AI Suggestions Popup */}
       <SuggestionsPopup
-        anchor={suggestionAnchor}
-        onClose={() => setSuggestionAnchor(null)}
+        isOpen={isSuggestionOpen}
+        section={suggestionSection}
+        onClose={() => setIsSuggestionOpen(false)}
         onSelect={(s) => {
-          const current = data.experience.find(e => e.id === activeExpId)?.description || '';
-          const prefix = current.trim() ? (current.endsWith('\n') ? '• ' : '\n• ') : '• ';
-          updateExperience(activeExpId, 'description', current + prefix + s);
-          setSuggestionAnchor(null);
+          if (suggestionSection === 'experience') {
+            const current = data.experience.find(e => e.id === activeExpId)?.description || '';
+            const prefix = current.trim() ? (current.endsWith('\n') ? '• ' : '\n• ') : '• ';
+            updateExperience(activeExpId, 'description', current + prefix + s);
+          } else if (suggestionSection === 'summary') {
+            const current = data.personal.summary || '';
+            const prefix = current.trim() ? (current.endsWith(' ') ? '' : ' ') : '';
+            updatePersonal('summary', current + prefix + s);
+          } else if (['skills', 'strengths', 'achievements'].includes(suggestionSection)) {
+            addToList(suggestionSection, s, () => { });
+          } else if (suggestionSection === 'activities') {
+            addToList('extracurricular', s, () => { });
+          } else if (suggestionSection === 'certifications') {
+            // Parse "Title — Issuer" or just use as title
+            const parts = s.split(' – ');
+            setData(d => ({ ...d, certifications: [...d.certifications, { id: uid(), title: parts[0].trim(), issuer: parts[1]?.trim() || '' }] }));
+          } else if (suggestionSection === 'languages') {
+            // Parse "Language (Proficiency)" format
+            const match = s.match(/^(.+?)\s*\((.+)\)$/);
+            setData(d => ({ ...d, languages: [...d.languages, { id: uid(), name: match ? match[1].trim() : s, proficiency: match ? match[2].trim() : 'Fluent' }] }));
+          } else if (suggestionSection === 'projects') {
+            // Add as a new project card with description pre-filled
+            setData(d => ({ ...d, projects: [...d.projects, { id: uid(), name: '', link: '', description: s }] }));
+          } else if (suggestionSection === 'volunteer') {
+            addToList('extracurricular', s, () => { });
+          }
+          setIsSuggestionOpen(false);
         }}
       />
     </div>

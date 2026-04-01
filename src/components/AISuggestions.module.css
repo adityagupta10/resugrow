@@ -1,0 +1,70 @@
+.container {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f0f7ff;
+  border: 1px solid #cce3ff;
+  border-radius: 12px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestionBtn {
+  text-align: left;
+  padding: 8px 14px;
+  font-size: 13px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1.4;
+  flex: 1 1 auto;
+  min-width: 140px;
+  max-width: 100%;
+}
+
+.suggestionBtn:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.improvementSection {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed #cbd5e1;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.improvedText {
+  font-weight: 600;
+  color: #475569;
+  font-style: italic;
+}
