@@ -1,13 +1,14 @@
 import { strategicPosts } from './strategicPosts';
 import { programmaticPosts } from './programmaticPosts';
+import { reviewPosts } from './reviewPosts';
 import { attachBlogImagesToPost } from './blogImages';
 
 const corePosts = [
   {
     slug: 'how-ats-systems-work-2025',
-    title: 'How ATS Systems Actually Work in 2025 (And Why Most Resumes Fail)',
+    title: 'How ATS Systems Actually Work in 2026 (And Why Most Resumes Fail)',
     category: 'ATS Optimization',
-    date: 'November 8, 2024',
+    date: 'November 8, 2025',
     readTime: '7 min read',
     author: 'Kavya Sharma',
     authorRole: 'Product Lead, ResuGrow',
@@ -736,4 +737,4 @@ Good follow-ups are respectful and strategic. They show consistency, communicati
   },
 ];
 
-export const posts = [...corePosts, ...strategicPosts, ...programmaticPosts].map(attachBlogImagesToPost);
+export const posts = [...corePosts, ...strategicPosts, ...reviewPosts, ...programmaticPosts].map(attachBlogImagesToPost);

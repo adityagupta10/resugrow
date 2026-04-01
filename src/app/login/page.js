@@ -184,7 +184,6 @@ function LoginContent() {
           </div>
 
           <h2>Welcome to <span style={{ fontWeight: 900 }} className="gradient-text">ResuGrow</span></h2>
-
           <div className={styles.socialStack}>
             <button className={styles.socialBtn} onClick={() => startSupabaseOAuth('google')} disabled={isLoading} type="button">
               <img src="/images/google.png" alt="Google logo for ResuGrow social sign-in" />

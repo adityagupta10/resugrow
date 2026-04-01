@@ -9,7 +9,7 @@ import {
   User, Briefcase, GraduationCap, Wrench, Star, FolderOpen, Trophy,
   Award, Languages, Activity, LayoutGrid, Download, Mail, LinkIcon,
   Home, ScanSearch, FileSignature, Trash2,
-  Wand2,
+  Wand2, FileDown, Copy,
 } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { generatePDFBlob } from '@/utils/pdfGenerator';
