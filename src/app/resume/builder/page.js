@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { RESUME_TEMPLATES } from '@/components/ResumeTemplates/TemplateConfig';
@@ -517,6 +518,9 @@ export default function ResumeBuilderPage() {
   const [activeTemplateId, setActiveTemplateId] = useState('classic');
   const [visitedSteps, setVisitedSteps] = useState(new Set([0]));
   const previewRef = useRef(null);
+  const searchParams = useSearchParams();
+  const resumeIdParam = searchParams.get('id');
+  const [isLoadingResume, setIsLoadingResume] = useState(!!resumeIdParam);
 
   // Uploading state (for start modal)
   const [isUploading, setIsUploading] = useState(false);
@@ -773,12 +777,11 @@ export default function ResumeBuilderPage() {
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || 'Failed to save sharing link');
 
-      const brandedUrl = `${window.location.origin}${result.url}`;
+      const brandedUrl = `https://www.resugrow.com${result.url}`;
       setShareUrl(brandedUrl);
       setShareId(stableShareId);
-      navigator.clipboard.writeText(brandedUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 3000);
+      // No auto-copy here during auto-generation to avoid UX surprise.
+      // Copy only happens on click of the Copy button in handleCopyLink.
     } catch (err) {
       console.error('Sharing failed:', err);
       setShareError(err.message || 'Could not create shareable link.');
@@ -786,6 +789,47 @@ export default function ResumeBuilderPage() {
       setIsSharing(false);
     }
   };
+
+  // ── Auto-generate sharing link on Step 13 ──────────────────────────────
+  useEffect(() => {
+    if (currentStep === 13 && !shareUrl && !isSharing && !shareError) {
+      handleShareResume();
+    }
+  }, [currentStep, shareUrl, isSharing, shareError]);
+
+  // ── Load existing resume if ID is present ──────────────────────────────
+  useEffect(() => {
+    if (resumeIdParam) {
+      const fetchResume = async () => {
+        try {
+          setIsLoadingResume(true);
+          const res = await fetch(`/api/resumes/${resumeIdParam}`);
+          if (res.ok) {
+            const resume = await res.json();
+            if (resume.data) {
+              setData(resume.data);
+              if (resume.data.meta?.templateId) {
+                setActiveTemplateId(resume.data.meta.templateId);
+              }
+              // Set shareUrl so we don't regenerate immediately if they go to download
+              const brandedUrl = `https://www.resugrow.com/r/${resume.shareId}`;
+              setShareUrl(brandedUrl);
+              setShareId(resume.shareId);
+              
+              // Skip the "Getting Started" modal/step since we're editing
+              setCurrentStep(1); 
+              setVisitedSteps(new Set([0, 1]));
+            }
+          }
+        } catch (err) {
+          console.error("Failed to fetch resume:", err);
+        } finally {
+          setIsLoadingResume(false);
+        }
+      };
+      fetchResume();
+    }
+  }, [resumeIdParam]);
 
   const handleCopyLink = () => {
     if (shareUrl) {
@@ -803,12 +847,37 @@ export default function ResumeBuilderPage() {
   const [emailSent, setEmailSent] = useState(false);
   const handleSendEmail = () => {
     if (!emailAddress.trim()) return;
-    // Use mailto as a fallback — opens user's email client with the share link
     const subject = encodeURIComponent(`My Resume — ${data.personal.fullName || 'ResuGrow'}`);
     const body = encodeURIComponent(`Here is my resume built with ResuGrow:\n\n${shareUrl}\n\nBest regards,\n${data.personal.fullName || ''}`);
     window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`);
     setEmailSent(true);
     setTimeout(() => { setEmailSent(false); setEmailModal(false); }, 2000);
+  };
+
+  const handleSocialShare = (platform) => {
+    const urlStr = shareUrl || 'https://resugrow.vercel.app/resume/view/' + uid();
+    const text = encodeURIComponent(`Check out my professional resume built with ResuGrow!`);
+    const url = encodeURIComponent(urlStr);
+
+    let shareLink = '';
+    switch (platform) {
+      case 'facebook':
+        shareLink = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        break;
+      case 'x':
+        shareLink = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+        break;
+      case 'telegram':
+        shareLink = `https://t.me/share/url?url=${url}&text=${text}`;
+        break;
+      case 'whatsapp':
+        shareLink = `https://api.whatsapp.com/send?text=${text}%20${url}`;
+        break;
+    }
+
+    if (shareLink) {
+      window.open(shareLink, '_blank', 'width=600,height=400');
+    }
   };
 
   // ── File Import ─────────────────────────────────────────────────────
@@ -862,6 +931,14 @@ export default function ResumeBuilderPage() {
 
   return (
     <div className={styles.wizardPage}>
+      {isLoadingResume && (
+        <div className={styles.globalLoader}>
+          <div className={styles.loaderContent}>
+            <Loader2 className="animate-spin" size={48} />
+            <p>Loading your resume...</p>
+          </div>
+        </div>
+      )}
       {/* ── Sidebar ── */}
       <aside className={styles.sidebar}>
         <Link href="/" className={styles.sidebarLogo}>
@@ -916,7 +993,7 @@ export default function ResumeBuilderPage() {
         </div>
 
         {/* Step Content */}
-        <div className={styles.stepContent}>
+        <div className={currentStep === 13 ? styles.downloadPageWrapper : styles.stepContent}>
 
           {/* ═══ Step 0: Getting Started ═══ */}
           {currentStep === 0 && (
@@ -1586,12 +1663,20 @@ export default function ResumeBuilderPage() {
           {currentStep === 13 && (
             <div className={styles.downloadLayout}>
               <div className={styles.downloadLeft}>
+                <button
+                  className={styles.backBtn}
+                  style={{ marginBottom: 24, padding: '8px 0' }}
+                  onClick={goBack}
+                >
+                  <ChevronLeft size={18} /> Back to Editor
+                </button>
+
                 <h1 className={styles.downloadHeading}>
                   <span className={styles.downloadCheckmark}><Check size={20} /></span>
-                  Your Resume is Ready!
+                  Ready to go!
                 </h1>
                 <p className={styles.downloadSubtitle}>
-                  Download, share, or continue editing your professional resume.
+                  Download your resume or share it with recruiters via a professional link.
                 </p>
 
                 <div className={styles.downloadActions}>
@@ -1656,12 +1741,12 @@ export default function ResumeBuilderPage() {
                 <hr className={styles.downloadDivider} />
 
                 <div className={styles.shareSection}>
-                  <h3 className={styles.shareSectionTitle}>Branded Shareable Link</h3>
+                  <h3 className={styles.shareSectionTitle}>Share your Professional Link</h3>
                   <div className={styles.shareRow}>
                     <input
                       className={styles.shareInput}
                       readOnly
-                      value={shareUrl || 'Generate a link to share...'}
+                      value={shareUrl || 'Generating link...'}
                       onClick={(e) => e.target.select()}
                     />
                     <button
@@ -1673,14 +1758,28 @@ export default function ResumeBuilderPage() {
                       {copied ? 'Copied!' : 'Copy'}
                     </button>
                   </div>
-                  <p className={styles.shareTip}>This link stays updated even if you change your resume data later.</p>
+
+                  <div className={styles.socialShareRow}>
+                    <button className={`${styles.socialBtn} ${styles.socialFB}`} onClick={() => handleSocialShare('facebook')} title="Share on Facebook">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </button>
+                    <button className={`${styles.socialBtn} ${styles.socialX}`} onClick={() => handleSocialShare('x')} title="Share on X">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>
+                    </button>
+                    <button className={`${styles.socialBtn} ${styles.socialTG}`} onClick={() => handleSocialShare('telegram')} title="Share on Telegram">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0C5.346 0 0 5.346 0 11.944s5.346 11.944 11.944 11.944 11.944-5.346 11.944-11.944S18.542 0 11.944 0zm5.812 8.353l-1.974 9.307c-.145.658-.537.818-1.084.508l-3.004-2.213-1.448 1.393c-.16.16-.296.296-.604.296l.216-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.654-.64.135-.954l11.566-4.458c.535-.196 1.006.128.832.914z"/></svg>
+                    </button>
+                    <button className={`${styles.socialBtn} ${styles.socialWA}`} onClick={() => handleSocialShare('whatsapp')} title="Share on WhatsApp">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.431 5.623 1.432h.004c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    </button>
+                  </div>
                 </div>
 
                 <div className={styles.rewriteBanner} style={{ marginTop: 32 }}>
                   <p className={styles.rewriteKicker}>Premium AI Upgrade</p>
-                  <h3 className={styles.rewriteTitle}>Turn this draft into a recruiter-ready resume in one click</h3>
+                  <h3 className={styles.rewriteTitle}>One-click Recruiter Optimization</h3>
                   <p className={styles.rewriteDesc}>
-                    Our AI rewrite layer improves clarity, impact metrics, keyword match, and structure while keeping ATS-safe formatting.
+                    Our AI rewrite layer improves clarity, impact metrics, and structure while keeping ATS-safe formatting.
                   </p>
                   <Link href="/payment?service=resume-ai-rewrite&source=resume-builder-download-cta" className={`btn btn-primary ${styles.rewriteBtn}`}>
                     ✨ AI Re-Write Resume
@@ -1689,26 +1788,36 @@ export default function ResumeBuilderPage() {
               </div>
 
               <div className={styles.downloadRight}>
-                <div className={styles.downloadPreviewCard}>
-                  <div className={styles.downloadPreviewInner}>
-                    <SelectedTemplate data={data} />
+                <div className={styles.downloadPreviewInner}>
+                  <div className={styles.previewScaleWrapper}>
+                    <div className={styles.scaledContent} style={{ transform: 'scale(0.55)' }}>
+                      <SelectedTemplate data={data} />
+                    </div>
                   </div>
-                  <div className={styles.downloadPreviewActions}>
-                    <button
-                      className={styles.secondaryBtn}
-                      style={{ flex: 1 }}
-                      onClick={() => goToStep(1)}
-                    >
-                      Change Template
-                    </button>
-                    <button
-                      className={styles.secondaryBtn}
-                      style={{ flex: 1 }}
-                      onClick={() => goToStep(2)}
-                    >
-                      Edit Resume
-                    </button>
-                  </div>
+                </div>
+
+                {/* Floating Action Buttons for preview area */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: 30,
+                  display: 'flex',
+                  gap: 12,
+                  zIndex: 10
+                }}>
+                  <button
+                    className={styles.secondaryBtn}
+                    style={{ background: 'white', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}
+                    onClick={() => goToStep(1)}
+                  >
+                    Change Template
+                  </button>
+                  <button
+                    className={styles.primaryBtn}
+                    style={{ boxShadow: '0 4px 12px rgba(59,130,246,0.2)' }}
+                    onClick={() => goToStep(2)}
+                  >
+                    Edit Content
+                  </button>
                 </div>
               </div>
             </div>

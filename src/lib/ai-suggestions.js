@@ -118,7 +118,63 @@ export const ROLE_SUGGESTIONS = {
     summary: ['Adaptable professional with a strong track record of problem-solving.'],
     skills: ['Communication', 'Project Management', 'Teamwork', 'Critical Thinking'],
     metrics: ['efficiency', 'productivity', 'deadlines']
-  }
+  },
+
+  sales: {
+    experience: {
+      impact: [
+        'Exceeded annual quota by 138%, closing $2.4M in new ARR.',
+        'Grew territory revenue from $800K to $2.1M in 18 months.',
+        'Increased average deal size by 34% through consultative selling techniques.',
+        'Reduced sales cycle from 62 to 38 days by refining discovery call process.',
+        'Maintained a 91% client retention rate across 40+ enterprise accounts.',
+      ],
+      technical: [
+        'Managed a $4.8M pipeline across 18 strategic accounts in Salesforce CRM.',
+        'Built outbound sequences in Outreach that generated 120+ qualified meetings per quarter.',
+        'Collaborated with marketing to create battle cards that improved win rate by 22%.',
+      ],
+      ownership: [
+        'Onboarded and ramped 6 new SDRs, reducing time-to-first-deal by 3 weeks.',
+        'Led weekly deal reviews and coached team on objection handling.',
+      ],
+    },
+    summary: [
+      'Quota-crushing Sales Executive with a track record of closing enterprise deals.',
+      'Revenue-focused Account Executive specializing in SaaS and B2B sales cycles.',
+      'Strategic sales professional with expertise in pipeline management and deal acceleration.',
+    ],
+    skills: ['Salesforce', 'Outreach', 'HubSpot', 'Negotiation', 'Pipeline Management', 'CRM'],
+    metrics: ['quota attainment', 'ARR', 'pipeline', 'win rate', 'deal size'],
+  },
+
+  hr: {
+    experience: {
+      impact: [
+        'Reduced time-to-hire from 52 to 28 days by redesigning the interview process.',
+        'Improved employee retention by 19% through structured onboarding and 90-day check-ins.',
+        'Sourced and hired 120+ candidates across 14 departments in a single fiscal year.',
+        'Decreased cost-per-hire by 31% by building an internal referral programme.',
+        'Achieved 94% offer acceptance rate through competitive benchmarking and candidate experience improvements.',
+      ],
+      technical: [
+        'Implemented Workday HRIS, migrating 800+ employee records with zero data loss.',
+        'Designed competency frameworks used across 6 business units for performance reviews.',
+        'Built a talent pipeline of 300+ pre-screened candidates using LinkedIn Recruiter.',
+      ],
+      ownership: [
+        'Led DEI initiative that increased underrepresented hires by 28% in 12 months.',
+        'Managed full-cycle recruitment for C-suite and VP-level roles.',
+      ],
+    },
+    summary: [
+      'People-first HR Leader with expertise in talent acquisition and organizational development.',
+      'Strategic HR Business Partner focused on retention, culture, and high-performance teams.',
+      'Talent Acquisition Specialist with a track record of building diverse, high-impact teams.',
+    ],
+    skills: ['Workday', 'LinkedIn Recruiter', 'ATS', 'HRIS', 'Talent Acquisition', 'Performance Management'],
+    metrics: ['time-to-hire', 'retention', 'offer acceptance', 'cost-per-hire', 'headcount'],
+  },
 };
 
 // ====================== ENGINE LOGIC ======================

@@ -1,18 +1,26 @@
-import { auth } from "@/lib/auth";
+import { getUnifiedSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import prisma from "@/lib/prisma";
 import styles from "./dashboard.module.css";
 
 export default async function DashboardPage() {
-  const session = await auth();
+  const user = await getUnifiedSession();
 
-  if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/dashboard");
+  if (!user) {
+    redirect("/login?callbackUrl=/dashboard");
   }
 
+  // Fetch recent resumes for this user
+  const recentResumes = await prisma.resume.findMany({
+    where: { userId: user.id },
+    orderBy: { updatedAt: 'desc' },
+    take: 5
+  });
+
   const stats = [
-    { label: "Resumes Built", value: "0", icon: "📄" },
+    { label: "Resumes Built", value: recentResumes.length.toString(), icon: "📄" },
     { label: "ATS Scans Done", value: "0", icon: "🔍" },
     { label: "LinkedIn Score", value: "0", icon: "💎" },
     { label: "Job Applications", value: "0", icon: "🚀" },
@@ -22,22 +30,22 @@ export default async function DashboardPage() {
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.welcome}>
-          <h1>Welcome, {session.user.name?.split(" ")[0]}!</h1>
+          <h1>Welcome, {user.name?.split(" ")[0]}!</h1>
           <p>Here's what's happening with your career journey.</p>
         </div>
         <div className={styles.userCard}>
-          {session.user.image && (
+          {user.image && (
             <Image
-              src={session.user.image}
-              alt={session.user.name}
+              src={user.image}
+              alt={user.name}
               width={48}
               height={48}
               className={styles.avatar}
             />
           )}
           <div className={styles.userInfo}>
-            <span className={styles.name}>{session.user.name}</span>
-            <span className={styles.email}>{session.user.email}</span>
+            <span className={styles.name}>{user.name}</span>
+            <span className={styles.email}>{user.email}</span>
           </div>
         </div>
       </header>
@@ -63,7 +71,30 @@ export default async function DashboardPage() {
             </div>
           </div>
           <div className={styles.cardContent}>
-            <p className={styles.emptyText}>You haven't saved any resumes yet.</p>
+            {recentResumes.length > 0 ? (
+              <div className={styles.resumeList}>
+                {recentResumes.map((resume) => (
+                  <div key={resume.id} className={styles.resumeItem}>
+                    <div className={styles.resumeInfo}>
+                      <h3 className={styles.resumeName}>{resume.title || "Untitled Resume"}</h3>
+                      <p className={styles.resumeDate}>
+                        Edited {new Date(resume.updatedAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className={styles.resumeActions}>
+                      <Link href={`/resume/builder?id=${resume.shareId}`} className={styles.editBtn}>
+                        Edit
+                      </Link>
+                      <Link href={`/r/${resume.shareId}`} target="_blank" className={styles.viewBtn}>
+                        View
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className={styles.emptyText}>You haven't saved any resumes yet.</p>
+            )}
           </div>
         </div>
 

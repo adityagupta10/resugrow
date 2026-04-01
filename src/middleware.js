@@ -6,7 +6,9 @@ const protectedPaths = [
   '/payment',
   '/cover-letter/create',
   '/linkedin-review',
-  '/tools/sar-rewriter'
+  '/tools/sar-rewriter',
+  '/dashboard',
+  '/settings'
 ];
 
 export function middleware(req) {
@@ -45,5 +47,7 @@ export const config = {
     '/cover-letter/create/:path*',
     '/linkedin-review/:path*',
     '/tools/sar-rewriter/:path*',
+    '/dashboard/:path*',
+    '/settings/:path*',
   ],
 };

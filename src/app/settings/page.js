@@ -1,12 +1,12 @@
-import { auth } from "@/lib/auth";
+import { getUnifiedSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import styles from "./settings.module.css";
 
 export default async function SettingsPage() {
-  const session = await auth();
+  const user = await getUnifiedSession();
 
-  if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/settings");
+  if (!user) {
+    redirect("/login?callbackUrl=/settings");
   }
 
   return (
@@ -24,13 +24,13 @@ export default async function SettingsPage() {
           </div>
           <div className={styles.formGroup}>
             <label>Full Name</label>
-            <input type="text" value={session.user.name || ""} readOnly className={styles.input} />
-            <span className={styles.hint}>Managed via Google account</span>
+            <input type="text" value={user.name || ""} readOnly className={styles.input} />
+            <span className={styles.hint}>Managed via {user.provider === 'supabase' ? 'Supabase' : 'Google'} account</span>
           </div>
           <div className={styles.formGroup}>
             <label>Email Address</label>
-            <input type="email" value={session.user.email || ""} readOnly className={styles.input} />
-            <span className={styles.hint}>Managed via Google account</span>
+            <input type="email" value={user.email || ""} readOnly className={styles.input} />
+            <span className={styles.hint}>Managed via {user.provider === 'supabase' ? 'Supabase' : 'Google'} account</span>
           </div>
         </section>
 

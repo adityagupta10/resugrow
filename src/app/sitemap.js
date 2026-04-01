@@ -1,4 +1,5 @@
 import { posts } from './blog/data';
+import { ROLE_SUGGESTIONS } from '@/lib/ai-suggestions';
 
 export default function sitemap() {
   const baseUrl = 'https://www.resugrow.com';
@@ -29,6 +30,9 @@ export default function sitemap() {
     // Content & resources
     { url: `${baseUrl}/blog`,                          changeFrequency: 'daily',   priority: 0.80, lastModified: now },
     { url: `${baseUrl}/career-tips`,                   changeFrequency: 'weekly',  priority: 0.75, lastModified: now },
+    { url: `${baseUrl}/cv-vs-resume`,                  changeFrequency: 'monthly', priority: 0.88, lastModified: now },
+    { url: `${baseUrl}/blog/resugrow-vs-canva-google-docs`, changeFrequency: 'monthly', priority: 0.82, lastModified: now },
+    { url: `${baseUrl}/examples`,                      changeFrequency: 'weekly',  priority: 0.85, lastModified: now },
 
     // Company
     { url: `${baseUrl}/about`,                         changeFrequency: 'monthly', priority: 0.70, lastModified: now },
@@ -51,5 +55,13 @@ export default function sitemap() {
     lastModified: parseDate(post.dateModified) || parseDate(post.date) || now,
   }));
 
-  return [...staticRoutes, ...blogRoutes];
+  // Dynamic role example pages
+  const exampleRoutes = Object.keys(ROLE_SUGGESTIONS).map((role) => ({
+    url: `${baseUrl}/examples/${role}`,
+    changeFrequency: 'weekly',
+    priority: 0.85,
+    lastModified: now,
+  }));
+
+  return [...staticRoutes, ...blogRoutes, ...exampleRoutes];
 }

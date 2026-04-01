@@ -5,29 +5,36 @@ import Image from 'next/image';
 import styles from './Footer.module.css';
 
 const footerLinks = {
-  'Resume & Cover Letter': [
-    { label: 'AI Resume Builder', href: '/resume/ai-builder' },
-    { label: 'ATS Score Checker', href: '/resume/ats-checker' },
-    { label: 'Resume Templates', href: '/resume/templates' },
+  'Resume Tools': [
+    { label: 'Free AI Resume Builder', href: '/resume/ai-builder' },
+    { label: 'Free ATS Resume Checker', href: '/resume/ats-checker' },
+    { label: 'Free Resume Templates', href: '/resume/templates' },
+    { label: 'Resume Builder Free', href: '/resume/builder' },
     { label: 'Cover Letter Builder', href: '/cover-letter/builder' },
     { label: 'Cover Letter Templates', href: '/cover-letter/templates' },
   ],
-  'LinkedIn': [
+  'LinkedIn & Career': [
     { label: 'LinkedIn Profile Boost', href: '/linkedin-makeover' },
-    { label: 'Profile Review & Score', href: '/linkedin-review' },
+    { label: 'LinkedIn Profile Review & Score', href: '/linkedin-review' },
     { label: 'AI SAR Bullet Rewriter', href: '/tools/sar-rewriter' },
+    { label: 'Resume Skills Guide', href: '/blog/skills-for-resume-guide' },
+    { label: 'Resume Summary Examples', href: '/blog/resume-summary-that-gets-noticed' },
   ],
-  'Company': [
+  'CV & Resume Guides': [
+    { label: 'CV vs Resume — What\'s the Difference?', href: '/cv-vs-resume' },
+    { label: 'What is a CV?', href: '/cv-vs-resume#what-is-a-cv' },
+    { label: 'Professional CV Format', href: '/resume/templates' },
+    { label: 'Resume Examples by Job Title', href: '/blog/software-engineer-resume' },
+    { label: 'How to Write a Resume', href: '/blog/resume-summary-that-gets-noticed' },
+    { label: 'ATS Resume Guide', href: '/blog/how-ats-systems-work-2025' },
+  ],
+  'Compare & Resources': [
+    { label: 'ResuGrow vs Canva Resume', href: '/blog/resugrow-vs-canva-google-docs' },
+    { label: 'Blog & Career Tips', href: '/blog' },
+    { label: 'Resume Examples', href: '/career-tips' },
+    { label: 'Help Center', href: '/help-center' },
     { label: 'About Us', href: '/about' },
     { label: 'Contact Us', href: '/contact' },
-    { label: 'Privacy Policy', href: '/privacy-policy' },
-    { label: 'Terms of Service', href: '/terms-of-service' },
-  ],
-  'Resources': [
-    { label: 'Blog', href: '/blog' },
-    { label: 'Career Tips', href: '/career-tips' },
-    { label: 'Resume Examples', href: '/resume/templates' },
-    { label: 'Help Center', href: '/help-center' },
   ],
 };
 
@@ -47,8 +54,7 @@ export default function Footer() {
               />
             </Link>
             <p className={styles.brandDesc}>
-              AI-powered resume builder helping thousands land their dream jobs. Create professional,
-              ATS-optimized resumes in minutes.
+              Free AI resume builder and ATS checker trusted by thousands of job seekers. Create a professional resume or CV, optimize for ATS, and land more interviews — in minutes.
             </p>
             <div className={styles.socialLinks}>
               <a href="https://x.com/resugrow" className={styles.socialLink} aria-label="Twitter" target="_blank" rel="noopener noreferrer">
