@@ -1,5 +1,5 @@
 import styles from './classic.module.css';
-import { parseBullets } from './TemplateConfig';
+import { parseBullets, normalizeData } from './TemplateConfig';
 
 function Watermark() {
   return (
@@ -11,7 +11,8 @@ function Watermark() {
   );
 }
 
-export default function ClassicTemplate({ data }) {
+export default function ClassicTemplate({ data: rawData }) {
+  const data = normalizeData(rawData);
   const p = data.personal;
   const hasAdditionalInfo = data.languages.length > 0 || data.extracurricular.length > 0;
 

@@ -140,3 +140,24 @@ export function parseBullets(text) {
     .map(line => line.trim())
     .filter(line => line.length > 0);
 }
+
+// Ensures all expected arrays/objects exist so templates never crash on undefined
+export function normalizeData(data = {}) {
+  return {
+    personal: {
+      fullName: '', currentPosition: '', email: '', phone: '',
+      location: '', website: '', linkedin: '', summary: '',
+      ...(data.personal || {}),
+    },
+    experience:      Array.isArray(data.experience)      ? data.experience      : [],
+    education:       Array.isArray(data.education)       ? data.education       : [],
+    skills:          Array.isArray(data.skills)          ? data.skills          : [],
+    certifications:  Array.isArray(data.certifications)  ? data.certifications  : [],
+    strengths:       Array.isArray(data.strengths)       ? data.strengths       : [],
+    achievements:    Array.isArray(data.achievements)    ? data.achievements    : [],
+    languages:       Array.isArray(data.languages)       ? data.languages       : [],
+    extracurricular: Array.isArray(data.extracurricular) ? data.extracurricular : [],
+    projects:        Array.isArray(data.projects)        ? data.projects        : [],
+    customSection:   data.customSection || { title: '', content: '' },
+  };
+}

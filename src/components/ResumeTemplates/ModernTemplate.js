@@ -1,5 +1,5 @@
 import styles from './modern.module.css';
-import { parseBullets } from './TemplateConfig';
+import { parseBullets, normalizeData } from './TemplateConfig';
 
 function Watermark() {
   return (
@@ -11,7 +11,8 @@ function Watermark() {
   );
 }
 
-export default function ModernTemplate({ data }) {
+export default function ModernTemplate({ data: rawData }) {
+  const data = normalizeData(rawData);
   const p = data.personal;
 
   return (

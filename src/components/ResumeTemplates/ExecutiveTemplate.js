@@ -1,7 +1,8 @@
-import { parseBullets } from './TemplateConfig';
+import { parseBullets, normalizeData } from './TemplateConfig';
 import styles from './executive.module.css';
 
-export default function ExecutiveTemplate({ data }) {
+export default function ExecutiveTemplate({ data: rawData }) {
+  const data = normalizeData(rawData);
   const p = data.personal;
   return (
     <div className={styles.resumeDoc}>

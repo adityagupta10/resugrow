@@ -1,7 +1,8 @@
-import { parseBullets } from './TemplateConfig';
+import { parseBullets, normalizeData } from './TemplateConfig';
 import styles from './impact.module.css';
 
-export default function ImpactTemplate({ data }) {
+export default function ImpactTemplate({ data: rawData }) {
+  const data = normalizeData(rawData);
   const { personal, experience, education, skills, achievements } = data;
 
   return (

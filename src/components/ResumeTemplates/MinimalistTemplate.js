@@ -1,8 +1,9 @@
-import { parseBullets } from './TemplateConfig';
+import { parseBullets, normalizeData } from './TemplateConfig';
 import styles from './minimalist.module.css';
 
-export default function MinimalistTemplate({ data }) {
-  const { personal, experience, education, skills, summary } = data;
+export default function MinimalistTemplate({ data: rawData }) {
+  const data = normalizeData(rawData);
+  const { personal, experience, education, skills } = data;
 
   return (
     <div className={styles.container}>

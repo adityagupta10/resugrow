@@ -1,7 +1,8 @@
-import { parseBullets } from './TemplateConfig';
+import { parseBullets, normalizeData } from './TemplateConfig';
 import styles from './tech.module.css';
 
-export default function TechTemplate({ data }) {
+export default function TechTemplate({ data: rawData }) {
+  const data = normalizeData(rawData);
   const { personal, experience, education, skills, projects } = data;
 
   return (

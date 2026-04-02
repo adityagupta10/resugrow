@@ -1,7 +1,8 @@
-import { parseBullets } from './TemplateConfig';
+import { parseBullets, normalizeData } from './TemplateConfig';
 import styles from './swiss.module.css';
 
-export default function SwissTemplate({ data }) {
+export default function SwissTemplate({ data: rawData }) {
+  const data = normalizeData(rawData);
   const { personal, experience, education, skills, projects } = data;
 
   return (

@@ -1,8 +1,10 @@
-import { parseBullets } from './TemplateConfig';
+import { parseBullets, normalizeData } from './TemplateConfig';
 import styles from './academic.module.css';
 
-export default function AcademicTemplate({ data }) {
-  const { personal, experience, education, skills, certifications, summary } = data;
+export default function AcademicTemplate({ data: rawData }) {
+  const data = normalizeData(rawData);
+  const { personal, experience, education, skills, certifications } = data;
+  const projects = data.projects;
 
   return (
     <div className={styles.container}>
