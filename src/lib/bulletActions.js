@@ -14,9 +14,19 @@ export function handleBulletFix(action, text = '', role = 'General') {
   switch (action) {
 
     case 'IMPROVE_BULLET':
-      // Basic AI-like polish
-      if (!improved.match(/^[A-Z][a-z]+ed/)) {
-        improved = 'Spearheaded ' + improved.charAt(0).toLowerCase() + improved.slice(1);
+      // Strip out weak passive introductory phrases first
+      const scrubbed = improved.replace(/^(responsible for|in charge of|handled|worked on|assisted with|helped with|managed)\b\s*/i, '');
+      
+      // Rotate through a dynamic array of strong action verbs
+      const verbs = ['Orchestrated', 'Engineered', 'Directed', 'Executed', 'Pioneered', 'Streamlined', 'Spearheaded', 'Optimized', 'Formulated', 'Conceptualized'];
+      // Use string length to quasi-randomly pick a verb so it stays consistent per bullet but varies across the list
+      const verb = verbs[scrubbed.length % verbs.length];
+
+      // If the bullet doesn't already start with a strong past-tense verb, inject it
+      if (!scrubbed.match(/^[A-Z][a-z]+ed\b/)) {
+        improved = `${verb} ${scrubbed.charAt(0).toLowerCase()}${scrubbed.slice(1)}`;
+      } else {
+        improved = scrubbed.charAt(0).toUpperCase() + scrubbed.slice(1);
       }
       return improved;
 

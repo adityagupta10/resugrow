@@ -831,6 +831,39 @@ function ResumeBuilderPage() {
     }
   }, [resumeIdParam]);
 
+  // ── Load Fixed Resume Data from ATS Auto-Fix ────────────────────────────
+  useEffect(() => {
+    const isFixed = searchParams.get('useFixed');
+    if (isFixed === 'true') {
+      const fixedData = localStorage.getItem('atsFixedResumeData');
+      if (fixedData) {
+        try {
+          const parsed = JSON.parse(fixedData);
+          // Gently patch the form data with the ATS outputs
+          setData(prev => ({
+            ...prev,
+            personal: { ...prev.personal, ...parsed.personal },
+            experience: parsed.structuredData?.experience?.map(exp => ({
+              id: exp.id || Math.random().toString(36).substr(2, 9),
+              company: exp.company || '',
+              position: exp.title || '',
+              startDate: exp.date || '',
+              endDate: '',
+              current: false,
+              description: exp.bullets ? exp.bullets.join('\n') : ''
+            })) || prev.experience,
+          }));
+          
+          localStorage.removeItem('atsFixedResumeData');
+          setCurrentStep(1);
+          setVisitedSteps(new Set([0, 1]));
+        } catch (e) {
+          console.error("Failed to parse ATS fixed data", e);
+        }
+      }
+    }
+  }, [searchParams]);
+
   const handleCopyLink = () => {
     if (shareUrl) {
       navigator.clipboard.writeText(shareUrl);

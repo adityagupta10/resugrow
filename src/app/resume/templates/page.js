@@ -4,6 +4,9 @@ import Image from 'next/image';
 import { templates as templateData } from '../../../data/templates';
 import Testimonials from '@/components/Testimonials/Testimonials';
 import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
+import { useState } from 'react';
+
+'use client';
 
 export const metadata = createPageMetadata({
   title: 'ATS-Friendly Resume Templates | Modern & Recruiter-Tested',
@@ -16,6 +19,8 @@ export const metadata = createPageMetadata({
 const templates = templateData;
 
 export default function Templates() {
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  
   const softwareJsonLd = getSoftwareAppJsonLd({
     name: 'ResuGrow Resume Templates',
     description:
@@ -23,6 +28,14 @@ export default function Templates() {
     url: `${SITE_URL}/resume/templates`,
     price: '0.00',
   });
+
+  const handleTemplateClick = (template) => {
+    setSelectedTemplate(template);
+  };
+
+  const closeModal = () => {
+    setSelectedTemplate(null);
+  };
 
   return (
     <>
@@ -50,7 +63,7 @@ export default function Templates() {
         <div className={styles.subpageContainer}>
           <div className={styles.templatesGallery}>
             {templates.map((t) => (
-              <div key={t.name} className={styles.galleryCard}>
+              <div key={t.name} className={styles.galleryCard} onClick={() => handleTemplateClick(t)}>
                 <div className={styles.galleryPreview}>
                   <div className={styles.galleryDoc}>
                     <Image
@@ -59,6 +72,7 @@ export default function Templates() {
                       fill
                       className={styles.templateImg}
                       style={{ objectFit: 'cover' }}
+                      sizes="(max-width: 900px) 100vw, 25vw"
                     />
                   </div>
                 </div>
@@ -76,6 +90,38 @@ export default function Templates() {
           </div>
         </div>
       </section>
+
+      {/* Modal for enlarged template view */}
+      {selectedTemplate && (
+        <div className={styles.modalOverlay} onClick={closeModal}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.modalClose} onClick={closeModal}>×</button>
+            <div className={styles.modalImage}>
+              <Image
+                src={selectedTemplate.image}
+                alt={`${selectedTemplate.name} enlarged resume template view`}
+                fill
+                style={{ objectFit: 'contain' }}
+                sizes="90vw"
+              />
+            </div>
+            <div className={styles.modalInfo}>
+              <h3>{selectedTemplate.name}</h3>
+              <p>{selectedTemplate.category}</p>
+              <div className={styles.modalTags}>
+                {selectedTemplate.tags.map((tag) => (
+                  <span key={tag} className={styles.galleryTag}>{tag}</span>
+                ))}
+              </div>
+              <div className={styles.modalActions}>
+                <Link href="/resume/ai-builder" className="btn btn-primary">
+                  Use This Template
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Testimonials 
         title="Templates that Get Hired" 

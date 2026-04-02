@@ -3,6 +3,9 @@ import Image from 'next/image';
 import styles from '../../subpage.module.css';
 import { coverLetters } from '../../../data/coverLetters';
 import { createPageMetadata } from '@/lib/seo';
+import { useState } from 'react';
+
+'use client';
 
 export const metadata = createPageMetadata({
   title: 'Cover Letter Templates for Every Industry | ResuGrow',
@@ -15,6 +18,16 @@ export const metadata = createPageMetadata({
 const templates = coverLetters;
 
 export default function CoverLetterTemplates() {
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+
+  const handleTemplateClick = (template) => {
+    setSelectedTemplate(template);
+  };
+
+  const closeModal = () => {
+    setSelectedTemplate(null);
+  };
+
   return (
     <>
       <section className={styles.subpageHero}>
@@ -37,7 +50,7 @@ export default function CoverLetterTemplates() {
         <div className={styles.subpageContainer}>
           <div className={styles.templatesGallery}>
             {templates.map((t) => (
-              <div key={t.name} className={styles.galleryCard}>
+              <div key={t.name} className={styles.galleryCard} onClick={() => handleTemplateClick(t)}>
                 <div className={styles.galleryPreview}>
                   <div className={styles.galleryDoc}>
                     <Image
@@ -46,6 +59,7 @@ export default function CoverLetterTemplates() {
                       fill
                       className={styles.templateImg}
                       style={{ objectFit: 'cover' }}
+                      sizes="(max-width: 900px) 100vw, 25vw"
                     />
                   </div>
                 </div>
@@ -63,6 +77,38 @@ export default function CoverLetterTemplates() {
           </div>
         </div>
       </section>
+
+      {/* Modal for enlarged template view */}
+      {selectedTemplate && (
+        <div className={styles.modalOverlay} onClick={closeModal}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.modalClose} onClick={closeModal}>×</button>
+            <div className={styles.modalImage}>
+              <Image
+                src={selectedTemplate.image}
+                alt={`${selectedTemplate.name} enlarged cover letter template view`}
+                fill
+                style={{ objectFit: 'contain' }}
+                sizes="90vw"
+              />
+            </div>
+            <div className={styles.modalInfo}>
+              <h3>{selectedTemplate.name}</h3>
+              <p>{selectedTemplate.category}</p>
+              <div className={styles.modalTags}>
+                {selectedTemplate.tags.map((tag) => (
+                  <span key={tag} className={styles.galleryTag}>{tag}</span>
+                ))}
+              </div>
+              <div className={styles.modalActions}>
+                <Link href="/cover-letter/builder" className="btn btn-primary">
+                  Use This Template
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
