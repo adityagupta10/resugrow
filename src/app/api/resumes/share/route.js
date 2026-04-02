@@ -15,7 +15,6 @@ export async function POST(req) {
     const { data: { user: supabaseUser }, error: userError } = await supabase.auth.getUser();
     
     if (userError || !supabaseUser) {
-      console.log('Sharing API: No authenticated Supabase session found');
       return NextResponse.json({ error: 'Please login to share your resume.' }, { status: 401 });
     }
 

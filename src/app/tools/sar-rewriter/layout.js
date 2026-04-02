@@ -1,11 +1,15 @@
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'AI SAR Bullet Rewriter | Upgrade Resume Bullets Fast',
+  title: 'Free AI Resume Bullet Rewriter — SAR Format in Seconds',
   description:
-    'Rewrite weak resume bullets into high-impact SAR statements with measurable results and keyword alignment.',
+    'Paste a weak resume bullet and get 3 AI-rewritten versions in SAR format with measurable results, strong action verbs, and keyword alignment. Free, instant.',
   path: '/tools/sar-rewriter',
-  keywords: ['SAR bullet rewriter', 'resume bullet rewrite', 'action result resume bullets']
+  keywords: [
+    'resume bullet rewriter', 'SAR bullet rewriter', 'AI resume bullet',
+    'resume bullet points', 'action verbs resume', 'resume bullet generator',
+    'improve resume bullets', 'resume achievement statements',
+  ]
 });
 
 export default function SarRewriterLayout({ children }) {

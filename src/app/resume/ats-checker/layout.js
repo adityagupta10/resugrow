@@ -1,12 +1,16 @@
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'Free ATS Resume Checker & Scanner | ResuGrow',
+  title: 'Free ATS Resume Checker — Score Your Resume in 30 Seconds',
   description:
-    'Scan your resume for ATS compatibility, keyword gaps, structure issues, and recruiter-readability signals. Get a score out of 100 in under 30 seconds.',
+    'Upload your resume and get an instant ATS score out of 100. Identifies keyword gaps, formatting issues, and missing sections. Free, no sign-up required.',
   path: '/resume/ats-checker',
-  keywords: ['ATS checker', 'free ATS resume checker', 'resume scanner', 'resume ATS score', 'keyword gap analysis', 'resume compatibility test'],
-  imageAlt: 'Free ATS Resume Checker tool by ResuGrow — scan your resume for keyword gaps and formatting issues'
+  keywords: [
+    'ATS resume checker', 'free ATS checker', 'resume ATS score', 'ATS scanner',
+    'resume keyword checker', 'resume compatibility test', 'ATS resume test',
+    'applicant tracking system checker', 'resume score checker', 'ats resume',
+  ],
+  imageAlt: 'Free ATS Resume Checker — get your resume score in 30 seconds',
 });
 
 export default function ATSCheckerLayout({ children }) {

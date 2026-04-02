@@ -5,11 +5,15 @@ import styles from '../../subpage.module.css';
 import landingStyles from './landing.module.css';
 
 export const metadata = createPageMetadata({
-  title: 'Cover Letter Generator | Build Job-Tailored Letters Fast',
+  title: 'Free Cover Letter Builder — Job-Tailored Letters in Minutes',
   description:
-    'Build deterministic, job-ready cover letters with live preview, smart prefill, and one-click PDF export.',
+    'Build a professional cover letter with our free guided builder. 6 templates, live A4 preview, PDF export. Tailored to your role, company, and experience level.',
   path: '/cover-letter/builder',
-  keywords: ['cover letter builder', 'cover letter generator', 'job tailored cover letter']
+  keywords: [
+    'cover letter builder', 'free cover letter builder', 'cover letter generator',
+    'cover letter maker', 'AI cover letter', 'cover letter template',
+    'how to write a cover letter', 'cover letter examples',
+  ]
 });
 
 const features = [

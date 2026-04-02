@@ -1,14 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 const protectedPaths = [
-  '/resume/builder',
-  '/resume/ats-checker',
-  '/payment',
-  '/cover-letter/create',
-  '/linkedin-review',
-  '/tools/sar-rewriter',
-  '/dashboard',
-  '/settings'
+  "/resume/builder",
+  "/resume/ats-checker",
+  "/payment",
+  "/cover-letter/create",
+  "/linkedin-review",
+  "/tools/sar-rewriter",
+  "/tools/interview-prep",
+  "/tools/linkedin-studio",
+  "/tools/salary-coach",
+  "/dashboard",
+  "/settings",
 ];
 
 export function middleware(req) {
@@ -18,10 +21,11 @@ export function middleware(req) {
 
   if (isProtected) {
     // Check for NextAuth/Auth.js session tokens
-    const sessionToken = req.cookies.get('authjs.session-token')?.value || 
-                         req.cookies.get('__Secure-authjs.session-token')?.value || 
-                         req.cookies.get('next-auth.session-token')?.value || 
-                         req.cookies.get('__Secure-next-auth.session-token')?.value;
+    const sessionToken =
+      req.cookies.get("authjs.session-token")?.value ||
+      req.cookies.get("__Secure-authjs.session-token")?.value ||
+      req.cookies.get("next-auth.session-token")?.value ||
+      req.cookies.get("__Secure-next-auth.session-token")?.value;
     // Supabase auth cookie keys look like:
     // sb-<project-ref>-auth-token, sb-<project-ref>-auth-token.0, sb-<project-ref>-auth-token.1
     const hasSupabaseSession = req.cookies
@@ -30,8 +34,8 @@ export function middleware(req) {
 
     if (!sessionToken && !hasSupabaseSession) {
       const url = req.nextUrl.clone();
-      url.pathname = '/login';
-      url.searchParams.set('callbackUrl', req.url);
+      url.pathname = "/login";
+      url.searchParams.set("callbackUrl", req.url);
       return NextResponse.redirect(url);
     }
   }
@@ -41,13 +45,16 @@ export function middleware(req) {
 
 export const config = {
   matcher: [
-    '/resume/builder/:path*',
-    '/resume/ats-checker/:path*',
-    '/payment/:path*',
-    '/cover-letter/create/:path*',
-    '/linkedin-review/:path*',
-    '/tools/sar-rewriter/:path*',
-    '/dashboard/:path*',
-    '/settings/:path*',
+    "/resume/builder/:path*",
+    "/resume/ats-checker/:path*",
+    "/payment/:path*",
+    "/cover-letter/create/:path*",
+    "/linkedin-review/:path*",
+    "/tools/sar-rewriter/:path*",
+    "/tools/interview-prep/:path*",
+    "/tools/linkedin-studio/:path*",
+    "/tools/salary-coach/:path*",
+    "/dashboard/:path*",
+    "/settings/:path*",
   ],
 };

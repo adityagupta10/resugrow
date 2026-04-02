@@ -4,11 +4,14 @@ import { createPageMetadata } from '@/lib/seo';
 import EmojiImage from '@/components/UI/EmojiImage';
 
 export const metadata = createPageMetadata({
-  title: 'AI Resume Builder | Build ATS-Friendly Resumes Faster',
+  title: 'Free AI Resume Builder — Build ATS-Friendly Resumes Faster',
   description:
-    'Generate recruiter-ready resume content with AI, optimize formatting, and tailor resumes for each job posting.',
+    'Generate a recruiter-ready resume with AI in minutes. Real-time ATS scoring, job description matching, 15 professional templates, and one-click PDF export. Free.',
   path: '/resume/ai-builder',
-  keywords: ['AI resume builder', 'resume generator', 'ATS friendly resume builder']
+  keywords: [
+    'AI resume builder', 'free AI resume', 'resume generator', 'ATS friendly resume builder',
+    'AI resume writer', 'resume builder AI', 'smart resume builder', 'resume builder 2026',
+  ]
 });
 
 const features = [

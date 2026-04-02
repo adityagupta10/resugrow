@@ -1,28 +1,69 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useSession, signOut } from 'next-auth/react';
-import { createClient as createSupabaseClient } from '@/utils/supabase/client';
-import styles from './Navbar.module.css';
+import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import { createClient as createSupabaseClient } from "@/utils/supabase/client";
+import styles from "./Navbar.module.css";
 
-const resumeItems = [
-  { label: 'AI Powered Resume Builder', href: '/resume/builder' },
-  { label: 'ATS Score Checker', href: '/resume/ats-checker' },
-  { label: 'High Impact Templates', href: '/resume/templates' },
-];
-
-const coverLetterItems = [
-  { label: 'Cover Letter Builder', href: '/cover-letter/builder' },
-  { label: 'Cover Letter Templates', href: '/cover-letter/templates' },
-];
-
-const linkedinItems = [
-  { label: 'LinkedIn Profile Boost', href: '/linkedin-makeover' },
-  { label: 'Profile Review & Score', href: '/linkedin-review' },
-  { label: 'AI SAR Bullet Rewriter', href: '/tools/sar-rewriter' },
+const dropdownSections = [
+  {
+    key: "resume",
+    label: "Resume",
+    badge: null,
+    items: [
+      { label: "AI Powered Resume Builder", href: "/resume/builder" },
+      { label: "ATS Score Checker", href: "/resume/ats-checker" },
+      { label: "High Impact Templates", href: "/resume/templates" },
+    ],
+  },
+  {
+    key: "cover",
+    label: "Cover Letter",
+    badge: null,
+    items: [
+      { label: "Cover Letter Builder", href: "/cover-letter/builder" },
+      { label: "Cover Letter Templates", href: "/cover-letter/templates" },
+    ],
+  },
+  {
+    key: "linkedin",
+    label: "LinkedIn",
+    badge: null,
+    items: [
+      { label: "LinkedIn Profile Boost", href: "/linkedin-makeover" },
+      { label: "Profile Review & Score", href: "/linkedin-review" },
+    ],
+  },
+  {
+    key: "tools",
+    label: "Tools",
+    badge: "3 New",
+    items: [
+      {
+        label: "AI SAR Bullet Rewriter",
+        href: "/tools/sar-rewriter",
+        badge: null,
+      },
+      {
+        label: "Interview Question Generator",
+        href: "/tools/interview-prep",
+        badge: "New",
+      },
+      {
+        label: "LinkedIn Content Studio",
+        href: "/tools/linkedin-studio",
+        badge: "New",
+      },
+      {
+        label: "Salary Negotiation Coach",
+        href: "/tools/salary-coach",
+        badge: "New",
+      },
+    ],
+  },
 ];
 
 export default function Navbar() {
@@ -38,26 +79,33 @@ export default function Navbar() {
 
   const userFromSupabase = supabaseUser
     ? {
-        name: supabaseUser.user_metadata?.full_name || supabaseUser.user_metadata?.name || supabaseUser.email || 'User',
+        name:
+          supabaseUser.user_metadata?.full_name ||
+          supabaseUser.user_metadata?.name ||
+          supabaseUser.email ||
+          "User",
         email: supabaseUser.email,
-        image: supabaseUser.user_metadata?.avatar_url || supabaseUser.user_metadata?.picture || null,
+        image:
+          supabaseUser.user_metadata?.avatar_url ||
+          supabaseUser.user_metadata?.picture ||
+          null,
       }
     : null;
   const activeUser = userFromSupabase || session?.user || null;
   const isLoggedIn = Boolean(activeUser);
-  const isAuthLoading = status === 'loading' || supabaseLoading;
+  const isAuthLoading = status === "loading" || supabaseLoading;
 
   const handleSignInRedirect = () => {
     const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    router.push(`/login?callbackUrl=${encodeURIComponent(currentPath || '/')}`);
+    router.push(`/login?callbackUrl=${encodeURIComponent(currentPath || "/")}`);
     setMobileOpen(false);
   };
 
   useEffect(() => {
     if (mobileOpen) {
-      document.body.classList.add('menu-open');
+      document.body.classList.add("menu-open");
     } else {
-      document.body.classList.remove('menu-open');
+      document.body.classList.remove("menu-open");
     }
   }, [mobileOpen]);
 
@@ -71,10 +119,10 @@ export default function Navbar() {
         setUserDropdownOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.body.classList.remove('menu-open');
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.body.classList.remove("menu-open");
     };
   }, []);
 
@@ -90,10 +138,12 @@ export default function Navbar() {
         setSupabaseLoading(false);
       });
 
-      const authSubscription = supabase.auth.onAuthStateChange((_event, sessionData) => {
-        setSupabaseUser(sessionData?.user || null);
-        setSupabaseLoading(false);
-      });
+      const authSubscription = supabase.auth.onAuthStateChange(
+        (_event, sessionData) => {
+          setSupabaseUser(sessionData?.user || null);
+          setSupabaseLoading(false);
+        },
+      );
       subscription = authSubscription.data.subscription;
     } catch {
       setSupabaseUser(null);
@@ -146,7 +196,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`${styles.navbarWrapper} ${mobileOpen ? styles.mobileNavOpen : ''}`} ref={navRef}>
+    <nav
+      className={`${styles.navbarWrapper} ${mobileOpen ? styles.mobileNavOpen : ""}`}
+      ref={navRef}
+    >
       <div className={styles.navContainer}>
         <Link href="/" className={styles.logo}>
           <Image
@@ -154,13 +207,13 @@ export default function Navbar() {
             alt="ResuGrow career platform logo for AI resume builder, ATS checker, and LinkedIn makeover"
             width={180}
             height={48}
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: "contain" }}
             priority
           />
         </Link>
 
         <button
-          className={`${styles.hamburger} ${mobileOpen ? styles.active : ''}`}
+          className={`${styles.hamburger} ${mobileOpen ? styles.active : ""}`}
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle navigation"
         >
@@ -170,107 +223,62 @@ export default function Navbar() {
         </button>
       </div>
 
-      <div className={`${styles.navLinks} ${mobileOpen ? styles.open : ''}`}>
-        {/* Resume Dropdown */}
-        <div
-          className={styles.dropdownWrapper}
-          onMouseEnter={() => handleMouseEnter('resume')}
-          onMouseLeave={handleMouseLeave}
-        >
-          <button
-            className={`${styles.navLink} ${activeDropdown === 'resume' ? styles.active : ''}`}
-            onClick={() => toggleDropdown('resume')}
+      <div className={`${styles.navLinks} ${mobileOpen ? styles.open : ""}`}>
+        {dropdownSections.map((section) => (
+          <div
+            key={section.key}
+            className={styles.dropdownWrapper}
+            onMouseEnter={() => handleMouseEnter(section.key)}
+            onMouseLeave={handleMouseLeave}
           >
-            Resume
-            <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          {activeDropdown === 'resume' && (
-            <div className={styles.dropdown}>
-              {resumeItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={styles.dropdownItem}
-                  onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
-                >
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Cover Letter Dropdown */}
-        <div
-          className={styles.dropdownWrapper}
-          onMouseEnter={() => handleMouseEnter('cover')}
-          onMouseLeave={handleMouseLeave}
-        >
-          <button
-            className={`${styles.navLink} ${activeDropdown === 'cover' ? styles.active : ''}`}
-            onClick={() => toggleDropdown('cover')}
-          >
-            Cover Letter
-            <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          {activeDropdown === 'cover' && (
-            <div className={styles.dropdown}>
-              {coverLetterItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={styles.dropdownItem}
-                  onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
-                >
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* LinkedIn Dropdown */}
-        <div
-          className={styles.dropdownWrapper}
-          onMouseEnter={() => handleMouseEnter('linkedin')}
-          onMouseLeave={handleMouseLeave}
-        >
-          <button
-            className={`${styles.navLink} ${activeDropdown === 'linkedin' ? styles.active : ''}`}
-            onClick={() => toggleDropdown('linkedin')}
-          >
-            LinkedIn
-            <span className={styles.navBadgeNew}>New</span>
-            <svg className={styles.chevron} width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          {activeDropdown === 'linkedin' && (
-            <div className={styles.dropdown}>
-              {linkedinItems.map((item) => (
-                <Link
-                  key={item.href + item.label}
-                  href={item.href}
-                  className={styles.dropdownItem}
-                  onClick={() => { setActiveDropdown(null); setMobileOpen(false); }}
-                >
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <Link href="/about" className={styles.navLink} onClick={() => setMobileOpen(false)}>
-          About Us
-        </Link>
-        <Link href="/contact" className={styles.navLink} onClick={() => setMobileOpen(false)}>
-          Contact Us
-        </Link>
+            <button
+              className={`${styles.navLink} ${activeDropdown === section.key ? styles.active : ""}`}
+              onClick={() => toggleDropdown(section.key)}
+            >
+              {section.label}
+              {section.badge && (
+                <span className={styles.navBadgeNew}>{section.badge}</span>
+              )}
+              <svg
+                className={styles.chevron}
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+              >
+                <path
+                  d="M3 4.5L6 7.5L9 4.5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            {activeDropdown === section.key && (
+              <div className={styles.dropdown}>
+                {section.items.map((item) => (
+                  <Link
+                    key={item.href + item.label}
+                    href={item.href}
+                    className={styles.dropdownItem}
+                    onClick={() => {
+                      setActiveDropdown(null);
+                      setMobileOpen(false);
+                    }}
+                  >
+                    <span>{item.label}</span>
+                    {item.badge && (
+                      <span className={styles.dropdownItemBadge}>
+                        {item.badge}
+                      </span>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
 
         {/* Auth Section */}
         {isAuthLoading ? (
@@ -285,20 +293,36 @@ export default function Navbar() {
                 {activeUser.image ? (
                   <Image
                     src={activeUser.image}
-                    alt={activeUser.name || 'User'}
+                    alt={activeUser.name || "User"}
                     width={32}
                     height={32}
                     className={styles.avatar}
                   />
                 ) : (
                   <div className={styles.avatarPlaceholder}>
-                    {activeUser.name ? activeUser.name.charAt(0).toUpperCase() : 'U'}
+                    {activeUser.name
+                      ? activeUser.name.charAt(0).toUpperCase()
+                      : "U"}
                   </div>
                 )}
               </div>
-              <span className={styles.userName}>{activeUser.name?.split(' ')[0]}</span>
-              <svg className={`${styles.chevron} ${userDropdownOpen ? styles.chevronRotate : ''}`} width="10" height="10" viewBox="0 0 10 10" fill="none">
-                <path d="M2 4L5 7L8 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <span className={styles.userName}>
+                {activeUser.name?.split(" ")[0]}
+              </span>
+              <svg
+                className={`${styles.chevron} ${userDropdownOpen ? styles.chevronRotate : ""}`}
+                width="10"
+                height="10"
+                viewBox="0 0 10 10"
+                fill="none"
+              >
+                <path
+                  d="M2 4L5 7L8 4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
 
@@ -307,10 +331,18 @@ export default function Navbar() {
                 <div className={styles.userDropdownHeader}>
                   <p className={styles.userEmail}>{activeUser.email}</p>
                 </div>
-                <Link href="/dashboard" className={styles.dropdownItem} onClick={() => setUserDropdownOpen(false)}>
+                <Link
+                  href="/dashboard"
+                  className={styles.dropdownItem}
+                  onClick={() => setUserDropdownOpen(false)}
+                >
                   <span>My Dashboard</span>
                 </Link>
-                <Link href="/settings" className={styles.dropdownItem} onClick={() => setUserDropdownOpen(false)}>
+                <Link
+                  href="/settings"
+                  className={styles.dropdownItem}
+                  onClick={() => setUserDropdownOpen(false)}
+                >
                   <span>Settings</span>
                 </Link>
                 <div className={styles.dropdownDivider} />
@@ -344,7 +376,11 @@ export default function Navbar() {
           </button>
         )}
 
-        <Link href="/resume/builder" className={`btn btn-primary ${styles.ctaBtn}`} onClick={() => setMobileOpen(false)}>
+        <Link
+          href="/resume/builder"
+          className={`btn btn-primary ${styles.ctaBtn}`}
+          onClick={() => setMobileOpen(false)}
+        >
           Build My Resume
         </Link>
       </div>

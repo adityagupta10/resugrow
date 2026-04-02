@@ -1808,6 +1808,25 @@ function ResumeBuilderPage() {
                   </div>
                 </div>
 
+                {shareUrl && (
+                  <div className={styles.dashboardLinkBanner} style={{
+                    marginTop: 24, 
+                    padding: 20, 
+                    borderRadius: 12, 
+                    background: 'var(--primary-50)', 
+                    border: '1px solid var(--primary-200)',
+                    textAlign: 'center'
+                  }}>
+                    <h4 style={{ margin: '0 0 8px', color: 'var(--text-primary)', fontSize: '16px' }}>✅ Securely Saved to your Account</h4>
+                    <p style={{ margin: '0 0 16px', color: 'var(--text-secondary)', fontSize: '14px' }}>
+                      You can return and edit this exact configuration later. 
+                    </p>
+                    <Link href="/dashboard" className="btn btn-secondary" style={{ display: 'inline-block' }}>
+                      Go to Dashboard
+                    </Link>
+                  </div>
+                )}
+
                 <div className={styles.rewriteBanner} style={{ marginTop: 32 }}>
                   <p className={styles.rewriteKicker}>Premium AI Upgrade</p>
                   <h3 className={styles.rewriteTitle}>One-click Recruiter Optimization</h3>

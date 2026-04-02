@@ -4,23 +4,23 @@ import Image from 'next/image';
 import { templates as templateData } from '../../../data/templates';
 import Testimonials from '@/components/Testimonials/Testimonials';
 import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
-import { useState } from 'react';
-
-'use client';
+import TemplateGallery from './client-gallery';
 
 export const metadata = createPageMetadata({
-  title: 'ATS-Friendly Resume Templates | Modern & Recruiter-Tested',
+  title: 'Free Resume Templates — ATS-Friendly & Recruiter-Tested (2026)',
   description:
-    'Browse resume templates optimized for ATS parsing and clean recruiter readability across industries.',
+    '15 free ATS-friendly resume templates designed by career experts. Clean layouts that pass applicant tracking systems and impress recruiters. Download as PDF instantly.',
   path: '/resume/templates',
-  keywords: ['resume templates', 'ATS templates', 'professional resume layout']
+  keywords: [
+    'free resume templates', 'ATS resume templates', 'professional resume templates',
+    'resume templates 2026', 'modern resume templates', 'resume layout',
+    'resume format', 'cv templates', 'resume template free download',
+  ]
 });
 
 const templates = templateData;
 
 export default function Templates() {
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
-  
   const softwareJsonLd = getSoftwareAppJsonLd({
     name: 'ResuGrow Resume Templates',
     description:
@@ -28,14 +28,6 @@ export default function Templates() {
     url: `${SITE_URL}/resume/templates`,
     price: '0.00',
   });
-
-  const handleTemplateClick = (template) => {
-    setSelectedTemplate(template);
-  };
-
-  const closeModal = () => {
-    setSelectedTemplate(null);
-  };
 
   return (
     <>
@@ -59,69 +51,7 @@ export default function Templates() {
         </div>
       </section>
 
-      <section className={styles.subpage}>
-        <div className={styles.subpageContainer}>
-          <div className={styles.templatesGallery}>
-            {templates.map((t) => (
-              <div key={t.name} className={styles.galleryCard} onClick={() => handleTemplateClick(t)}>
-                <div className={styles.galleryPreview}>
-                  <div className={styles.galleryDoc}>
-                    <Image
-                      src={t.image}
-                      alt={`${t.name} modern ATS resume template for professional job applications and recruiter screening`}
-                      fill
-                      className={styles.templateImg}
-                      style={{ objectFit: 'cover' }}
-                      sizes="(max-width: 900px) 100vw, 25vw"
-                    />
-                  </div>
-                </div>
-                <div className={styles.galleryInfo}>
-                  <h3 className={styles.galleryName}>{t.name}</h3>
-                  <p className={styles.galleryCategory}>{t.category}</p>
-                  <div className={styles.galleryTags}>
-                    {t.tags.map((tag) => (
-                      <span key={tag} className={styles.galleryTag}>{tag}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Modal for enlarged template view */}
-      {selectedTemplate && (
-        <div className={styles.modalOverlay} onClick={closeModal}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <button className={styles.modalClose} onClick={closeModal}>×</button>
-            <div className={styles.modalImage}>
-              <Image
-                src={selectedTemplate.image}
-                alt={`${selectedTemplate.name} enlarged resume template view`}
-                fill
-                style={{ objectFit: 'contain' }}
-                sizes="90vw"
-              />
-            </div>
-            <div className={styles.modalInfo}>
-              <h3>{selectedTemplate.name}</h3>
-              <p>{selectedTemplate.category}</p>
-              <div className={styles.modalTags}>
-                {selectedTemplate.tags.map((tag) => (
-                  <span key={tag} className={styles.galleryTag}>{tag}</span>
-                ))}
-              </div>
-              <div className={styles.modalActions}>
-                <Link href="/resume/ai-builder" className="btn btn-primary">
-                  Use This Template
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <TemplateGallery templates={templates} />
 
       <Testimonials 
         title="Templates that Get Hired" 
