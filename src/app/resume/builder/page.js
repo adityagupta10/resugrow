@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -512,7 +512,7 @@ function SuggestionsPopup({ isOpen, section, onSelect, onClose }) {
 // ══════════════════════════════════════════════════════════════════════════
 // MAIN PAGE
 // ══════════════════════════════════════════════════════════════════════════
-export default function ResumeBuilderPage() {
+function ResumeBuilderPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [data, setData] = useState(defaultData);
   const [activeTemplateId, setActiveTemplateId] = useState('classic');
@@ -1887,5 +1887,13 @@ export default function ResumeBuilderPage() {
         }}
       />
     </div>
+  );
+}
+
+export default function ResumeBuilderPageWrapper() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', fontSize: '14px' }}>Loading builder...</div>}>
+      <ResumeBuilderPage />
+    </Suspense>
   );
 }
