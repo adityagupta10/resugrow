@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import EmojiImage from '@/components/UI/EmojiImage';
 import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
@@ -37,6 +37,7 @@ function MetricTag({ label, value, tone = 'neutral' }) {
 const SARContent = () => {
   const searchParams = useSearchParams();
   const initialKeyword = searchParams.get('keyword') || '';
+  const outputRef = useRef(null);
 
   const [bullet, setBullet] = useState('');
   const [keyword, setKeyword] = useState(initialKeyword);
@@ -46,6 +47,13 @@ const SARContent = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [copiedIndex, setCopiedIndex] = useState(-1);
+
+  // Scroll to output when results appear
+  useEffect(() => {
+    if (results && outputRef.current) {
+      outputRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [results]);
 
   const inputMeta = useMemo(() => {
     const words = bullet.trim().split(/\s+/).filter(Boolean);
@@ -199,7 +207,7 @@ const SARContent = () => {
             </div>
           </div>
 
-          <div className={styles.panel}>
+          <div className={styles.panel} ref={outputRef}>
             <div className={styles.panelHeader}>
               <h2>Rewrite Output</h2>
               <p>Before/after scoring, SAR decomposition, and copy-ready bullets.</p>

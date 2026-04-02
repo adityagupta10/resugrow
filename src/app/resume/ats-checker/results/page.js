@@ -4,7 +4,10 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import EmojiImage from '@/components/UI/EmojiImage';
+import { generateFixSuggestions } from '@/lib/atsFixEngine';
+import { handleBulletFix } from '@/lib/bulletActions';
 import styles from './results.module.css';
 
 const Testimonials = dynamic(() => import('@/components/Testimonials/Testimonials'), {
@@ -26,10 +29,15 @@ function StatusIcon({ status }) {
 }
 
 export default function ATSResultsPage() {
+  const router = useRouter();
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [previewUrl, setPreviewUrl] = useState(null);
+
+  // Fix states
+  const [fixedBullets, setFixedBullets] = useState({});
+  const [fixedData, setFixedData] = useState(null);
+  const [isFixingAll, setIsFixingAll] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('atsResults');
@@ -73,16 +81,84 @@ export default function ATSResultsPage() {
   const { score, probability, gapAnalysis, categories, missingKeywords, verbAnalysis, fileInfo, extractedData, repetitionData } = results;
 
 
-  const renderFindings = (sectionData) => {
+  const renderFindings = (modId, sectionData) => {
     if (!sectionData?.findings) return null;
+
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {sectionData.findings.map((f, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}>
-            <StatusIcon status={f.status} />
-            <span>{f.message}</span>
-          </div>
-        ))}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {sectionData.findings.map((f, i) => {
+          // Identify fix scenarios
+          const fixes = generateFixSuggestions({
+            modId,
+            findings: [f],
+            context: { jobTitle: results?.extractedData?.personal?.currentPosition || 'General' }
+          });
+
+          const fixedKey = `${modId}-${i}`;
+          const currentFixed = fixedBullets[fixedKey];
+
+          return (
+            <div key={i} style={{ background: '#f8fafc', padding: '14px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+              {/* Original Finding */}
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                <StatusIcon status={f.status} />
+                <span style={{ fontSize: '13px', lineHeight: '1.5', color: '#334155' }}>{f.message}</span>
+              </div>
+
+              {/* Fix Buttons */}
+              {fixes.length > 0 && f.status !== 'pass' && (
+                <div style={{ marginTop: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {fixes.map((fix, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        // Normally this would parse the specific failed bullet, 
+                        // but here we just pass the message or a default string for local simulation
+                        const simulatedTargetText = f.message;
+                        const improved = handleBulletFix(fix.action, simulatedTargetText, 'General');
+                        setFixedBullets(prev => ({
+                          ...prev,
+                          [fixedKey]: improved
+                        }));
+                      }}
+                      style={{
+                        fontSize: '11px',
+                        padding: '6px 12px',
+                        background: '#0ea5e9',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontWeight: '600'
+                      }}
+                    >
+                      <EmojiImage emoji={fix.icon} size={14} /> {fix.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Show Fixed Version */}
+              {currentFixed && (
+                <div style={{
+                  marginTop: '12px',
+                  padding: '10px',
+                  background: '#ecfdf5',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  border: '1px solid #10b981',
+                  color: '#065f46'
+                }}>
+                  <strong>Improved Example:</strong><br />
+                  <span style={{ fontStyle: 'italic', display: 'block', marginTop: '4px' }}>{currentFixed}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -112,8 +188,8 @@ export default function ATSResultsPage() {
   };
 
   const moduleDescriptions = {
+    // Legacy
     readabilityExtraction: 'Analyzing text parsability and document word count.',
-    contactInfo: 'Checking for essential contact details like email and phone.',
     actionVerbs: 'Identifying high-impact verbs that demonstrate initiative.',
     impactMetrics: 'Scanning for quantifiable achievements and data points.',
     readability: 'Assessing how easy it is for a human and machine to read.',
@@ -124,17 +200,30 @@ export default function ATSResultsPage() {
     kwMatch: 'Analyzing keyword density and relevance to job descriptions.',
     formatting: 'Detecting potential layout issues that break ATS parsers.',
     spellCheck: 'Finding typos and grammatical errors that look unprofessional.',
-    fileMetadata: 'Checking file name and properties for professionalism.',
     tenseAlignment: 'Ensuring your experience is written in the correct tense.',
     cliches: 'Flagging generic buzzwords that lack specific meaning.',
     layoutArtifacts: 'Detecting "scrambled" text from complex layouts.',
     employmentGaps: 'Highlighting gaps in your career timeline.',
-    linkedinPolish: 'Checking if your LinkedIn profile URL is professional.'
+    linkedinPolish: 'Checking if your LinkedIn profile URL is professional.',
+    // New Deterministic
+    pronounUsage: 'Checking for unprofessional first-person pronouns (I, me, my).',
+    bulletLength: 'Analyzing bullet point length for optimal recruiter skimmability.',
+    emailProfessionalism: 'Evaluating email address format for professional standards.',
+    dateConsistency: 'Checking timeline dates for uniform formatting.',
+    parserSafety: 'Detecting unsafe characters/symbols that break legacy ATS systems.',
+    headerStandardization: 'Verifying section headers use standard, recognizable naming.',
+    capsDensity: 'Analyzing capitalization to ensure text isn\'t "shouting".',
+    linkFormatting: 'Checking URLs for clean formatting and tracking parameters.',
+    contactCompleteness: 'Checking for essential contact details like email and phone.',
+    acronymOveruse: 'Detecting excessive unexplained acronym usage.',
+    sectionOrder: 'Verifying structural flow follows chronological best practices.',
+    responsibilityVsAchievement: 'Penalizing "responsible for" phrasing in favor of achievement metrics.',
+    fileNameProfessionalism: 'Checking file name properties for basic professionalism.'
   };
 
   const moduleIcons = {
+    // Legacy
     readabilityExtraction: '📏',
-    contactInfo: '📇',
     actionVerbs: '💪',
     impactMetrics: '📊',
     readability: '📖',
@@ -145,12 +234,25 @@ export default function ATSResultsPage() {
     kwMatch: '🔍',
     formatting: '📝',
     spellCheck: '✍️',
-    fileMetadata: '📁',
     tenseAlignment: '⏳',
     cliches: '🫧',
     layoutArtifacts: '🧩',
     employmentGaps: '📅',
-    linkedinPolish: '✨'
+    linkedinPolish: '✨',
+    // New Deterministic
+    pronounUsage: '👤',
+    bulletLength: '📏',
+    emailProfessionalism: '📧',
+    dateConsistency: '🗓️',
+    parserSafety: '🛡️',
+    headerStandardization: '🏷️',
+    capsDensity: '🔠',
+    linkFormatting: '🔗',
+    contactCompleteness: '📇',
+    acronymOveruse: '🔤',
+    sectionOrder: '🧱',
+    responsibilityVsAchievement: '🏆',
+    fileNameProfessionalism: '📁'
   };
 
   const categoryIcons = {
@@ -187,6 +289,79 @@ export default function ATSResultsPage() {
                 We&apos;ve analyzed your resume against modern ATS benchmarks.
                 Below is a category-by-category breakdown of your performance.
               </p>
+
+              {/* Global Auto-Fix Button */}
+              {results && (
+                <div style={{ marginTop: '24px', marginBottom: '8px' }}>
+                  <button
+                    onClick={async () => {
+                      setIsFixingAll(true);
+                      // Simulate short network delay for processing text
+                      await new Promise(r => setTimeout(r, 800));
+
+                      const improved = { ...extractedData };
+                      if (improved.structuredData?.experience) {
+                        improved.structuredData.experience = improved.structuredData.experience.map(exp => {
+                          if (!exp.bullets) return exp;
+                          const fixedBullets = exp.bullets.map(b => handleBulletFix('IMPROVE_BULLET', b, 'General'));
+                          return { ...exp, bullets: fixedBullets };
+                        });
+                      }
+
+                      setFixedData(improved);
+                      localStorage.setItem('atsFixedResumeData', JSON.stringify(improved));
+                      setIsFixingAll(false);
+                    }}
+                    disabled={isFixingAll}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      fontSize: '14px',
+                      fontWeight: '800',
+                      padding: '14px 24px',
+                      width: '100%',
+                      justifyContent: 'center',
+                      background: isFixingAll ? '#e2e8f0' : '#10b981',
+                      color: isFixingAll ? '#64748b' : 'white',
+                      border: 'none',
+                      borderRadius: '12px',
+                      cursor: isFixingAll ? 'wait' : 'pointer',
+                      transition: 'background 0.2s'
+                    }}
+                  >
+                    {isFixingAll ? (
+                      <><EmojiImage emoji="⏳" size={18} /> Fixing all issues automatically...</>
+                    ) : (
+                      <>
+                        <EmojiImage emoji="⚡" size={18} /> Fix All Issues Automatically
+                        <span style={{ fontSize: '12px', opacity: 0.9, fontWeight: '500' }}> (Send to Builder)</span>
+                      </>
+                    )}
+                  </button>
+
+                  {fixedData && (
+                    <div style={{ marginTop: '12px' }}>
+                      <Link
+                        href="/resume/builder?useFixed=true"
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          textAlign: 'center',
+                          padding: '12px',
+                          background: '#0f172a',
+                          color: 'white',
+                          borderRadius: '12px',
+                          fontWeight: '700',
+                          fontSize: '14px'
+                        }}
+                      >
+                        Apply All Fixes & Launch AI Builder →
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Category Quick Navigation Summary */}
               <div style={{ 
@@ -261,10 +436,25 @@ export default function ATSResultsPage() {
                       {moduleDescriptions[modId]}
                     </p>
 
-                    {renderFindings(mod)}
+                    {renderFindings(modId, mod)}
 
                     {/* Module-specific logic */}
-                    {modId === 'contactInfo' && extractedData?.contact && (
+                    {modId === 'pronounUsage' && mod.findings?.some(f => f.status === 'error') && mod.badWords && (
+                      <div style={{ marginTop: '16px', background: '#fffbeb', border: '1px solid #fde68a', padding: '12px', borderRadius: '8px' }}>
+                        <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#b45309', marginBottom: '8px' }}>
+                          Remove these words (ATS Penalty):
+                        </h4>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                          {mod.badWords.map(word => (
+                            <span key={word} style={{ background: '#fef3c7', color: '#92400e', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
+                              <strike>{word}</strike>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {modId === 'contactCompleteness' && extractedData?.contact && (
                       <div className={styles.checkList} style={{ marginTop: '16px' }}>
                         {Object.entries(extractedData.contact).map(([label, value]) => (
                           <div key={label} className={styles.checkItem} style={{ display: 'flex', gap: '8px', fontSize: '13px', marginBottom: '4px' }}>

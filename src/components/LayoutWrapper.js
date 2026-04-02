@@ -6,7 +6,7 @@ import Footer from '@/components/Footer/Footer';
 
 export default function LayoutWrapper({ children }) {
   const pathname = usePathname();
-  const hideChrome = pathname === '/login' || pathname === '/resume/builder' || pathname === '/cover-letter/create' || pathname === '/cover-letter/builder';
+  const hideChrome = pathname === '/login' || pathname === '/resume/builder' || pathname === '/cover-letter/create';
 
   return (
     <>

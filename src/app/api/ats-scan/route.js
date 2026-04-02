@@ -16,7 +16,22 @@ import { INDUSTRY_MAPPINGS } from '@/constants/industry_keywords';
 import semanticDict from '@/constants/semantic_dict.json';
 import { parsePDF } from '@/lib/pdf-extract';
 import { detectDocumentType } from '@/lib/documentAnalyzer';
-
+import { parseResumeText } from '@/lib/resume-parser';
+import { 
+  calculatePronounUsageScore,
+  calculateBulletLengthScore,
+  calculateEmailProfessionalismScore,
+  calculateDateConsistencyScore,
+  calculateParserSafetyScore,
+  calculateHeaderStandardizationScore,
+  calculateCapsDensityScore,
+  calculateLinkFormattingScore,
+  calculateContactCompletenessScore,
+  calculateAcronymOveruseScore,
+  calculateSectionOrderScore,
+  calculateResponsibilityVsAchievementScore,
+  calculateFileNameProfessionalismScore 
+} from '@/lib/ats-modules';
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
@@ -80,55 +95,88 @@ function scoreReadabilityExtraction(text) {
 // ---------------------------------------------------------------------------
 // Impact Modules
 // ---------------------------------------------------------------------------
-async function scoreActionVerbs(text) {
+async function scoreActionVerbs(allBullets) {
   const nlpModule = await import('compromise');
   const nlp = nlpModule.default || nlpModule;
   if (typeof nlp !== 'function') {
     console.error('Compromise NLP is not a function:', nlp);
     return { score: 5, max: 15, findings: [], strongVerbs: [], weakVerbs: [] };
   }
+  
+  if (!allBullets || allBullets.length === 0) {
+    return { 
+      score: 0, 
+      max: 15, 
+      findings: [{ status: 'warning', message: 'No experience bullets found to analyze for action verbs. Check formatting.' }], 
+      strongVerbs: [], 
+      weakVerbs: [] 
+    };
+  }
+
   const strongFound = [];
   const weakFound = [];
-  const lines = text.split(/\n/).map(l => l.trim()).filter(l => l.length > 10);
-  for (const line of lines) {
-    const doc = nlp(line);
+  
+  for (const bullet of allBullets) {
+    if (bullet.length < 10) continue;
+    
+    const doc = nlp(bullet);
     const verbs = doc.verbs().toInfinitive().out('array');
-    const firstWord = line.split(/\s+/)[0].toLowerCase().replace(/[^a-z]/g, '');
+    const firstWord = bullet.split(/\s+/)[0].toLowerCase().replace(/[^a-z]/g, '');
+    
+    // Focus specifically on the first word representing the core action, though we check all verbs for generic weakness
     for (const sv of STRONG_VERBS) if (firstWord === sv || verbs.includes(sv)) if (!strongFound.includes(sv)) strongFound.push(sv);
     for (const wv of WEAK_VERBS) if (firstWord === wv || verbs.includes(wv)) if (!weakFound.includes(wv)) weakFound.push(wv);
   }
+  
   let score = Math.min(strongFound.length * 2, 15);
   score = Math.max(0, score - weakFound.length);
   if (strongFound.length > 0 && score < 5) score = 5;
+  
   const findings = [];
-  if (strongFound.length > 0) findings.push({ status: 'pass', message: `Strong verbs detected: ${strongFound.slice(0, 5).join(', ')}.` });
+  if (strongFound.length > 0) findings.push({ status: 'pass', message: `Strong verbs detected in bullets: ${strongFound.slice(0, 5).join(', ')}.` });
   if (weakFound.length > 0) findings.push({ status: 'warning', message: `Weak/passive verbs found: ${weakFound.join(', ')}.` });
-  if (strongFound.length === 0) findings.push({ status: 'error', message: 'No strong action verbs detected.' });
+  if (strongFound.length === 0) findings.push({ status: 'error', message: 'No strong action verbs detected at the start of your bullets.' });
+  
   return { score, max: 15, findings, strongVerbs: strongFound, weakVerbs: weakFound };
 }
 
-function scoreImpactMetrics(text) {
-  const lines = text.split(/\n/).map(l => l.trim()).filter(l => l.length > 10);
+function scoreImpactMetrics(allBullets) {
   const metricPattern = /(\d+%|\$[\d,.]+|\b\d{2,}\b)/;
   
+  if (!allBullets || allBullets.length === 0) {
+    return { 
+      score: 0, 
+      max: 15, 
+      findings: [{ status: 'warning', message: 'No experience bullets found to analyze for quantitative metrics.' }] 
+    };
+  }
+
   let matches = 0;
   let strongBullets = 0;
   
-  for (const l of lines) {
-    if (metricPattern.test(l)) {
+  for (const bullet of allBullets) {
+    if (metricPattern.test(bullet)) {
       matches++;
-      const hasActionVerb = STRONG_VERBS.some(v => l.toLowerCase().includes(v));
-      const hasNumber = /\d/.test(l);
-      const hasPercentage = /%/.test(l);
+      const hasActionVerb = STRONG_VERBS.some(v => bullet.toLowerCase().includes(v));
+      const hasNumber = /\d/.test(bullet);
+      const hasPercentage = /%/.test(bullet);
       if (hasActionVerb && hasNumber && hasPercentage) strongBullets++;
     }
   }
   
-  let score = Math.min((matches * 2) + (strongBullets * 3), 15);
+  // Density approach: Ideal density is around 30-40% of bullets containing metrics
+  const density = matches / allBullets.length;
+  let score = Math.min(15, Math.max(0, Math.round((density / 0.35) * 15)));
+  
+  // Elite bonus
+  if (strongBullets > 0) {
+    score = Math.min(15, score + (strongBullets * 2));
+  }
+  
   const findings = [];
-  if (matches > 0) findings.push({ status: 'pass', message: `${matches} bullet points include metrics (%, $, numbers).` });
+  if (matches > 0) findings.push({ status: 'pass', message: `${Math.round(density * 100)}% of bullets include metrics (${matches} total).` });
   if (strongBullets > 0) findings.push({ status: 'pass', message: `Found ${strongBullets} Elite "Strong" bullets (Verb + Number + %).` });
-  if (matches === 0) findings.push({ status: 'warning', message: 'No metrics (%, $) found in bullets.' });
+  if (matches === 0) findings.push({ status: 'warning', message: 'No metrics (%, $) found in any experience bullets.' });
   
   return { score, max: 15, findings };
 }
@@ -525,6 +573,10 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
+    // 1.8. Execute Robust Resume Parser
+    const structuredData = parseResumeText(text);
+    const allBullets = structuredData.experience.flatMap(job => job.bullets) || [];
+
     // Extraction for UI lists
     const extractedData = {
       contact: {
@@ -532,27 +584,29 @@ export async function POST(request) {
         phone: (text.match(CONTACT_PATTERNS.phone)?.[0] || 'Not found').trim(),
         linkedin: (text.match(CONTACT_PATTERNS.linkedin)?.[0] || 'Not found').trim()
       },
-      sections: Object.entries(SECTION_PATTERNS)
-        .filter(([name, pattern]) => pattern.test(text))
-        .map(([name]) => name.charAt(0).toUpperCase() + name.slice(1))
+      sections: Object.keys(structuredData).map(name => name.charAt(0).toUpperCase() + name.slice(1)),
+      structuredData 
     };
 
-    // 2. Score Individual Modules
-    const contactInfo = scoreContactInfo(text);
+    // 2. RUN ALL MODULES
+
+    // --- Legacy Foundation & Technical ---
     const readabilityExtraction = scoreReadabilityExtraction(text);
-    const fileMetadata = { score: fileInfo.isPdf ? 5 : 3, max: 5, findings: [{ status: fileInfo.isPdf ? 'pass' : 'warning', message: `File format: ${fileInfo.type}. ${fileInfo.isPdf ? 'Ideal' : 'Consider PDF'}.` }] };
-    
-    const actionVerbs = await scoreActionVerbs(text);
-    const impactMetrics = scoreImpactMetrics(text);
+    const formatting = scoreFormatting(text);
+    const spellCheck = scoreSpellCheck(text);
+    const layoutArtifacts = scoreLayoutArtifacts(text, industryMode);
+    const employmentGaps = scoreEmploymentGaps(text);
+    const linkedinPolish = scoreLinkedInPolish(extractedData);
+
+    // --- Legacy Impact & Relevance ---
+    const actionVerbs = await scoreActionVerbs(allBullets);
+    const impactMetrics = scoreImpactMetrics(allBullets);
     const readability = scoreReadability(text);
     const repetition = scoreRepetition(text);
     const tenseAlignment = await scoreTenseAlignment(text);
     const cliches = scoreCliches(text);
-
     const sections = scoreSections(text);
-    
-    // Evaluate standard Hard Skills
-    const hardSkills = scoreSkills(text, 'hard'); // defaults to global HARD_SKILLS_KEYWORDS
+    const hardSkills = scoreSkills(text, 'hard'); 
     
     // Apply Bonus Points for Industry-Specific Keywords
     if (industryMode && INDUSTRY_MAPPINGS[industryMode]) {
@@ -565,11 +619,11 @@ export async function POST(request) {
 
       if (industryFound.length > 0) {
         const bonusPoints = industryFound.length * 2;
-        hardSkills.score = Math.min(hardSkills.score + bonusPoints, 15); // Cap at 15 with bonus
-        hardSkills.max = 15; // Increase max potential if applying for specific industry
+        hardSkills.score = Math.min(hardSkills.score + bonusPoints, 15);
+        hardSkills.max = 15;
         hardSkills.findings.push({ 
           status: 'pass', 
-          message: `Bonus: Found ${industryFound.length} industry keywords for ${industryMode}: ${industryFound.slice(0, 5).join(', ')}. (+${bonusPoints} pts)` 
+          message: `Bonus: Found ${industryFound.length} industry keywords for ${industryMode}. (+${bonusPoints} pts)` 
         });
       }
     }
@@ -577,41 +631,60 @@ export async function POST(request) {
     const softSkills = scoreSkills(text, 'soft');
     const kwMatch = await scoreKeywordMatch(text, jd);
 
-    const formatting = scoreFormatting(text);
-    const spellCheck = scoreSpellCheck(text);
-    const layoutArtifacts = scoreLayoutArtifacts(text, industryMode);
-    const employmentGaps = scoreEmploymentGaps(text);
-    const linkedinPolish = scoreLinkedInPolish(extractedData);
+    // --- NEW Deterministic Modules ---
+    const pronounUsage = calculatePronounUsageScore(text);
+    const bulletLength = calculateBulletLengthScore(allBullets);
+    const emailProfessionalism = calculateEmailProfessionalismScore(extractedData.contact.email);
+    const dateConsistency = calculateDateConsistencyScore(text);
+    const parserSafety = calculateParserSafetyScore(text);
+    const headerStandardization = calculateHeaderStandardizationScore(extractedData.sections);
+    const capsDensity = calculateCapsDensityScore(text);
+    const linkFormatting = calculateLinkFormattingScore(text);
+    const contactCompleteness = calculateContactCompletenessScore(extractedData.contact);
+    const acronymOveruse = calculateAcronymOveruseScore(text);
+    const sectionOrder = calculateSectionOrderScore(extractedData.sections);
+    const responsibilityVsAchievement = calculateResponsibilityVsAchievementScore(allBullets);
+    const fileNameProfessionalism = calculateFileNameProfessionalismScore(fileInfo);
 
-    // 3. Group into Categories
+
+    // 3. Group into Categories (Dynamic Max Points)
+    const foundationModules = { contactCompleteness, readabilityExtraction, fileNameProfessionalism, dateConsistency, sectionOrder, headerStandardization, emailProfessionalism };
+    const impactModules = { actionVerbs, impactMetrics, readability, repetition, tenseAlignment, cliches, bulletLength, responsibilityVsAchievement };
+    const relevanceModules = { sections, hardSkills, softSkills, kwMatch, acronymOveruse };
+    const technicalModules = { formatting, spellCheck, layoutArtifacts, employmentGaps, linkedinPolish, pronounUsage, capsDensity, linkFormatting, parserSafety };
+
+    // Calculate Dynamic Maxes and Scores
+    const sumCat = (mods) => Object.values(mods).reduce((acc, mod) => acc + (mod.max || 0), 0);
+    const sumScore = (mods) => Object.values(mods).reduce((acc, mod) => acc + (mod.score || 0), 0);
+
     const categories = {
       foundation: {
         title: 'Foundation',
         summary: 'These are the non-negotiables. If an ATS cannot extract your text or find your contact details, your application may be automatically discarded.',
-        score: contactInfo.score + readabilityExtraction.score + fileMetadata.score,
-        max: 25,
-        modules: { contactInfo, readabilityExtraction, fileMetadata }
+        score: sumScore(foundationModules),
+        max: sumCat(foundationModules),
+        modules: foundationModules
       },
       impact: {
         title: 'Impact',
-        summary: 'We analyze your use of strong action verbs, quantifiable metrics, and readability to ensure your achievements stand out instantly.',
-        score: actionVerbs.score + impactMetrics.score + readability.score + repetition.score + tenseAlignment.score + cliches.score,
-        max: 50,
-        modules: { actionVerbs, impactMetrics, readability, repetition, tenseAlignment, cliches }
+        summary: 'We analyze your use of strong action verbs, quantifiable metrics, and optimal bullet length ensuring your achievements stand out instantly.',
+        score: sumScore(impactModules),
+        max: sumCat(impactModules),
+        modules: impactModules
       },
       relevance: {
         title: 'Relevance',
         summary: 'Alignment with job requirements. We check for core hard/soft skills and keyword density critical for passing algorithmic filters.',
-        score: sections.score + hardSkills.score + softSkills.score + (kwMatch.skipped ? 0 : kwMatch.score),
-        max: kwMatch.skipped ? 30 : 45,
-        modules: { sections, hardSkills, softSkills, kwMatch }
+        score: sumScore(relevanceModules),
+        max: sumCat(relevanceModules),
+        modules: relevanceModules
       },
       technical: {
         title: 'Trust & Layout',
-        summary: 'Technical glitches like spelling errors or complex formatting can scramble your data. This section ensures your resume is bot-ready.',
-        score: formatting.score + spellCheck.score + layoutArtifacts.score + employmentGaps.score + linkedinPolish.score,
-        max: 25,
-        modules: { formatting, spellCheck, layoutArtifacts, employmentGaps, linkedinPolish }
+        summary: 'Technical glitches like spelling errors, unsafe characters, or first-person pronouns can scramble your data and annoy recruiters.',
+        score: sumScore(technicalModules),
+        max: sumCat(technicalModules),
+        modules: technicalModules
       }
     };
 
