@@ -19,19 +19,19 @@ const heroPhrases = [
 
 const heroResumeSlides = [
   {
-    src: '/hero-images/dbsuagbknhl0ry64xurq.webp',
+    src: '/hero-images/ats-optimized-resume-builder-preview.webp',
     alt: 'AI resume builder sample with ATS-optimized professional resume layout for job seekers'
   },
   {
-    src: '/hero-images/nlut5socqakwn6twlcjx.webp',
+    src: '/hero-images/professional-resume-template-ats-friendly.webp',
     alt: 'ATS-friendly resume template example designed to pass applicant tracking systems'
   },
   {
-    src: '/hero-images/nypg6oywh2aeh6rf2ukj.webp',
+    src: '/hero-images/ai-resume-builder-job-application-template.webp',
     alt: 'Professional resume format template for high-converting job applications and recruiter screening'
   },
   {
-    src: '/hero-images/tqrzbjupdasigynxnsgz.webp',
+    src: '/hero-images/resume-template-interview-call-rate-boost.webp',
     alt: 'Best resume template preview to improve interview call rate and hiring visibility'
   }
 ];

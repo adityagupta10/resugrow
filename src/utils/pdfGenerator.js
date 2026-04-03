@@ -1,8 +1,8 @@
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
-
 /**
  * Generates a PDF Blob from a DOM element.
+ * Libraries (html2canvas ~700KB, jsPDF ~300KB) are loaded lazily
+ * so they don't bloat the initial page bundle.
+ *
  * @param {HTMLElement} element - The DOM element to capture.
  * @param {object} [options]
  * @param {number} [options.scale] - Canvas scale multiplier.
@@ -13,6 +13,12 @@ export const generatePDFBlob = async (element, options = {}) => {
   if (!element) return null;
 
   try {
+    // Dynamic imports — only fetched when user actually generates a PDF
+    const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+      import('html2canvas'),
+      import('jspdf'),
+    ]);
+
     const scale = typeof options.scale === 'number' ? options.scale : 2;
     const marginMm = typeof options.marginMm === 'number' ? options.marginMm : 10;
 

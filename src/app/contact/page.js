@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import emailjs from '@emailjs/browser';
 import { Mail, MapPin, Clock, MessageSquare, CheckCircle, XCircle } from 'lucide-react';
 import styles from '../subpage.module.css';
 
@@ -9,25 +8,26 @@ export default function Contact() {
   const [status, setStatus] = useState('idle'); // idle, loading, success, error
   const form = useRef();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
 
-    emailjs.sendForm(
-      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-      form.current,
-      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-    )
-      .then(() => {
-        setStatus('success');
-        form.current.reset();
-        setTimeout(() => setStatus('idle'), 5000);
-      }, (error) => {
-        console.error('EmailJS Error:', error);
-        setStatus('error');
-        setTimeout(() => setStatus('idle'), 5000);
-      });
+    try {
+      const emailjs = (await import('@emailjs/browser')).default;
+      await emailjs.sendForm(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+        form.current,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      );
+      setStatus('success');
+      form.current.reset();
+      setTimeout(() => setStatus('idle'), 5000);
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
   };
 
   return (

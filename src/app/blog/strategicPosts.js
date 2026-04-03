@@ -7,7 +7,7 @@ const commonToolLinks = [
 
 const fallbackScreenshots = [
   {
-    src: '/templates/template-3.png',
+    src: '/templates/executive-leadership-resume-design-3.png',
     alt: 'ATS-friendly resume template preview showing clean single-column formatting for better parsing',
     caption: 'Example of a clean ATS-friendly layout that preserves structure.'
   },
@@ -21,79 +21,79 @@ const fallbackScreenshots = [
 const screenshotSets = {
   'ats-friendly-resume-guide-2026': [
     {
-      src: '/templates/template-3.png',
+      src: '/templates/executive-leadership-resume-design-3.png',
       alt: 'ATS-friendly resume PDF layout showing clean one-column structure for parser readability',
       caption: 'ATS-safe structure: simple heading hierarchy and scan-friendly formatting.'
     },
     {
-      src: '/templates/template-5.png',
+      src: '/templates/tech-software-engineer-resume-template-5.png',
       alt: 'Minimal resume template screenshot used for ATS parsing reliability examples',
       caption: 'Minimal layouts reduce extraction errors in many applicant tracking systems.'
     }
   ],
   'resume-word-vs-pdf-recruiter-preference': [
     {
-      src: '/templates/template-1.png',
+      src: '/templates/ats-friendly-professional-resume-template-1.png',
       alt: 'Executive resume template screenshot used for PDF format consistency example',
       caption: 'PDF preserves visual layout for recruiter-facing review.'
     },
     {
-      src: '/templates/template-11.png',
+      src: '/templates/project-manager-agile-resume-template-11.png',
       alt: 'Corporate resume template screenshot used for Word versus PDF formatting comparison',
       caption: 'Maintain a DOCX backup when a role specifically requests Word format.'
     }
   ],
   'how-to-quantify-resume-metrics-roi': [
     {
-      src: '/templates/template-4.png',
+      src: '/templates/entry-level-graduate-resume-format-4.png',
       alt: 'Impact-focused resume screenshot with quantified results and percentage outcomes',
       caption: 'Strong bullets combine action, context, and measurable impact.'
     },
     {
-      src: '/hero-images/dbsuagbknhl0ry64xurq.webp',
+      src: '/hero-images/ats-optimized-resume-builder-preview.webp',
       alt: 'Resume builder screenshot for rewriting weak bullets into quantified achievements',
       caption: 'Use structured rewrite workflows to turn vague bullets into evidence-backed outcomes.'
     }
   ],
   'where-to-put-certifications-and-technical-skills-resume': [
     {
-      src: '/templates/template-6.png',
+      src: '/templates/minimalist-clean-resume-builder-template-6.png',
       alt: 'Technical resume screenshot showing grouped skills section and certification placement',
       caption: 'Group technical stack by category for recruiter scan speed.'
     },
     {
-      src: '/templates/template-14.png',
+      src: '/templates/freelance-consultant-cv-template-14.png',
       alt: 'Professional resume screenshot highlighting certifications and role-relevant tools',
       caption: 'Place certifications where they support role-fit, not as isolated badges.'
     }
   ],
   'sales-executive-resume-high-conversion-guide': [
     {
-      src: '/templates/template-9.png',
+      src: '/templates/data-science-analytics-resume-template-9.png',
       alt: 'Sales executive resume screenshot with quota attainment and pipeline metrics',
       caption: 'Sales resumes should foreground commercial outcomes and quota ownership.'
     },
     {
-      src: '/templates/template-10.png',
+      src: '/templates/healthcare-medical-resume-format-10.png',
       alt: 'Revenue-focused resume screenshot for B2B sales role positioning',
       caption: 'Structure bullets around revenue, conversion, and account expansion signals.'
     }
   ],
   'martech-resume-formatting-digital-ops-analytics': [
     {
-      src: '/templates/template-13.png',
+      src: '/templates/customer-success-resume-design-13.png',
       alt: 'MarTech resume screenshot showing analytics tools and attribution workflow experience',
       caption: 'MarTech resumes work best when tools and outcomes are presented together.'
     },
     {
-      src: '/hero-images/nlut5socqakwn6twlcjx.webp',
+      src: '/hero-images/professional-resume-template-ats-friendly.webp',
       alt: 'Digital marketing resume screenshot with operations and analytics stack organization',
       caption: 'Keep stack sections organized across attribution, analytics, and activation.'
     }
   ],
   'how-to-explain-career-gaps-with-confidence': [
     {
-      src: '/templates/template-12.png',
+      src: '/templates/sales-executive-resume-layout-12.png',
       alt: 'Resume screenshot showing transparent career gap framing and recent upskilling evidence',
       caption: 'Concise gap context plus current proof builds recruiter trust.'
     },
@@ -105,31 +105,31 @@ const screenshotSets = {
   ],
   'resume-action-verbs-list-50': [
     {
-      src: '/templates/template-2.png',
+      src: '/templates/modern-creative-cv-layout-template-2.png',
       alt: 'Resume screenshot with action-oriented achievement bullets and stronger verb usage',
       caption: 'Action verbs improve clarity and ownership signals in first-pass review.'
     },
     {
-      src: '/hero-images/tqrzbjupdasigynxnsgz.webp',
+      src: '/hero-images/resume-template-interview-call-rate-boost.webp',
       alt: 'Resume optimization screenshot for replacing passive phrasing with impact-driven verbs',
       caption: 'Upgrade passive language with role-accurate verbs and measurable outcomes.'
     }
   ],
   'tailoring-resume-for-multiple-jobs-at-scale': [
     {
-      src: '/templates/template-8.png',
+      src: '/templates/finance-accounting-professional-cv-8.png',
       alt: 'Resume versioning screenshot for tailoring one master resume across multiple roles',
       caption: 'Use a master resume and clone role-specific versions for faster customization.'
     },
     {
-      src: '/hero-images/nypg6oywh2aeh6rf2ukj.webp',
+      src: '/hero-images/ai-resume-builder-job-application-template.webp',
       alt: 'ATS checker screenshot used to validate tailored resume versions before submission',
       caption: 'Validate each customized version against job-specific keyword requirements.'
     }
   ],
   'recruiter-6-second-resume-scan-guide': [
     {
-      src: '/templates/template-7.png',
+      src: '/templates/marketing-manager-creative-resume-7.png',
       alt: 'Recruiter-friendly resume screenshot optimized for six-second scan clarity',
       caption: 'Place identity, role fit, and outcomes where the eye lands first.'
     },

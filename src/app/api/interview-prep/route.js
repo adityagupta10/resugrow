@@ -6,6 +6,10 @@ const ROLE_KEYWORDS = {
   frontend_developer: ['frontend','front-end','react developer','angular developer','vue developer','ui developer'],
   backend_developer: ['backend','back-end','node developer','java developer','python developer','api developer'],
   fullstack_developer: ['fullstack','full stack','full-stack'],
+  mobile_developer: ['mobile developer','ios developer','android developer','flutter','react native','swift','kotlin'],
+  cloud_architect: ['cloud architect','solutions architect','aws architect','azure architect'],
+  cybersecurity_engineer: ['security engineer','cybersecurity','infosec','penetration tester','soc analyst'],
+  qa_engineer: ['qa engineer','sdet','quality assurance','test engineer','automation tester'],
   data_scientist: ['data scientist','machine learning','ml engineer','ai engineer','deep learning'],
   data_analyst: ['data analyst','business intelligence','bi analyst','analytics'],
   product_manager: ['product manager','product owner','pm ','p.m.'],
@@ -16,7 +20,9 @@ const ROLE_KEYWORDS = {
   hr_manager: ['hr manager','human resources','talent acquisition','recruiter'],
   sales_manager: ['sales manager','account executive','business development','account manager'],
   finance_analyst: ['finance analyst','financial analyst','fp&a','investment analyst'],
+  executive: ['ceo','cto','cmo','cfo','coo','vp ','vice president','chief','head of'],
 };
+
 
 const SENIORITY_KEYWORDS = {
   junior: ['junior','jr.','entry level','fresher','graduate','associate','intern'],
@@ -100,6 +106,36 @@ const BEHAVIORAL_TEMPLATES = [
     kp: ['How you mapped priorities','Communication approach with each stakeholder','Framework you used to decide','Outcome'],
     time: '2–3 min',
     followUp: ['What did you use to track priorities?','How did stakeholders react?'],
+  },
+  {
+    q: 'Tell me about a time you took a calculated risk and it backfired. How did you recover?',
+    kp: ['Risk assessment process','Point of failure','Immediate recovery steps','Long-term adjustment'],
+    time: '3 min',
+    followUp: ['Would you take the same risk again?','How did leadership react?'],
+  },
+  {
+    q: 'Describe a time you navigated an ambiguous project with no clear requirements or endpoint.',
+    kp: ['How you defined scope boundaries','Iterative discovery approach','Check-ins with stakeholders','Project resolution'],
+    time: '2–3 min',
+    followUp: ['How do you handle the stress of ambiguity?','Were the stakeholders satisfied with the defined scope?'],
+  },
+  {
+    q: 'Tell me about a time you had to adapt your communication style to work effectively with someone.',
+    kp: ['Why your original style failed','How you analyzed their preference','Specific adjustments made','Result of the change'],
+    time: '2 min',
+    followUp: ['Have you incorporated that style permanently?','How do you handle a team with diverse styles?'],
+  },
+  {
+    q: 'Walk me through a time you had to give difficult or critical feedback to a peer.',
+    kp: ['Preparation for the conversation','Empathy and framing used','Their immediate reaction','Long-term behavioral change'],
+    time: '2–3 min',
+    followUp: ['Did it damage the working relationship?','What feedback did they give you?'],
+  },
+  {
+    q: 'Give an example of a time you stepped outside your official role to help the team succeed.',
+    kp: ['Gap identified','Why you specifically stepped in','How you managed your actual duties','Result for the team'],
+    time: '2 min',
+    followUp: ['Did this become a permanent part of your role?','How did your manager react?'],
   },
 ];
 
@@ -426,6 +462,76 @@ const TECHNICAL_TEMPLATES = {
       time: '2 min',
     },
   ],
+  mobile_developer: [
+    {
+      q: 'How do you manage memory and prevent leaks in a large mobile application?',
+      kp: ['Profiling tools','ARC/Garbage collection','Retain cycles','Image caching strategy'],
+      diff: 'hard',
+      time: '3 min',
+    },
+    {
+      q: 'Describe your approach to handling offline capabilities and data syncing in a mobile app.',
+      kp: ['Local database choices','Conflict resolution','Background fetch','UX during offline mode'],
+      diff: 'medium',
+      time: '2–3 min',
+    },
+  ],
+  cloud_architect: [
+    {
+      q: 'Walk me through how you would design a multi-region active-active architecture for high availability.',
+      kp: ['Data replication strategy','Global traffic routing (Route53 etc)','Failover automation','Latency considerations'],
+      diff: 'hard',
+      time: '3–4 min',
+    },
+    {
+      q: 'How do you balance cost optimization with performance when designing cloud infrastructure?',
+      kp: ['Spot instances vs reserved','Right-sizing resources','Auto-scaling policies','FinOps tracking'],
+      diff: 'medium',
+      time: '2–3 min',
+    },
+  ],
+  cybersecurity_engineer: [
+    {
+      q: 'How would you respond to an alert indicating a suspected data breach on a mission-critical database?',
+      kp: ['Containment strategy','Log analysis','Chain of custody','Stakeholder communication'],
+      diff: 'hard',
+      time: '3 min',
+    },
+    {
+      q: 'Explain how you approach implementing a zero-trust architecture in an existing corporate network.',
+      kp: ['Identity verification','Micro-segmentation','Least privilege enforcement','Device health checks'],
+      diff: 'hard',
+      time: '3–4 min',
+    },
+  ],
+  qa_engineer: [
+    {
+      q: 'How do you design a test automation framework from scratch for a complex web application?',
+      kp: ['Tool selection rationale','Page Object Model or similar','CI/CD integration','Handling flaky tests'],
+      diff: 'hard',
+      time: '3 min',
+    },
+    {
+      q: 'Describe your approach to testing an API comprehensively before the frontend is even built.',
+      kp: ['Boundary testing','Contract testing','Mocking/Stubbing','Performance/Load testing'],
+      diff: 'medium',
+      time: '2–3 min',
+    },
+  ],
+  executive: [
+    {
+      q: 'How do you align cross-functional departments (Engineering, Sales, Product) during a major strategic pivot?',
+      kp: ['Communication cadence','KPI alignment','Handling department friction','Executive presence'],
+      diff: 'hard',
+      time: '3–4 min',
+    },
+    {
+      q: 'Describe a time you had to make a high-stakes decision with incomplete data. What was your framework?',
+      kp: ['Risk assessment','Reversibility of decision','Consultation process','Outcome evaluation'],
+      diff: 'hard',
+      time: '3 min',
+    },
+  ],
 };
 
 const SITUATIONAL_TEMPLATES = [
@@ -738,6 +844,66 @@ function getRoleSpecificQuestions(role, seniority, skills) {
         q: `How do you build in flexibility when building financial models for scenarios with high uncertainty?`,
         kp: ['Scenario and sensitivity framework','Assumption documentation','Communication of uncertainty ranges','Model governance'],
         time: '2 min',
+      },
+    ],
+    mobile_developer: [
+      {
+        q: `Tell me about a mobile feature you built that had strict performance requirements. How did you optimize it?`,
+        kp: ['Optimization techniques','Tools used for profiling','Trade-offs made','End-user impact'],
+        time: '2–3 min',
+      },
+      {
+        q: `How do you approach testing on mobile platforms across fragmented device ecosystems?`,
+        kp: ['Device farm usage','OS version coverage','Automated vs manual','Handling specific OEM quirks'],
+        time: '2 min',
+      },
+    ],
+    cloud_architect: [
+      {
+        q: `Describe the most complex migration from on-prem to cloud you've architected. What went wrong that you didn't anticipate?`,
+        kp: ['Planning phase','Execution strategy','Unexpected hurdle','How you recovered'],
+        time: '3 min',
+      },
+      {
+        q: `How do you enforce security and compliance standards automatically across a multi-account cloud environment?`,
+        kp: ['Guardrails vs gates','Infrastructure as code','Compliance frameworks','Remediation automation'],
+        time: '2–3 min',
+      },
+    ],
+    cybersecurity_engineer: [
+      {
+        q: `Walk me through a time you found a significant vulnerability. How did you communicate the risk to engineering leadership to get it prioritized?`,
+        kp: ['Vulnerability assessment','Exploitability demonstration','Business impact translation','Remediation collaboration'],
+        time: '3 min',
+      },
+      {
+        q: `How do you stay updated on zero-day threats and integrate them into your team's defense posture quickly?`,
+        kp: ['Threat intel sources','Triaging process','Patch deployment speed','Automated scanning updates'],
+        time: '2 min',
+      },
+    ],
+    qa_engineer: [
+      {
+        q: `Tell me about a time when a critical bug slipped into production. How did you handle the post-mortem and what did you change in your test strategy?`,
+        kp: ['Root cause analysis','Test coverage gap identified','Process implementation','Cultural handling of failure'],
+        time: '2–3 min',
+      },
+      {
+        q: `How do you decide what NOT to automate in a test suite?`,
+        kp: ['ROI of automation','Maintenance overhead','Exploratory testing value','Visual regression limitations'],
+        time: '2 min',
+      },
+    ],
+    executive: [
+      {
+        q: `Describe the most difficult organizational restructuring or team transition you've successfully led.`,
+        kp: ['Business rationale','Communication plan','Handling dissent or turnover','Sustaining productivity'],
+        time: '3–4 min',
+      },
+      {
+        q: `How do you balance achieving quarterly targets with investing in long-term strategic capabilities?`,
+        kp: ['Resource allocation framework','Managing board/investor expectations','Leading/lagging indicators','Course correction mechanism'],
+        time: '3 min',
       },
     ],
   };

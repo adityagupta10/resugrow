@@ -71,7 +71,7 @@ const defaultToolLinks = [
 
 const defaultScreenshots = [
   {
-    src: '/templates/template-3.png',
+    src: '/templates/executive-leadership-resume-design-3.png',
     alt: 'ATS-friendly resume template screenshot with clean one-column format',
     caption: 'ATS-friendly resume layout example'
   },

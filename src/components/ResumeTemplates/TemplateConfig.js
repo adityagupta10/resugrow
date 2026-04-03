@@ -16,7 +16,7 @@ export const RESUME_TEMPLATES = {
     category: 'Professional',
     tags: ['ATS-Friendly', 'Top Rated'],
     component: ExecutiveTemplate,
-    preview: '/templates/template-1.png',
+    preview: '/templates/ats-friendly-professional-resume-template-1.png',
   },
   modern: {
     id: 'modern',
@@ -24,7 +24,7 @@ export const RESUME_TEMPLATES = {
     category: 'Creative',
     tags: ['Design', 'Portfolio'],
     component: ModernTemplate,
-    preview: '/templates/template-2.png',
+    preview: '/templates/modern-creative-cv-layout-template-2.png',
   },
   classic: {
     id: 'classic',
@@ -32,7 +32,7 @@ export const RESUME_TEMPLATES = {
     category: 'Traditional',
     tags: ['Conservative', 'Corporate'],
     component: ClassicTemplate,
-    preview: '/templates/template-3.png',
+    preview: '/templates/executive-leadership-resume-design-3.png',
   },
   impact: {
     id: 'impact',
@@ -40,7 +40,7 @@ export const RESUME_TEMPLATES = {
     category: 'Modern',
     tags: ['Stand Out', 'Bold'],
     component: ImpactTemplate,
-    preview: '/templates/template-4.png',
+    preview: '/templates/entry-level-graduate-resume-format-4.png',
   },
   minimalist: {
     id: 'minimalist',
@@ -48,7 +48,7 @@ export const RESUME_TEMPLATES = {
     category: 'Minimal',
     tags: ['Minimal', 'Clean'],
     component: MinimalistTemplate,
-    preview: '/templates/template-5.png',
+    preview: '/templates/tech-software-engineer-resume-template-5.png',
   },
   tech: {
     id: 'tech',
@@ -56,7 +56,7 @@ export const RESUME_TEMPLATES = {
     category: 'Technology',
     tags: ['Tech', 'Developer'],
     component: TechTemplate,
-    preview: '/templates/template-6.png',
+    preview: '/templates/minimalist-clean-resume-builder-template-6.png',
   },
   graduate: {
     id: 'graduate',
@@ -64,7 +64,7 @@ export const RESUME_TEMPLATES = {
     category: 'Entry Level',
     tags: ['Entry Level', 'Fresh Grad'],
     component: AcademicTemplate,
-    preview: '/templates/template-7.png',
+    preview: '/templates/marketing-manager-creative-resume-7.png',
   },
   creative: {
     id: 'creative',
@@ -72,7 +72,7 @@ export const RESUME_TEMPLATES = {
     category: 'Creative',
     tags: ['Creative', 'Director'],
     component: CreativeTemplate,
-    preview: '/templates/template-8.png',
+    preview: '/templates/finance-accounting-professional-cv-8.png',
   },
   federal: {
     id: 'federal',
@@ -80,7 +80,7 @@ export const RESUME_TEMPLATES = {
     category: 'Government',
     tags: ['Government', 'Federal'],
     component: ClassicTemplate,
-    preview: '/templates/template-9.png',
+    preview: '/templates/data-science-analytics-resume-template-9.png',
   },
   stylish: {
     id: 'stylish',
@@ -88,7 +88,7 @@ export const RESUME_TEMPLATES = {
     category: 'Modern',
     tags: ['Modern', 'Stylish'],
     component: ModernTemplate,
-    preview: '/templates/template-10.png',
+    preview: '/templates/healthcare-medical-resume-format-10.png',
   },
   corporate: {
     id: 'corporate',
@@ -96,7 +96,7 @@ export const RESUME_TEMPLATES = {
     category: 'Professional',
     tags: ['Corporate', 'Executive'],
     component: ExecutiveTemplate,
-    preview: '/templates/template-11.png',
+    preview: '/templates/project-manager-agile-resume-template-11.png',
   },
   swiss: {
     id: 'swiss',
@@ -104,7 +104,7 @@ export const RESUME_TEMPLATES = {
     category: 'Minimal',
     tags: ['Lightweight', 'Clean'],
     component: SwissTemplate,
-    preview: '/templates/template-12.png',
+    preview: '/templates/sales-executive-resume-layout-12.png',
   },
   startup: {
     id: 'startup',
@@ -112,7 +112,7 @@ export const RESUME_TEMPLATES = {
     category: 'Creative',
     tags: ['Startup', 'Hybrid'],
     component: StartupTemplate,
-    preview: '/templates/template-13.png',
+    preview: '/templates/customer-success-resume-design-13.png',
   },
   medical: {
     id: 'medical',
@@ -120,7 +120,7 @@ export const RESUME_TEMPLATES = {
     category: 'Professional',
     tags: ['Healthcare', 'Clinical'],
     component: ImpactTemplate,
-    preview: '/templates/template-14.png',
+    preview: '/templates/freelance-consultant-cv-template-14.png',
   },
   academic: {
     id: 'academic',
@@ -128,7 +128,7 @@ export const RESUME_TEMPLATES = {
     category: 'Traditional',
     tags: ['Academic', 'Research'],
     component: AcademicTemplate,
-    preview: '/templates/template-15.png',
+    preview: '/templates/academic-research-cv-format-15.png',
   },
 };
 

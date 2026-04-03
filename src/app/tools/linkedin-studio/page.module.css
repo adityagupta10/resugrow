@@ -81,12 +81,22 @@
     font-weight: 400;
 }
 
-/* ── Two-panel grid ─────────────────────────────────────────────────────── */
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+/* ── Layout grid ─────────────────────────────────────────────────────── */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 24px;
-    align-items: start;
+    width: 100%;
+}
+
+.inputPanel {
+    width: 100%;
+    max-width: 800px;
+}
+
+.outputPanel {
+    width: 100%;
 }
 
 /* ── Glass panel ────────────────────────────────────────────────────────── */
@@ -1028,9 +1038,6 @@
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 @media (max-width: 768px) {

@@ -493,6 +493,10 @@ function buildScript(role, offer, ask, range, analysis) {
       ? `Given all of this, I'd like to respectfully propose a revised CTC of ₹${ask.target} LPA. I'm flexible on how this is structured — fixed, variable, joining bonus, or a combination — and I'm genuinely open to a creative package that works for both sides. My minimum to move forward would be ₹${ask.minAcceptable} LPA.`
       : `I'd like to propose moving to ₹${ask.target} LPA. If the budget is constrained, I'm open to discussing a performance milestone review at 6 months with a pre-agreed increment range, or a joining bonus to bridge the gap. My goal is to find a structure that works for both sides.`,
 
+    objectionHandling: below
+      ? `If HR says: "This is the absolute maximum budget we have for this band."\n\nYou reply: "I completely understand budget constraints. If we cannot adjust the base salary, what flexibility do we have with a one-time sign-on bonus or a guaranteed 6-month performance review to bridge the gap? I want to find a creative way to make this work."`
+      : `If HR says: "You are already at the top of the band for this role."\n\nYou reply: "I appreciate the transparency. Since the base is capped, is there room in the equity pool or a possibility for a joining bonus? Alternatively, I'm open to an accelerated review cycle once I prove my impact over the first 6 months."`,
+
     closingStatement: `I'm very committed to this role — this conversation is about starting the relationship on the right foundation so I can focus entirely on delivering results from day one. I'm confident we can find a number that works. Would it be possible to set up a brief call this week to finalize the details?`,
   };
 }

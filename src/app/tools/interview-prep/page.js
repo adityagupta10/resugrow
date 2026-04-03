@@ -413,14 +413,14 @@ export default function InterviewPrepPage() {
           </p>
         </section>
 
-        {/* ── Two-panel grid ───────────────────────────────────────────── */}
-        <section className={styles.grid}>
+        {/* ── Stacked Layout ───────────────────────────────────────────── */}
+        <section className={styles.container}>
 
           {/* INPUT PANEL */}
-          <div className={styles.panel}>
-            <div className={styles.panelHeader}>
-              <h2>Job Description</h2>
-              <p>Paste the full job posting for the most accurate question set.</p>
+          <div className={`${styles.panel} ${styles.inputPanel}`}>
+            <div className={styles.panelHeader} style={{ textAlign: 'center' }}>
+              <h2 style={{ justifyContent: 'center' }}>Job Description</h2>
+              <p>Paste the full job posting for the most targeted simulated questions.</p>
             </div>
 
             {/* JD textarea */}
@@ -429,7 +429,7 @@ export default function InterviewPrepPage() {
               <textarea
                 id="jd-input"
                 className={styles.textarea}
-                style={{ minHeight: '200px' }}
+                style={{ minHeight: '160px' }}
                 placeholder="Paste the full job description here — title, responsibilities, requirements, and any nice-to-haves. The more detail, the more targeted the questions…"
                 value={jd}
                 onChange={(e) => setJd(e.target.value)}
@@ -437,7 +437,7 @@ export default function InterviewPrepPage() {
             </div>
 
             {/* Sample JD chips */}
-            <div className={styles.sampleChips}>
+            <div className={styles.sampleChips} style={{ justifyContent: 'center' }}>
               {SAMPLE_JDS.map((sample) => (
                 <button
                   key={sample}
@@ -451,16 +451,18 @@ export default function InterviewPrepPage() {
             </div>
 
             {/* Resume toggle */}
-            <button
-              type="button"
-              className={styles.resumeToggle}
-              onClick={() => setShowResume((v) => !v)}
-            >
-              {showResume ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-              {showResume
-                ? 'Hide resume text'
-                : '+ Add your resume (optional — improves targeting)'}
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <button
+                type="button"
+                className={styles.resumeToggle}
+                onClick={() => setShowResume((v) => !v)}
+              >
+                {showResume ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                {showResume
+                  ? 'Hide resume text'
+                  : '+ Add your resume (optional — improves targeting)'}
+              </button>
+            </div>
 
             {showResume && (
               <div className={styles.inputBlock}>
@@ -468,7 +470,7 @@ export default function InterviewPrepPage() {
                 <textarea
                   id="resume-input"
                   className={styles.textarea}
-                  style={{ minHeight: '140px' }}
+                  style={{ minHeight: '120px' }}
                   placeholder="Paste the text of your resume here. This helps tailor role-specific questions to your background…"
                   value={resumeText}
                   onChange={(e) => setResumeText(e.target.value)}
@@ -485,6 +487,7 @@ export default function InterviewPrepPage() {
                   flexWrap: 'wrap',
                   gap: '10px',
                   marginTop: '8px',
+                  justifyContent: 'center',
                 }}
               >
                 {FOCUS_OPTIONS.map((opt) => (
@@ -548,9 +551,9 @@ export default function InterviewPrepPage() {
           </div>
 
           {/* OUTPUT PANEL */}
-          <div className={styles.panel}>
+          <div className={`${styles.panel} ${styles.outputPanel}`}>
             <div className={styles.panelHeader}>
-              <h2>Questions & Answer Frameworks</h2>
+              <h2>Generated Question Set</h2>
               <p>Tailored to the role with SAR frameworks, key points, and likely follow-ups.</p>
             </div>
 

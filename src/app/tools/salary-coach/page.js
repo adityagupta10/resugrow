@@ -51,9 +51,9 @@ const SECTORS = [
   { value: 'other',      label: 'Other' },
 ];
 
-const SCRIPT_KEYS   = ['openingStatement', 'marketDataReference', 'valueProposition', 'counterOfferAsk', 'closingStatement'];
-const SCRIPT_LABELS = ['Opening Statement', 'Market Data Reference', 'Value Proposition', 'Counter-Offer Ask', 'Closing Statement'];
-const SCRIPT_ICONS  = ['👋', '📊', '💎', '💰', '🤝'];
+const SCRIPT_KEYS   = ['openingStatement', 'marketDataReference', 'valueProposition', 'counterOfferAsk', 'objectionHandling', 'closingStatement'];
+const SCRIPT_LABELS = ['Opening Statement', 'Market Data Reference', 'Value Proposition', 'Counter-Offer Ask', 'Handling "Out of Budget"', 'Closing Statement'];
+const SCRIPT_ICONS  = ['👋', '📊', '💎', '💰', '🛡️', '🤝'];
 
 const EMAIL_TABS = [
   { label: 'Initial Response', key: 'initialResponse' },
@@ -296,9 +296,9 @@ export default function SalaryCoachPage() {
 
         {/* ── FORM ──────────────────────────────────────────────────────── */}
         {showForm && (
-          <div className={styles.formPanel}>
-            <div className={styles.panelHeader}>
-              <h2>Your Offer Details</h2>
+          <div className={`${styles.formPanel} ${styles.inputPanel}`} style={{ margin: '0 auto' }}>
+            <div className={styles.panelHeader} style={{ textAlign: 'center' }}>
+              <h2 style={{ justifyContent: 'center' }}>Your Offer Details</h2>
               <p>Fill in your details to get a personalised negotiation strategy and email templates.</p>
             </div>
 
@@ -464,16 +464,18 @@ export default function SalaryCoachPage() {
 
         {/* ── RESULTS ───────────────────────────────────────────────────── */}
         {results && !showForm && (
-          <div ref={resultsRef}>
+          <div ref={resultsRef} className={styles.container}>
             {/* Edit inputs CTA */}
-            <button className={styles.editBtn} onClick={handleEditInputs}>
-              <IconArrowLeft />
-              Edit Inputs
-            </button>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+              <button className={styles.editBtn} onClick={handleEditInputs}>
+                <IconArrowLeft />
+                Edit Inputs
+              </button>
+            </div>
 
-            <div className={styles.resultsGrid}>
-              {/* ── LEFT COLUMN ──────────────────────────────────────── */}
-              <div>
+            <div className={`${styles.outputPanel}`}>
+              {/* ── METRICS & SCRIPT SECTION ──────────────────────────────────────── */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 {/* Market Analysis Card */}
                 <div className={styles.analysisCard}>
                   <p className={styles.cardTitle}><IconTrending /> Market Analysis</p>
@@ -527,10 +529,7 @@ export default function SalaryCoachPage() {
                   </div>
                   <p className={styles.askRationale}>{results.recommendedAsk.rationale}</p>
                 </div>
-              </div>
 
-              {/* ── RIGHT COLUMN ─────────────────────────────────────── */}
-              <div>
                 {/* Negotiation Script Accordion */}
                 <div className={styles.scriptCard}>
                   <p className={styles.cardTitle}>🗣️ Negotiation Script</p>

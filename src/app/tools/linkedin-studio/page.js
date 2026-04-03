@@ -185,12 +185,12 @@ export default function LinkedInStudioPage() {
           </p>
         </section>
 
-        {/* ── Two-panel grid ────────────────────────────────────────────── */}
-        <section className={styles.grid}>
-          {/* ── LEFT: Content Input ──────────────────────────────────── */}
-          <div className={styles.panel}>
-            <div className={styles.panelHeader}>
-              <h2>Content Input</h2>
+        {/* ── Stacked Layout ────────────────────────────────────────────── */}
+        <section className={styles.container}>
+          {/* ── INPUT PANEL ──────────────────────────────────── */}
+          <div className={`${styles.panel} ${styles.inputPanel}`}>
+            <div className={styles.panelHeader} style={{ textAlign: 'center' }}>
+              <h2 style={{ justifyContent: 'center' }}>Content Input</h2>
               <p>Describe your achievement, then choose your post style and tone.</p>
             </div>
 
@@ -209,8 +209,8 @@ export default function LinkedInStudioPage() {
 
             {/* Post type pills */}
             <div className={styles.inputBlock}>
-              <label>Post Type</label>
-              <div className={styles.typePills}>
+              <label style={{ textAlign: 'center' }}>Post Type</label>
+              <div className={styles.typePills} style={{ justifyContent: 'center' }}>
                 {POST_TYPES.map(({ value, label }) => (
                   <button
                     key={value}
@@ -226,8 +226,8 @@ export default function LinkedInStudioPage() {
 
             {/* Tone pills */}
             <div className={styles.inputBlock}>
-              <label>Tone</label>
-              <div className={styles.typePills}>
+              <label style={{ textAlign: 'center' }}>Tone</label>
+              <div className={styles.typePills} style={{ justifyContent: 'center' }}>
                 {TONE_OPTIONS.map(({ value, label }) => (
                   <button
                     key={value}
@@ -242,7 +242,7 @@ export default function LinkedInStudioPage() {
             </div>
 
             {/* Toggle row */}
-            <div className={styles.toggleRow}>
+            <div className={styles.toggleRow} style={{ justifyContent: 'center' }}>
               <label className={styles.toggleItem}>
                 <span className={styles.toggle}>
                   <input
@@ -286,9 +286,9 @@ export default function LinkedInStudioPage() {
             {error && <p className={styles.errorMsg}>{error}</p>}
 
             {/* Sample achievement chips */}
-            <div className={styles.samples}>
+            <div className={styles.samples} style={{ textAlign: 'center' }}>
               <p>Try a sample</p>
-              <div className={styles.sampleList}>
+              <div className={styles.sampleList} style={{ justifyContent: 'center' }}>
                 {SAMPLE_ACHIEVEMENTS.map((sample) => (
                   <button
                     key={sample}
@@ -303,8 +303,8 @@ export default function LinkedInStudioPage() {
             </div>
           </div>
 
-          {/* ── RIGHT: Generated Posts ────────────────────────────────── */}
-          <div className={styles.panel}>
+          {/* ── OUTPUT PANEL ────────────────────────────────── */}
+          <div className={`${styles.panel} ${styles.outputPanel}`}>
             <div className={styles.panelHeader}>
               <h2>Generated Posts</h2>
               <p>Three proven frameworks, ready to publish.</p>

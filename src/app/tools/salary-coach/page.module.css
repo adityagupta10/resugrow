@@ -418,12 +418,22 @@
   border-color: rgba(255, 255, 255, 0.8);
 }
 
-/* ── Results two-column grid ─────────────────────────────────────────────── */
-.resultsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  align-items: start;
+/* ── Layout grid ─────────────────────────────────────────────── */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.inputPanel {
+  width: 100%;
+  max-width: 800px;
+}
+
+.outputPanel {
+  width: 100%;
 }
 
 /* ── Shared card base ────────────────────────────────────────────────────── */

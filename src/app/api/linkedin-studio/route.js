@@ -11,6 +11,11 @@ const OPENING_HOOKS = {
     '{{timeAgo}}, my {{role}} journey hit rock bottom.',
     'The best career advice I ever received cost me nothing.',
     'I failed at {{topic}} 3 times before I figured it out.',
+    'The lowest point of my career taught me the most about {{topic}}.',
+    'A quick story about the time I completely messed up {{challenge}}.',
+    'They don\'t teach you how to handle {{topic}} in school.',
+    'I almost quit when I faced {{challenge}}. Here is why I didn\'t.',
+    'It took me 5 years to learn this secret about {{topic}}.',
   ],
   hook: [
     'Most {{role}}s get this completely wrong:',
@@ -21,6 +26,11 @@ const OPENING_HOOKS = {
     'I\'ve reviewed 100+ {{documents}}. Here\'s what separates the best:',
     'Hot take: {{topic}} is not about what you think.',
     'The truth about {{topic}} that no one talks about:',
+    'Unpopular opinion: {{oldBelief}} is holding you back.',
+    'If you want to master {{topic}}, memorize this post.',
+    'Here is the harsh reality about being a {{role}}:',
+    'A brutal truth that most {{role}}s try to ignore:',
+    'I spent 1,000 hours analyzing {{topic}}. Here are my top findings:',
   ],
   achievement: [
     'Proud moment: {{achievement}}',
@@ -72,14 +82,27 @@ const HASHTAG_BANK = {
   general: ['#Learning', '#Success', '#Motivation', '#PersonalGrowth', '#WorkCulture'],
 };
 
-// ── Framework implementations ──────────────────────────────────────────────
+// ── Tone helpers ──────────────────────────────────────────────
+function applyTonePrefix(tone) {
+  if (tone === 'bold') return 'Here is the brutal truth:';
+  if (tone === 'inspirational') return 'There is a deeper truth we often miss:';
+  if (tone === 'conversational') return 'Here\'s something kind of crazy I realized:';
+  return 'Here\'s the reality:';
+}
+
+function applyToneClosingQuestion(tone) {
+  if (tone === 'bold') return 'Stop accepting average results. Are you ready to make this shift?';
+  if (tone === 'inspirational') return 'Remember, you define your own ceiling. What\'s your next breakthrough?';
+  if (tone === 'conversational') return 'Have you ever experienced something like this? Tell me below.';
+  return 'What\'s the biggest thing you\'ve changed about how you present yourself professionally?';
+}
 
 function buildPASPost(achievement, tone, useEmoji) {
   const e = useEmoji;
   const lines = [
     `${e ? '⚠️ ' : ''}Most professionals make this mistake — and it's costing them opportunities.`,
     '',
-    `Here's the reality: the job market has changed. What worked 5 years ago doesn't cut it today.`,
+    `${applyTonePrefix(tone)} the job market has changed. What worked 5 years ago doesn't cut it today.`,
     '',
     `${e ? '📌 ' : ''}The problem isn't your skills. It's how you present them.`,
     '',
@@ -89,14 +112,14 @@ function buildPASPost(achievement, tone, useEmoji) {
     '',
     `The result? ${extractMetricFromAchievement(achievement)}`,
     '',
-    `The lesson: ${generateLesson(achievement)}`,
+    `The lesson: ${generateLesson(achievement, tone)}`,
     '',
     `${e ? '💡 ' : ''}If you're going through the same thing, here's what to focus on:`,
     `→ Quantify every bullet on your profile`,
     `→ Use the language from job descriptions you want`,
     `→ Lead with impact, not responsibilities`,
     '',
-    `What's the biggest thing you've changed about how you present yourself professionally?`,
+    applyToneClosingQuestion(tone),
     `Drop it below ${e ? '👇' : ''}`,
   ];
   return { framework: 'PAS', content: lines.join('\n'), cta: lines[lines.length - 2] };
@@ -104,10 +127,12 @@ function buildPASPost(achievement, tone, useEmoji) {
 
 function buildAIDAPost(achievement, tone, useEmoji) {
   const e = useEmoji;
+  const attentionGrabber = tone === 'bold' ? 'Read this twice if you feel stuck in your career.' : 'Here is the context most people don\'t see:';
+  
   const lines = [
     `${e ? '🚀 ' : ''}${extractHookFromAchievement(achievement)}`,
     '',
-    `Here's the context most people don't see:`,
+    attentionGrabber,
     `${formatAchievementContext(achievement)}`,
     '',
     `What actually drove this result:`,
@@ -138,14 +163,14 @@ function buildStoryPost(achievement, tone, useEmoji) {
     `Fast forward to today:`,
     `${formatAchievementLines(achievement, e)}`,
     '',
-    `What changed? ${generateLesson(achievement)}`,
+    `What changed? ${generateLesson(achievement, tone)}`,
     '',
     `${e ? '📌 ' : ''}The 3 things I'd tell my past self:`,
     `1. Start before you feel ready`,
     `2. Progress compounds faster than you think`,
     `3. Document everything — your future self will thank you`,
     '',
-    `Has anyone else had a similar turning point? What triggered yours?`,
+    applyToneClosingQuestion(tone),
     `${e ? '👇 ' : ''}I read every comment.`,
   ];
   return { framework: 'Story', content: lines.join('\n'), cta: lines[lines.length - 2] };
@@ -167,14 +192,29 @@ function extractHookFromAchievement(text) {
 function formatAchievementContext(text) {
   return text.slice(0, 150).trim() + (text.length > 150 ? '...' : '');
 }
-function generateLesson(text) {
-  const lessons = [
+function generateLesson(text, tone) {
+  let lessons = [
     'small, consistent actions compound into massive results over time.',
     'the bottleneck is almost never skill — it\'s clarity and consistency.',
     'measuring the right things is more valuable than working harder.',
     'the people who win aren\'t smarter — they just refuse to stop.',
     'your environment shapes your outcomes more than your willpower does.',
+    'failure is just a data point on the path to success.',
+    'waiting for the perfect moment guarantees you will be left behind.',
   ];
+  if (tone === 'bold') {
+    lessons = [
+      'you are probably overcomplicating it. execute relentlessly.',
+      'excuses don\'t scale. only results do.',
+      'stop hiding behind busywork and do the scary thing.',
+    ];
+  } else if (tone === 'inspirational') {
+    lessons = [
+      'your potential is entirely dictated by your mindset.',
+      'when you believe in the process, the outcome handles itself.',
+      'every setback is just a setup for an incredible comeback.',
+    ];
+  }
   const idx = text.length % lessons.length;
   return lessons[idx];
 }

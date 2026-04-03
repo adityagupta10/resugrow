@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import LayoutWrapper from '@/components/LayoutWrapper';
 import AuthProvider from '@/components/Providers/AuthProvider';
@@ -15,7 +16,7 @@ import {
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-inter',
 });
 
@@ -81,17 +82,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
-        {/* Google tag (gtag.js) */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PNP4M5Y49H" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-PNP4M5Y49H"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-
-gtag('config', 'G-PNP4M5Y49H');`
-          }}
-        />
+gtag('config', 'G-PNP4M5Y49H');`}
+        </Script>
         <link rel="preconnect" href="https://www.resugrow.com" />
         <link rel="dns-prefetch" href="https://www.resugrow.com" />
       </head>

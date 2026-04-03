@@ -1,23 +1,11 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
 import { templates as templateData } from '../data/templates';
 import { platformFaqs } from '../data/faqs';
-
-// Dynamic imports for components below the fold
-const Hero = dynamic(() => import('@/components/Home/Hero'), {
-  ssr: false,
-  loading: () => <div className="bg-gray-50 h-[600px] w-full animate-pulse" />
-});
-
-const Testimonials = dynamic(() => import('@/components/Testimonials/Testimonials'), {
-  ssr: false,
-  loading: () => <div className="animate-pulse bg-gray-50 h-96 rounded-2xl" />
-});
+import FaqAccordion from '@/components/Home/FaqAccordion';
+import Hero from '@/components/Home/Hero';
+import Testimonials from '@/components/Testimonials/Testimonials';
 
 const productPillars = [
   {
@@ -102,7 +90,6 @@ const faqJsonLd = {
 };
 
 export default function Home() {
-  const [openFaq, setOpenFaq] = useState(0);
 
   return (
     <>
@@ -236,21 +223,7 @@ export default function Home() {
             <p>FAQ</p>
             <h2>Quick Answers Before You Start</h2>
           </div>
-          <div className={styles.faqList}>
-            {platformFaqs.map((faq, idx) => (
-              <div key={faq.q} className={styles.faqItem}>
-                <button
-                  className={styles.faqButton}
-                  onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)}
-                  type="button"
-                >
-                  <span>{faq.q}</span>
-                  <span className={styles.faqIcon}>{openFaq === idx ? '−' : '+'}</span>
-                </button>
-                {openFaq === idx && <p className={styles.faqAnswer}>{faq.a}</p>}
-              </div>
-            ))}
-          </div>
+          <FaqAccordion faqs={platformFaqs} />
         </div>
       </section>
 

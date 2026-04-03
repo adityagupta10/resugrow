@@ -5,7 +5,7 @@ export const templates = [
     category: 'Professional',
     color: '#2563eb',
     tags: ['ATS-Friendly', 'Top Rated'],
-    image: '/templates/template-1.png',
+    image: '/templates/ats-friendly-professional-resume-template-1.png',
   },
   {
     id: 'modern-creative',
@@ -13,7 +13,7 @@ export const templates = [
     category: 'Creative',
     color: '#7c3aed',
     tags: ['Design', 'Portfolio'],
-    image: '/templates/template-2.png',
+    image: '/templates/modern-creative-cv-layout-template-2.png',
   },
   {
     id: 'classic-standard',
@@ -21,7 +21,7 @@ export const templates = [
     category: 'Traditional',
     color: '#0f766e',
     tags: ['Conservative', 'Corporate'],
-    image: '/templates/template-3.png',
+    image: '/templates/executive-leadership-resume-design-3.png',
   },
   {
     id: 'bold-impact',
@@ -29,7 +29,7 @@ export const templates = [
     category: 'Modern',
     color: '#dc2626',
     tags: ['Stand Out', 'Bold'],
-    image: '/templates/template-4.png',
+    image: '/templates/entry-level-graduate-resume-format-4.png',
   },
   {
     id: 'clean-simple',
@@ -37,7 +37,7 @@ export const templates = [
     category: 'Minimal',
     color: '#475569',
     tags: ['Minimal', 'Clean'],
-    image: '/templates/template-5.png',
+    image: '/templates/tech-software-engineer-resume-template-5.png',
   },
   {
     id: 'tech-forward',
@@ -45,7 +45,7 @@ export const templates = [
     category: 'Technology',
     color: '#0891b2',
     tags: ['Tech', 'Developer'],
-    image: '/templates/template-6.png',
+    image: '/templates/minimalist-clean-resume-builder-template-6.png',
   },
   {
     id: 'graduate-start',
@@ -53,7 +53,7 @@ export const templates = [
     category: 'Entry Level',
     color: '#d97706',
     tags: ['Entry Level', 'Fresh Grad'],
-    image: '/templates/template-7.png',
+    image: '/templates/marketing-manager-creative-resume-7.png',
   },
   {
     id: 'creative-director',
@@ -61,7 +61,7 @@ export const templates = [
     category: 'Creative',
     color: '#be185d',
     tags: ['Creative', 'Director'],
-    image: '/templates/template-8.png',
+    image: '/templates/finance-accounting-professional-cv-8.png',
   },
   {
     id: 'federal-resume',
@@ -69,7 +69,7 @@ export const templates = [
     category: 'Government',
     color: '#1e40af',
     tags: ['Government', 'Federal'],
-    image: '/templates/template-9.png',
+    image: '/templates/data-science-analytics-resume-template-9.png',
   },
   {
     id: 'stylish-modern',
@@ -77,7 +77,7 @@ export const templates = [
     category: 'Modern',
     color: '#ec4899',
     tags: ['Modern', 'Stylish'],
-    image: '/templates/template-10.png',
+    image: '/templates/healthcare-medical-resume-format-10.png',
   },
   {
     id: 'corporate-plus',
@@ -85,7 +85,7 @@ export const templates = [
     category: 'Professional',
     color: '#1e293b',
     tags: ['Corporate', 'Executive'],
-    image: '/templates/template-11.png',
+    image: '/templates/project-manager-agile-resume-template-11.png',
   },
   {
     id: 'minimalist-white',
@@ -93,7 +93,7 @@ export const templates = [
     category: 'Minimal',
     color: '#94a3b8',
     tags: ['Lightweight', 'Clean'],
-    image: '/templates/template-12.png',
+    image: '/templates/sales-executive-resume-layout-12.png',
   },
   {
     id: 'startup-edge',
@@ -101,7 +101,7 @@ export const templates = [
     category: 'Creative',
     color: '#fbbf24',
     tags: ['Startup', 'Hybrid'],
-    image: '/templates/template-13.png',
+    image: '/templates/customer-success-resume-design-13.png',
   },
   {
     id: 'medical-pro',
@@ -109,7 +109,7 @@ export const templates = [
     category: 'Professional',
     color: '#10b981',
     tags: ['Healthcare', 'Clinical'],
-    image: '/templates/template-14.png',
+    image: '/templates/freelance-consultant-cv-template-14.png',
   },
   {
     id: 'academic-cv',
@@ -117,6 +117,6 @@ export const templates = [
     category: 'Traditional',
     color: '#4338ca',
     tags: ['Academic', 'Research'],
-    image: '/templates/template-15.png',
+    image: '/templates/academic-research-cv-format-15.png',
   },
 ];
