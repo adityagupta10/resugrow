@@ -3,7 +3,7 @@ import { ROLE_SUGGESTIONS } from '@/lib/ai-suggestions';
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'Resume Examples by Job Title (2026) | ResuGrow',
+  title: 'Resume Examples by Job Title (2026) | RESUGROW',
   description:
     'Browse ATS-optimized resume examples for every role — Software Engineer, Product Manager, Marketing, Data Analyst, Sales, HR and more. Free AI resume builder included.',
   path: '/examples',

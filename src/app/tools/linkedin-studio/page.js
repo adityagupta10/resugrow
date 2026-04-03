@@ -177,7 +177,7 @@ export default function LinkedInStudioPage() {
       <main className={styles.main}>
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section className={styles.hero}>
-          <p className={styles.kicker}>Content Studio</p>
+          <p className={styles.kicker}>Content Studio : Personal Brand Builder</p>
           <h1 className={styles.title}>LinkedIn Content Studio</h1>
           <p className={styles.subtitle}>
             Turn resume achievements into compelling LinkedIn posts with proven frameworks (PAS, AIDA,
@@ -306,7 +306,7 @@ export default function LinkedInStudioPage() {
           {/* ── OUTPUT PANEL ────────────────────────────────── */}
           {results && (
             <div className={`${styles.panel} ${styles.outputPanel}`}>
-              <button 
+              <button
                 className={styles.editBtn}
                 onClick={() => {
                   setResults(null);
@@ -478,13 +478,12 @@ export default function LinkedInStudioPage() {
                         <div key={day.day} className={styles.dayCard}>
                           <p className={styles.dayName}>{day.day}</p>
                           <span
-                            className={`${styles.engLevel} ${
-                              day.level === 'Highest'
-                                ? styles.engHighest
-                                : day.level === 'High'
+                            className={`${styles.engLevel} ${day.level === 'Highest'
+                              ? styles.engHighest
+                              : day.level === 'High'
                                 ? styles.engHigh
                                 : styles.engMedium
-                            }`}
+                              }`}
                           >
                             {day.level} Engagement
                           </span>

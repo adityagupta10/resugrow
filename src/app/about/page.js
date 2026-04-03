@@ -4,11 +4,11 @@ import { createPageMetadata } from '@/lib/seo';
 import EmojiImage from '@/components/UI/EmojiImage';
 
 export const metadata = createPageMetadata({
-  title: 'About ResuGrow | AI Career Platform Mission & Team',
+  title: 'About RESUGROW | AI Career Platform Mission & Team',
   description:
-    'Learn why ResuGrow was built, the mission behind our AI resume platform, and how we help job seekers become recruiter-ready with confidence.',
+    'Learn why RESUGROW was built, the mission behind our AI resume platform, and how we help job seekers become recruiter-ready with confidence.',
   path: '/about',
-  keywords: ['about resugrow', 'career platform mission', 'AI resume company']
+  keywords: ['about RESUGROW', 'career platform mission', 'AI resume company']
 });
 
 const stats = [
@@ -55,7 +55,7 @@ const journey = [
   {
     year: '2026',
     title: 'End-to-End Career System',
-    text: 'ResuGrow matured into a full platform where users can build, diagnose, rewrite, and optimize with one consistent quality standard.'
+    text: 'RESUGROW matured into a full platform where users can build, diagnose, rewrite, and optimize with one consistent quality standard.'
   }
 ];
 
@@ -69,7 +69,7 @@ export default function About() {
             Built for the moments when careers feel <span className="gradient-text">uncertain</span>
           </h1>
           <p className={styles.subpageDesc}>
-            ResuGrow started with one mission: help capable people get seen fairly. We build AI-powered career tools that turn confusion into a clear, recruiter-ready plan.
+            RESUGROW started with one mission: help capable people get seen fairly. We build AI-powered career tools that turn confusion into a clear, recruiter-ready plan.
           </p>
           <div className={styles.subpageBtn}>
             <Link href="/resume/builder" className="btn btn-primary">Build My Resume</Link>
@@ -87,14 +87,14 @@ export default function About() {
                 Most job seekers are not rejected because they lack skill. They are filtered out because their strengths are buried, their documents are not machine-readable, or their profile language does not match recruiter intent. The result is painful: silence after dozens of applications.
               </p>
               <p>
-                We built ResuGrow to remove that silence. Our platform combines deterministic scoring with AI-assisted rewriting so users can understand exactly what is weak, what is missing, and what to change first. That clarity turns effort into momentum.
+                We built RESUGROW to remove that silence. Our platform combines deterministic scoring with AI-assisted rewriting so users can understand exactly what is weak, what is missing, and what to change first. That clarity turns effort into momentum.
               </p>
               <p>
                 We are deeply outcome-focused. Every feature is designed around one question: does this increase interview probability in the real world? If the answer is not measurable, it does not ship.
               </p>
             </div>
             <div className={styles.aboutNarrativeAside}>
-              <h3>What users feel after using ResuGrow</h3>
+              <h3>What users feel after using RESUGROW</h3>
               <ul>
                 <li>They stop guessing what recruiters want.</li>
                 <li>They know which edits will move score and visibility.</li>
@@ -117,7 +117,7 @@ export default function About() {
             {values.map((item) => (
               <article key={item.title} className={styles.aboutValueCard}>
                 <div className={styles.aboutValueIcon}>
-                  <EmojiImage emoji={item.icon} size={26} alt={`${item.title} value icon for ResuGrow mission`} />
+                  <EmojiImage emoji={item.icon} size={26} alt={`${item.title} value icon for RESUGROW mission`} />
                 </div>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
@@ -141,7 +141,7 @@ export default function About() {
           <div className={styles.aboutManifesto}>
             <h2>What we promise every user</h2>
             <p>
-              We will keep ResuGrow practical, transparent, and honest. We will keep shipping tools that save time and improve outcomes. And we will keep building for the people behind every resume: professionals trying to provide, grow, and be recognized for what they can do.
+              We will keep RESUGROW practical, transparent, and honest. We will keep shipping tools that save time and improve outcomes. And we will keep building for the people behind every resume: professionals trying to provide, grow, and be recognized for what they can do.
             </p>
             <p>
               If you are in that season right now, we built this for you.

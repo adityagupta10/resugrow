@@ -40,7 +40,7 @@ const helpCategories = [
         a: 'When your results page shows a premium call-to-action, click it to open the payment route and continue to the makeover workflow. We keep the transition short so you do not lose context from your scan.'
       },
       {
-        q: 'Can I use ResuGrow tools without creating an account first?',
+        q: 'Can I use RESUGROW tools without creating an account first?',
         a: 'Yes. Most scanning and builder flows support guest-first usage. Your active session can still store progress locally so you can continue editing before deciding to create an account.'
       },
       {
@@ -132,7 +132,7 @@ export default function HelpCenter() {
             {helpCategories.map((item) => (
               <div key={item.id} className={styles.helpTopicCard}>
                 <div className={styles.helpTopicIcon}>
-                  <EmojiImage emoji={item.icon} size={34} alt={`${item.title} help category icon for ResuGrow support`} />
+                  <EmojiImage emoji={item.icon} size={34} alt={`${item.title} help category icon for RESUGROW support`} />
                 </div>
                 <h3>{item.title}</h3>
                 <p>{item.desc}</p>

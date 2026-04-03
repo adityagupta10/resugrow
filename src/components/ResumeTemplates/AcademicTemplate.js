@@ -8,8 +8,8 @@ export default function AcademicTemplate({ data: rawData }) {
 
   return (
     <div className={styles.container}>
-      {/* ResuGrow Watermark */}
-      <div className={styles.watermark}>Built with ResuGrow</div>
+      {/* RESUGROW Watermark */}
+      <div className={styles.watermark}>Built with RESUGROW</div>
 
       <header className={styles.header}>
         <h1 className={styles.name}>{personal.fullName || 'Your Name'}</h1>

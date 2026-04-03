@@ -12,7 +12,7 @@ export const metadata = createPageMetadata({
     'cv format', 'academic cv', 'cv example', 'cv template', 'cv sample',
     'what does cv mean', 'cv resume', 'resume cv', 'international cv',
   ],
-  imageAlt: 'CV vs Resume comparison guide — ResuGrow',
+  imageAlt: 'CV vs Resume comparison guide — RESUGROW',
 });
 
 const faqs = [

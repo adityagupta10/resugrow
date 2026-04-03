@@ -5,7 +5,7 @@ import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } 
 import styles from './blog.module.css';
 
 export const metadata = createPageMetadata({
-  title: 'Blog | Resume Tips, Career Advice & Job Search Strategies | ResuGrow',
+  title: 'Blog | Resume Tips, Career Advice & Job Search Strategies | RESUGROW',
   description:
     'Expert articles on ATS optimization, resume writing, LinkedIn strategy, salary negotiation, and career growth — written by recruiters and career coaches.',
   path: '/blog',
@@ -37,7 +37,7 @@ export default function BlogPage() {
     { name: 'Blog', url: `${SITE_URL}/blog` }
   ]);
   const itemListSchema = getItemListJsonLd({
-    name: 'ResuGrow Blog Articles',
+    name: 'RESUGROW Blog Articles',
     items: posts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
       name: post.title
@@ -57,7 +57,7 @@ export default function BlogPage() {
       {/* Hero */}
       <section className={styles.hero}>
         <div className={styles.container}>
-          <div className={styles.heroBadge}>The ResuGrow Blog</div>
+          <div className={styles.heroBadge}>The RESUGROW Blog</div>
           <h1 className={styles.heroTitle}>
             Career Insights That <span className="gradient-text">Actually Move the Needle</span>
           </h1>

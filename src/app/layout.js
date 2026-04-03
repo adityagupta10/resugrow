@@ -21,9 +21,9 @@ const inter = Inter({
 });
 
 const homeMetadata = createPageMetadata({
-  title: 'ResuGrow | Free AI Resume Builder, ATS Checker & LinkedIn Optimizer',
+  title: 'RESUGROW | Free AI Resume Builder, ATS Checker & LinkedIn Optimizer',
   description:
-    'Build ATS-friendly resumes in minutes, score your LinkedIn profile, and generate cover letters with ResuGrow — the free AI career platform trusted by 25,000+ job seekers.',
+    'Build ATS-friendly resumes in minutes, score your LinkedIn profile, and generate cover letters with RESUGROW — the free AI career platform trusted by 25,000+ job seekers.',
   path: '/',
   keywords: [
     'resume builder',
@@ -44,10 +44,10 @@ export const metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
   title: {
-    default: 'ResuGrow | Free AI Resume Builder, ATS Checker & LinkedIn Optimizer',
-    template: '%s | ResuGrow'
+    default: 'RESUGROW | Free AI Resume Builder, ATS Checker & LinkedIn Optimizer',
+    template: '%s | RESUGROW'
   },
-  authors: [{ name: 'ResuGrow Team' }],
+  authors: [{ name: 'RESUGROW Team' }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
   category: 'Career Development',

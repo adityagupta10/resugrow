@@ -2,10 +2,10 @@ import styles from '../legal.module.css';
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-    title: 'Cookie Policy | ResuGrow',
-    description: 'Read how ResuGrow uses cookies and analytics technologies on the website.',
+    title: 'Cookie Policy | RESUGROW',
+    description: 'Read how RESUGROW uses cookies and analytics technologies on the website.',
     path: '/cookies',
-    keywords: ['cookie policy', 'website cookies', 'resugrow cookies']
+    keywords: ['cookie policy', 'website cookies', 'RESUGROW cookies']
 });
 
 export default function Cookies() {

@@ -75,7 +75,7 @@ export default function Contact() {
 
               <div className={styles.contactInfoItem}>
                 <div className={styles.contactIcon}>
-                  <MapPin size={24} aria-label="ResuGrow office location pin for New Delhi India headquarters" />
+                  <MapPin size={24} aria-label="RESUGROW office location pin for New Delhi India headquarters" />
                 </div>
                 <div>
                   <div className={styles.contactLabel}>Office</div>
@@ -85,7 +85,7 @@ export default function Contact() {
 
               <div className={styles.contactInfoItem}>
                 <div className={styles.contactIcon}>
-                  <Clock size={24} aria-label="Business hours clock for ResuGrow customer support availability" />
+                  <Clock size={24} aria-label="Business hours clock for RESUGROW customer support availability" />
                 </div>
                 <div>
                   <div className={styles.contactLabel}>Business Hours</div>
@@ -129,7 +129,7 @@ export default function Contact() {
                 {status === 'loading' ? 'Sending...' :
                   status === 'success' ? (
                     <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                      <CheckCircle size={18} aria-label="Message sent successfully to ResuGrow support" />
+                      <CheckCircle size={18} aria-label="Message sent successfully to RESUGROW support" />
                       Message Sent!
                     </span>
                   ) :

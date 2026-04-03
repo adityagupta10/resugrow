@@ -7,8 +7,8 @@ export default function TechTemplate({ data: rawData }) {
 
   return (
     <div className={styles.resumeDoc}>
-      {/* ResuGrow Watermark */}
-      <div className={styles.watermark}>Built with ResuGrow</div>
+      {/* RESUGROW Watermark */}
+      <div className={styles.watermark}>Built with RESUGROW</div>
 
       <header className={styles.header}>
         <div className={styles.nameBlock}>

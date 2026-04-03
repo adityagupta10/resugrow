@@ -1,5 +1,5 @@
 export const SITE_URL = "https://www.resugrow.com";
-export const SITE_NAME = "ResuGrow";
+export const SITE_NAME = "RESUGROW";
 export const SITE_TWITTER = "@resugrow";
 export const SITE_LINKEDIN_URL =
   "https://www.linkedin.com/company/resugrow-com/";
@@ -37,7 +37,7 @@ export function createPageMetadata({
   const canonicalUrl =
     normalizedPath === "/" ? SITE_URL : `${SITE_URL}${normalizedPath}`;
   const mergedKeywords = [...new Set([...GLOBAL_KEYWORDS, ...keywords])];
-  const resolvedAlt = imageAlt || `${title} — ResuGrow`;
+  const resolvedAlt = imageAlt || `${title} — RESUGROW`;
 
   return {
     title,
@@ -98,7 +98,7 @@ export function getOrganizationJsonLd() {
     "@type": "Organization",
     name: SITE_NAME,
     description:
-      "ResuGrow is an AI-powered career platform helping job seekers build ATS-optimized resumes, improve LinkedIn profiles, and land more interviews.",
+      "RESUGROW is an AI-powered career platform helping job seekers build ATS-optimized resumes, improve LinkedIn profiles, and land more interviews.",
     url: SITE_URL,
     foundingDate: "2024",
     logo: {

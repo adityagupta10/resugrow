@@ -7,8 +7,8 @@ export default function ImpactTemplate({ data: rawData }) {
 
   return (
     <div className={styles.resumeDoc}>
-      {/* ResuGrow Watermark */}
-      <div className={styles.watermark}>Built with ResuGrow</div>
+      {/* RESUGROW Watermark */}
+      <div className={styles.watermark}>Built with RESUGROW</div>
 
       <div className={styles.mainContent}>
         <header className={styles.header}>

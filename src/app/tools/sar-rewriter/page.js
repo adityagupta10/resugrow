@@ -7,12 +7,10 @@ import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
 import styles from './page.module.css';
 
 // ── Icons (inline SVG to avoid any import issues) ─────────────────────────
-const IconZap       = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
-const IconCheck     = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
-const IconX         = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
-const IconArrowLeft = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>;
-const IconTrending  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>;
-const IconBook      = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>;
+const IconZap = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>;
+const IconArrowLeft = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>;
+const IconTrending = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>;
+const IconBook = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" /><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" /></svg>;
 
 const SAMPLE_BULLETS = [
   'Helped marketing team run campaigns for multiple products.',
@@ -118,7 +116,7 @@ const SARContent = () => {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             getSoftwareAppJsonLd({
-              name: 'ResuGrow SAR Bullet Rewriter',
+              name: 'RESUGROW SAR Bullet Rewriter',
               description:
                 'Rewrite resume bullets into Situation-Action-Result format with measurable outcomes and recruiter-ready language.',
               url: `${SITE_URL}/tools/sar-rewriter`,
@@ -129,7 +127,7 @@ const SARContent = () => {
       />
       <main className={styles.main}>
         <section className={styles.hero}>
-          <p className={styles.kicker}>AI Rewrite Studio</p>
+          <p className={styles.kicker}>AI SAR Rewriter: Bullet Optimizer</p>
           <h1 className={styles.title}>Advanced SAR Bullet Rewriter</h1>
           <p className={styles.subtitle}>
             Upgrade weak resume bullets into measurable recruiter-grade outcomes with deterministic SAR logic.
@@ -144,83 +142,83 @@ const SARContent = () => {
                 <p>Paste one bullet and choose your rewrite strategy.</p>
               </div>
 
-            <div className={styles.inputBlock}>
-              <label>Current Bullet</label>
-              <textarea
-                className={styles.textarea}
-                placeholder="Example: Helped team improve onboarding process."
-                value={bullet}
-                onChange={(e) => setBullet(e.target.value)}
-              />
-            </div>
-
-            <div className={styles.metaRow}>
-              <MetricTag label="Words" value={inputMeta.wordCount} tone={inputMeta.wordCount >= 10 ? 'good' : 'neutral'} />
-              <MetricTag label="Metrics Found" value={inputMeta.metricSignals} tone={inputMeta.metricSignals > 0 ? 'good' : 'neutral'} />
-            </div>
-
-            <div className={styles.controlsGrid}>
-              <div>
-                <label>Target Keyword</label>
-                <input
-                  type="text"
-                  className={styles.input}
-                  placeholder="Python, FinTech, Product Strategy..."
-                  value={keyword}
-                  onChange={(e) => setKeyword(e.target.value)}
+              <div className={styles.inputBlock}>
+                <label>Current Bullet</label>
+                <textarea
+                  className={styles.textarea}
+                  placeholder="Example: Helped team improve onboarding process."
+                  value={bullet}
+                  onChange={(e) => setBullet(e.target.value)}
                 />
               </div>
-              <div>
-                <label>Tone</label>
-                <select className={styles.select} value={tone} onChange={(e) => setTone(e.target.value)}>
-                  {toneOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label>Impact Focus</label>
-                <select className={styles.select} value={focus} onChange={(e) => setFocus(e.target.value)}>
-                  {focusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
 
-            <button className={styles.primaryBtn} onClick={handleRewrite} disabled={loading}>
-              {loading ? (
-                'Optimizing Bullet...'
-              ) : (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                  <EmojiImage emoji="🔥" size={20} /> Generate Advanced Rewrites
+              <div className={styles.metaRow}>
+                <MetricTag label="Words" value={inputMeta.wordCount} tone={inputMeta.wordCount >= 10 ? 'good' : 'neutral'} />
+                <MetricTag label="Metrics Found" value={inputMeta.metricSignals} tone={inputMeta.metricSignals > 0 ? 'good' : 'neutral'} />
+              </div>
+
+              <div className={styles.controlsGrid}>
+                <div>
+                  <label>Target Keyword</label>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    placeholder="Python, FinTech, Product Strategy..."
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                  />
                 </div>
-              )}
-            </button>
-
-            {error && <p className={styles.errorMsg}>{error}</p>}
-
-            <div className={styles.scenariosSection}>
-              <p className={styles.sectionLabel}>Quick Start Samples</p>
-              <div className={styles.scenarioChips}>
-                {SAMPLE_BULLETS.map((sample) => (
-                  <button key={sample} type="button" onClick={() => setBullet(sample)} className={styles.scenarioChip}>
-                    {sample}
-                  </button>
-                ))}
+                <div>
+                  <label>Tone</label>
+                  <select className={styles.select} value={tone} onChange={(e) => setTone(e.target.value)}>
+                    {toneOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label>Impact Focus</label>
+                  <select className={styles.select} value={focus} onChange={(e) => setFocus(e.target.value)}>
+                    {focusOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
+
+              <button className={styles.primaryBtn} onClick={handleRewrite} disabled={loading}>
+                {loading ? (
+                  'Optimizing Bullet...'
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <IconZap /> Generate Advanced Rewrites
+                  </div>
+                )}
+              </button>
+
+              {error && <p className={styles.errorMsg}>{error}</p>}
+
+              <div className={styles.scenariosSection}>
+                <p className={styles.sectionLabel}>Quick Start Samples</p>
+                <div className={styles.scenarioChips}>
+                  {SAMPLE_BULLETS.map((sample) => (
+                    <button key={sample} type="button" onClick={() => setBullet(sample)} className={styles.scenarioChip}>
+                      {sample}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
             </section>
           </div>
 
           <div className={`${styles.outputPanel} ${results ? '' : styles.hidden}`} ref={outputRef}>
             {results && (
-              <button 
+              <button
                 className={styles.editBtn}
                 onClick={() => {
                   setResults(null);

@@ -6,7 +6,7 @@ import { createPageMetadata } from '@/lib/seo';
 import TemplateGallery from './client-gallery';
 
 export const metadata = createPageMetadata({
-  title: 'Cover Letter Templates for Every Industry | ResuGrow',
+  title: 'Cover Letter Templates for Every Industry | RESUGROW',
   description:
     'Browse ATS-friendly cover letter templates and choose a design that matches your resume and target role.',
   path: '/cover-letter/templates',

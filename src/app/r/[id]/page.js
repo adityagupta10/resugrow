@@ -35,7 +35,7 @@ export default async function SharedResumePage({ params }) {
       <div className={styles.navbar}>
         <div className={styles.logo}>
           <FileText className={styles.logoIcon} />
-          <span>ResuGrow</span>
+          <span>RESUGROW</span>
         </div>
         <div className={styles.cta}>
           <span>Create a winning resume like this in 5 minutes.</span>
@@ -71,7 +71,7 @@ export default async function SharedResumePage({ params }) {
 
       {/* ── Footer / CTA ──────────────────────────────────────────────── */}
       <footer className={styles.footer}>
-        <div className={styles.footerBrand}>Powered by ResuGrow</div>
+        <div className={styles.footerBrand}>Powered by RESUGROW</div>
         <p>Get AI-powered optimization, ATS-score tracking, and 15+ premium templates.</p>
         <Link href="/resume/builder" className={styles.footerCta}>
           Create My Resume

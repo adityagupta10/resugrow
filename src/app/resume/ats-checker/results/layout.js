@@ -1,7 +1,7 @@
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'ATS Scan Results | ResuGrow',
+  title: 'ATS Scan Results | RESUGROW',
   description: 'Your resume ATS analysis results and module-wise breakdown.',
   path: '/resume/ats-checker/results',
   noindex: true

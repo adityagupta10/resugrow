@@ -12,11 +12,23 @@ export default async function DashboardPage() {
     redirect("/login?callbackUrl=/dashboard");
   }
 
-  // Fetch recent resumes for this user
+  // Build a list of all user IDs that share the same email.
+  // This handles the case where multiple Prisma User records exist
+  // (one from NextAuth PrismaAdapter, one from the Supabase share API).
+  let userIds = [user.id];
+  if (user.email) {
+    const allUsers = await prisma.user.findMany({
+      where: { email: user.email },
+      select: { id: true },
+    });
+    userIds = [...new Set([user.id, ...allUsers.map((u) => u.id)])];
+  }
+
+  // Fetch recent resumes across all matching user IDs
   const recentResumes = await prisma.resume.findMany({
-    where: { userId: user.id },
-    orderBy: { updatedAt: 'desc' },
-    take: 5
+    where: { userId: { in: userIds } },
+    orderBy: { updatedAt: "desc" },
+    take: 10,
   });
 
   const stats = [

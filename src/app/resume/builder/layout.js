@@ -10,7 +10,7 @@ export const metadata = createPageMetadata({
     'ATS resume builder', 'professional resume builder', 'online resume builder',
     'resume builder free', 'create resume online', 'resume generator',
   ],
-  imageAlt: 'Free AI Resume Builder by ResuGrow — build an ATS-friendly resume in minutes',
+  imageAlt: 'Free AI Resume Builder by RESUGROW — build an ATS-friendly resume in minutes',
 });
 
 export default function ResumeBuilderLayout({ children }) {

@@ -15,7 +15,7 @@ const footerLinks = {
   ],
   "LinkedIn & Career": [
     { label: "LinkedIn Profile Boost", href: "/linkedin-makeover" },
-    { label: "LinkedIn Profile Review & Score", href: "/linkedin-review" },
+    { label: "LinkedIn Profile Review & Score", href: "/linkedin-review", badge: "New" },
     { label: "Resume Skills Guide", href: "/blog/skills-for-resume-guide" },
     {
       label: "Resume Summary Examples",
@@ -27,17 +27,17 @@ const footerLinks = {
   "AI Career Tools": [
     { label: "AI SAR Bullet Rewriter", href: "/tools/sar-rewriter" },
     {
-      label: "Interview Question Generator",
+      label: "Interview Simulator",
       href: "/tools/interview-prep",
       badge: "New",
     },
     {
-      label: "LinkedIn Content Studio",
+      label: "LinkedIn Studio",
       href: "/tools/linkedin-studio",
       badge: "New",
     },
     {
-      label: "Salary Negotiation Coach",
+      label: "Salary Negotiation",
       href: "/tools/salary-coach",
       badge: "New",
     },
@@ -46,7 +46,7 @@ const footerLinks = {
   ],
   Resources: [
     {
-      label: "ResuGrow vs Canva Resume",
+      label: "RESUGROW vs Canva Resume",
       href: "/blog/resugrow-vs-canva-google-docs",
     },
     { label: "Blog & Career Tips", href: "/blog" },
@@ -65,7 +65,7 @@ export default function Footer() {
             <Link href="/" className={styles.logoWrapper}>
               <Image
                 src="/resugrow-logo.png"
-                alt="ResuGrow AI resume builder and ATS checker logo for job seekers and career growth"
+                alt="RESUGROW AI resume builder and ATS checker logo for job seekers and career growth"
                 width={180}
                 height={48}
                 style={{ objectFit: "contain" }}
@@ -148,7 +148,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Follow ResuGrow on LinkedIn
+              Follow <span className="gradient-text"> RESUGROW </span>  on LinkedIn
             </a>
           </div>
 
@@ -174,7 +174,7 @@ export default function Footer() {
         <div className={styles.footerBottom}>
           <p className={styles.copyright}>
             Made with love for job seekers © {new Date().getFullYear()}{" "}
-            ResuGrow. All rights reserved.
+            <span className="gradient-text">RESUGROW</span>. All rights reserved.
           </p>
           <p className={styles.bottomLinks}>
             <Link href="/privacy-policy">Privacy</Link>

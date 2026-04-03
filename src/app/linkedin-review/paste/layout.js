@@ -1,7 +1,7 @@
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'LinkedIn Direct Paste Analyzer | ResuGrow',
+  title: 'LinkedIn Direct Paste Analyzer | RESUGROW',
   description:
     'Analyze pasted LinkedIn profile text with deterministic scoring when PDF export is unavailable.',
   path: '/linkedin-review/paste',

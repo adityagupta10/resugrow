@@ -1,10 +1,10 @@
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'Account Settings | ResuGrow',
-  description: 'Manage your ResuGrow account settings and profile preferences.',
+  title: 'Account Settings | RESUGROW',
+  description: 'Manage your RESUGROW account settings and profile preferences.',
   path: '/settings',
-  keywords: ['account settings', 'resugrow settings'],
+  keywords: ['account settings', 'RESUGROW settings'],
   noindex: true,
 });
 

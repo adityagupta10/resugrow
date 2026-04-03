@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { createPageMetadata, getFaqJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'ResuGrow vs Canva vs Google Docs Resume Builder (2025 Comparison)',
+  title: 'RESUGROW vs Canva vs Google Docs Resume Builder (2025 Comparison)',
   description:
-    'Comparing ResuGrow, Canva resume, Google Docs resume templates, and Indeed resume builder. Which free resume builder actually gets you hired in 2025?',
+    'Comparing RESUGROW, Canva resume, Google Docs resume templates, and Indeed resume builder. Which free resume builder actually gets you hired in 2025?',
   path: '/blog/resugrow-vs-canva-google-docs',
   keywords: [
     'canva resume', 'google docs resume', 'indeed resume', 'resume builder free',
@@ -12,7 +12,7 @@ export const metadata = createPageMetadata({
     'google docs resume template', 'canva resume template', 'resume maker',
     'resume now', 'resume builder comparison',
   ],
-  imageAlt: 'ResuGrow vs Canva vs Google Docs resume builder comparison 2025',
+  imageAlt: 'RESUGROW vs Canva vs Google Docs resume builder comparison 2025',
 });
 
 const faqs = [
@@ -30,13 +30,13 @@ const faqs = [
   },
   {
     q: 'What is the best free AI resume builder in 2025?',
-    a: 'ResuGrow offers a free AI resume builder with real-time ATS scoring, keyword gap analysis, and AI-powered bullet suggestions — features that Canva, Google Docs, and Indeed do not provide.',
+    a: 'RESUGROW offers a free AI resume builder with real-time ATS scoring, keyword gap analysis, and AI-powered bullet suggestions — features that Canva, Google Docs, and Indeed do not provide.',
   },
 ];
 
 const tools = [
   {
-    name: 'ResuGrow',
+    name: 'RESUGROW',
     tagline: 'AI-powered, ATS-optimized',
     color: '#2563eb',
     bg: '#eff6ff',
@@ -55,7 +55,7 @@ const tools = [
     ],
     verdict: 'Best for getting past ATS filters and landing interviews',
     href: '/resume/builder',
-    cta: 'Try ResuGrow Free',
+    cta: 'Try RESUGROW Free',
   },
   {
     name: 'Canva Resume',
@@ -130,7 +130,7 @@ export default function ComparisonPage() {
   const breadcrumbSchema = getBreadcrumbJsonLd([
     { name: 'Home', url: SITE_URL },
     { name: 'Blog', url: `${SITE_URL}/blog` },
-    { name: 'ResuGrow vs Canva vs Google Docs', url: `${SITE_URL}/blog/resugrow-vs-canva-google-docs` },
+    { name: 'RESUGROW vs Canva vs Google Docs', url: `${SITE_URL}/blog/resugrow-vs-canva-google-docs` },
   ]);
 
   return (
@@ -145,7 +145,7 @@ export default function ComparisonPage() {
           <span style={{ margin: '0 8px' }}>›</span>
           <Link href="/blog" style={{ color: '#2563eb' }}>Blog</Link>
           <span style={{ margin: '0 8px' }}>›</span>
-          <span>ResuGrow vs Canva vs Google Docs</span>
+          <span>RESUGROW vs Canva vs Google Docs</span>
         </nav>
 
         <div style={{ marginBottom: '48px' }}>
@@ -153,13 +153,13 @@ export default function ComparisonPage() {
             Tool Comparison · 2025
           </div>
           <h1 style={{ fontSize: 'clamp(26px, 5vw, 42px)', fontWeight: 800, color: '#0f172a', lineHeight: 1.15, letterSpacing: '-0.03em', marginBottom: '16px' }}>
-            ResuGrow vs Canva vs Google Docs Resume Builder: Which One Actually Gets You Hired?
+            RESUGROW vs Canva vs Google Docs Resume Builder: Which One Actually Gets You Hired?
           </h1>
           <p style={{ fontSize: '17px', color: '#475569', lineHeight: 1.75, maxWidth: '720px' }}>
             Most job seekers pick a resume tool based on how it looks. But in 2025, 98% of Fortune 500 companies use ATS software that never sees your design — it only reads your text. Here's how the most popular free resume builders stack up where it actually matters.
           </p>
           <div style={{ marginTop: '16px', fontSize: '13px', color: '#64748b' }}>
-            By <strong style={{ color: '#374151' }}>Kavya Sharma</strong> · Product Lead, ResuGrow · Updated April 2025
+            By <strong style={{ color: '#374151' }}>Kavya Sharma</strong> · Product Lead, RESUGROW · Updated April 2025
           </div>
         </div>
 

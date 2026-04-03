@@ -62,7 +62,7 @@ function slugHash(slug) {
 
 function buildCoverAlt(post) {
   const category = post.category ? `${post.category}` : 'career growth';
-  return `${post.title} cover image for ResuGrow blog about ${category}, ATS-friendly resumes, and recruiter-ready job search strategy`;
+  return `${post.title} cover image for RESUGROW blog about ${category}, ATS-friendly resumes, and recruiter-ready job search strategy`;
 }
 
 function resolveCoverImage(post) {
@@ -97,7 +97,7 @@ export function attachBlogImagesToPost(post) {
   const secondarySrc = pickSecondaryImage(post, coverImage);
   const secondaryShot = {
     src: secondarySrc,
-    alt: `${post.title} supporting image for ResuGrow blog with ATS optimization and recruiter scan guidance`,
+    alt: `${post.title} supporting image for RESUGROW blog with ATS optimization and recruiter scan guidance`,
     caption: `Supporting visual for ${post.category || 'this guide'}.`,
   };
 

@@ -27,7 +27,7 @@ const features = [
 
 export default function CoverLetterBuilder() {
   const softwareJsonLd = getSoftwareAppJsonLd({
-    name: 'ResuGrow Cover Letter Studio',
+    name: 'RESUGROW Cover Letter Studio',
     description:
       'Generate job-tailored cover letters with live preview, deterministic structure, and one-click PDF export.',
     url: `${SITE_URL}/cover-letter/builder`,

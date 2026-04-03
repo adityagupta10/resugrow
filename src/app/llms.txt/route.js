@@ -1,7 +1,7 @@
 import { SITE_URL } from '@/lib/seo';
 
 export async function GET() {
-  const content = `# ResuGrow
+  const content = `# RESUGROW
 AI-powered career platform for resume building, ATS optimization, LinkedIn review, and cover letters.
 
 Primary site: ${SITE_URL}

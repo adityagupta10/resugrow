@@ -4,30 +4,30 @@ import { useState, useEffect, useRef } from 'react';
 import styles from './page.module.css';
 
 // ── Icons (inline SVG to avoid any import issues) ─────────────────────────
-const IconZap       = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
-const IconChevDown  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>;
-const IconChevUp    = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6"/></svg>;
-const IconCopy      = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>;
-const IconCheck     = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
-const IconX         = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
-const IconArrowLeft = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>;
-const IconTrending  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>;
-const IconMail      = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>;
-const IconTarget    = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>;
-const IconBriefcase = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>;
-const IconBook      = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>;
+const IconZap = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>;
+const IconChevDown = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>;
+const IconChevUp = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6" /></svg>;
+const IconCopy = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>;
+const IconCheck = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>;
+const IconX = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>;
+const IconArrowLeft = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>;
+const IconTrending = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>;
+const IconMail = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>;
+const IconTarget = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg>;
+const IconBriefcase = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" /></svg>;
+const IconBook = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" /><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" /></svg>;
 
 // ── Constants ─────────────────────────────────────────────────────────────
 const LOCATIONS = [
   { value: 'san_francisco', label: 'San Francisco, CA' },
-  { value: 'new_york',      label: 'New York, NY' },
-  { value: 'london',        label: 'London, UK' },
-  { value: 'toronto',       label: 'Toronto, CA' },
-  { value: 'sydney',        label: 'Sydney, AU' },
-  { value: 'berlin',        label: 'Berlin, DE' },
-  { value: 'singapore',     label: 'Singapore, SG' },
-  { value: 'bangalore',     label: 'Bangalore, IN' },
-  { value: 'remote',        label: 'Remote (Global)' },
+  { value: 'new_york', label: 'New York, NY' },
+  { value: 'london', label: 'London, UK' },
+  { value: 'toronto', label: 'Toronto, CA' },
+  { value: 'sydney', label: 'Sydney, AU' },
+  { value: 'berlin', label: 'Berlin, DE' },
+  { value: 'singapore', label: 'Singapore, SG' },
+  { value: 'bangalore', label: 'Bangalore, IN' },
+  { value: 'remote', label: 'Remote (Global)' },
 ];
 
 const CURRENCIES = [
@@ -40,34 +40,34 @@ const CURRENCIES = [
 ];
 
 const COMPANY_TYPES = [
-  { value: 'product',        label: 'Product' },
-  { value: 'startup',        label: 'Startup' },
-  { value: 'mnc',            label: 'MNC' },
-  { value: 'service',        label: 'IT Services' },
+  { value: 'product', label: 'Product' },
+  { value: 'startup', label: 'Startup' },
+  { value: 'mnc', label: 'MNC' },
+  { value: 'service', label: 'IT Services' },
   { value: 'government_psu', label: 'Govt / PSU' },
 ];
 
 const SECTORS = [
-  { value: 'general',    label: 'General' },
-  { value: 'fintech',    label: 'Fintech' },
+  { value: 'general', label: 'General' },
+  { value: 'fintech', label: 'Fintech' },
   { value: 'healthtech', label: 'Healthtech' },
-  { value: 'ecommerce',  label: 'E-commerce' },
-  { value: 'saas',       label: 'SaaS' },
-  { value: 'gaming',     label: 'Gaming' },
-  { value: 'edtech',     label: 'EdTech' },
-  { value: 'media',      label: 'Media' },
-  { value: 'other',      label: 'Other' },
+  { value: 'ecommerce', label: 'E-commerce' },
+  { value: 'saas', label: 'SaaS' },
+  { value: 'gaming', label: 'Gaming' },
+  { value: 'edtech', label: 'EdTech' },
+  { value: 'media', label: 'Media' },
+  { value: 'other', label: 'Other' },
 ];
 
-const SCRIPT_KEYS   = ['openingStatement', 'marketDataReference', 'valueProposition', 'counterOfferAsk', 'objectionHandling', 'closingStatement'];
+const SCRIPT_KEYS = ['openingStatement', 'marketDataReference', 'valueProposition', 'counterOfferAsk', 'objectionHandling', 'closingStatement'];
 const SCRIPT_LABELS = ['Opening Statement', 'Market Data Reference', 'Value Proposition', 'Counter-Offer Ask', 'Handling "Out of Budget"', 'Closing Statement'];
-const SCRIPT_ICONS  = ['👋', '📊', '💎', '💰', '🛡️', '🤝'];
+const SCRIPT_ICONS = ['👋', '📊', '💎', '💰', '🛡️', '🤝'];
 
 const EMAIL_TABS = [
   { label: 'Initial Response', key: 'initialResponse' },
-  { label: 'Counter Offer',    key: 'counterOffer' },
-  { label: 'Follow-Up',        key: 'followUp' },
-  { label: 'Acceptance',       key: 'acceptance' },
+  { label: 'Counter Offer', key: 'counterOffer' },
+  { label: 'Follow-Up', key: 'followUp' },
+  { label: 'Acceptance', key: 'acceptance' },
 ];
 
 const SCENARIOS = [
@@ -111,16 +111,16 @@ function getPctOnBar(val, barMin, barMax) {
 }
 
 function getVerdictClass(color, styles) {
-  if (color === 'red')    return styles.verdictRed;
+  if (color === 'red') return styles.verdictRed;
   if (color === 'orange') return styles.verdictOrange;
-  if (color === 'blue')   return styles.verdictBlue;
+  if (color === 'blue') return styles.verdictBlue;
   return styles.verdictGreen;
 }
 
 function getOfferDotClass(color, styles) {
-  if (color === 'red')    return styles.offerDotRed;
+  if (color === 'red') return styles.offerDotRed;
   if (color === 'orange') return styles.offerDotOrange;
-  if (color === 'blue')   return styles.offerDotBlue;
+  if (color === 'blue') return styles.offerDotBlue;
   return '';
 }
 
@@ -141,16 +141,16 @@ export default function SalaryCoachPage() {
   });
 
   // App state
-  const [results, setResults]             = useState(null);
-  const [loading, setLoading]             = useState(false);
-  const [error, setError]                 = useState('');
-  const [showForm, setShowForm]           = useState(true);
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showForm, setShowForm] = useState(true);
   const [activeEmailTab, setActiveEmailTab] = useState(0);
   const [expandedScript, setExpandedScript] = useState(0);
-  const [copiedKey, setCopiedKey]         = useState(null);
+  const [copiedKey, setCopiedKey] = useState(null);
 
   const skillInputRef = useRef(null);
-  const resultsRef    = useRef(null);
+  const resultsRef = useRef(null);
 
   // Scroll to results on success
   useEffect(() => {
@@ -167,16 +167,16 @@ export default function SalaryCoachPage() {
   function applyScenario(data) {
     setForm(f => ({
       ...f,
-      role:          data.role          || f.role,
+      role: data.role || f.role,
       yearsExperience: data.yearsExperience || f.yearsExperience,
-      offeredCTC:    data.offeredCTC    || f.offeredCTC,
-      currentCTC:    data.currentCTC    || f.currentCTC,
-      location:      data.location      || f.location,
-      currency:      data.currency      || f.currency,
-      companyType:   data.companyType   || f.companyType,
-      sector:        data.sector        || f.sector,
-      skills:        data.skills        || f.skills,
-      skillInput:    '',
+      offeredCTC: data.offeredCTC || f.offeredCTC,
+      currentCTC: data.currentCTC || f.currentCTC,
+      location: data.location || f.location,
+      currency: data.currency || f.currency,
+      companyType: data.companyType || f.companyType,
+      sector: data.sector || f.sector,
+      skills: data.skills || f.skills,
+      skillInput: '',
     }));
   }
 
@@ -216,15 +216,15 @@ export default function SalaryCoachPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          role:            form.role,
-          currency:        form.currency,
+          role: form.role,
+          currency: form.currency,
           yearsExperience: form.yearsExperience,
-          offeredCTC:      form.offeredCTC,
-          currentCTC:      form.currentCTC || null,
-          location:        form.location,
-          companyType:     form.companyType,
-          sector:          form.sector,
-          skills:          form.skills,
+          offeredCTC: form.offeredCTC,
+          currentCTC: form.currentCTC || null,
+          location: form.location,
+          companyType: form.companyType,
+          sector: form.sector,
+          skills: form.skills,
         }),
       });
       const data = await res.json();
@@ -249,9 +249,9 @@ export default function SalaryCoachPage() {
   function renderRangeBar(ma) {
     const barMin = ma.minRange * 0.80;
     const barMax = ma.maxRange * 1.12;
-    const minPct  = getPctOnBar(ma.minRange,  barMin, barMax);
-    const midPct  = getPctOnBar(ma.midRange,  barMin, barMax);
-    const maxPct  = getPctOnBar(ma.maxRange,  barMin, barMax);
+    const minPct = getPctOnBar(ma.minRange, barMin, barMax);
+    const midPct = getPctOnBar(ma.midRange, barMin, barMax);
+    const maxPct = getPctOnBar(ma.maxRange, barMin, barMax);
     const offerPct = getPctOnBar(ma.offeredCTC, barMin, barMax);
     const dotClass = getOfferDotClass(ma.verdictColor, styles);
 
@@ -310,7 +310,7 @@ export default function SalaryCoachPage() {
       <main className={styles.main}>
         {/* Hero */}
         <section className={styles.hero}>
-          <p className={styles.kicker}>Negotiation Coach</p>
+          <p className={styles.kicker}>Salary Coach : Negotiation Strategist</p>
           <h1 className={styles.title}>Salary Negotiation Coach</h1>
           <p className={styles.subtitle}>
             Global salary benchmarks, a personalised negotiation script, and ready-to-send email templates — built for your exact offer.
@@ -645,9 +645,9 @@ export default function SalaryCoachPage() {
                     <div className={styles.additionalCardHeader}>
                       <span className={styles.additionalName}>{item.item}</span>
                       <span className={
-                        item.priority === 'High'   ? styles.priorityHigh :
-                        item.priority === 'Medium' ? styles.priorityMedium :
-                        styles.priorityLow
+                        item.priority === 'High' ? styles.priorityHigh :
+                          item.priority === 'Medium' ? styles.priorityMedium :
+                            styles.priorityLow
                       }>{item.priority}</span>
                     </div>
                     <p className={styles.additionalDetail}>{item.detail}</p>

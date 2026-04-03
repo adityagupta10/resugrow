@@ -100,7 +100,7 @@ export default function Hero() {
                 <span className={styles.typewriterCursor}>|</span>
               </span>
               <br />
-              with <span className="gradient-text">ResuGrow</span> Platform
+              with <span className="gradient-text">RESUGROW</span> Platform
             </h1>
             <p className={styles.heroSubtitle}>
               The AI-powered career engine trusted by 25M+ pros to get hired at Google, Tesla, Microsoft and beyond.
@@ -147,7 +147,7 @@ export default function Hero() {
 
           <div className={styles.heroPanel}>
             <div className={styles.panelTop}>
-              <span>ResuGrow Overview</span>
+              <span>RESUGROW Overview</span>
               <span>Live</span>
             </div>
 

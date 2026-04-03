@@ -1,8 +1,8 @@
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'Secure Checkout | ResuGrow',
-  description: 'Checkout page for ResuGrow services.',
+  title: 'Secure Checkout | RESUGROW',
+  description: 'Checkout page for RESUGROW services.',
   path: '/payment',
   noindex: true
 });

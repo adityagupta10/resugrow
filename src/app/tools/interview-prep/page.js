@@ -390,12 +390,12 @@ export default function InterviewPrepPage() {
 
   const filterCounts = results
     ? FILTER_OPTIONS.reduce((acc, f) => {
-        acc[f.value] =
-          f.value === 'all'
-            ? results.questions.length
-            : results.questions.filter((q) => q.category === f.value).length;
-        return acc;
-      }, {})
+      acc[f.value] =
+        f.value === 'all'
+          ? results.questions.length
+          : results.questions.filter((q) => q.category === f.value).length;
+      return acc;
+    }, {})
     : {};
 
   // ── Render ───────────────────────────────────────────────────────────────
@@ -405,7 +405,7 @@ export default function InterviewPrepPage() {
 
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section className={styles.hero}>
-          <p className={styles.kicker}>AI Interview Lab</p>
+          <p className={styles.kicker}>AI Interview Generator: Interview Simulator</p>
           <h1 className={styles.title}>Interview Question Generator</h1>
           <p className={styles.subtitle}>
             Generate 15–20 tailored interview questions from any job description with SAR answer
@@ -554,7 +554,7 @@ export default function InterviewPrepPage() {
           {(results || loading) && (
             <div className={`${styles.panel} ${styles.outputPanel}`}>
               {results && (
-                <button 
+                <button
                   className={styles.editBtn}
                   onClick={() => {
                     setResults(null);
@@ -583,69 +583,68 @@ export default function InterviewPrepPage() {
               {/* Results */}
               {!loading && results && (
                 <div>
-                {/* Detected role + seniority + skills */}
-                <div className={styles.detectedRow}>
-                  <span className={styles.detectedLabel}>Detected:</span>
-                  <span className={styles.rolePill}>{results.detectedRole}</span>
-                  <span
-                    style={{
-                      fontSize: '12px',
-                      color: '#166534',
-                      fontWeight: 700,
-                      background: '#dcfce7',
-                      padding: '3px 10px',
-                      borderRadius: '20px',
-                      border: '1px solid #bbf7d0',
-                    }}
-                  >
-                    {results.seniority}
-                  </span>
-                  {results.extractedSkills.map((skill) => (
-                    <span key={skill} className={styles.skillChip}>
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Filter tabs */}
-                <div className={styles.filterTabs}>
-                  {FILTER_OPTIONS.map((f) => (
-                    <button
-                      key={f.value}
-                      type="button"
-                      className={`${styles.filterTab} ${
-                        activeFilter === f.value ? styles.filterTabActive : ''
-                      }`}
-                      onClick={() => setActiveFilter(f.value)}
+                  {/* Detected role + seniority + skills */}
+                  <div className={styles.detectedRow}>
+                    <span className={styles.detectedLabel}>Detected:</span>
+                    <span className={styles.rolePill}>{results.detectedRole}</span>
+                    <span
+                      style={{
+                        fontSize: '12px',
+                        color: '#166534',
+                        fontWeight: 700,
+                        background: '#dcfce7',
+                        padding: '3px 10px',
+                        borderRadius: '20px',
+                        border: '1px solid #bbf7d0',
+                      }}
                     >
-                      {f.label}
-                      {filterCounts[f.value] > 0 && (
-                        <span className={styles.filterCount}>{filterCounts[f.value]}</span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Question list */}
-                {filteredQuestions.length === 0 ? (
-                  <div className={styles.noResults}>
-                    No questions in this category for the detected role.
+                      {results.seniority}
+                    </span>
+                    {results.extractedSkills.map((skill) => (
+                      <span key={skill} className={styles.skillChip}>
+                        {skill}
+                      </span>
+                    ))}
                   </div>
-                ) : (
-                  filteredQuestions.map((q) => (
-                    <QuestionCard
-                      key={q.id}
-                      q={q}
-                      expanded={expandedCards.has(q.id)}
-                      onToggle={toggleCard}
-                      isSaved={isPracticeSaved(q.id)}
-                      onSave={saveAsCard}
-                    />
-                  ))
-                )}
-              </div>
-            )}
-          </div>
+
+                  {/* Filter tabs */}
+                  <div className={styles.filterTabs}>
+                    {FILTER_OPTIONS.map((f) => (
+                      <button
+                        key={f.value}
+                        type="button"
+                        className={`${styles.filterTab} ${activeFilter === f.value ? styles.filterTabActive : ''
+                          }`}
+                        onClick={() => setActiveFilter(f.value)}
+                      >
+                        {f.label}
+                        {filterCounts[f.value] > 0 && (
+                          <span className={styles.filterCount}>{filterCounts[f.value]}</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Question list */}
+                  {filteredQuestions.length === 0 ? (
+                    <div className={styles.noResults}>
+                      No questions in this category for the detected role.
+                    </div>
+                  ) : (
+                    filteredQuestions.map((q) => (
+                      <QuestionCard
+                        key={q.id}
+                        q={q}
+                        expanded={expandedCards.has(q.id)}
+                        onToggle={toggleCard}
+                        isSaved={isPracticeSaved(q.id)}
+                        onSave={saveAsCard}
+                      />
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
           )}
         </section>
 

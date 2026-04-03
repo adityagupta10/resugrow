@@ -11,11 +11,22 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const resume = await prisma.resume.findUnique({
-      where: { 
+    // Collect all user IDs tied to this email so we can match resumes
+    // created under a different auth provider's user record.
+    let userIds = [user.id];
+    if (user.email) {
+      const allUsers = await prisma.user.findMany({
+        where: { email: user.email },
+        select: { id: true },
+      });
+      userIds = [...new Set([user.id, ...allUsers.map((u) => u.id)])];
+    }
+
+    const resume = await prisma.resume.findFirst({
+      where: {
         shareId: id,
-        userId: user.id // Security: Ensure only the owner can fetch for editing
-      }
+        userId: { in: userIds },
+      },
     });
 
     if (!resume) {

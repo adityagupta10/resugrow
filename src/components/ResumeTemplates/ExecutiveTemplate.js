@@ -6,8 +6,8 @@ export default function ExecutiveTemplate({ data: rawData }) {
   const p = data.personal;
   return (
     <div className={styles.resumeDoc}>
-      {/* ResuGrow Watermark */}
-      <div className={styles.watermark}>Built with ResuGrow</div>
+      {/* RESUGROW Watermark */}
+      <div className={styles.watermark}>Built with RESUGROW</div>
 
       <header className={styles.header}>
         <h1 className={styles.name}>{p.fullName || 'Your Name'}</h1>

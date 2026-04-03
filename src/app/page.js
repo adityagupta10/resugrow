@@ -64,8 +64,8 @@ const templates = templateData.slice(0, 4);
 const appJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'ResuGrow',
-  alternateName: 'ResuGrow AI',
+  name: 'RESUGROW',
+  alternateName: 'RESUGROW AI',
   url: 'https://www.resugrow.com',
   logo: 'https://www.resugrow.com/resugrow-logo.png',
   applicationCategory: 'BusinessApplication',

@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
   const post = posts.find((p) => p.slug === slug);
   if (!post) return {};
   return createPageMetadata({
-    title: `${post.title} | ResuGrow Blog`,
+    title: `${post.title} | RESUGROW Blog`,
     description: post.excerpt,
     path: `/blog/${post.slug}`,
     keywords: post.tags,
@@ -77,7 +77,7 @@ const defaultScreenshots = [
   },
   {
     src: '/linkedin-makeover.png',
-    alt: 'LinkedIn profile optimization example from ResuGrow tool experience',
+    alt: 'LinkedIn profile optimization example from RESUGROW tool experience',
     caption: 'LinkedIn optimization workflow preview'
   }
 ];
@@ -89,7 +89,7 @@ function buildFaqSchema(post) {
       a: 'It improves clarity, keyword alignment, and recruiter confidence, which typically increases first-pass response rates.'
     },
     {
-      q: 'Which ResuGrow tool should I use first after reading this?',
+      q: 'Which RESUGROW tool should I use first after reading this?',
       a: 'Start with ATS Checker for diagnostics, then apply edits in Resume Builder and validate again before applying.'
     }
   ];
@@ -243,7 +243,7 @@ export default async function BlogPost({ params }) {
             )}
           </div>
 
-          <ToolCtaStrip title="Apply this guide immediately with ResuGrow tools" links={toolLinks} />
+          <ToolCtaStrip title="Apply this guide immediately with RESUGROW tools" links={toolLinks} />
 
           <div className={styles.screenshotGrid}>
             {screenshots.map((shot) => (

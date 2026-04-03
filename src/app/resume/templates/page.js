@@ -22,7 +22,7 @@ const templates = templateData;
 
 export default function Templates() {
   const softwareJsonLd = getSoftwareAppJsonLd({
-    name: 'ResuGrow Resume Templates',
+    name: 'RESUGROW Resume Templates',
     description:
       'Browse ATS-friendly resume templates optimized for recruiter readability across industries.',
     url: `${SITE_URL}/resume/templates`,

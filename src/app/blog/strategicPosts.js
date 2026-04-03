@@ -14,7 +14,7 @@ const fallbackScreenshots = [
   {
     src: '/linkedin-save-pdf-guide.png',
     alt: 'LinkedIn Save to PDF walkthrough screenshot for profile optimization workflow',
-    caption: 'Workflow screenshot used in ResuGrow tools and LinkedIn optimization guides.'
+    caption: 'Workflow screenshot used in RESUGROW tools and LinkedIn optimization guides.'
   }
 ];
 
@@ -237,7 +237,7 @@ Run one final scan and remove low-value filler.
 
 This sprint is short enough to repeat per application without burnout and strong enough to improve quality meaningfully.
 
-## How to use ResuGrow tools with this strategy
+## How to use RESUGROW tools with this strategy
 
 Use [ATS Checker](/resume/ats-checker) to identify structural and keyword gaps first. Move to [Resume Builder](/resume/builder) for controlled rewrites and format consistency. Then use [LinkedIn Review](/linkedin-review) to ensure your profile tells the same professional story. When needed, add a targeted narrative layer with [Cover Letter Builder](/cover-letter/builder).
 
@@ -394,7 +394,7 @@ const strategicPostSeeds = [
     date: 'March 27, 2026',
     readTime: '12 min read',
     author: 'Priya Nair',
-    authorRole: 'Head of Product, ResuGrow',
+    authorRole: 'Head of Product, RESUGROW',
     authorInitials: 'PN',
     authorColor: '#2563eb',
     excerpt: 'Most resume rejections happen before a human review. Learn how ATS parsers read your PDF, what breaks extraction, and how to fix structure fast.',
@@ -559,7 +559,7 @@ Never guess. Use a data-backed check before you apply. One fast validation can p
     date: 'March 27, 2026',
     readTime: '11 min read',
     author: 'Priya Nair',
-    authorRole: 'Head of Product, ResuGrow',
+    authorRole: 'Head of Product, RESUGROW',
     authorInitials: 'PN',
     authorColor: '#2563eb',
     excerpt: 'High-performing resumes replace vague claims with measurable outcomes. Use this formula to transform weak bullets into recruiter-ready proof.',
@@ -778,7 +778,7 @@ Your resume is your first sales call. If it does not make business impact obviou
     date: 'March 27, 2026',
     readTime: '10 min read',
     author: 'Priya Nair',
-    authorRole: 'Head of Product, ResuGrow',
+    authorRole: 'Head of Product, RESUGROW',
     authorInitials: 'PN',
     authorColor: '#2563eb',
     excerpt: 'MarTech candidates must balance marketing outcomes and technical depth. Here is how to present attribution, automation, and analytics work without clutter.',
@@ -970,7 +970,7 @@ Choose verbs that match your actual responsibility level. Strong language works 
     date: 'March 27, 2026',
     readTime: '11 min read',
     author: 'Priya Nair',
-    authorRole: 'Head of Product, ResuGrow',
+    authorRole: 'Head of Product, RESUGROW',
     authorInitials: 'PN',
     authorColor: '#2563eb',
     excerpt: 'Use a master resume workflow to customize quickly for multiple roles without rewriting from scratch.',

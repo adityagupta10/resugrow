@@ -58,7 +58,7 @@ export default function ATSChecker() {
   const softwareJsonLd = useMemo(
     () =>
       getSoftwareAppJsonLd({
-        name: 'ResuGrow ATS Resume Checker',
+        name: 'RESUGROW ATS Resume Checker',
         description:
           'Upload a resume PDF and get an ATS compatibility score, keyword gaps, and actionable fixes.',
         url: `${SITE_URL}/resume/ats-checker`,
@@ -397,11 +397,11 @@ export default function ATSChecker() {
         </div>
       </section>
 
-      {/* 3. Key Benefits (Why ResuGrow?) */}
+      {/* 3. Key Benefits (Why RESUGROW?) */}
       <section className={styles.subpage}>
         <div className={styles.subpageContainer}>
           <div className="section-header">
-            <h2 className="section-title">Why <span className="gradient-text">ResuGrow?</span></h2>
+            <h2 className="section-title">Why <span className="gradient-text">RESUGROW?</span></h2>
             <p className="section-subtitle">Comprehensive analysis to ensure your resume gets past ATS filters.</p>
           </div>
           <div className={styles.featureGrid}>
@@ -421,7 +421,7 @@ export default function ATSChecker() {
       {/* 4. The "Fear of Missing Out" (Social Proof) */}
       <Testimonials
         title="Stop Getting Auto-Rejected"
-        subtitle="Join thousands of professionals who used ResuGrow to beat the bots and land their dream interviews."
+        subtitle="Join thousands of professionals who used RESUGROW to beat the bots and land their dream interviews."
       />
 
       {/* 5. Technical Trust Signals (SEO Boost) */}
@@ -437,7 +437,7 @@ export default function ATSChecker() {
                   data structures that bots require.
                 </p>
                 <p>
-                  ResuGrow uses a proprietary algorithm that mimics the logic of major systems like
+                  RESUGROW uses a proprietary algorithm that mimics the logic of major systems like
                   Workday, Taleo, and Greenhouse to give you a competitive edge. We don&apos;t just check
                   for keywords; we ensure your entire professional story is machine-readable and human-ready.
                 </p>

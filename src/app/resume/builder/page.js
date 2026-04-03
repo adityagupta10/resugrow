@@ -880,8 +880,8 @@ function ResumeBuilderPage() {
   const [emailSent, setEmailSent] = useState(false);
   const handleSendEmail = () => {
     if (!emailAddress.trim()) return;
-    const subject = encodeURIComponent(`My Resume — ${data.personal.fullName || 'ResuGrow'}`);
-    const body = encodeURIComponent(`Here is my resume built with ResuGrow:\n\n${shareUrl}\n\nBest regards,\n${data.personal.fullName || ''}`);
+    const subject = encodeURIComponent(`My Resume — ${data.personal.fullName || 'RESUGROW'}`);
+    const body = encodeURIComponent(`Here is my resume built with RESUGROW:\n\n${shareUrl}\n\nBest regards,\n${data.personal.fullName || ''}`);
     window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`);
     setEmailSent(true);
     setTimeout(() => { setEmailSent(false); setEmailModal(false); }, 2000);
@@ -889,7 +889,7 @@ function ResumeBuilderPage() {
 
   const handleSocialShare = (platform) => {
     const urlStr = shareUrl || 'https://resugrow.vercel.app/resume/view/' + uid();
-    const text = encodeURIComponent(`Check out my professional resume built with ResuGrow!`);
+    const text = encodeURIComponent(`Check out my professional resume built with RESUGROW!`);
     const url = encodeURIComponent(urlStr);
 
     let shareLink = '';
@@ -976,7 +976,7 @@ function ResumeBuilderPage() {
       <aside className={styles.sidebar}>
         <Link href="/" className={styles.sidebarLogo}>
           <div className={styles.sidebarLogoIcon}>R</div>
-          <span className={styles.sidebarLogoText}>ResuGrow</span>
+          <span className={styles.sidebarLogoText}>RESUGROW</span>
         </Link>
         <nav className={styles.sidebarNav}>
           {STEPS.map((step, idx) => {

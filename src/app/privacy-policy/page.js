@@ -2,10 +2,10 @@ import styles from '../legal.module.css';
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-    title: 'Privacy Policy | ResuGrow',
-    description: 'Read how ResuGrow collects, uses, and protects data across resume and LinkedIn tools.',
+    title: 'Privacy Policy | RESUGROW',
+    description: 'Read how RESUGROW collects, uses, and protects data across resume and LinkedIn tools.',
     path: '/privacy-policy',
-    keywords: ['privacy policy', 'data protection', 'resugrow privacy']
+    keywords: ['privacy policy', 'data protection', 'RESUGROW privacy']
 });
 
 export default function PrivacyPolicy() {
@@ -20,7 +20,7 @@ export default function PrivacyPolicy() {
                 <section>
                     <h2>1. Introduction</h2>
                     <p>
-                        At ResuGrow, we take your privacy seriously. This Privacy Policy explains how we collect,
+                        At RESUGROW, we take your privacy seriously. This Privacy Policy explains how we collect,
                         use, disclose, and safeguard your information when you visit our website or use our
                         resume building services. Please read this privacy policy carefully. If you do not agree
                         with the terms of this privacy policy, please do not access the site.

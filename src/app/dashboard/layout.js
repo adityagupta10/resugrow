@@ -1,10 +1,10 @@
 import { createPageMetadata } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'Dashboard | ResuGrow',
-  description: 'Your ResuGrow dashboard for resumes, ATS scans, and LinkedIn optimization history.',
+  title: 'Dashboard | RESUGROW',
+  description: 'Your RESUGROW dashboard for resumes, ATS scans, and LinkedIn optimization history.',
   path: '/dashboard',
-  keywords: ['resugrow dashboard'],
+  keywords: ['RESUGROW dashboard'],
   noindex: true,
 });
 

@@ -135,7 +135,7 @@ export default function ProfileReview() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             getSoftwareAppJsonLd({
-              name: 'ResuGrow LinkedIn Profile Review',
+              name: 'RESUGROW LinkedIn Profile Review',
               description:
                 'Upload your official LinkedIn PDF export to get a 0-100 score with actionable fixes to improve recruiter visibility.',
               url: `${SITE_URL}/linkedin-review`,

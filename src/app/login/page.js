@@ -127,7 +127,7 @@ function LoginContent() {
         <div className={styles.mapBg} />
         <div className={styles.marketingContent}>
           <h1 className={styles.headline}>
-            ResuGrow:<br />
+            RESUGROW:<br />
             Turn Your Profile<br />
             Into a Hiring Magnet.
           </h1>
@@ -146,7 +146,7 @@ function LoginContent() {
               <div className={styles.avatar}>
                 <Image
                   src="/images/rand.png"
-                  alt="Bella Thomas, Senior Product Manager at Amazon, endorsing ResuGrow"
+                  alt="Bella Thomas, Senior Product Manager at Amazon, endorsing RESUGROW"
                   width={44}
                   height={44}
                   className={styles.avatar}
@@ -166,7 +166,7 @@ function LoginContent() {
         <div className={styles.topBar}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <span style={{ fontSize: '24px', fontWeight: 1000 }} className="gradient-text">
-              ResuGrow
+              RESUGROW
             </span>
           </Link>
         </div>
@@ -183,7 +183,7 @@ function LoginContent() {
             </span>
           </div>
 
-          <h2>Welcome to <span style={{ fontWeight: 900 }} className="gradient-text">ResuGrow</span></h2>
+          <h2>Welcome to <span style={{ fontWeight: 900 }} className="gradient-text">RESUGROW</span></h2>
           <div className={styles.socialStack}>
             <button className={styles.socialBtn} onClick={() => startSupabaseOAuth('google')} disabled={isLoading} type="button">
               <img src="/images/google.png" alt="Google logo for ResuGrow social sign-in" />
@@ -191,14 +191,14 @@ function LoginContent() {
             </button>
 
             <button className={styles.socialBtn} onClick={() => startSupabaseOAuth('linkedin_oidc')} disabled={isLoading} type="button">
-              <svg viewBox="0 0 24 24" fill="#0077b5" role="img" aria-label="LinkedIn logo for ResuGrow social sign-in">
+              <svg viewBox="0 0 24 24" fill="#0077b5" role="img" aria-label="LinkedIn logo for RESUGROW social sign-in">
                 <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
               </svg>
               Continue with LinkedIn
             </button>
 
             <button className={styles.socialBtn} onClick={() => startSupabaseOAuth('github')} disabled={isLoading} type="button">
-              <svg viewBox="0 0 24 24" fill="currentColor" role="img" aria-label="GitHub logo for ResuGrow social sign-in">
+              <svg viewBox="0 0 24 24" fill="currentColor" role="img" aria-label="GitHub logo for RESUGROW social sign-in">
                 <path d="M12 0.3c-6.63 0-12 5.37-12 12 0 5.3 3.44 9.8 8.2 11.39 0.6 0.11 0.82-0.26 0.82-0.58 0-0.29-0.01-1.04-0.02-2.05-3.34 0.73-4.04-1.61-4.04-1.61-0.55-1.39-1.34-1.76-1.34-1.76-1.09-0.75 0.08-0.73 0.08-0.73 1.21 0.09 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 0.11-0.78 0.42-1.31 0.76-1.61-2.66-0.3-5.46-1.33-5.46-5.92 0-1.31 0.47-2.38 1.24-3.22-0.12-0.3-0.54-1.52 0.12-3.17 0 0 1.01-0.32 3.3 1.23 0.96-0.27 1.98-0.4 3-0.4 1.02 0 2.04 0.13 3 0.4 2.29-1.55 3.3-1.23 3.3-1.23 0.66 1.65 0.24 2.87 0.12 3.17 0.77 0.84 1.24 1.91 1.24 3.22 0 4.6-2.81 5.61-5.49 5.91 0.43 0.38 0.82 1.12 0.82 2.25 0 1.62-0.01 2.93-0.01 3.33 0 0.32 0.22 0.69 0.83 0.58 4.76-1.59 8.2-6.09 8.2-11.39 0-6.63-5.37-12-12-12z" />
               </svg>
               Continue with GitHub

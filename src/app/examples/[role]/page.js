@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
 
   if (!data) {
     return {
-      title: 'Professional Resume Examples & Templates | ResuGrow',
+      title: 'Professional Resume Examples & Templates | RESUGROW',
       description: 'Browse professional resume examples for various industries and roles.',
     };
   }
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }) {
   const topSkills = data.skills.slice(0, 3).join(', ');
 
   return {
-    title: `Best ${formattedRole} Resume Example & Skills for 2026 | ResuGrow`,
+    title: `Best ${formattedRole} Resume Example & Skills for 2026 | RESUGROW`,
     description: `Create a winning ${formattedRole} resume with AI-backed examples. Featuring ${topSkills} and high-impact experience bullets proven to pass ATS filters.`,
     keywords: [
       `${role} resume`, `${role} cv`, `${role} resume example`,
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }) {
       title: `How to Write a ${formattedRole} Resume in 2026`,
       description: `Expert-vetted resume examples and skills for ${formattedRole} professionals. Built for ATS.`,
       url: `${SITE_URL}/examples/${role}`,
-      siteName: 'ResuGrow',
+      siteName: 'RESUGROW',
       images: [{ url: '/resugrow-logo.png', width: 1200, height: 630, alt: `${formattedRole} resume example — ResuGrow` }],
       locale: 'en_US',
       type: 'article',

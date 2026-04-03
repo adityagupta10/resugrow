@@ -84,7 +84,7 @@ export default function LinkedinMakeover() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             getSoftwareAppJsonLd({
-              name: 'ResuGrow LinkedIn Professional Makeover',
+              name: 'RESUGROW LinkedIn Professional Makeover',
               description:
                 'Premium LinkedIn optimization service with expert rewriting and AI-assisted positioning for recruiter visibility.',
               url: `${SITE_URL}/linkedin-makeover`,
@@ -106,7 +106,7 @@ export default function LinkedinMakeover() {
                 <span className={styles.cursor}>|</span>
               </span>
               <br />
-              with <span className="gradient-text">ResuGrow&apos;s</span> LinkedIn Optimizer
+              with <span className="gradient-text">RESUGROW&apos;S</span> LinkedIn Optimizer
             </h1>
             <p className={styles.heroDesc}>
               Your LinkedIn profile is either opening doors—or being ignored. We completely rewrite every section so your profile sells your value and gets you noticed.
@@ -164,7 +164,7 @@ export default function LinkedinMakeover() {
                 We Turn Your LinkedIn Into a <span className="gradient-text">Magnet</span> for Opportunities
               </h2>
               <p className={styles.sectionSubtitleLeft}>
-                You&apos;ve got the experience, the skills, and the potential. But your profile isn&apos;t showing it—and that&apos;s where we come in. At ResuGrow, we completely transform it.
+                You&apos;ve got the experience, the skills, and the potential. But your profile isn&apos;t showing it—and that&apos;s where we come in. At RESUGROW, we completely transform it.
               </p>
             </div>
             <div className={styles.featuresList}>

@@ -1,9 +1,9 @@
 import { SITE_URL } from '@/lib/seo';
 
 export async function GET() {
-  const content = `# ResuGrow Knowledge File
+  const content = `# RESUGROW Knowledge File
 
-ResuGrow is a web platform that helps job seekers improve interview conversion by optimizing all major career assets:
+RESUGROW is a web platform that helps job seekers improve interview conversion by optimizing all major career assets:
 - Resume quality and ATS compatibility
 - LinkedIn profile structure and discoverability
 - Cover letter quality and relevance

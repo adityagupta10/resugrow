@@ -4,7 +4,7 @@ import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } 
 import { strategicPosts } from '../blog/strategicPosts';
 
 export const metadata = createPageMetadata({
-    title: 'Career Tips, Resume Advice & Interview Guides | ResuGrow',
+    title: 'Career Tips, Resume Advice & Interview Guides | RESUGROW',
     description:
       'Read practical career tips, ATS resume advice, and interview strategies to improve your job search outcomes.',
     path: '/career-tips',

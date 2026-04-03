@@ -5,7 +5,7 @@ const testimonials = [
     name: 'Sarah J.',
     role: 'Software Engineer',
     situation: 'Applying to 50+ roles with zero response despite 5 years of experience.',
-    action: "Ran my resume through ResuGrow's ATS Checker and discovered my 'Skills' section was unreadable to bots.",
+    action: "Ran my resume through RESUGROW\'s ATS Checker and discovered my 'Skills' section was unreadable to bots.",
     result: 'Fixed it in 10 minutes, reached a 95% match score, and landed 4 interviews the next week.'
   },
   {
@@ -34,13 +34,13 @@ const testimonials = [
     role: 'Data Analyst',
     situation: 'Constantly getting auto-rejections despite having all technical requirements.',
     action: 'Found that my critical technical tags were missing from the machine-readable layer of my PDF.',
-    result: 'ResuGrow\'s ATS-optimized template fixed the encoding issue, leading to a job at a Fortune 500 company.'
+    result: 'RESUGROW\'s ATS-optimized template fixed the encoding issue, leading to a job at a Fortune 500 company.'
   },
   {
     name: 'Marcus V.',
     role: 'HR Specialist',
     situation: 'Knew the hiring systems from the inside but still struggled to optimize my own personal resume for automated filters.',
-    action: 'Applied the AI-driven keyword density suggestions from ResuGrow to my professional summary and experience sections.',
+    action: 'Applied the AI-driven keyword density suggestions from RESUGROW to my professional summary and experience sections.',
     result: 'Landed a Head of HR role with a 30% salary hike after my first application with the updated resume.'
   }
 ];
