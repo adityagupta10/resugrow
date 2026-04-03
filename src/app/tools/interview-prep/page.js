@@ -11,6 +11,7 @@ import {
   Bookmark,
   Clock,
 } from 'lucide-react';
+import { trackCTA } from '@/lib/analytics';
 import styles from './page.module.css';
 
 // ── Constants ──────────────────────────────────────────────────────────────
@@ -527,7 +528,7 @@ export default function InterviewPrepPage() {
             <button
               type="button"
               className={styles.primaryBtn}
-              onClick={handleGenerate}
+              onClick={() => { trackCTA('generate_questions', 'Interview Prep'); handleGenerate(); }}
               disabled={loading}
             >
               {loading ? (

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { trackCTA } from '@/lib/analytics';
 import {
   Sparkles,
   Copy,
@@ -270,7 +271,7 @@ export default function LinkedInStudioPage() {
             {/* Generate button */}
             <button
               className={styles.primaryBtn}
-              onClick={handleGenerate}
+              onClick={() => { trackCTA('generate_post', 'LinkedIn Studio'); handleGenerate(); }}
               disabled={loading}
             >
               {loading ? (

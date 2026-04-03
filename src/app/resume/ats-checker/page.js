@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Testimonials from '@/components/Testimonials/Testimonials';
 import { INDUSTRY_MAPPINGS } from '@/constants/industry_keywords';
 import EmojiImage from '@/components/UI/EmojiImage';
+import { trackCTA } from '@/lib/analytics';
 import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
 import styles from '../../subpage.module.css';
 
@@ -341,7 +342,7 @@ export default function ATSChecker() {
               {!loading ? (
                 <button
                   className="btn btn-primary"
-                  onClick={handleScan}
+                  onClick={() => { trackCTA('scan_resume', 'ATS Checker'); handleScan(); }}
                   style={{ width: '100%', opacity: file ? 1 : 0.6 }}
                   disabled={!file}
                 >

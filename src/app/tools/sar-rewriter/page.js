@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import EmojiImage from '@/components/UI/EmojiImage';
+import { trackCTA } from '@/lib/analytics';
 import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
 import styles from './page.module.css';
 
@@ -190,7 +191,7 @@ const SARContent = () => {
                 </div>
               </div>
 
-              <button className={styles.primaryBtn} onClick={handleRewrite} disabled={loading}>
+              <button className={styles.primaryBtn} onClick={() => { trackCTA('generate_rewrite', 'SAR Rewriter'); handleRewrite(); }} disabled={loading}>
                 {loading ? (
                   'Optimizing Bullet...'
                 ) : (

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import TrackedLink from '@/components/UI/TrackedLink';
 import Image from 'next/image';
 import styles from './page.module.css';
 import { templates as templateData } from '../data/templates';
@@ -138,12 +139,15 @@ export default function Home() {
                     <li key={point}>{point}</li>
                   ))}
                 </ul>
-                <Link
+                <TrackedLink
                   href={pillar.href}
+                  ctaName={pillar.cta.toLowerCase().replace(/\s+/g, '_')}
+                  ctaPage="Homepage"
+                  ctaLocation="product_pillars"
                   className={`btn btn-secondary ${styles.pillarCtaBtn} ${pillar.tag === 'Resume' ? styles.pillarCtaResume : ''}`}
                 >
                   {pillar.cta}
-                </Link>
+                </TrackedLink>
               </article>
             ))}
           </div>
@@ -236,12 +240,12 @@ export default function Home() {
               confidence.
             </p>
             <div className={styles.finalActions}>
-              <Link href="/resume/ats-checker" className="btn btn-primary">
+              <TrackedLink href="/resume/ats-checker" ctaName="start_ats_check" ctaPage="Homepage" ctaLocation="final_section" className="btn btn-primary">
                 Start Free ATS Check
-              </Link>
-              <Link href="/linkedin-review" className="btn btn-secondary">
+              </TrackedLink>
+              <TrackedLink href="/linkedin-review" ctaName="analyze_linkedin" ctaPage="Homepage" ctaLocation="final_section" className="btn btn-secondary">
                 Analyze LinkedIn Profile
-              </Link>
+              </TrackedLink>
             </div>
           </div>
         </div>

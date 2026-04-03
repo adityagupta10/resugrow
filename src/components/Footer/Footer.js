@@ -53,6 +53,12 @@ const footerLinks = {
     { label: "Help Center", href: "/help-center" },
     { label: "About Us", href: "/about" },
     { label: "Contact Us", href: "/contact" },
+    {
+      label: "Review Us on Trustpilot",
+      href: "https://www.trustpilot.com/evaluate/resugrow.com",
+      external: true,
+      badge: "★",
+    },
   ],
 };
 
@@ -148,7 +154,29 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Follow <span className="gradient-text"> RESUGROW </span>  on LinkedIn
+              {/* Modern Follow/User-Plus Icon matching the Trustpilot star weight */}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M8.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM20 8v6M23 11h-6"
+                  stroke="#00b67a"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              &nbsp; Follow<span className="gradient-text">&nbsp;RESUGROW&nbsp;</span>on LinkedIn
+            </a>
+
+            <a
+              href="https://www.trustpilot.com/evaluate/resugrow.com"
+              className={styles.trustpilotBadge}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#00b67a" />
+              </svg>
+              Rate<span className="gradient-text">RESUGROW</span>on Trustpilot
             </a>
           </div>
 
@@ -158,12 +186,21 @@ export default function Footer() {
               <ul className={styles.columnLinks}>
                 {links.map((link) => (
                   <li key={link.href + link.label}>
-                    <Link href={link.href} className={styles.footerLink}>
-                      {link.label}
-                      {link.badge && (
-                        <span className={styles.footerBadge}>{link.badge}</span>
-                      )}
-                    </Link>
+                    {link.external ? (
+                      <a href={link.href} className={styles.footerLink} target="_blank" rel="noopener noreferrer">
+                        {link.label}
+                        {link.badge && (
+                          <span className={styles.footerBadge} style={link.badge === '★' ? { background: '#00b67a' } : {}}>{link.badge}</span>
+                        )}
+                      </a>
+                    ) : (
+                      <Link href={link.href} className={styles.footerLink}>
+                        {link.label}
+                        {link.badge && (
+                          <span className={styles.footerBadge}>{link.badge}</span>
+                        )}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -173,8 +210,8 @@ export default function Footer() {
 
         <div className={styles.footerBottom}>
           <p className={styles.copyright}>
-            Made with love for job seekers © {new Date().getFullYear()}{" "}
-            <span className="gradient-text">RESUGROW</span>. All rights reserved.
+            Made with love for job seekers © {new Date().getFullYear()}{' '}
+            <span className="gradient-text">RESUGROW</span>{' '}. All rights reserved.
           </p>
           <p className={styles.bottomLinks}>
             <Link href="/privacy-policy">Privacy</Link>

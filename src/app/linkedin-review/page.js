@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ClipboardList, FileText, Inbox, Lock, AlertTriangle, FileSignature, UserCircle, Briefcase, Target, BarChart2, Lightbulb } from 'lucide-react';
+import { trackCTA } from '@/lib/analytics';
 import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
 import styles from '../subpage.module.css';
 
@@ -204,7 +205,7 @@ export default function ProfileReview() {
                     </p>
                   </div>
                   
-                  <button onClick={handleScan} className="btn btn-primary" style={{ width: '100%', opacity: file ? 1 : 0.6 }} disabled={!file}>
+                  <button onClick={() => { trackCTA('scan_linkedin', 'LinkedIn Review'); handleScan(); }} className="btn btn-primary" style={{ width: '100%', opacity: file ? 1 : 0.6 }} disabled={!file}>
                     {file ? 'Analyze My Profile' : 'Upload PDF to Begin'}
                   </button>
 

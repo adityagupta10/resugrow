@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { createClient as createSupabaseClient } from "@/utils/supabase/client";
+import { trackCTA } from '@/lib/analytics';
 import styles from "./Navbar.module.css";
 
 const dropdownSections = [
@@ -377,7 +378,7 @@ export default function Navbar() {
         <Link
           href="/resume/builder"
           className={`btn btn-primary ${styles.ctaBtn}`}
-          onClick={() => setMobileOpen(false)}
+          onClick={() => { trackCTA('build_resume', 'Navbar', 'navbar'); setMobileOpen(false); }}
         >
           Build My Resume
         </Link>

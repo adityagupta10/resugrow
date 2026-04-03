@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { trackCTA } from '@/lib/analytics';
 import styles from './page.module.css';
 
 // ── Icons (inline SVG to avoid any import issues) ─────────────────────────
@@ -471,7 +472,7 @@ export default function SalaryCoachPage() {
             </div>
 
             {/* Submit */}
-            <button className={styles.primaryBtn} onClick={handleSubmit} disabled={loading}>
+            <button className={styles.primaryBtn} onClick={() => { trackCTA('analyze_salary', 'Salary Coach'); handleSubmit(); }} disabled={loading}>
               {loading ? (
                 <span className={styles.spinner} />
               ) : (

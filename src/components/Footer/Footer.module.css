@@ -101,6 +101,28 @@
     background: rgba(10, 102, 194, 0.18);
 }
 
+.trustpilotBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 182, 122, 0.35);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: 600;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.trustpilotBadge:hover {
+    color: #ffffff;
+    border-color: rgba(0, 182, 122, 0.7);
+    background: rgba(0, 182, 122, 0.18);
+}
+
 .footerColumn {
     display: flex;
     flex-direction: column;

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import TrackedLink from '@/components/UI/TrackedLink';
 import Image from 'next/image';
 import styles from '@/app/page.module.css';
 
@@ -100,7 +101,7 @@ export default function Hero() {
                 <span className={styles.typewriterCursor}>|</span>
               </span>
               <br />
-              with <span className="gradient-text">RESUGROW</span> Platform
+              with{' '}<span className="gradient-text">RESUGROW</span>{' '}Platform
             </h1>
             <p className={styles.heroSubtitle}>
               The AI-powered career engine trusted by 25M+ pros to get hired at Google, Tesla, Microsoft and beyond.
@@ -109,18 +110,18 @@ export default function Hero() {
             </p>
 
             <div className={styles.heroActions}>
-              <Link href="/resume/ai-builder" className={`btn btn-primary ${styles.heroPrimaryBtn}`}>
+              <TrackedLink href="/resume/ai-builder" ctaName="build_ai_resume" ctaPage="Homepage" ctaLocation="hero" className={`btn btn-primary ${styles.heroPrimaryBtn}`}>
                 Build my AI Powered resume
-              </Link>
+              </TrackedLink>
               <div className={styles.heroSecondaryActions}>
-                <Link href="/resume/ats-checker" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
+                <TrackedLink href="/resume/ats-checker" ctaName="ats_check" ctaPage="Homepage" ctaLocation="hero" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
                   ATS-Pro Resume Score
-                </Link>
+                </TrackedLink>
               </div>
               <div className={styles.heroSecondaryActions}>
-                <Link href="/linkedin-makeover" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
+                <TrackedLink href="/linkedin-makeover" ctaName="linkedin_makeover" ctaPage="Homepage" ctaLocation="hero" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
                   Linkedin Profile Makeover
-                </Link>
+                </TrackedLink>
               </div>
             </div>
 
