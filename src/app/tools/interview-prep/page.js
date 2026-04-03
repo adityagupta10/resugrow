@@ -417,7 +417,7 @@ export default function InterviewPrepPage() {
         <section className={styles.container}>
 
           {/* INPUT PANEL */}
-          <div className={`${styles.panel} ${styles.inputPanel}`}>
+          <div className={`${styles.panel} ${styles.inputPanel} ${(results || loading) ? styles.hidden : ''}`}>
             <div className={styles.panelHeader} style={{ textAlign: 'center' }}>
               <h2 style={{ justifyContent: 'center' }}>Job Description</h2>
               <p>Paste the full job posting for the most targeted simulated questions.</p>
@@ -551,37 +551,38 @@ export default function InterviewPrepPage() {
           </div>
 
           {/* OUTPUT PANEL */}
-          <div className={`${styles.panel} ${styles.outputPanel}`}>
-            <div className={styles.panelHeader}>
-              <h2>Generated Question Set</h2>
-              <p>Tailored to the role with SAR frameworks, key points, and likely follow-ups.</p>
-            </div>
+          {(results || loading) && (
+            <div className={`${styles.panel} ${styles.outputPanel}`}>
+              {results && (
+                <button 
+                  className={styles.editBtn}
+                  onClick={() => {
+                    setResults(null);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  <X size={16} /> Edit Inputs
+                </button>
+              )}
 
-            {/* Loading */}
-            {loading && (
-              <div className={styles.loadingState}>
-                <div className={styles.spinner} />
-                <p style={{ color: '#6b7280', fontWeight: 600, margin: 0, fontSize: '15px' }}>
-                  Analysing job description and generating your question set…
-                </p>
+              <div className={styles.panelHeader} style={{ marginTop: results ? '16px' : '0' }}>
+                <h2>Generated Question Set</h2>
+                <p>Tailored to the role with SAR frameworks, key points, and likely follow-ups.</p>
               </div>
-            )}
 
-            {/* Placeholder */}
-            {!loading && !results && (
-              <div className={styles.placeholder}>
-                <div style={{ fontSize: '48px', marginBottom: '14px', lineHeight: 1 }}>💬</div>
-                <h3>No questions yet</h3>
-                <p>
-                  Paste a job description on the left and click Generate to get your personalised
-                  question set with SAR answer frameworks.
-                </p>
-              </div>
-            )}
+              {/* Loading */}
+              {loading && (
+                <div className={styles.loadingState}>
+                  <div className={styles.spinner} />
+                  <p style={{ color: '#6b7280', fontWeight: 600, margin: 0, fontSize: '15px' }}>
+                    Analysing job description and generating your question set…
+                  </p>
+                </div>
+              )}
 
-            {/* Results */}
-            {!loading && results && (
-              <div>
+              {/* Results */}
+              {!loading && results && (
+                <div>
                 {/* Detected role + seniority + skills */}
                 <div className={styles.detectedRow}>
                   <span className={styles.detectedLabel}>Detected:</span>
@@ -645,6 +646,7 @@ export default function InterviewPrepPage() {
               </div>
             )}
           </div>
+          )}
         </section>
 
         {/* ── Prep tips ─────────────────────────────────────────────────── */}

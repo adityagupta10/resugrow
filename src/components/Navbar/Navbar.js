@@ -35,6 +35,7 @@ const dropdownSections = [
     items: [
       { label: "LinkedIn Profile Boost", href: "/linkedin-makeover" },
       { label: "Profile Review & Score", href: "/linkedin-review" },
+      { label: "LinkedIn Content Studio", href: "/tools/linkedin-studio", badge: "New", badgeStyle: "green", },
     ],
   },
   {
@@ -48,19 +49,16 @@ const dropdownSections = [
         badge: null,
       },
       {
-        label: "Interview Question Generator",
+        label: "Interview Coach",
         href: "/tools/interview-prep",
         badge: "New",
+        badgeStyle: "green",
       },
       {
-        label: "LinkedIn Content Studio",
-        href: "/tools/linkedin-studio",
-        badge: "New",
-      },
-      {
-        label: "Salary Negotiation Coach",
+        label: "Salary Negotiator",
         href: "/tools/salary-coach",
-        badge: "New",
+        badge: "🔥",
+        badgeStyle: "white",
       },
     ],
   },
@@ -79,17 +77,17 @@ export default function Navbar() {
 
   const userFromSupabase = supabaseUser
     ? {
-        name:
-          supabaseUser.user_metadata?.full_name ||
-          supabaseUser.user_metadata?.name ||
-          supabaseUser.email ||
-          "User",
-        email: supabaseUser.email,
-        image:
-          supabaseUser.user_metadata?.avatar_url ||
-          supabaseUser.user_metadata?.picture ||
-          null,
-      }
+      name:
+        supabaseUser.user_metadata?.full_name ||
+        supabaseUser.user_metadata?.name ||
+        supabaseUser.email ||
+        "User",
+      email: supabaseUser.email,
+      image:
+        supabaseUser.user_metadata?.avatar_url ||
+        supabaseUser.user_metadata?.picture ||
+        null,
+    }
     : null;
   const activeUser = userFromSupabase || session?.user || null;
   const isLoggedIn = Boolean(activeUser);
@@ -269,7 +267,7 @@ export default function Navbar() {
                   >
                     <span>{item.label}</span>
                     {item.badge && (
-                      <span className={styles.dropdownItemBadge}>
+                      <span className={`${styles.dropdownItemBadge} ${item.badgeStyle === 'green' ? styles.dropdownItemBadgeGreen : styles.dropdownItemBadgeWhite}`}>
                         {item.badge}
                       </span>
                     )}
@@ -353,7 +351,7 @@ export default function Navbar() {
                       try {
                         const supabase = createSupabaseClient();
                         await supabase.auth.signOut();
-                      } catch {}
+                      } catch { }
                       setUserDropdownOpen(false);
                       router.refresh();
                       return;

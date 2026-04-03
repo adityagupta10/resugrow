@@ -1,7 +1,6 @@
-/* ── Page shell ─────────────────────────────────────────────────────────── */
 .page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  background: linear-gradient(135deg, #059669 0%, #064e3b 100%);
   position: relative;
   overflow-x: hidden;
 }
@@ -9,11 +8,14 @@
 .page::before {
   content: '';
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background:
-    radial-gradient(circle at 15% 85%, rgba(4, 120, 87, 0.45) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(5, 150, 105, 0.3) 0%, transparent 50%),
     radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.35) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
   pointer-events: none;
   z-index: 1;
 }

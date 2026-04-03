@@ -19,16 +19,24 @@ const IconBook      = () => <svg width="16" height="16" viewBox="0 0 24 24" fill
 
 // ── Constants ─────────────────────────────────────────────────────────────
 const LOCATIONS = [
-  { value: 'bangalore',  label: 'Bangalore' },
-  { value: 'mumbai',     label: 'Mumbai' },
-  { value: 'delhi_ncr',  label: 'Delhi NCR' },
-  { value: 'pune',       label: 'Pune' },
-  { value: 'hyderabad',  label: 'Hyderabad' },
-  { value: 'chennai',    label: 'Chennai' },
-  { value: 'kolkata',    label: 'Kolkata' },
-  { value: 'ahmedabad',  label: 'Ahmedabad' },
-  { value: 'remote',     label: 'Remote (India)' },
-  { value: 'tier2',      label: 'Tier 2 City' },
+  { value: 'san_francisco', label: 'San Francisco, CA' },
+  { value: 'new_york',      label: 'New York, NY' },
+  { value: 'london',        label: 'London, UK' },
+  { value: 'toronto',       label: 'Toronto, CA' },
+  { value: 'sydney',        label: 'Sydney, AU' },
+  { value: 'berlin',        label: 'Berlin, DE' },
+  { value: 'singapore',     label: 'Singapore, SG' },
+  { value: 'bangalore',     label: 'Bangalore, IN' },
+  { value: 'remote',        label: 'Remote (Global)' },
+];
+
+const CURRENCIES = [
+  { value: 'USD', label: 'USD ($)' },
+  { value: 'EUR', label: 'EUR (€)' },
+  { value: 'GBP', label: 'GBP (£)' },
+  { value: 'CAD', label: 'CAD (C$)' },
+  { value: 'AUD', label: 'AUD (A$)' },
+  { value: 'INR', label: 'INR (₹)' },
 ];
 
 const COMPANY_TYPES = [
@@ -64,16 +72,16 @@ const EMAIL_TABS = [
 
 const SCENARIOS = [
   {
-    label: 'SDE 4 yrs, ₹22L, Bangalore, Product',
-    data: { role: 'Software Engineer', yearsExperience: '4', offeredCTC: '22', currentCTC: '16', location: 'bangalore', companyType: 'product', sector: 'general', skills: ['React', 'Node.js', 'AWS'] },
+    label: 'SDE 4 yrs, $140K, San Francisco',
+    data: { role: 'Software Engineer', yearsExperience: '4', offeredCTC: '140', currentCTC: '110', location: 'san_francisco', currency: 'USD', companyType: 'product', sector: 'general', skills: ['React', 'Node.js', 'AWS'] },
   },
   {
-    label: 'Product Manager 6 yrs, ₹40L, Mumbai, MNC',
-    data: { role: 'Product Manager', yearsExperience: '6', offeredCTC: '40', currentCTC: '28', location: 'mumbai', companyType: 'mnc', sector: 'fintech', skills: ['Product Roadmap', 'OKRs', 'Agile'] },
+    label: 'Product Manager 6 yrs, £85K, London, MNC',
+    data: { role: 'Product Manager', yearsExperience: '6', offeredCTC: '85', currentCTC: '65', location: 'london', currency: 'GBP', companyType: 'mnc', sector: 'fintech', skills: ['Product Roadmap', 'OKRs', 'Agile'] },
   },
   {
-    label: 'Data Scientist 3 yrs, ₹18L, Hyderabad, Startup',
-    data: { role: 'Data Scientist', yearsExperience: '3', offeredCTC: '18', currentCTC: '12', location: 'hyderabad', companyType: 'startup', sector: 'healthtech', skills: ['Python', 'TensorFlow', 'SQL'] },
+    label: 'Data Scientist 3 yrs, ₹18L, Bangalore, Startup',
+    data: { role: 'Data Scientist', yearsExperience: '3', offeredCTC: '18', currentCTC: '12', location: 'bangalore', currency: 'INR', companyType: 'startup', sector: 'healthtech', skills: ['Python', 'TensorFlow', 'SQL'] },
   },
 ];
 
@@ -86,6 +94,18 @@ const ROLE_SUGGESTIONS = [
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────
+function formatVal(val, curr) {
+  if (curr === 'INR') return '₹' + val + 'L';
+  if (curr === 'EUR') return '€' + val + 'K';
+  if (curr === 'GBP') return '£' + val + 'K';
+  return '$' + val + 'K';
+}
+
+function formatSuffix(curr) {
+  if (curr === 'INR') return 'LPA';
+  return '/ yr';
+}
+
 function getPctOnBar(val, barMin, barMax) {
   return Math.max(2, Math.min(97, ((val - barMin) / (barMax - barMin)) * 100));
 }
@@ -112,7 +132,8 @@ export default function SalaryCoachPage() {
     yearsExperience: '',
     offeredCTC: '',
     currentCTC: '',
-    location: 'bangalore',
+    location: 'san_francisco',
+    currency: 'USD',
     companyType: 'product',
     sector: 'general',
     skillInput: '',
@@ -151,6 +172,7 @@ export default function SalaryCoachPage() {
       offeredCTC:    data.offeredCTC    || f.offeredCTC,
       currentCTC:    data.currentCTC    || f.currentCTC,
       location:      data.location      || f.location,
+      currency:      data.currency      || f.currency,
       companyType:   data.companyType   || f.companyType,
       sector:        data.sector        || f.sector,
       skills:        data.skills        || f.skills,
@@ -195,6 +217,7 @@ export default function SalaryCoachPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           role:            form.role,
+          currency:        form.currency,
           yearsExperience: form.yearsExperience,
           offeredCTC:      form.offeredCTC,
           currentCTC:      form.currentCTC || null,
@@ -261,19 +284,19 @@ export default function SalaryCoachPage() {
         {/* Labels row */}
         <div className={styles.rangeLabelsRow}>
           <span style={{ position: 'absolute', left: `${minPct}%`, transform: 'translateX(-50%)' }}>
-            <span className={styles.rangeLabelVal}>₹{ma.minRange}L</span>
+            <span className={styles.rangeLabelVal}>{formatVal(ma.minRange, form.currency)}</span>
             <span className={styles.rangeLabelName}>Min</span>
           </span>
           <span style={{ position: 'absolute', left: `${midPct}%`, transform: 'translateX(-50%)' }}>
-            <span className={styles.rangeLabelVal}>₹{ma.midRange}L</span>
+            <span className={styles.rangeLabelVal}>{formatVal(ma.midRange, form.currency)}</span>
             <span className={styles.rangeLabelName}>Market Mid</span>
           </span>
           <span style={{ position: 'absolute', left: `${maxPct}%`, transform: 'translateX(-50%)' }}>
-            <span className={styles.rangeLabelVal}>₹{ma.maxRange}L</span>
+            <span className={styles.rangeLabelVal}>{formatVal(ma.maxRange, form.currency)}</span>
             <span className={styles.rangeLabelName}>Max</span>
           </span>
           <span style={{ position: 'absolute', left: `${offerPct}%`, transform: 'translateX(-50%)', top: '28px' }}>
-            <span className={`${styles.rangeLabelVal} ${styles.offerLabelVal}`}>₹{ma.offeredCTC}L</span>
+            <span className={`${styles.rangeLabelVal} ${styles.offerLabelVal}`}>{formatVal(ma.offeredCTC, form.currency)}</span>
             <span className={`${styles.rangeLabelName} ${styles.offerLabelName}`}>Your Offer</span>
           </span>
         </div>
@@ -290,7 +313,7 @@ export default function SalaryCoachPage() {
           <p className={styles.kicker}>Negotiation Coach</p>
           <h1 className={styles.title}>Salary Negotiation Coach</h1>
           <p className={styles.subtitle}>
-            India-focused salary benchmarks, a personalised negotiation script, and ready-to-send email templates — built for your exact offer.
+            Global salary benchmarks, a personalised negotiation script, and ready-to-send email templates — built for your exact offer.
           </p>
         </section>
 
@@ -516,15 +539,15 @@ export default function SalaryCoachPage() {
                 <div className={styles.askCard}>
                   <p className={styles.cardTitle}><IconTarget /> Recommended Ask</p>
                   <p className={styles.askLabel}>Target CTC</p>
-                  <p className={styles.askAmount}>₹{results.recommendedAsk.target} <span className={styles.askLpa}>LPA</span></p>
+                  <p className={styles.askAmount}>{formatVal(results.recommendedAsk.target, form.currency)} <span className={styles.askLpa}>{formatSuffix(form.currency)}</span></p>
                   <div className={styles.askSubRow}>
                     <div className={styles.askSubItem}>
                       <span className={styles.askSubLabel}>Minimum acceptable</span>
-                      <span className={styles.askSubValue}>₹{results.recommendedAsk.minAcceptable} LPA</span>
+                      <span className={styles.askSubValue}>{formatVal(results.recommendedAsk.minAcceptable, form.currency)} {formatSuffix(form.currency)}</span>
                     </div>
                     <div className={styles.askSubItem}>
                       <span className={styles.askSubLabel}>Maximum ask</span>
-                      <span className={styles.askSubValue}>₹{results.recommendedAsk.maxAsk} LPA</span>
+                      <span className={styles.askSubValue}>{formatVal(results.recommendedAsk.maxAsk, form.currency)} {formatSuffix(form.currency)}</span>
                     </div>
                   </div>
                   <p className={styles.askRationale}>{results.recommendedAsk.rationale}</p>

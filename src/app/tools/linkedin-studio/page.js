@@ -188,7 +188,7 @@ export default function LinkedInStudioPage() {
         {/* ── Stacked Layout ────────────────────────────────────────────── */}
         <section className={styles.container}>
           {/* ── INPUT PANEL ──────────────────────────────────── */}
-          <div className={`${styles.panel} ${styles.inputPanel}`}>
+          <div className={`${styles.panel} ${styles.inputPanel} ${results ? styles.hidden : ''}`}>
             <div className={styles.panelHeader} style={{ textAlign: 'center' }}>
               <h2 style={{ justifyContent: 'center' }}>Content Input</h2>
               <p>Describe your achievement, then choose your post style and tone.</p>
@@ -304,22 +304,23 @@ export default function LinkedInStudioPage() {
           </div>
 
           {/* ── OUTPUT PANEL ────────────────────────────────── */}
-          <div className={`${styles.panel} ${styles.outputPanel}`}>
-            <div className={styles.panelHeader}>
-              <h2>Generated Posts</h2>
-              <p>Three proven frameworks, ready to publish.</p>
-            </div>
+          {results && (
+            <div className={`${styles.panel} ${styles.outputPanel}`}>
+              <button 
+                className={styles.editBtn}
+                onClick={() => {
+                  setResults(null);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              >
+                <X size={16} /> Edit Inputs
+              </button>
 
-            {!results ? (
-              <div className={styles.placeholder}>
-                <span style={{ fontSize: 48, lineHeight: 1, marginBottom: 16 }}>📝</span>
-                <h3>No posts yet</h3>
-                <p>
-                  Describe your achievement and click Generate to create viral-ready LinkedIn posts
-                  using PAS, AIDA, and Story frameworks.
-                </p>
+              <div className={styles.panelHeader} style={{ marginTop: '16px' }}>
+                <h2>Generated Posts</h2>
+                <p>Three proven frameworks, ready to publish.</p>
               </div>
-            ) : (
+
               <>
                 {/* Post framework tabs */}
                 <div className={styles.postTabs}>
@@ -512,8 +513,8 @@ export default function LinkedInStudioPage() {
                   ))}
                 </div>
               </>
-            )}
-          </div>
+            </div>
+          )}
         </section>
 
         {/* ── Saved Posts ──────────────────────────────────────────────── */}

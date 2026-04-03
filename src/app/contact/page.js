@@ -12,19 +12,23 @@ export default function Contact() {
     e.preventDefault();
     setStatus('loading');
 
+    const formData = new FormData(form.current);
+    const data = Object.fromEntries(formData.entries());
+
     try {
-      const emailjs = (await import('@emailjs/browser')).default;
-      await emailjs.sendForm(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-        form.current,
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-      );
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      if (!res.ok) throw new Error('Response not OK');
+
       setStatus('success');
       form.current.reset();
       setTimeout(() => setStatus('idle'), 5000);
     } catch (error) {
-      console.error('EmailJS Error:', error);
+      console.error('Contact API Error:', error);
       setStatus('error');
       setTimeout(() => setStatus('idle'), 5000);
     }

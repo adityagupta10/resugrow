@@ -6,6 +6,28 @@ const TITLE_CASE_ROLE = (role) =>
 const isBelowMarket = (position) =>
   ["significantly_below", "below"].includes(position);
 
+// ── Currency formatting helpers ────────────────────────────────────────────
+const CURRENCY_SYMBOLS = { USD: '$', EUR: '€', GBP: '£', CAD: 'C$', AUD: 'A$', INR: '₹' };
+
+/** Format a salary band value: fmt(22, 'INR') → '₹22L', fmt(140, 'USD') → '$140K' */
+function fmt(val, currency = 'USD') {
+  const sym = CURRENCY_SYMBOLS[currency] || '$';
+  const rounded = typeof val === 'number' ? Math.round(val * 10) / 10 : val;
+  if (currency === 'INR') return `${sym}${rounded}L`;
+  return `${sym}${rounded}K`;
+}
+
+/** Return the per-annum suffix: sfx('INR') → 'LPA', sfx('USD') → '/ yr' */
+function sfx(currency = 'USD') {
+  return currency === 'INR' ? 'LPA' : '/ yr';
+}
+
+/** Prefix a small monetary string with the currency symbol: sm('5,000','USD') → '$5,000' */
+function sm(val, currency = 'USD') {
+  const sym = CURRENCY_SYMBOLS[currency] || '$';
+  return `${sym}${val}`;
+}
+
 // ── India salary database (all values in LPA) ─────────────────────────────
 const SALARY_DB = {
   software_engineer: {
@@ -433,7 +455,7 @@ const PREMIUM_SKILLS = [
   "Rust",
 ];
 
-function calcAsk(offer, range, analysis, skills) {
+function calcAsk(offer, range, analysis, skills, currency = 'USD') {
   const skillPremium =
     (skills || []).filter((s) => PREMIUM_SKILLS.includes(s)).length > 3
       ? 0.05
@@ -445,7 +467,7 @@ function calcAsk(offer, range, analysis, skills) {
       target: ROUND_TO_HALF(range.mid * (1 + skillPremium)),
       minAcceptable: ROUND_TO_HALF(offer * 1.15),
       maxAsk: ROUND_TO_HALF(range.mid * 1.12),
-      rationale: `The offer of ₹${offer} LPA is ${Math.abs(analysis.pctFromMid)}% below market mid (₹${range.mid} LPA). A significant counter-offer is fully justified and expected by most hiring managers in this situation.`,
+      rationale: `The offer of ${fmt(offer, currency)} ${sfx(currency)} is ${Math.abs(analysis.pctFromMid)}% below market mid (${fmt(range.mid, currency)} ${sfx(currency)}). A significant counter-offer is fully justified and expected by most hiring managers in this situation.`,
     };
   }
 
@@ -476,7 +498,7 @@ function calcAsk(offer, range, analysis, skills) {
 }
 
 // ── Negotiation script ─────────────────────────────────────────────────────
-function buildScript(role, offer, ask, range, analysis) {
+function buildScript(role, offer, ask, range, analysis, currency = 'USD') {
   const rl = TITLE_CASE_ROLE(role);
   const below = isBelowMarket(analysis.position);
 
@@ -484,14 +506,14 @@ function buildScript(role, offer, ask, range, analysis) {
     openingStatement: `Thank you so much for extending the offer for the ${rl} position — I'm genuinely excited about the opportunity to join the team. Before formally signing, I'd welcome a brief conversation about the compensation package. I want to make sure we start on the right footing, and I'm confident we can reach a number that works well for both sides.`,
 
     marketDataReference: below
-      ? `I've done some research into current market compensation for ${rl} roles — looking at AmbitionBox, Glassdoor, LinkedIn Salary Insights, and Levels.fyi. For this experience level and location, the market range appears to be ₹${range.min}–₹${range.max} LPA, with a mid-point around ₹${range.mid} LPA. The current offer of ₹${offer} LPA is ${Math.abs(analysis.pctFromMid)}% below that mid-point, which is why I'd like to discuss a revision.`
+      ? `I've done some research into current market compensation for ${rl} roles — looking at AmbitionBox, Glassdoor, LinkedIn Salary Insights, and Levels.fyi. For this experience level and location, the market range appears to be ${fmt(range.min, currency)}–${fmt(range.max, currency)} ${sfx(currency)}, with a mid-point around ${fmt(range.mid, currency)} ${sfx(currency)}. The current offer of ${fmt(offer, currency)} ${sfx(currency)} is ${Math.abs(analysis.pctFromMid)}% below that mid-point, which is why I'd like to discuss a revision.`
       : `I've reviewed current compensation benchmarks for ${rl} roles across similar companies. The offer aligns broadly with market data, and I appreciate that. Given my specific experience and the skills I bring that are directly relevant to this role, I believe there's a reasonable case to position compensation toward the upper end of the market range.`,
 
-    valueProposition: `Beyond the market context, I want to highlight the direct value I bring: [insert your most impressive, quantified achievement here — e.g., "reduced infra costs by 30% while scaling to 10M requests/day" or "grew ARR by ₹4Cr in 18 months"]. I'm not asking for a premium over market — I'm asking to be paid at market for the specific skills and impact I'll bring from day one.`,
+    valueProposition: `Beyond the market context, I want to highlight the direct value I bring: [insert your most impressive, quantified achievement here — e.g., "reduced infra costs by 30% while scaling to 10M requests/day" or "grew ARR by ${sm("2M", currency)} in 18 months"]. I'm not asking for a premium over market — I'm asking to be paid at market for the specific skills and impact I'll bring from day one.`,
 
     counterOfferAsk: below
-      ? `Given all of this, I'd like to respectfully propose a revised CTC of ₹${ask.target} LPA. I'm flexible on how this is structured — fixed, variable, joining bonus, or a combination — and I'm genuinely open to a creative package that works for both sides. My minimum to move forward would be ₹${ask.minAcceptable} LPA.`
-      : `I'd like to propose moving to ₹${ask.target} LPA. If the budget is constrained, I'm open to discussing a performance milestone review at 6 months with a pre-agreed increment range, or a joining bonus to bridge the gap. My goal is to find a structure that works for both sides.`,
+      ? `Given all of this, I'd like to respectfully propose a revised CTC of ${fmt(ask.target, currency)} ${sfx(currency)}. I'm flexible on how this is structured — fixed, variable, joining bonus, or a combination — and I'm genuinely open to a creative package that works for both sides. My minimum to move forward would be ${fmt(ask.minAcceptable, currency)} ${sfx(currency)}.`
+      : `I'd like to propose moving to ${fmt(ask.target, currency)} ${sfx(currency)}. If the budget is constrained, I'm open to discussing a performance milestone review at 6 months with a pre-agreed increment range, or a joining bonus to bridge the gap. My goal is to find a structure that works for both sides.`,
 
     objectionHandling: below
       ? `If HR says: "This is the absolute maximum budget we have for this band."\n\nYou reply: "I completely understand budget constraints. If we cannot adjust the base salary, what flexibility do we have with a one-time sign-on bonus or a guaranteed 6-month performance review to bridge the gap? I want to find a creative way to make this work."`
@@ -502,7 +524,7 @@ function buildScript(role, offer, ask, range, analysis) {
 }
 
 // ── Email templates ────────────────────────────────────────────────────────
-function buildEmails(role, offer, ask, range, analysis) {
+function buildEmails(role, offer, ask, range, analysis, currency = 'USD') {
   const rl = TITLE_CASE_ROLE(role);
   const below = isBelowMarket(analysis.position);
 
@@ -528,11 +550,11 @@ Dear [Hiring Manager / HR Name],
 
 Thank you for taking the time to speak with me — I really appreciate the openness.
 
-To summarize: the current offer is ₹${offer} LPA.${below ? ` Based on my research of current market compensation for ${rl} roles in [City] — using AmbitionBox, Glassdoor, and LinkedIn Salary Insights — the typical range for this profile at a [Company Type] company is ₹${range.min}–₹${range.max} LPA (mid: ₹${range.mid} LPA).` : ""}
+To summarize: the current offer is ${fmt(offer, currency)} ${sfx(currency)}.${below ? ` Based on my research of current market compensation for ${rl} roles in [City] — using AmbitionBox, Glassdoor, and LinkedIn Salary Insights — the typical range for this profile at a [Company Type] company is ${fmt(range.min, currency)}–${fmt(range.max, currency)} ${sfx(currency)} (mid: ${fmt(range.mid, currency)} ${sfx(currency)}).` : ""}
 
-Given my background in [Skill 1] and [Skill 2], and the direct value I can bring to [specific team/product area], I'd like to propose a revised CTC of ₹${ask.target} LPA.
+Given my background in [Skill 1] and [Skill 2], and the direct value I can bring to [specific team/product area], I'd like to propose a revised CTC of ${fmt(ask.target, currency)} ${sfx(currency)}.
 
-I'm flexible on structure — base, variable, joining bonus, or a combination — and genuinely open to a creative solution. My minimum requirement to move forward is ₹${ask.minAcceptable} LPA.
+I'm flexible on structure — base, variable, joining bonus, or a combination — and genuinely open to a creative solution. My minimum requirement to move forward is ${fmt(ask.minAcceptable, currency)} ${sfx(currency)}.
 
 I remain very enthusiastic about the role and the company. I'm confident we can find a package that works for both sides.
 
@@ -551,7 +573,7 @@ I hope you're doing well. I wanted to follow up on my email from [Date] regardin
 I'm still very excited about joining [Company Name] and haven't taken any other decisions — I'm waiting to resolve this before moving forward.
 
 If the revised base isn't feasible within budget, I'm also open to exploring alternatives such as:
-  • A one-time joining bonus of ₹[Amount]
+  • A one-time joining bonus of ${sm("[Amount]", currency)}
   • An accelerated performance review at the 6-month mark with a pre-agreed increment range
   • Additional ESOPs or equity (if applicable to the role)
   • A higher variable pay component
@@ -568,7 +590,7 @@ Dear [Hiring Manager / HR Name],
 
 Thank you for working through the compensation discussion with me — I genuinely appreciate the transparency and flexibility shown throughout the process.
 
-I'm pleased to formally accept the offer for the ${rl} position at [Company Name] with a total CTC of ₹[Final Agreed Amount] LPA.
+I'm pleased to formally accept the offer for the ${rl} position at [Company Name] with a total CTC of [Final Agreed Amount].
 
 Please send over the revised offer letter at your earliest convenience. My tentative joining date is [Date] — please let me know if there are any pre-joining formalities, documentation, or onboarding steps I should complete before then.
 
@@ -582,7 +604,7 @@ Warm regards,
 }
 
 // ── Additional negotiation items ───────────────────────────────────────────
-function buildAdditionalItems(offer, range, compType, analysis) {
+function buildAdditionalItems(offer, range, compType, analysis, currency = 'USD') {
   const below = isBelowMarket(analysis.position);
   const gap = Math.max(0, range.mid - offer);
 
@@ -591,7 +613,7 @@ function buildAdditionalItems(offer, range, compType, analysis) {
       item: "Joining Bonus",
       priority: below ? "High" : "Medium",
       detail: below
-        ? `Ask for a one-time joining bonus of ₹${ROUND_TO_HALF(gap * 0.5)}–₹${ROUND_TO_HALF(gap * 1.0)}L to bridge the gap between the offer and market mid. Joining bonuses are easier to approve than base increases.`
+        ? `Ask for a one-time joining bonus of ${fmt(ROUND_TO_HALF(gap * 0.5), currency)}–${fmt(ROUND_TO_HALF(gap * 1.0), currency)} to bridge the gap between the offer and market mid. Joining bonuses are easier to approve than base increases.`
         : "A 1–2 month CTC joining bonus is standard at most companies and is rarely refused. Frame it as compensation for the notice period cost or deferred bonuses from your current role.",
     },
     {
@@ -622,37 +644,37 @@ function buildAdditionalItems(offer, range, compType, analysis) {
       item: "WFH / Hybrid Flexibility",
       priority: "Medium",
       detail:
-        "Confirm hybrid terms in the offer letter itself — not just verbally. Even 2 days WFH/week saves ₹2,000–₹6,000/month in commute costs and significantly impacts quality of life.",
+        `Confirm hybrid terms in the offer letter itself — not just verbally. Even 2 days WFH/week saves ${sm("200", currency)}–${sm("600", currency)}/month in commute costs and significantly impacts quality of life.`,
     },
     {
       item: "Learning & Development Budget",
       priority: "Medium",
       detail:
-        "Request an annual L&D budget of ₹30,000–₹1,00,000 for certifications (AWS, PMP, CFA, etc.), online courses, and conferences. This is standard at most product companies and mid-to-large MNCs.",
+        `Request an annual L&D budget of ${sm("3,000", currency)}–${sm("10,000", currency)} for certifications (AWS, PMP, CFA, etc.), online courses, and conferences. This is standard at most product companies and mid-to-large MNCs.`,
     },
     {
       item: "Health Insurance Coverage",
       priority: "Medium",
       detail:
-        "Verify: (1) Sum insured — aim for ₹5L+, (2) Whether it covers spouse, children, and/or parents, (3) Whether the premium for dependents is covered by the company, (4) Top-up options available.",
+        `Verify: (1) Sum insured — aim for ${sm("500,000", currency)}+, (2) Whether it covers spouse, children, and/or parents, (3) Whether the premium for dependents is covered by the company, (4) Top-up options available.`,
     },
     {
       item: "Notice Period Buyout",
       priority: "Medium",
       detail:
-        "If your current employer requires a buyout to exit early, ask the new company to cover it. This is increasingly common at ₹50,000–₹3,00,000 depending on your seniority and notice period length.",
+        `If your current employer requires a buyout to exit early, ask the new company to cover it. This is increasingly common at ${sm("5,000", currency)}–${sm("30,000", currency)} depending on your seniority and notice period length.`,
     },
     {
       item: "Relocation Assistance",
       priority: "Low",
       detail:
-        "If you are relocating cities for this role, request a one-time relocation allowance of ₹50,000–₹2,00,000 to cover moving expenses, accommodation deposit, and travel. Many companies have a standard relocation policy.",
+        `If you are relocating cities for this role, request a one-time relocation allowance of ${sm("5,000", currency)}–${sm("20,000", currency)} to cover moving expenses, accommodation deposit, and travel. Many companies have a standard relocation policy.`,
     },
     {
       item: "Laptop / Equipment Policy",
       priority: "Low",
       detail:
-        "Confirm whether the company provides a work laptop and peripherals, or whether you are expected to use your own (BYOD). If BYOD, negotiate a one-time equipment allowance of ₹30,000–₹80,000.",
+        `Confirm whether the company provides a work laptop and peripherals, or whether you are expected to use your own (BYOD). If BYOD, negotiate a one-time equipment allowance of ${sm("3,000", currency)}–${sm("8,000", currency)}.`,
     },
   );
 
@@ -683,6 +705,7 @@ export async function POST(request) {
       offeredCTC,
       currentCTC,
       location,
+      currency = 'USD',
       companyType,
       sector,
       skills,
@@ -730,10 +753,10 @@ export async function POST(request) {
     const safeSkills = skills || [];
     const range = calcRange(role, band, locKey, compKey, secKey);
     const analysis = analyzeOffer(offer, range);
-    const ask = calcAsk(offer, range, analysis, safeSkills);
-    const script = buildScript(role, offer, ask, range, analysis);
-    const emails = buildEmails(role, offer, ask, range, analysis);
-    const extras = buildAdditionalItems(offer, range, compKey, analysis);
+    const ask = calcAsk(offer, range, analysis, safeSkills, currency);
+    const script = buildScript(role, offer, ask, range, analysis, currency);
+    const emails = buildEmails(role, offer, ask, range, analysis, currency);
+    const extras = buildAdditionalItems(offer, range, compKey, analysis, currency);
 
     // Shuffle tips and pick 5
     const tips = [...NEGOTIATION_TIPS]
@@ -769,7 +792,7 @@ export async function POST(request) {
         verdict: analysis.verdict,
         verdictColor: analysis.color,
         pctFromMid: analysis.pctFromMid,
-        analysisText: `Market range for a ${role.replace(/_/g, " ")} with ${yearsExperience} year(s) of experience at a ${compKey} company in ${(location || "Bangalore").replace(/_/g, " ")} is approximately ₹${range.min}–₹${range.max} LPA (mid ₹${range.mid} LPA). Your offer of ₹${offer} LPA is ${Math.abs(analysis.pctFromMid)}% ${analysis.pctFromMid <= 0 ? "below" : "above"} market mid.`,
+        analysisText: `Market range for a ${role.replace(/_/g, " ")} with ${yearsExperience} year(s) of experience at a ${compKey} company in ${(location || "Bangalore").replace(/_/g, " ")} is approximately ${fmt(range.min, currency)}–${fmt(range.max, currency)} ${sfx(currency)} (mid ${fmt(range.mid, currency)} ${sfx(currency)}). Your offer of ${fmt(offer, currency)} ${sfx(currency)} is ${Math.abs(analysis.pctFromMid)}% ${analysis.pctFromMid <= 0 ? "below" : "above"} market mid.`,
       },
       incrementAnalysis,
       recommendedAsk: ask,

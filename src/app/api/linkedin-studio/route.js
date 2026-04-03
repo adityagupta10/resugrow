@@ -258,7 +258,7 @@ function extractTopic(text) {
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
-// ── Best posting times (India-focused) ─────────────────────────────────────
+// ── Best posting times (Global Localized) ─────────────────────────────────────
 const BEST_POSTING_TIMES = [
   { day: 'Tuesday', slots: ['8:00–9:00 AM IST', '12:30–1:30 PM IST', '6:00–7:00 PM IST'], level: 'High', reason: 'Mid-week energy is high. Morning commuters and lunch scrollers drive strong early traction.' },
   { day: 'Wednesday', slots: ['8:30–9:30 AM IST', '1:00–2:00 PM IST', '5:30–7:00 PM IST'], level: 'Highest', reason: 'Consistently the highest-engagement day on LinkedIn globally. Algo favors posts with early engagement.' },

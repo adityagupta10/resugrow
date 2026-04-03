@@ -1,7 +1,7 @@
 /* ── Base page ─────────────────────────────────────────────────────────── */
 .page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+    background: linear-gradient(135deg, #0891b2 0%, #083344 100%);
     position: relative;
     overflow-x: hidden;
 }
@@ -14,21 +14,9 @@
     right: 0;
     bottom: 0;
     background:
-        radial-gradient(
-            circle at 20% 80%,
-            rgba(8, 145, 178, 0.35) 0%,
-            transparent 50%
-        ),
-        radial-gradient(
-            circle at 80% 20%,
-            rgba(14, 116, 144, 0.4) 0%,
-            transparent 50%
-        ),
-        radial-gradient(
-            circle at 40% 40%,
-            rgba(255, 255, 255, 0.1) 0%,
-            transparent 50%
-        );
+        radial-gradient(circle at 20% 80%, rgba(8, 145, 178, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(14, 116, 144, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
     pointer-events: none;
     z-index: 1;
 }
@@ -1089,4 +1077,32 @@
     .savePostBtn {
         justify-content: center;
     }
+}
+
+/* ── UI Toggles ─────────────────────────────────────────────────────────── */
+.hidden {
+    display: none !important;
+}
+
+.editBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 2px solid #e5e7eb;
+    color: #4b5563;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 20px;
+    font-family: inherit;
+}
+
+.editBtn:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+    color: #1a1a2e;
 }

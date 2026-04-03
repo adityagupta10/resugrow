@@ -130,6 +130,21 @@
     flex-shrink: 0;
 }
 
+.dropdownItemBadgeGreen {
+    background: #059669;
+    color: white;
+}
+
+.dropdownItemBadgeWhite {
+    background: white;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    font-size: 11px;
+    padding: 1px 5px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
 @keyframes dropdownIn {
     from {
         opacity: 0;
