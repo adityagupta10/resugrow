@@ -1,20 +1,17 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import prisma from '@/lib/prisma';
 import { auth } from '@/lib/auth';
+import { supabase } from '@/lib/supabase';
 
-export async function checkAdminStatus() {
+async function checkAdminStatus() {
+  if (process.env.NODE_ENV === 'development') return true;
+
   const session = await auth();
   
   if (!session || !session.user || !session.user.email) {
     return false;
   }
   
-  if (process.env.NODE_ENV === 'development') return true;
-
   const adminEmail = "aditya.gupta10jan@gmail.com";
-  if (!adminEmail) return false;
-  
   return session.user.email.toLowerCase() === adminEmail.toLowerCase();
 }
 
@@ -25,9 +22,12 @@ export async function GET() {
   }
 
   try {
-    const blogs = await prisma.blogPost.findMany({
-      orderBy: { createdAt: 'desc' }
-    });
+    const { data: blogs, error } = await supabase
+      .from('BlogPost')
+      .select('*')
+      .order('createdAt', { ascending: false });
+
+    if (error) throw error;
     return NextResponse.json(blogs);
   } catch (error) {
     console.error('API /api/admin/blogs GET error:', error);
@@ -44,38 +44,50 @@ export async function POST(request) {
   try {
     const data = await request.json();
     
-    // Validate required fields
     if (!data.title || !data.slug || !data.content) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const newPost = await prisma.blogPost.create({
-      data: {
-        title: data.title,
-        slug: data.slug,
-        excerpt: data.excerpt || '',
-        content: data.content,
-        category: data.category || 'Career Advice',
-        coverImage: data.coverImage || null,
-        coverEmoji: data.coverEmoji || null,
-        coverAlt: data.coverAlt || null,
-        author: data.author || 'RESUGROW Team',
-        authorRole: data.authorRole || 'Career Expert',
-        authorInitials: data.authorInitials || 'RG',
-        authorColor: data.authorColor || '#2563eb',
-        readTime: data.readTime || '5 min read',
-        date: data.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
-        tags: data.tags || [],
-        isPublished: data.isPublished !== undefined ? data.isPublished : true,
-      }
-    });
+    const { data: newPost, error } = await supabase
+      .from('BlogPost')
+      .insert([
+        {
+          id: crypto.randomUUID(),
+          title: data.title,
+          slug: data.slug,
+          excerpt: data.excerpt || '',
+          content: data.content,
+          category: data.category || 'Career Advice',
+          coverImage: data.coverImage || null,
+          coverEmoji: data.coverEmoji || null,
+          coverAlt: data.coverAlt || null,
+          author: data.author || 'RESUGROW Team',
+          authorRole: data.authorRole || 'Career Expert',
+          authorInitials: data.authorInitials || 'RG',
+          authorColor: data.authorColor || '#2563eb',
+          readTime: data.readTime || '5 min read',
+          date: data.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+          tags: data.tags || [],
+          isPublished: data.isPublished !== undefined ? data.isPublished : true,
+          updatedAt: new Date().toISOString(),
+        },
+      ])
+      .select();
 
-    return NextResponse.json(newPost, { status: 201 });
+    if (error) {
+      if (error.code === '23505') {
+        return NextResponse.json({ error: 'Slug must be unique' }, { status: 400 });
+      }
+      throw error;
+    }
+
+    return NextResponse.json(newPost[0], { status: 201 });
   } catch (error) {
     console.error('API /api/admin/blogs POST error:', error);
-    if (error.code === 'P2002') {
-      return NextResponse.json({ error: 'Slug must be unique' }, { status: 400 });
-    }
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Internal Server Error', 
+      details: error.message || error.toString(),
+      code: error.code
+    }, { status: 500 });
   }
 }

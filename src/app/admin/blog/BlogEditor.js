@@ -60,7 +60,8 @@ export default function BlogEditor({ initialData = null }) {
           router.push('/admin/blog');
         }
       } else {
-        setMessage(`Error: ${result.error}`);
+        const errorDetail = result.details ? `: ${result.details}` : result.error ? `: ${result.error}` : '';
+        setMessage(`Error${errorDetail}`);
       }
     } catch (err) {
       console.error('Error saving blog:', err);

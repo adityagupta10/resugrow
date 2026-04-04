@@ -8,9 +8,12 @@ export default async function AdminLayout({ children }) {
   const adminEmail = "aditya.gupta10jan@gmail.com";
   
   const isDev = process.env.NODE_ENV === 'development';
-  const isAdmin = session?.user?.email?.toLowerCase() === adminEmail.toLowerCase();
+  const userEmail = session?.user?.email;
+  const isAdmin = userEmail && userEmail.toLowerCase() === adminEmail.toLowerCase();
 
   if (!isDev && !isAdmin) {
+    // If not in dev and not an admin, redirect
+    console.log(`Admin access denied for: ${userEmail || 'Unauthenticated'}`);
     redirect('/login');
   }
 

@@ -5,7 +5,7 @@ import { posts } from '../data';
 import { createPageMetadata, getArticleJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
 import styles from './post.module.css';
 
-import prisma from '@/lib/prisma';
+import { supabase } from '@/lib/supabase';
 
 export async function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -16,9 +16,12 @@ export async function generateMetadata({ params }) {
   let post = posts.find((p) => p.slug === slug);
   
   if (!post) {
-    post = await prisma.blogPost.findUnique({
-      where: { slug }
-    });
+    const { data: dbPost } = await supabase
+      .from('BlogPost')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+    post = dbPost;
   }
 
   if (!post) return {};
@@ -161,9 +164,12 @@ export default async function BlogPost({ params }) {
   let post = posts.find((p) => p.slug === slug);
 
   if (!post) {
-    post = await prisma.blogPost.findUnique({
-      where: { slug }
-    });
+    const { data: dbPost } = await supabase
+      .from('BlogPost')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+    post = dbPost;
   }
 
   if (!post) notFound();

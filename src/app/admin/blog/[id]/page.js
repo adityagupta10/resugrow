@@ -1,23 +1,25 @@
-import prisma from '@/lib/prisma';
+import { supabase } from '@/lib/supabase';
 import BlogEditor from '../BlogEditor';
 import { notFound } from 'next/navigation';
 
 export default async function EditBlogPostPage({ params }) {
   const { id } = await params;
 
-  const blog = await prisma.blogPost.findUnique({
-    where: { id }
-  });
+  const { data: blog, error } = await supabase
+    .from('BlogPost')
+    .select('*')
+    .eq('id', id)
+    .single();
 
-  if (!blog) {
+  if (error || !blog) {
     notFound();
   }
 
-  // Convert Date objects to strings for Client Component
+  // Supabase returns dates as strings, no need to call .toISOString()
   const initialData = {
     ...blog,
-    createdAt: blog.createdAt.toISOString(),
-    updatedAt: blog.updatedAt.toISOString(),
+    createdAt: blog.createdAt,
+    updatedAt: blog.updatedAt,
   };
 
   return (

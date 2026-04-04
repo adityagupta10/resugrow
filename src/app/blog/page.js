@@ -12,7 +12,7 @@ export const metadata = createPageMetadata({
   keywords: ['resume tips', 'career advice', 'job search', 'ATS optimization', 'LinkedIn tips', 'salary negotiation'],
 });
 
-import prisma from '@/lib/prisma';
+import { supabase } from '@/lib/supabase';
 
 const categories = [
   'All',
@@ -31,15 +31,18 @@ const categories = [
 ];
 
 export default async function BlogPage() {
-  const dbPosts = await prisma.blogPost.findMany({
-    where: { isPublished: true },
-    orderBy: { createdAt: 'desc' },
-  });
+  const { data: dbPosts, error } = await supabase
+    .from('BlogPost')
+    .select('*')
+    .eq('isPublished', true)
+    .order('createdAt', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching blogs from Supabase:', error);
+  }
 
   // Combine static and DB posts
-  // Note: static posts don't have createdAt, so we'll just prepend DB posts for now
-  // as they are likely newer.
-  const allPosts = [...dbPosts, ...posts];
+  const allPosts = [...(dbPosts || []), ...posts];
 
   if (allPosts.length === 0) {
     return (

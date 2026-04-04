@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import prisma from '@/lib/prisma';
 import { auth } from "@/lib/auth";
+import { supabase } from '@/lib/supabase';
 
-// Simple helper to check admin status
 async function checkAdminStatus() {
   if (process.env.NODE_ENV === 'development') return true;
 
@@ -26,10 +24,13 @@ export async function GET(request, { params }) {
   const { id } = await params;
 
   try {
-    const blog = await prisma.blogPost.findUnique({
-      where: { id }
-    });
-    if (!blog) {
+    const { data: blog, error } = await supabase
+      .from('BlogPost')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !blog) {
       return NextResponse.json({ error: 'Blog post not found' }, { status: 404 });
     }
     return NextResponse.json(blog);
@@ -50,34 +51,42 @@ export async function PATCH(request, { params }) {
   try {
     const data = await request.json();
     
-    const updatedPost = await prisma.blogPost.update({
-      where: { id },
-      data: {
-        title: data.title,
-        slug: data.slug,
-        excerpt: data.excerpt,
-        content: data.content,
-        category: data.category,
-        coverImage: data.coverImage,
-        coverEmoji: data.coverEmoji,
-        coverAlt: data.coverAlt,
-        author: data.author,
-        authorRole: data.authorRole,
-        authorInitials: data.authorInitials,
-        authorColor: data.authorColor,
-        readTime: data.readTime,
-        date: data.date,
-        tags: data.tags,
-        isPublished: data.isPublished,
-      }
-    });
+    const updateData = {
+      title: data.title,
+      slug: data.slug,
+      excerpt: data.excerpt,
+      content: data.content,
+      category: data.category,
+      coverImage: data.coverImage,
+      coverEmoji: data.coverEmoji,
+      coverAlt: data.coverAlt,
+      author: data.author,
+      authorRole: data.authorRole,
+      authorInitials: data.authorInitials,
+      authorColor: data.authorColor,
+      readTime: data.readTime,
+      date: data.date,
+      tags: data.tags,
+      isPublished: data.isPublished,
+      updatedAt: new Date().toISOString(),
+    };
 
-    return NextResponse.json(updatedPost);
+    const { data: updatedPost, error } = await supabase
+      .from('BlogPost')
+      .update(updateData)
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      if (error.code === '23505') {
+        return NextResponse.json({ error: 'Slug must be unique' }, { status: 400 });
+      }
+      throw error;
+    }
+
+    return NextResponse.json(updatedPost[0]);
   } catch (error) {
     console.error('API /api/admin/blogs/[id] PATCH error:', error);
-    if (error.code === 'P2002') {
-      return NextResponse.json({ error: 'Slug must be unique' }, { status: 400 });
-    }
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
@@ -91,9 +100,12 @@ export async function DELETE(request, { params }) {
   const { id } = await params;
 
   try {
-    await prisma.blogPost.delete({
-      where: { id }
-    });
+    const { error } = await supabase
+      .from('BlogPost')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('API /api/admin/blogs/[id] DELETE error:', error);
