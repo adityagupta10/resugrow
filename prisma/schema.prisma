@@ -69,3 +69,25 @@ model Resume {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model BlogPost {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  excerpt        String   @db.Text
+  content        String   @db.Text
+  category       String
+  coverImage     String?
+  coverEmoji     String?
+  coverAlt       String?
+  author         String
+  authorRole     String?
+  authorInitials String?
+  authorColor    String?
+  readTime       String
+  date           String
+  tags           String[]
+  isPublished    Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

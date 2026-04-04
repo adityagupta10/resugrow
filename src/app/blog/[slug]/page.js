@@ -5,14 +5,24 @@ import { posts } from '../data';
 import { createPageMetadata, getArticleJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
 import styles from './post.module.css';
 
+import prisma from '@/lib/prisma';
+
 export async function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+  let post = posts.find((p) => p.slug === slug);
+  
+  if (!post) {
+    post = await prisma.blogPost.findUnique({
+      where: { slug }
+    });
+  }
+
   if (!post) return {};
+
   return createPageMetadata({
     title: `${post.title} | RESUGROW Blog`,
     description: post.excerpt,
@@ -148,7 +158,14 @@ function ToolCtaStrip({ title, links }) {
 
 export default async function BlogPost({ params }) {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+  let post = posts.find((p) => p.slug === slug);
+
+  if (!post) {
+    post = await prisma.blogPost.findUnique({
+      where: { slug }
+    });
+  }
+
   if (!post) notFound();
 
   const related = posts.filter((p) => p.slug !== post.slug && p.tags.some((t) => post.tags.includes(t))).slice(0, 3);

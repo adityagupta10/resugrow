@@ -12,6 +12,8 @@ export const metadata = createPageMetadata({
   keywords: ['resume tips', 'career advice', 'job search', 'ATS optimization', 'LinkedIn tips', 'salary negotiation'],
 });
 
+import prisma from '@/lib/prisma';
+
 const categories = [
   'All',
   'ATS Optimization',
@@ -28,17 +30,36 @@ const categories = [
   'Career Change',
 ];
 
-const featured = posts[0];
-const rest = posts.slice(1);
+export default async function BlogPage() {
+  const dbPosts = await prisma.blogPost.findMany({
+    where: { isPublished: true },
+    orderBy: { createdAt: 'desc' },
+  });
 
-export default function BlogPage() {
+  // Combine static and DB posts
+  // Note: static posts don't have createdAt, so we'll just prepend DB posts for now
+  // as they are likely newer.
+  const allPosts = [...dbPosts, ...posts];
+
+  if (allPosts.length === 0) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <p>No blog posts found.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const featured = allPosts[0];
+  const rest = allPosts.slice(1);
   const breadcrumbSchema = getBreadcrumbJsonLd([
     { name: 'Home', url: SITE_URL },
     { name: 'Blog', url: `${SITE_URL}/blog` }
   ]);
   const itemListSchema = getItemListJsonLd({
     name: 'RESUGROW Blog Articles',
-    items: posts.map((post) => ({
+    items: allPosts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
       name: post.title
     }))
