@@ -1,11 +1,58 @@
 'use client';
 
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { createClient as createSupabaseClient } from '@/utils/supabase/client';
 import styles from './login.module.css';
+
+const LAST_OAUTH_PROVIDER_KEY = 'resugrow:last-oauth-provider';
+
+function getProviderLabel(provider) {
+  if (provider === 'google') return 'Google';
+  if (provider === 'linkedin_oidc') return 'LinkedIn';
+  if (provider === 'github') return 'GitHub';
+  if (provider === 'azure') return 'Microsoft';
+  return 'Social';
+}
+
+function decodeParam(value) {
+  if (!value) return '';
+  let decoded = value;
+  for (let i = 0; i < 3; i += 1) {
+    try {
+      const nextValue = decodeURIComponent(decoded);
+      if (nextValue === decoded) break;
+      decoded = nextValue;
+    } catch {
+      break;
+    }
+  }
+  return decoded;
+}
+
+function formatOauthErrorMessage(error, errorCode, errorDescription, providerLabel = 'Social') {
+  const decodedDescription = decodeParam(errorDescription);
+
+  if (decodedDescription.includes('Unable to exchange external code')) {
+    return `${providerLabel} sign-in could not be completed. This usually means the ${providerLabel} OAuth settings in Supabase and the provider dashboard do not fully match the live production setup. Please try once more in a fresh tab. If it still fails, the production ${providerLabel} provider configuration needs to be corrected.`;
+  }
+
+  if (error === 'oauth_callback_failed') {
+    return `Your ${providerLabel} sign-in completed with the provider, but ResuGrow could not finish the callback. Please try again.`;
+  }
+
+  if (decodedDescription) {
+    return decodedDescription;
+  }
+
+  if (errorCode === 'unexpected_failure') {
+    return 'Social sign-in failed unexpectedly. Please try again.';
+  }
+
+  return '';
+}
 
 function LoginContent() {
   const router = useRouter();
@@ -16,6 +63,7 @@ function LoginContent() {
   const [authNotice, setAuthNotice] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [lastProviderLabel, setLastProviderLabel] = useState('Social');
 
   const nextPath = useMemo(() => {
     try {
@@ -30,6 +78,46 @@ function LoginContent() {
     }
   }, [callbackUrl]);
 
+  useEffect(() => {
+    let providerLabel = 'Social';
+    if (typeof window !== 'undefined') {
+      const storedProvider = window.sessionStorage.getItem(LAST_OAUTH_PROVIDER_KEY);
+      providerLabel = getProviderLabel(storedProvider);
+      setLastProviderLabel(providerLabel);
+    }
+
+    const queryError = searchParams.get('error');
+    const queryErrorCode = searchParams.get('error_code');
+    const queryErrorDescription = searchParams.get('error_description');
+
+    let nextError = formatOauthErrorMessage(queryError, queryErrorCode, queryErrorDescription, providerLabel);
+
+    if (!nextError && typeof window !== 'undefined' && window.location.hash) {
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      nextError = formatOauthErrorMessage(
+        hashParams.get('error'),
+        hashParams.get('error_code'),
+        hashParams.get('error_description'),
+        providerLabel,
+      );
+
+      if (nextError) {
+        const cleanUrl = `${window.location.pathname}${window.location.search}`;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+    }
+
+    if (nextError) {
+      setOauthError(nextError);
+      setIsLoading(false);
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.removeItem(LAST_OAUTH_PROVIDER_KEY);
+      }
+    } else if (typeof window !== 'undefined' && (queryError || window.location.hash)) {
+      window.sessionStorage.removeItem(LAST_OAUTH_PROVIDER_KEY);
+    }
+  }, [searchParams]);
+
   const startSupabaseOAuth = async (provider) => {
     setIsLoading(true);
     setOauthError('');
@@ -37,23 +125,38 @@ function LoginContent() {
 
     try {
       const supabase = createSupabaseClient();
-      const resolvedRedirectTo =
-        `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+      const resolvedRedirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+      const providerLabel = getProviderLabel(provider);
+
+      const options = {
+        redirectTo: resolvedRedirectTo,
+      };
+
+      if (provider === 'google') {
+        options.scopes = 'openid email profile https://www.googleapis.com/auth/userinfo.email';
+      } else if (provider === 'azure') {
+        options.scopes = 'email';
+      }
+
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.setItem(LAST_OAUTH_PROVIDER_KEY, provider);
+      }
+
+      console.log(`[Login] Initiating OAuth for ${provider}...`, { redirectTo: resolvedRedirectTo });
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: {
-          // After Supabase OAuth, exchange code server-side and then redirect.
-          redirectTo: resolvedRedirectTo,
-        },
+        options,
       });
 
       if (error) {
-        setOauthError(error.message || 'Social login failed. Please try again.');
+        console.error(`[Login] Supabase OAuth error:`, error);
+        setOauthError(error.message || `${providerLabel} login failed. Please try again.`);
         setIsLoading(false);
       }
-    } catch {
-      setOauthError('Supabase is not configured on this environment. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY.');
+    } catch (err) {
+      console.error(`[Login] Unexpected error during OAuth start:`, err);
+      setOauthError(`Unable to start ${getProviderLabel(provider)} sign-in. Please check your connection or try again later.`);
       setIsLoading(false);
     }
   };
@@ -202,6 +305,16 @@ function LoginContent() {
                 <path d="M12 0.3c-6.63 0-12 5.37-12 12 0 5.3 3.44 9.8 8.2 11.39 0.6 0.11 0.82-0.26 0.82-0.58 0-0.29-0.01-1.04-0.02-2.05-3.34 0.73-4.04-1.61-4.04-1.61-0.55-1.39-1.34-1.76-1.34-1.76-1.09-0.75 0.08-0.73 0.08-0.73 1.21 0.09 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 0.11-0.78 0.42-1.31 0.76-1.61-2.66-0.3-5.46-1.33-5.46-5.92 0-1.31 0.47-2.38 1.24-3.22-0.12-0.3-0.54-1.52 0.12-3.17 0 0 1.01-0.32 3.3 1.23 0.96-0.27 1.98-0.4 3-0.4 1.02 0 2.04 0.13 3 0.4 2.29-1.55 3.3-1.23 3.3-1.23 0.66 1.65 0.24 2.87 0.12 3.17 0.77 0.84 1.24 1.91 1.24 3.22 0 4.6-2.81 5.61-5.49 5.91 0.43 0.38 0.82 1.12 0.82 2.25 0 1.62-0.01 2.93-0.01 3.33 0 0.32 0.22 0.69 0.83 0.58 4.76-1.59 8.2-6.09 8.2-11.39 0-6.63-5.37-12-12-12z" />
               </svg>
               Continue with GitHub
+            </button>
+
+            <button className={styles.socialBtn} onClick={() => startSupabaseOAuth('azure')} disabled={isLoading} type="button">
+              <svg viewBox="0 0 23 23" fill="#f35325" role="img" aria-label="Microsoft logo for RESUGROW social sign-in">
+                <rect x="0" y="0" width="10.5" height="10.5" fill="#f35325" />
+                <rect x="12" y="0" width="10.5" height="10.5" fill="#81bc06" />
+                <rect x="0" y="12" width="10.5" height="10.5" fill="#05a6f0" />
+                <rect x="12" y="12" width="10.5" height="10.5" fill="#ffba08" />
+              </svg>
+              Continue with Microsoft
             </button>
           </div>
 

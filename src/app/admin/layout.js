@@ -1,20 +1,22 @@
-import { auth } from "@/lib/auth";
-import { redirect } from 'next/navigation';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 
 export default async function AdminLayout({ children }) {
-  const session = await auth();
+  if (process.env.NODE_ENV !== 'development') {
+    notFound();
+  }
+
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+  const { data: { user } } = await supabase.auth.getUser();
   
   const adminEmail = "aditya.gupta10jan@gmail.com";
-  
-  const isDev = process.env.NODE_ENV === 'development';
-  const userEmail = session?.user?.email;
-  const isAdmin = userEmail && userEmail.toLowerCase() === adminEmail.toLowerCase();
+  const isAdmin = user?.email?.toLowerCase() === adminEmail.toLowerCase();
 
-  if (!isDev && !isAdmin) {
-    // If not in dev and not an admin, redirect
-    console.log(`Admin access denied for: ${userEmail || 'Unauthenticated'}`);
-    redirect('/login');
+  if (!isAdmin) {
+    redirect(`/login?callbackUrl=/admin/blog`);
   }
 
   return (

@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
 import { createClient as createSupabaseClient } from "@/utils/supabase/client";
 import { trackCTA } from '@/lib/analytics';
 import styles from "./Navbar.module.css";
@@ -66,7 +65,6 @@ const dropdownSections = [
 ];
 
 export default function Navbar() {
-  const { data: session, status } = useSession();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -90,9 +88,9 @@ export default function Navbar() {
         null,
     }
     : null;
-  const activeUser = userFromSupabase || session?.user || null;
+  const activeUser = userFromSupabase || null;
   const isLoggedIn = Boolean(activeUser);
-  const isAuthLoading = status === "loading" || supabaseLoading;
+  const isAuthLoading = supabaseLoading;
 
   const handleSignInRedirect = () => {
     const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
@@ -348,16 +346,12 @@ export default function Navbar() {
                 <button
                   className={`${styles.dropdownItem} ${styles.signOutBtn}`}
                   onClick={async () => {
-                    if (supabaseUser) {
-                      try {
-                        const supabase = createSupabaseClient();
-                        await supabase.auth.signOut();
-                      } catch { }
-                      setUserDropdownOpen(false);
-                      router.refresh();
-                      return;
-                    }
-                    await signOut();
+                    try {
+                      const supabase = createSupabaseClient();
+                      await supabase.auth.signOut();
+                    } catch {}
+                    setUserDropdownOpen(false);
+                    router.refresh();
                   }}
                 >
                   <span>Sign Out</span>

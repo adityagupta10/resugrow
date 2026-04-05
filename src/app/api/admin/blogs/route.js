@@ -1,18 +1,21 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
 
 async function checkAdminStatus() {
-  if (process.env.NODE_ENV === 'development') return true;
-
-  const session = await auth();
+  if (process.env.NODE_ENV !== 'development') return false;
   
-  if (!session || !session.user || !session.user.email) {
+  const cookieStore = await cookies();
+  const serverSupabase = createClient(cookieStore);
+  const { data: { user } } = await serverSupabase.auth.getUser();
+
+  if (!user || !user.email) {
     return false;
   }
   
   const adminEmail = "aditya.gupta10jan@gmail.com";
-  return session.user.email.toLowerCase() === adminEmail.toLowerCase();
+  return user.email.toLowerCase() === adminEmail.toLowerCase();
 }
 
 export async function GET() {

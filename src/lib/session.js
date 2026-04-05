@@ -1,37 +1,19 @@
-import { auth } from "@/lib/auth";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 
 /**
- * A unified session helper that checks both Auth.js (NextAuth) and Supabase.
+ * A unified session helper for Supabase-authenticated users.
  * Returns a consistent user object or null.
  *
  * IMPORTANT: The returned `id` is the Prisma user id.  When the user logged in
  * via Supabase OAuth the Supabase UUID may differ from a pre-existing Prisma
- * user row (e.g. one created by the NextAuth PrismaAdapter).  We reconcile by
+ * user row created before the auth migration. We reconcile by
  * falling back to an email look-up so that the dashboard query always hits the
- * correct rows regardless of which auth provider created the Prisma record.
+ * correct rows regardless of which legacy auth flow created the Prisma record.
  */
 export async function getUnifiedSession() {
-  // 1. Check Auth.js session (Google Login via NextAuth — legacy path)
-  try {
-    const session = await auth();
-    if (session?.user) {
-      return {
-        id: session.user.id,
-        name: session.user.name,
-        email: session.user.email,
-        image: session.user.image,
-        provider: 'next-auth'
-      };
-    }
-  } catch (err) {
-    // auth() can fail if env vars aren't set — ignore and fallthrough
-    console.error("Auth.js session check failed:", err);
-  }
-
-  // 2. Check Supabase session (Email / OTP / OAuth — primary path)
+  // Check Supabase session (email/password and OAuth).
   try {
     const cookieStore = await cookies();
     const supabase = createClient(cookieStore);

@@ -1,22 +1,24 @@
 import { NextResponse } from 'next/server';
-import { auth } from "@/lib/auth";
 import { supabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
 
-async function checkAdminStatus() {
-  if (process.env.NODE_ENV === 'development') return true;
-
-  const session = await auth();
-  
-  if (!session || !session.user || !session.user.email) {
-    return false;
-  }
+async function getAuthenticatedClient() {
+  const cookieStore = await cookies();
+  const serverSupabase = createClient(cookieStore);
+  const { data: { user } } = await serverSupabase.auth.getUser();
   
   const adminEmail = "aditya.gupta10jan@gmail.com";
-  return session.user.email.toLowerCase() === adminEmail.toLowerCase();
+  const isAdmin = user && user.email && user.email.toLowerCase() === adminEmail.toLowerCase();
+  
+  return { serverSupabase, isAdmin };
 }
 
+const EMOJI_POOL = ['🚀', '📈', '💼', '💡', '🎯', '🧠', '✨', '🔥', '🏆', '📝', '🤝', '🌐', '📊', '💎', '🎨'];
+const getRandomEmoji = () => EMOJI_POOL[Math.floor(Math.random() * EMOJI_POOL.length)];
+
 export async function GET(request, { params }) {
-  const isAdmin = await checkAdminStatus();
+  const { serverSupabase, isAdmin } = await getAuthenticatedClient();
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -24,7 +26,7 @@ export async function GET(request, { params }) {
   const { id } = await params;
 
   try {
-    const { data: blog, error } = await supabase
+    const { data: blog, error } = await serverSupabase
       .from('BlogPost')
       .select('*')
       .eq('id', id)
@@ -41,7 +43,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PATCH(request, { params }) {
-  const isAdmin = await checkAdminStatus();
+  const { serverSupabase, isAdmin } = await getAuthenticatedClient();
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -51,6 +53,9 @@ export async function PATCH(request, { params }) {
   try {
     const data = await request.json();
     
+    const rawEmoji = data.coverEmoji;
+    const finalEmoji = (rawEmoji && String(rawEmoji).trim().length > 0) ? rawEmoji : getRandomEmoji();
+
     const updateData = {
       title: data.title,
       slug: data.slug,
@@ -58,7 +63,7 @@ export async function PATCH(request, { params }) {
       content: data.content,
       category: data.category,
       coverImage: data.coverImage,
-      coverEmoji: data.coverEmoji,
+      coverEmoji: finalEmoji,
       coverAlt: data.coverAlt,
       author: data.author,
       authorRole: data.authorRole,
@@ -71,7 +76,7 @@ export async function PATCH(request, { params }) {
       updatedAt: new Date().toISOString(),
     };
 
-    const { data: updatedPost, error } = await supabase
+    const { data: updatedPost, error } = await serverSupabase
       .from('BlogPost')
       .update(updateData)
       .eq('id', id)
@@ -87,12 +92,15 @@ export async function PATCH(request, { params }) {
     return NextResponse.json(updatedPost[0]);
   } catch (error) {
     console.error('API /api/admin/blogs/[id] PATCH error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Internal Server Error', 
+      details: error.message || error.toString() 
+    }, { status: 500 });
   }
 }
 
 export async function DELETE(request, { params }) {
-  const isAdmin = await checkAdminStatus();
+  const { serverSupabase, isAdmin } = await getAuthenticatedClient();
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -100,7 +108,7 @@ export async function DELETE(request, { params }) {
   const { id } = await params;
 
   try {
-    const { error } = await supabase
+    const { error } = await serverSupabase
       .from('BlogPost')
       .delete()
       .eq('id', id);

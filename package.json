@@ -26,7 +26,8 @@
     "pdf-parse": "^1.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "stopword": "^3.1.5"
+    "stopword": "^3.1.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "eslint": "^9",
