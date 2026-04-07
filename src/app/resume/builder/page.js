@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect, Suspense } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -10,7 +10,7 @@ import {
   User, Briefcase, GraduationCap, Wrench, Star, FolderOpen, Trophy,
   Award, Languages, Activity, LayoutGrid, Download, Mail, LinkIcon,
   Home, ScanSearch, FileSignature, Trash2,
-  Wand2, FileDown, Copy,
+  Wand2, FileDown, Copy, Camera, User2, Lock,
 } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { generatePDFBlob } from '@/utils/pdfGenerator';
@@ -57,6 +57,8 @@ const defaultData = {
     website: '',
     linkedin: '',
     summary: '',
+    photo: '',
+    showPhoto: false,
   },
   experience: [],
   education: [],
@@ -68,13 +70,118 @@ const defaultData = {
   extracurricular: [],
   projects: [],
   customSection: { title: '', content: '' },
+  meta: {},
 };
+
+const MAX_VERSION_HISTORY = 12;
+
+function stripVersionMeta(resumeData = {}) {
+  const meta = resumeData.meta || {};
+  const {
+    versionHistory,
+    versionCounter,
+    lastVersionId,
+    lastVersionReason,
+    lastSavedAt,
+    ...safeMeta
+  } = meta;
+
+  return {
+    ...resumeData,
+    meta: safeMeta,
+  };
+}
+
+function getResumeSnapshotSummary(resumeData = {}) {
+  return {
+    fullName: resumeData.personal?.fullName || '',
+    currentPosition: resumeData.personal?.currentPosition || '',
+    experienceCount: Array.isArray(resumeData.experience) ? resumeData.experience.length : 0,
+    educationCount: Array.isArray(resumeData.education) ? resumeData.education.length : 0,
+    skillsCount: Array.isArray(resumeData.skills) ? resumeData.skills.length : 0,
+    projectsCount: Array.isArray(resumeData.projects) ? resumeData.projects.length : 0,
+    certificationsCount: Array.isArray(resumeData.certifications) ? resumeData.certifications.length : 0,
+    achievementsCount: Array.isArray(resumeData.achievements) ? resumeData.achievements.length : 0,
+    languagesCount: Array.isArray(resumeData.languages) ? resumeData.languages.length : 0,
+    hasSummary: Boolean(resumeData.personal?.summary?.trim()),
+  };
+}
+
+function extractVersionHistory(resumeData = {}) {
+  const history = resumeData?.meta?.versionHistory;
+  return Array.isArray(history) ? history.slice(0, MAX_VERSION_HISTORY) : [];
+}
+
+function formatVersionDate(value) {
+  if (!value) return 'Just now';
+  return new Date(value).toLocaleString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
+
+function buildVersionDiff(leftVersion, rightVersion) {
+  if (!leftVersion || !rightVersion) return [];
+
+  const leftSummary = leftVersion.summary || {};
+  const rightSummary = rightVersion.summary || {};
+  const diffRows = [];
+
+  const countFields = [
+    ['Experience entries', 'experienceCount'],
+    ['Education entries', 'educationCount'],
+    ['Skills', 'skillsCount'],
+    ['Projects', 'projectsCount'],
+    ['Certifications', 'certificationsCount'],
+    ['Achievements', 'achievementsCount'],
+    ['Languages', 'languagesCount'],
+  ];
+
+  if ((leftVersion.templateId || 'classic') !== (rightVersion.templateId || 'classic')) {
+    diffRows.push({
+      label: 'Template',
+      left: leftVersion.templateId || 'classic',
+      right: rightVersion.templateId || 'classic',
+    });
+  }
+
+  if ((leftSummary.currentPosition || '') !== (rightSummary.currentPosition || '')) {
+    diffRows.push({
+      label: 'Current Position',
+      left: leftSummary.currentPosition || 'Not set',
+      right: rightSummary.currentPosition || 'Not set',
+    });
+  }
+
+  countFields.forEach(([label, key]) => {
+    if ((leftSummary[key] || 0) !== (rightSummary[key] || 0)) {
+      diffRows.push({
+        label,
+        left: leftSummary[key] || 0,
+        right: rightSummary[key] || 0,
+      });
+    }
+  });
+
+  if (Boolean(leftSummary.hasSummary) !== Boolean(rightSummary.hasSummary)) {
+    diffRows.push({
+      label: 'Professional Summary',
+      left: leftSummary.hasSummary ? 'Present' : 'Missing',
+      right: rightSummary.hasSummary ? 'Present' : 'Missing',
+    });
+  }
+
+  return diffRows;
+}
 
 // ── Step Definitions ──────────────────────────────────────────────────────
 const STEPS = [
   { id: 'start', label: 'Getting Started', icon: FileText },
-  { id: 'template', label: 'Template', icon: LayoutGrid },
   { id: 'personal', label: 'Personal Info', icon: User },
+  { id: 'template', label: 'Template', icon: LayoutGrid },
   { id: 'experience', label: 'Experience', icon: Briefcase },
   { id: 'education', label: 'Education', icon: GraduationCap },
   { id: 'skills', label: 'Skills', icon: Wrench },
@@ -517,6 +624,8 @@ function ResumeBuilderPage() {
   const [data, setData] = useState(defaultData);
   const [activeTemplateId, setActiveTemplateId] = useState('classic');
   const [visitedSteps, setVisitedSteps] = useState(new Set([0]));
+  const [personalInfoSaved, setPersonalInfoSaved] = useState(false);
+  const [startOptionChosen, setStartOptionChosen] = useState(false);
   const previewRef = useRef(null);
   const searchParams = useSearchParams();
   const resumeIdParam = searchParams.get('id');
@@ -526,6 +635,7 @@ function ResumeBuilderPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
   const fileInputRef = useRef(null);
+  const photoInputRef = useRef(null);
 
   // Tag input states
   const [newSkill, setNewSkill] = useState('');
@@ -542,6 +652,8 @@ function ResumeBuilderPage() {
 
   // ── Navigation ──────────────────────────────────────────────────────────
   const goNext = () => {
+    if (currentStep === 0) setStartOptionChosen(true);
+    if (currentStep === 1) setPersonalInfoSaved(true);
     const next = Math.min(currentStep + 1, STEPS.length - 1);
     setCurrentStep(next);
     setVisitedSteps(prev => new Set([...prev, next]));
@@ -552,6 +664,12 @@ function ResumeBuilderPage() {
   };
 
   const goToStep = (idx) => {
+    // Step 0 always accessible
+    if (idx === 0) { setCurrentStep(0); return; }
+    // Step 1 (Personal Info) only accessible after choosing a start option
+    if (idx === 1 && !startOptionChosen) return;
+    // Steps 2+ only accessible after Personal Info is saved
+    if (idx >= 2 && !personalInfoSaved) return;
     setCurrentStep(idx);
     setVisitedSteps(prev => new Set([...prev, idx]));
   };
@@ -562,6 +680,23 @@ function ResumeBuilderPage() {
   const updatePersonal = useCallback((field, value) => {
     setData((d) => ({ ...d, personal: { ...d.personal, [field]: value } }));
   }, []);
+
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Check file size (limit to 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Photo must be smaller than 2MB");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      updatePersonal('photo', event.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   // ── Generic list helpers ──────────────────────────────────────────────
   const addToList = (key, value, reset) => {
@@ -605,15 +740,152 @@ function ResumeBuilderPage() {
   const removeProject = (id) =>
     setData((d) => ({ ...d, projects: d.projects.filter((p) => p.id !== id) }));
 
+  // ── Share via Link ─────────────────────────────────────────────────
+  const [isSharing, setIsSharing] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
+  const [shareId, setShareId] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [shareError, setShareError] = useState(null);
+  const [versionHistory, setVersionHistory] = useState([]);
+  const [isSavingVersion, setIsSavingVersion] = useState(false);
+  const [versionNotice, setVersionNotice] = useState('');
+  const [compareVersionIds, setCompareVersionIds] = useState({ left: '', right: '' });
+
+  const comparedVersions = useMemo(() => {
+    const left = versionHistory.find((version) => version.id === compareVersionIds.left) || versionHistory[0] || null;
+    const right = versionHistory.find((version) => version.id === compareVersionIds.right) || versionHistory[1] || null;
+    return { left, right };
+  }, [compareVersionIds, versionHistory]);
+
+  const versionDiffRows = useMemo(
+    () => buildVersionDiff(comparedVersions.left, comparedVersions.right),
+    [comparedVersions.left, comparedVersions.right],
+  );
+
+  const persistResumeRecord = useCallback(async ({
+    sharedPdfUrl = null,
+    recordVersion = false,
+    versionReason = 'Manual snapshot',
+    overrideData = null,
+    overrideTemplateId = null,
+  } = {}) => {
+    const supabase = createClient();
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    if (authError) throw authError;
+    if (!authData?.user) throw new Error('Please sign in to save your resume.');
+
+    const userId = authData.user.id;
+    const stableShareId = shareId || `${userId.slice(0, 8)}-${Date.now()}`;
+    const nextTemplateId = overrideTemplateId || activeTemplateId;
+    const payloadData = overrideData || data;
+    const sanitizedData = stripVersionMeta(payloadData);
+    const hydratedData = {
+      ...sanitizedData,
+      meta: {
+        ...(sanitizedData.meta || {}),
+        templateId: nextTemplateId,
+      },
+    };
+
+    const res = await fetch('/api/resumes/share', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: hydratedData,
+        title: hydratedData.personal?.fullName ? `Resume - ${hydratedData.personal.fullName}` : 'Untitled Resume',
+        sharedPdfUrl,
+        shareId: stableShareId,
+        recordVersion,
+        versionReason,
+      }),
+    });
+
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save resume state.');
+
+    const brandedUrl = `https://www.resugrow.com${result.url}`;
+    setShareUrl(brandedUrl);
+    setShareId(stableShareId);
+
+    if (result.resume?.data) {
+      setData(result.resume.data);
+      const incomingHistory = extractVersionHistory(result.resume.data);
+      setVersionHistory(incomingHistory);
+      if (incomingHistory.length >= 2) {
+        setCompareVersionIds({
+          left: incomingHistory[0].id,
+          right: incomingHistory[1].id,
+        });
+      } else if (incomingHistory.length === 1) {
+        setCompareVersionIds({
+          left: incomingHistory[0].id,
+          right: '',
+        });
+      }
+    }
+
+    return { ...result, shareId: stableShareId, brandedUrl };
+  }, [activeTemplateId, data, shareId]);
+
+  const handleShareResume = async () => {
+    if (isSharing) return;
+    setIsSharing(true);
+    setShareError(null);
+
+    try {
+      const pdfBlob = await generatePDFBlob(previewRef.current);
+      if (!pdfBlob) throw new Error('Failed to generate PDF');
+
+      const supabase = createClient();
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError) throw authError;
+      if (!authData?.user) throw new Error('Please sign in to create a shareable resume link.');
+
+      const userId = authData.user.id;
+      const stableShareId = shareId || `${userId.slice(0, 8)}-${Date.now()}`;
+      const fileName = `${userId}/${stableShareId}-${Date.now()}.pdf`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('public-resumes')
+        .upload(fileName, pdfBlob, {
+          contentType: 'application/pdf',
+          cacheControl: '3600',
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('public-resumes')
+        .getPublicUrl(fileName);
+
+      await persistResumeRecord({
+        sharedPdfUrl: publicUrl,
+        recordVersion: false,
+      });
+      // No auto-copy here during auto-generation to avoid UX surprise.
+    } catch (err) {
+      console.error('Sharing failed:', err);
+      setShareError(err.message || 'Could not create shareable link.');
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   // ── PDF download (print-to-PDF) ─────────────────────────────────────
   const handleDownloadPDF = useCallback(async () => {
     const srcEl = previewRef.current;
     if (!srcEl) return;
 
+    setShareError(null);
+    setVersionNotice('');
+    setIsSavingVersion(true);
+
     const filenameBase = `Resume_${data.personal.fullName ? data.personal.fullName.replace(/\s+/g, '_') : 'Download'}`;
     const filename = `${filenameBase}.pdf`;
     const printWindow = window.open('', filenameBase);
     if (!printWindow) {
+      setIsSavingVersion(false);
       alert('Popup blocked. Please allow popups to download your PDF.');
       return;
     }
@@ -659,13 +931,28 @@ function ResumeBuilderPage() {
       );
     } catch { }
 
+    try {
+      const saveResult = await persistResumeRecord({
+        recordVersion: true,
+        versionReason: 'PDF export',
+      });
+      const nextVersionNumber =
+        saveResult?.resume?.data?.meta?.versionCounter || versionHistory.length + 1;
+      setVersionNotice(`Version ${nextVersionNumber} saved from this PDF export.`);
+    } catch (error) {
+      console.error('Version snapshot failed:', error);
+      setShareError(error.message || 'Could not save version history for this export.');
+    } finally {
+      setIsSavingVersion(false);
+    }
+
     setTimeout(() => {
       try {
         printWindow.focus();
         printWindow.print();
       } catch { }
     }, 0);
-  }, [data.personal.fullName]);
+  }, [data.personal.fullName, persistResumeRecord, versionHistory.length]);
 
   // ── Export Text Only ────────────────────────────────────────────────
   const handleExportText = () => {
@@ -724,71 +1011,7 @@ function ResumeBuilderPage() {
     URL.revokeObjectURL(a.href);
   };
 
-  // ── Share via Link ─────────────────────────────────────────────────
-  const [isSharing, setIsSharing] = useState(false);
-  const [shareUrl, setShareUrl] = useState('');
-  const [shareId, setShareId] = useState('');
-  const [copied, setCopied] = useState(false);
-  const [shareError, setShareError] = useState(null);
-
-  const handleShareResume = async () => {
-    if (isSharing) return;
-    setIsSharing(true);
-    setShareError(null);
-
-    try {
-      const pdfBlob = await generatePDFBlob(previewRef.current);
-      if (!pdfBlob) throw new Error('Failed to generate PDF');
-
-      const supabase = createClient();
-      const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) throw authError;
-      if (!authData?.user) throw new Error('Please sign in to create a shareable resume link.');
-
-      const userId = authData.user.id;
-      const stableShareId = shareId || `${userId.slice(0, 8)}-${Date.now()}`;
-      const fileName = `${userId}/${stableShareId}-${Date.now()}.pdf`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('public-resumes')
-        .upload(fileName, pdfBlob, {
-          contentType: 'application/pdf',
-          cacheControl: '3600',
-          upsert: false,
-        });
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('public-resumes')
-        .getPublicUrl(fileName);
-
-      const res = await fetch('/api/resumes/share', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          data: { ...data, meta: { ...(data.meta || {}), templateId: activeTemplateId } },
-          title: data.personal.fullName ? `Resume - ${data.personal.fullName}` : 'Untitled Resume',
-          sharedPdfUrl: publicUrl,
-          shareId: stableShareId,
-        }),
-      });
-
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || 'Failed to save sharing link');
-
-      const brandedUrl = `https://www.resugrow.com${result.url}`;
-      setShareUrl(brandedUrl);
-      setShareId(stableShareId);
-      // No auto-copy here during auto-generation to avoid UX surprise.
-      // Copy only happens on click of the Copy button in handleCopyLink.
-    } catch (err) {
-      console.error('Sharing failed:', err);
-      setShareError(err.message || 'Could not create shareable link.');
-    } finally {
-      setIsSharing(false);
-    }
-  };
+  // Moved to Share via Link section
 
   // ── Auto-generate sharing link on Step 13 ──────────────────────────────
   useEffect(() => {
@@ -796,6 +1019,14 @@ function ResumeBuilderPage() {
       handleShareResume();
     }
   }, [currentStep, shareUrl, isSharing, shareError]);
+
+  useEffect(() => {
+    if (!versionHistory.length) return;
+    setCompareVersionIds((prev) => ({
+      left: prev.left || versionHistory[0]?.id || '',
+      right: prev.right || versionHistory[1]?.id || '',
+    }));
+  }, [versionHistory]);
 
   // ── Load existing resume if ID is present ──────────────────────────────
   useEffect(() => {
@@ -808,6 +1039,12 @@ function ResumeBuilderPage() {
             const resume = await res.json();
             if (resume.data) {
               setData(resume.data);
+              const incomingHistory = extractVersionHistory(resume.data);
+              setVersionHistory(incomingHistory);
+              setCompareVersionIds({
+                left: incomingHistory[0]?.id || '',
+                right: incomingHistory[1]?.id || '',
+              });
               if (resume.data.meta?.templateId) {
                 setActiveTemplateId(resume.data.meta.templateId);
               }
@@ -819,6 +1056,8 @@ function ResumeBuilderPage() {
               // Skip the "Getting Started" modal/step since we're editing
               setCurrentStep(1); 
               setVisitedSteps(new Set([0, 1]));
+              setStartOptionChosen(true);
+              setPersonalInfoSaved(true);
             }
           }
         } catch (err) {
@@ -857,6 +1096,8 @@ function ResumeBuilderPage() {
           localStorage.removeItem('atsFixedResumeData');
           setCurrentStep(1);
           setVisitedSteps(new Set([0, 1]));
+          setStartOptionChosen(true);
+          setPersonalInfoSaved(true);
         } catch (e) {
           console.error("Failed to parse ATS fixed data", e);
         }
@@ -910,6 +1151,38 @@ function ResumeBuilderPage() {
 
     if (shareLink) {
       window.open(shareLink, '_blank', 'width=600,height=400');
+    }
+  };
+
+  const handleRestoreVersion = async (versionId) => {
+    const targetVersion = versionHistory.find((version) => version.id === versionId);
+    if (!targetVersion?.data) return;
+
+    const restoredTemplateId = targetVersion.templateId || 'classic';
+    const restoredData = {
+      ...targetVersion.data,
+      meta: {
+        ...(targetVersion.data.meta || {}),
+        templateId: restoredTemplateId,
+        versionHistory,
+        versionCounter: data.meta?.versionCounter || versionHistory.length,
+      },
+    };
+
+    setData(restoredData);
+    setActiveTemplateId(restoredTemplateId);
+    setVersionNotice(`${targetVersion.label} restored. Export again to save the rollback as a fresh snapshot.`);
+    setShareError(null);
+
+    try {
+      await persistResumeRecord({
+        overrideData: restoredData,
+        overrideTemplateId: restoredTemplateId,
+        recordVersion: false,
+      });
+    } catch (error) {
+      console.error('Failed to persist restored version:', error);
+      setShareError(error.message || 'Restored locally, but failed to sync the rollback to your account.');
     }
   };
 
@@ -983,14 +1256,17 @@ function ResumeBuilderPage() {
             const Icon = step.icon;
             const isActive = idx === currentStep;
             const isCompleted = visitedSteps.has(idx) && idx < currentStep && stepHasData(idx);
+            const isLocked = (idx === 1 && !startOptionChosen) || (idx >= 2 && !personalInfoSaved);
             return (
               <button
                 key={step.id}
-                className={`${styles.sidebarStep} ${isActive ? styles.sidebarStepActive : ''} ${isCompleted ? styles.sidebarStepCompleted : ''}`}
+                className={`${styles.sidebarStep} ${isActive ? styles.sidebarStepActive : ''} ${isCompleted ? styles.sidebarStepCompleted : ''} ${isLocked ? styles.sidebarStepLocked : ''}`}
                 onClick={() => goToStep(idx)}
+                disabled={isLocked}
+                title={isLocked && idx === 1 ? 'Choose a start option first' : isLocked ? 'Complete Personal Info first' : ''}
               >
                 <span className={styles.stepIcon}>
-                  {isCompleted ? <Check size={14} /> : <Icon size={14} />}
+                  {isLocked ? <Lock size={14} /> : isCompleted ? <Check size={14} /> : <Icon size={14} />}
                 </span>
                 {step.label}
               </button>
@@ -1079,61 +1355,77 @@ function ResumeBuilderPage() {
             </div>
           )}
 
-          {/* ═══ Step 1: Template Selection ═══ */}
+          {/* ═══ Step 1: Personal Information ═══ */}
           {currentStep === 1 && (
-            <div className={`${styles.stepCard} ${styles.stepCardWide}`}>
-              <div className={styles.stepHeader}>
-                <h2 className={styles.stepTitle}>
-                  <span className={styles.stepTitleIcon} style={{ background: '#ede9fe', color: '#6366f1' }}>
-                    <LayoutGrid size={20} />
-                  </span>
-                  Choose Your Template
-                </h2>
-                <p className={styles.stepSubtitle}>Select a design for your resume. You can change it anytime on the Download page.</p>
-              </div>
-              <div className={styles.templateGrid}>
-                {Object.values(RESUME_TEMPLATES).map((tmpl, index) => (
-                  <button
-                    key={tmpl.id}
-                    className={`${styles.templateCard} ${activeTemplateId === tmpl.id ? styles.templateCardActive : ''}`}
-                    onClick={() => setActiveTemplateId(tmpl.id)}
-                  >
-                    <div className={styles.templateThumbnail}>
-                      {tmpl.preview ? (
-                        <Image
-                          src={tmpl.preview}
-                          alt={`${tmpl.name} resume template preview`}
-                          fill
-                          className={styles.templateThumbnailImage}
-                          sizes="200px"
-                          priority={index < 3}
-                        />
-                      ) : (
-                        <span className={styles.templateNoPreview}>Preview</span>
-                      )}
-                    </div>
-                    <div className={styles.templateInfo}>
-                      <p className={styles.templateName}>{tmpl.name}</p>
-                      <p className={styles.templateCategory}>{tmpl.category || 'Professional'}</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ═══ Step 2: Personal Information ═══ */}
-          {currentStep === 2 && (
             <div className={styles.stepCard}>
               <div className={styles.stepHeader}>
                 <h2 className={styles.stepTitle}>
-                  <span className={styles.stepTitleIcon} style={{ background: '#dbeafe', color: '#2563eb' }}>
+                  <span className={styles.stepTitleIcon} style={{ background: '#dcfce7', color: '#166534' }}>
                     <User size={20} />
                   </span>
                   Personal Information
                 </h2>
                 <p className={styles.stepSubtitle}>Add your contact details so employers can reach you.</p>
               </div>
+
+              {/* Photo Toggle & Upload */}
+              <div className={styles.photoSection}>
+                <div 
+                  className={styles.photoUploadBox}
+                  style={!data.personal.showPhoto ? { opacity: 0.4, pointerEvents: 'none', cursor: 'not-allowed' } : {}}
+                  onClick={() => data.personal.showPhoto && photoInputRef.current?.click()}
+                >
+                  {data.personal.photo ? (
+                    <img src={data.personal.photo} alt="Profile" className={styles.photoPreview} />
+                  ) : (
+                    <>
+                      <Camera className={styles.photoUploadIcon} size={24} />
+                      <span className={styles.photoUploadText}>Upload</span>
+                    </>
+                  )}
+                  <input 
+                    type="file"
+                    ref={photoInputRef}
+                    className={styles.photoInput}
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                  />
+                </div>
+                <div className={styles.photoControls}>
+                  <h3 className={styles.photoTitle}>Profile Photo</h3>
+                  <p className={styles.photoDesc}>A professional photo can build trust. (Max 2MB)</p>
+                  
+                  <div 
+                    className={styles.toggleContainer}
+                    onClick={() => {
+                      const newVal = !data.personal.showPhoto;
+                      updatePersonal('showPhoto', newVal);
+                      
+                      // Switch to/from the dedicated photo template
+                      if (newVal) {
+                        setActiveTemplateId('photo');
+                      } else {
+                        setActiveTemplateId('classic');
+                      }
+                    }}
+                  >
+                    <div className={`${styles.toggleBase} ${data.personal.showPhoto ? styles.toggleActive : ''}`}>
+                      <div className={styles.toggleCircle} />
+                    </div>
+                    <span className={styles.toggleLabel}>Show photo on resume</span>
+                  </div>
+
+                  {data.personal.photo && (
+                    <button 
+                      className={styles.removePhotoBtn}
+                      onClick={() => updatePersonal('photo', '')}
+                    >
+                      Remove Photo
+                    </button>
+                  )}
+                </div>
+              </div>
+
               <div className={styles.grid2}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Full Name</label>
@@ -1216,6 +1508,51 @@ function ResumeBuilderPage() {
                     updatePersonal('summary', current + prefix + suggestion);
                   }}
                 />
+              </div>
+            </div>
+          )}
+
+          {/* ═══ Step 2: Template Selection ═══ */}
+          {currentStep === 2 && (
+            <div className={`${styles.stepCard} ${styles.stepCardWide}`}>
+              <div className={styles.stepHeader}>
+                <h2 className={styles.stepTitle}>
+                  <span className={styles.stepTitleIcon} style={{ background: '#ede9fe', color: '#6366f1' }}>
+                    <LayoutGrid size={20} />
+                  </span>
+                  Choose Your Template
+                </h2>
+                <p className={styles.stepSubtitle}>Select a design for your resume. You can change it anytime on the Download page.</p>
+              </div>
+              <div className={styles.templateGrid}>
+                {Object.values(RESUME_TEMPLATES)
+                  .filter(tmpl => !tmpl.id.startsWith('photo'))
+                  .map((tmpl, index) => (
+                    <button
+                      key={tmpl.id}
+                      className={`${styles.templateCard} ${activeTemplateId === tmpl.id ? styles.templateCardActive : ''}`}
+                      onClick={() => setActiveTemplateId(tmpl.id)}
+                    >
+                      <div className={styles.templateThumbnail}>
+                        {tmpl.preview ? (
+                          <Image
+                            src={tmpl.preview}
+                            alt={`${tmpl.name} resume template preview`}
+                            fill
+                            className={styles.templateThumbnailImage}
+                            sizes="200px"
+                            priority={index < 3}
+                          />
+                        ) : (
+                          <span className={styles.templateNoPreview}>Preview</span>
+                        )}
+                      </div>
+                      <div className={styles.templateCardInfo}>
+                        <h4 className={styles.templateCardName}>{tmpl.name}</h4>
+                        <p className={styles.templateCardCategory}>{tmpl.category}</p>
+                      </div>
+                    </button>
+                  ))}
               </div>
             </div>
           )}
@@ -1716,8 +2053,10 @@ function ResumeBuilderPage() {
                   <button
                     className={`${styles.downloadActionBtn} ${styles.downloadActionPrimary}`}
                     onClick={handleDownloadPDF}
+                    disabled={isSavingVersion}
                   >
-                    <FileDown size={20} /> Download as PDF
+                    {isSavingVersion ? <Loader2 className={styles.spinner} size={20} /> : <FileDown size={20} />}
+                    {isSavingVersion ? 'Saving Version...' : 'Download as PDF'}
                   </button>
                   <button
                     className={`${styles.downloadActionBtn} ${styles.downloadActionSecondary}`}
@@ -1743,6 +2082,7 @@ function ResumeBuilderPage() {
                 </div>
 
                 {shareError && <p className={styles.shareError}>{shareError}</p>}
+                {versionNotice && <p className={styles.versionNotice}>{versionNotice}</p>}
 
                 {/* Email Modal */}
                 {emailModal && (
@@ -1826,6 +2166,130 @@ function ResumeBuilderPage() {
                     </Link>
                   </div>
                 )}
+
+                <div className={styles.versionPanel}>
+                  <div className={styles.versionPanelHeader}>
+                    <div>
+                      <p className={styles.versionKicker}>Feature 3 : Resume Version Control</p>
+                      <h3 className={styles.versionTitle}>Export snapshots, compare changes, and roll back instantly</h3>
+                      <p className={styles.versionText}>
+                        Every PDF export now saves a point-in-time version of this resume. Use the compare view below to see what changed between iterations before you send the next one out.
+                      </p>
+                    </div>
+                  </div>
+
+                  {versionHistory.length ? (
+                    <>
+                      <div className={styles.versionCompareControls}>
+                        <div className={styles.versionCompareField}>
+                          <label className={styles.versionLabel}>Compare from</label>
+                          <select
+                            className={styles.versionSelect}
+                            value={comparedVersions.left?.id || ''}
+                            onChange={(e) => setCompareVersionIds((prev) => ({ ...prev, left: e.target.value }))}
+                          >
+                            {versionHistory.map((version) => (
+                              <option key={version.id} value={version.id}>
+                                {version.label} · {formatVersionDate(version.createdAt)}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className={styles.versionCompareField}>
+                          <label className={styles.versionLabel}>Compare to</label>
+                          <select
+                            className={styles.versionSelect}
+                            value={comparedVersions.right?.id || ''}
+                            onChange={(e) => setCompareVersionIds((prev) => ({ ...prev, right: e.target.value }))}
+                          >
+                            <option value="">Select version</option>
+                            {versionHistory.map((version) => (
+                              <option key={version.id} value={version.id}>
+                                {version.label} · {formatVersionDate(version.createdAt)}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+                      {comparedVersions.left && comparedVersions.right ? (
+                        <div className={styles.versionDiffCard}>
+                          <div className={styles.versionCompareHeader}>
+                            <div>
+                              <strong>{comparedVersions.left.label}</strong>
+                              <span>{formatVersionDate(comparedVersions.left.createdAt)}</span>
+                            </div>
+                            <div>
+                              <strong>{comparedVersions.right.label}</strong>
+                              <span>{formatVersionDate(comparedVersions.right.createdAt)}</span>
+                            </div>
+                          </div>
+
+                          {versionDiffRows.length ? (
+                            <div className={styles.versionDiffGrid}>
+                              {versionDiffRows.map((row) => (
+                                <div key={`${row.label}-${row.left}-${row.right}`} className={styles.versionDiffRow}>
+                                  <span>{row.label}</span>
+                                  <strong>{row.left}</strong>
+                                  <strong>{row.right}</strong>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className={styles.versionEmpty}>These two versions are structurally identical based on template and section counts.</p>
+                          )}
+                        </div>
+                      ) : null}
+
+                      <div className={styles.versionCards}>
+                        {versionHistory.map((version) => (
+                          <div key={version.id} className={styles.versionCard}>
+                            <div className={styles.versionCardTop}>
+                              <div>
+                                <h4>{version.label}</h4>
+                                <p>{formatVersionDate(version.createdAt)}</p>
+                              </div>
+                              <span className={styles.versionReason}>{version.reason || 'Snapshot'}</span>
+                            </div>
+
+                            <div className={styles.versionMeta}>
+                              <span>Template: {version.templateId || 'classic'}</span>
+                              <span>{version.summary?.experienceCount || 0} experience entries</span>
+                              <span>{version.summary?.skillsCount || 0} skills</span>
+                            </div>
+
+                            <div className={styles.versionCardActions}>
+                              <button
+                                type="button"
+                                className={styles.versionBtn}
+                                onClick={() => setCompareVersionIds({
+                                  left: versionHistory[0]?.id || version.id,
+                                  right: version.id,
+                                })}
+                              >
+                                Compare
+                              </button>
+                              <button
+                                type="button"
+                                className={styles.versionBtnPrimary}
+                                onClick={() => handleRestoreVersion(version.id)}
+                              >
+                                Restore this version
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <div className={styles.versionEmptyState}>
+                      <h4>No saved snapshots yet</h4>
+                      <p>
+                        Your first PDF export will create Version 1 automatically. After that, each export becomes a checkpoint you can compare or restore.
+                      </p>
+                    </div>
+                  )}
+                </div>
 
                 <div className={styles.rewriteBanner} style={{ marginTop: 32 }}>
                   <p className={styles.rewriteKicker}>Premium AI Upgrade</p>

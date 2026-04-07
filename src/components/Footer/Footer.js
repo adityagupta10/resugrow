@@ -9,6 +9,7 @@ const footerLinks = {
     { label: "Free AI Resume Builder", href: "/resume/ai-builder" },
     { label: "Free ATS Resume Checker", href: "/resume/ats-checker" },
     { label: "Free Resume Templates", href: "/resume/templates" },
+    { label: "Community Template Marketplace", href: "/resume/template-marketplace", badge: "New" },
     { label: "Resume Builder Free", href: "/resume/builder" },
     { label: "Cover Letter Builder", href: "/cover-letter/builder" },
     { label: "Cover Letter Templates", href: "/cover-letter/templates" },
@@ -26,6 +27,16 @@ const footerLinks = {
   ],
   "AI Career Tools": [
     { label: "AI SAR Bullet Rewriter", href: "/tools/sar-rewriter" },
+    {
+      label: "Career Path Simulator",
+      href: "/tools/career-path",
+      badge: "New",
+    },
+    {
+      label: "Application Tracker Dashboard",
+      href: "/dashboard/applications",
+      badge: "New",
+    },
     {
       label: "Interview Simulator",
       href: "/tools/interview-prep",

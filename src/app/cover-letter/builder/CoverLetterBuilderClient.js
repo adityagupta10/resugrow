@@ -787,9 +787,9 @@ export default function CoverLetterBuilderClient() {
     <div className={styles.wizardPage}>
       {/* Sidebar */}
       <aside className={styles.sidebar}>
-        <Link href="/cover-letter/builder" className={styles.sidebarLogo}>
+        <Link href="/" className={styles.sidebarLogo}>
           <div className={styles.sidebarLogoIcon}>✉</div>
-          <span className={styles.sidebarLogoText}>Cover Letter</span>
+          <span className={styles.sidebarLogoText}>RESUGROW</span>
         </Link>
         <nav className={styles.sidebarNav}>
           {STEPS.map((s, i) => (

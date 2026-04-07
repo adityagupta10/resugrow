@@ -40,6 +40,18 @@ URL: ${SITE_URL}/cover-letter/builder
 Converts weak bullets into metric-backed impact statements.
 URL: ${SITE_URL}/tools/sar-rewriter
 
+7. Career Path Simulator
+Models realistic next roles, salary bands, skill gaps, and a 6-12 month growth roadmap.
+URL: ${SITE_URL}/tools/career-path
+
+8. Job Application Tracker
+Kanban-style tracker for applications, status transitions, response rate, interview rate, and job-search funnel analytics.
+URL: ${SITE_URL}/dashboard/applications
+
+9. Community Template Marketplace
+Public marketplace for approved community-built HTML/CSS resume templates plus creator submission workflow.
+URL: ${SITE_URL}/resume/template-marketplace
+
 ## Support and educational resources
 - Blog: ${SITE_URL}/blog
 - Career tips: ${SITE_URL}/career-tips

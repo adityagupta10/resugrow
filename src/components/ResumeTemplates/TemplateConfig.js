@@ -8,8 +8,10 @@ import TechTemplate from './TechTemplate';
 import AcademicTemplate from './AcademicTemplate';
 import ImpactTemplate from './ImpactTemplate';
 import SwissTemplate from './SwissTemplate';
+import PhotoTemplate from './PhotoTemplate';
 
 export const RESUME_TEMPLATES = {
+  // Standard Templates
   executive: {
     id: 'executive',
     name: 'Executive Pro',
@@ -130,6 +132,16 @@ export const RESUME_TEMPLATES = {
     component: AcademicTemplate,
     preview: '/templates/academic-research-cv-format-15.png',
   },
+
+  // ── Photo Template (shown only when "Show photo on resume" is enabled) ──
+  photo: {
+    id: 'photo',
+    name: 'Photo Resume',
+    category: 'Professional',
+    tags: ['Photo Ready', 'Premium'],
+    component: PhotoTemplate,
+    preview: '/templates/ats-friendly-professional-resume-template-1.png',
+  },
 };
 
 export function parseBullets(text) {
@@ -147,6 +159,7 @@ export function normalizeData(data = {}) {
     personal: {
       fullName: '', currentPosition: '', email: '', phone: '',
       location: '', website: '', linkedin: '', summary: '',
+      photo: '', showPhoto: false,
       ...(data.personal || {}),
     },
     experience:      Array.isArray(data.experience)      ? data.experience      : [],

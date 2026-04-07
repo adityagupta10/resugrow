@@ -5,6 +5,7 @@ import { templates as templateData } from '../../../data/templates';
 import Testimonials from '@/components/Testimonials/Testimonials';
 import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
 import TemplateGallery from './client-gallery';
+import { listApprovedCommunityTemplates } from '@/lib/communityTemplatesDb';
 
 export const metadata = createPageMetadata({
   title: 'Free Resume Templates — ATS-Friendly & Recruiter-Tested (2026)',
@@ -20,7 +21,8 @@ export const metadata = createPageMetadata({
 
 const templates = templateData;
 
-export default function Templates() {
+export default async function Templates() {
+  const communityTemplates = await listApprovedCommunityTemplates();
   const softwareJsonLd = getSoftwareAppJsonLd({
     name: 'RESUGROW Resume Templates',
     description:
@@ -52,6 +54,83 @@ export default function Templates() {
       </section>
 
       <TemplateGallery templates={templates} />
+
+      <section className={styles.subpage}>
+        <div className={styles.subpageContainer}>
+          <div
+            style={{
+              background: 'linear-gradient(135deg, #111827 0%, #312e81 100%)',
+              borderRadius: '32px',
+              padding: '36px',
+              color: 'white',
+              boxShadow: '0 26px 60px rgba(17, 24, 39, 0.18)',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+                gap: '20px',
+                flexWrap: 'wrap',
+              }}
+            >
+              <div style={{ maxWidth: '760px' }}>
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: '8px 14px',
+                    borderRadius: '999px',
+                    background: 'rgba(255,255,255,0.12)',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    marginBottom: '14px',
+                  }}
+                >
+                  Community Marketplace
+                </div>
+                <h2 style={{ margin: '0 0 12px', fontSize: '34px', lineHeight: 1.1 }}>
+                  Want fresh layouts beyond the first-party library?
+                </h2>
+                <p style={{ margin: 0, color: 'rgba(255,255,255,0.82)', lineHeight: 1.8, fontSize: '16px' }}>
+                  We now support a creator marketplace where designers and frontend developers can
+                  submit HTML/CSS resume templates for review. Browse approved community layouts or
+                  contribute your own template pipeline.
+                </p>
+              </div>
+
+              <div
+                style={{
+                  minWidth: '220px',
+                  padding: '18px 20px',
+                  borderRadius: '24px',
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                }}
+              >
+                <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', opacity: 0.76 }}>
+                  Approved community templates
+                </div>
+                <div style={{ fontSize: '42px', fontWeight: 900, marginTop: '6px' }}>
+                  {communityTemplates.length}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '24px' }}>
+              <Link href="/resume/template-marketplace" className="btn btn-primary">
+                Browse Marketplace
+              </Link>
+              <Link href="/resume/template-marketplace/submit" className="btn btn-secondary">
+                Submit a Template
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <Testimonials 
         title="Templates that Get Hired" 

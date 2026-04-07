@@ -44,6 +44,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   resumes       Resume[]
+  applications  JobApplication[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -90,4 +91,52 @@ model BlogPost {
   isPublished    Boolean  @default(true)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+enum ApplicationStatus {
+  DRAFTING
+  APPLIED
+  SCREENING
+  INTERVIEW
+  OFFER
+  REJECTED
+}
+
+model JobApplication {
+  id             String             @id @default(cuid())
+  userId         String
+  company        String
+  role           String
+  jobUrl         String?            @db.Text
+  jdSource       String?
+  location       String?
+  salaryMin      Int?
+  salaryMax      Int?
+  salaryCurrency String?            @default("USD")
+  notes          String?            @db.Text
+  status         ApplicationStatus  @default(DRAFTING)
+  appliedAt      DateTime?
+  statusUpdatedAt DateTime          @default(now())
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  user   User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events ApplicationStatusEvent[]
+
+  @@index([userId, status])
+  @@index([userId, updatedAt])
+  @@index([userId, createdAt])
+}
+
+model ApplicationStatusEvent {
+  id            String             @id @default(cuid())
+  applicationId String
+  fromStatus    ApplicationStatus?
+  toStatus      ApplicationStatus
+  note          String?            @db.Text
+  createdAt     DateTime           @default(now())
+
+  application JobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId, createdAt])
 }

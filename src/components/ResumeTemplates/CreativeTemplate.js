@@ -9,8 +9,13 @@ export default function CreativeTemplate({ data: rawData }) {
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.headerLeft}>
-          <h1 className={styles.name}>{personal.fullName || 'Your Name'}</h1>
-          <p className={styles.title}>{personal.currentPosition || 'Professional Title'}</p>
+          {personal.showPhoto && personal.photo && (
+            <img src={personal.photo} alt={personal.fullName || 'Profile'} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', marginRight: 16, border: '2px solid rgba(255,255,255,0.3)', flexShrink: 0 }} />
+          )}
+          <div>
+            <h1 className={styles.name}>{personal.fullName || 'Your Name'}</h1>
+            <p className={styles.title}>{personal.currentPosition || 'Professional Title'}</p>
+          </div>
         </div>
         <div className={styles.headerRight}>
           {personal.email && <div>{personal.email}</div>}

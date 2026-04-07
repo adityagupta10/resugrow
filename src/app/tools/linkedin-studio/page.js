@@ -33,6 +33,18 @@ const TONE_OPTIONS = [
   { value: 'inspirational', label: 'Inspirational' },
 ];
 
+const INDUSTRY_OPTIONS = [
+  { value: 'general', label: 'General' },
+  { value: 'software', label: 'Software Engineering' },
+  { value: 'data', label: 'Data & AI' },
+  { value: 'product', label: 'Product Management' },
+  { value: 'marketing', label: 'Marketing & Growth' },
+  { value: 'sales', label: 'Sales & Revenue' },
+  { value: 'finance', label: 'Finance & FinTech' },
+  { value: 'healthcare', label: 'Healthcare' },
+  { value: 'hr', label: 'HR & Talent' },
+];
+
 const FRAMEWORK_TAB_LABELS = ['PAS Framework', 'AIDA Framework', 'Story Arc'];
 const ENGAGEMENT_SCORES = { PAS: 88, AIDA: 84, Story: 91 };
 
@@ -54,6 +66,7 @@ export default function LinkedInStudioPage() {
   const [achievement, setAchievement] = useState('');
   const [postType, setPostType] = useState('story');
   const [tone, setTone] = useState('professional');
+  const [industry, setIndustry] = useState('general');
   const [includeEmoji, setIncludeEmoji] = useState(true);
   const [includeHashtags, setIncludeHashtags] = useState(true);
   const [results, setResults] = useState(null);
@@ -101,7 +114,7 @@ export default function LinkedInStudioPage() {
       const res = await fetch('/api/linkedin-studio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ achievement: trimmed, postType, tone, includeEmoji, includeHashtags }),
+        body: JSON.stringify({ achievement: trimmed, postType, tone, industry, includeEmoji, includeHashtags }),
       });
       const data = await res.json();
       if (!res.ok || data.error) {
@@ -206,6 +219,22 @@ export default function LinkedInStudioPage() {
                 onChange={(e) => setAchievement(e.target.value)}
                 rows={5}
               />
+            </div>
+
+            <div className={styles.inputBlock}>
+              <label htmlFor="industry-input">Industry Context</label>
+              <select
+                id="industry-input"
+                className={styles.selectInput}
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value)}
+              >
+                {INDUSTRY_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Post type pills */}
@@ -321,6 +350,33 @@ export default function LinkedInStudioPage() {
                 <h2>Generated Posts</h2>
                 <p>Three proven frameworks, ready to publish.</p>
               </div>
+
+              {results.insights && (
+                <div className={styles.contextGrid}>
+                  <div className={styles.contextCard}>
+                    <span className={styles.contextLabel}>Detected Industry</span>
+                    <strong>{results.insights.industry}</strong>
+                    <p>Audience: {results.insights.audience}</p>
+                  </div>
+                  <div className={styles.contextCard}>
+                    <span className={styles.contextLabel}>Suggested Angle</span>
+                    <strong>{results.insights.suggestedAngle}</strong>
+                    <p>Role signal: {results.insights.role}</p>
+                  </div>
+                  <div className={styles.contextCard}>
+                    <span className={styles.contextLabel}>Detected Keywords</span>
+                    <div className={styles.contextTags}>
+                      {(results.insights.keywords || []).length > 0 ? (
+                        results.insights.keywords.map((keyword) => (
+                          <span key={keyword} className={styles.contextTag}>{keyword}</span>
+                        ))
+                      ) : (
+                        <span className={styles.contextHint}>No strong keywords detected yet</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <>
                 {/* Post framework tabs */}

@@ -10,6 +10,9 @@ export default function ExecutiveTemplate({ data: rawData }) {
       <div className={styles.watermark}>Built with RESUGROW</div>
 
       <header className={styles.header}>
+        {p.showPhoto && p.photo && (
+          <img src={p.photo} alt={p.fullName || 'Profile'} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', float: 'right', marginLeft: 16, border: '2px solid rgba(255,255,255,0.3)' }} />
+        )}
         <h1 className={styles.name}>{p.fullName || 'Your Name'}</h1>
         <div className={styles.contactRow}>
           {p.email && <span>{p.email}</span>}

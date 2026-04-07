@@ -12,6 +12,9 @@ export default function TechTemplate({ data: rawData }) {
 
       <header className={styles.header}>
         <div className={styles.nameBlock}>
+          {personal.showPhoto && personal.photo && (
+            <img src={personal.photo} alt={personal.fullName || 'Profile'} style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', marginBottom: 8, border: '2px solid rgba(255,255,255,0.2)', display: 'block' }} />
+          )}
           <h1 className={styles.name}>{personal.fullName || 'Your Name'}</h1>
           <p className={styles.jobTitle}>{personal.currentPosition || 'Software Engineer'}</p>
         </div>

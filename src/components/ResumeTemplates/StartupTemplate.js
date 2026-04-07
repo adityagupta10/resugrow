@@ -12,6 +12,9 @@ export default function StartupTemplate({ data: rawData }) {
 
       <div className={styles.mainColumn}>
         <header className={styles.header}>
+          {personal.showPhoto && personal.photo && (
+            <img src={personal.photo} alt={personal.fullName || 'Profile'} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', float: 'right', marginLeft: 12, border: '2px solid #e2e8f0' }} />
+          )}
           <h1 className={styles.heroName}>{personal.fullName || 'Your Name'}</h1>
           <p className={styles.jobTitle}>{personal.currentPosition || 'Professional Title'}</p>
           <div className={styles.contactInfo}>

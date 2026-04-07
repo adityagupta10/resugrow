@@ -3,6 +3,11 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import {
+  calculateApplicationAnalytics,
+  formatStatusLabel,
+} from "@/lib/applicationTracker";
+import { fetchApplicationsForUserIds } from "@/lib/applicationTrackerDb";
 import styles from "./dashboard.module.css";
 
 export default async function DashboardPage() {
@@ -31,11 +36,19 @@ export default async function DashboardPage() {
     take: 10,
   });
 
+  const allApplications = await fetchApplicationsForUserIds(userIds);
+  const applications = allApplications.slice(0, 6);
+  const totalApplications = allApplications.length;
+  const applicationAnalytics = calculateApplicationAnalytics(allApplications);
+  const activeApplications = allApplications.filter(
+    (application) => !["REJECTED", "OFFER"].includes(application.status),
+  ).length;
+
   const stats = [
     { label: "Resumes Built", value: recentResumes.length.toString(), icon: "📄" },
     { label: "ATS Scans Done", value: "0", icon: "🔍" },
     { label: "LinkedIn Score", value: "0", icon: "💎" },
-    { label: "Job Applications", value: "0", icon: "🚀" },
+    { label: "Job Applications", value: totalApplications.toString(), icon: "🚀" },
   ];
 
   return (
@@ -110,25 +123,83 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        <div className={styles.card}>
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>
-              <h2>Quick Actions</h2>
+        <div className={styles.sideColumn}>
+          <div className={`${styles.card} ${styles.pipelineCard}`}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>
+                <h2>Application Pipeline</h2>
+                <Link href="/dashboard/applications" className={styles.viewAll}>
+                  Open Board
+                </Link>
+              </div>
+              <p className={styles.cardSubtitle}>
+                Treat your job search like a funnel, not a scattered spreadsheet.
+              </p>
             </div>
+            <div className={styles.pipelineMetrics}>
+              <div className={styles.pipelineMetric}>
+                <strong>{activeApplications}</strong>
+                <span>Active roles</span>
+              </div>
+              <div className={styles.pipelineMetric}>
+                <strong>{applicationAnalytics.responseRate}%</strong>
+                <span>Response rate</span>
+              </div>
+              <div className={styles.pipelineMetric}>
+                <strong>{applicationAnalytics.interviewRate}%</strong>
+                <span>Interview rate</span>
+              </div>
+            </div>
+
+            {applications.length > 0 ? (
+              <div className={styles.applicationList}>
+                {applications.map((application) => (
+                  <div key={application.id} className={styles.applicationItem}>
+                    <div className={styles.applicationInfo}>
+                      <h3>{application.company}</h3>
+                      <p>{application.role}</p>
+                    </div>
+                    <span className={styles.applicationStatus}>
+                      {formatStatusLabel(application.status)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className={styles.emptyText}>
+                You have not logged any applications yet. Start with your first role and build your funnel.
+              </p>
+            )}
           </div>
-          <div className={styles.actionsList}>
-            <Link href="/resume/ats-checker" className={styles.actionItem}>
-              <span>Scan My Resume</span>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 15L12 10L7 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
-            <Link href="/linkedin-review" className={styles.actionItem}>
-              <span>Review LinkedIn Profile</span>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 15L12 10L7 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
-            <Link href="/tools/sar-rewriter" className={styles.actionItem}>
-              <span>Rewrite SAR Bullets</span>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 15L12 10L7 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
+
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>
+                <h2>Quick Actions</h2>
+              </div>
+            </div>
+            <div className={styles.actionsList}>
+              <Link href="/dashboard/applications" className={styles.actionItem}>
+                <span>Track Job Applications</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 15L12 10L7 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </Link>
+              <Link href="/tools/career-path" className={styles.actionItem}>
+                <span>Simulate Career Path</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 15L12 10L7 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </Link>
+              <Link href="/resume/ats-checker" className={styles.actionItem}>
+                <span>Scan My Resume</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 15L12 10L7 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </Link>
+              <Link href="/linkedin-review" className={styles.actionItem}>
+                <span>Review LinkedIn Profile</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 15L12 10L7 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </Link>
+              <Link href="/tools/sar-rewriter" className={styles.actionItem}>
+                <span>Rewrite SAR Bullets</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 15L12 10L7 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

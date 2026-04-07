@@ -8,6 +8,9 @@ export default function MinimalistTemplate({ data: rawData }) {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
+        {personal.showPhoto && personal.photo && (
+          <img src={personal.photo} alt={personal.fullName || 'Profile'} style={{ width: 68, height: 68, borderRadius: '50%', objectFit: 'cover', float: 'right', marginLeft: 12, border: '2px solid #e2e8f0' }} />
+        )}
         <h1 className={styles.name}>{personal.fullName || 'Your Name'}</h1>
         <div className={styles.contactRow}>
           {personal.email && <span>{personal.email}</span>}

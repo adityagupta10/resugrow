@@ -12,11 +12,12 @@ const dropdownSections = [
   {
     key: "resume",
     label: "Resume",
-    badge: null,
+    badge: "1 New",
     items: [
-      { label: "AI Powered Resume Builder", href: "/resume/builder" },
-      { label: "ATS Score Checker", href: "/resume/ats-checker" },
-      { label: "High Impact Templates", href: "/resume/templates" },
+      { label: "AI Powered Resume Builder", href: "/resume/builder", badge: "⚡", badgeStyle: "white" },
+      { label: "ATS Score Checker", href: "/resume/ats-checker", badge: "🎯", badgeStyle: "white" },
+      { label: "High Impact Templates", href: "/resume/templates", badge: "📝", badgeStyle: "white" },
+      { label: "Community Template Marketplace", href: "/resume/template-marketplace", badge: "New", badgeStyle: "green" },
     ],
   },
   {
@@ -24,17 +25,17 @@ const dropdownSections = [
     label: "Cover Letter",
     badge: null,
     items: [
-      { label: "Cover Letter Builder", href: "/cover-letter/builder" },
-      { label: "Cover Letter Templates", href: "/cover-letter/templates" },
+      { label: "Cover Letter Builder", href: "/cover-letter/builder", badge: "⚡", badgeStyle: "white" },
+      { label: "Cover Letter Templates", href: "/cover-letter/templates", badge: "📝", badgeStyle: "white" },
     ],
   },
   {
     key: "linkedin",
     label: "LinkedIn",
-    badge: null,
+    badge: "1 New",
     items: [
-      { label: "LinkedIn Profile Boost", href: "/linkedin-makeover" },
-      { label: "Profile Review & Score", href: "/linkedin-review" },
+      { label: "LinkedIn Profile Boost", href: "/linkedin-makeover", badge: "🔥", badgeStyle: "white", },
+      { label: "Profile Review & Score", href: "/linkedin-review", badge: "🏆", badgeStyle: "white" },
       { label: "LinkedIn Content Studio", href: "/tools/linkedin-studio", badge: "New", badgeStyle: "green", },
     ],
   },
@@ -46,7 +47,7 @@ const dropdownSections = [
       {
         label: "AI SAR Bullet Rewriter",
         href: "/tools/sar-rewriter",
-        badge: null,
+        badge: "💡", badgeStyle: "white",
       },
       {
         label: "Interview Coach",
@@ -57,8 +58,20 @@ const dropdownSections = [
       {
         label: "Salary Negotiator",
         href: "/tools/salary-coach",
-        badge: "🔥",
+        badge: "📈",
         badgeStyle: "white",
+      },
+      {
+        label: "Career Path Simulator",
+        href: "/tools/career-path",
+        badge: "New",
+        badgeStyle: "green",
+      },
+      {
+        label: "Application Tracker",
+        href: "/dashboard/applications",
+        badge: "New",
+        badgeStyle: "green",
       },
     ],
   },
@@ -336,6 +349,13 @@ export default function Navbar() {
                   <span>My Dashboard</span>
                 </Link>
                 <Link
+                  href="/dashboard/applications"
+                  className={styles.dropdownItem}
+                  onClick={() => setUserDropdownOpen(false)}
+                >
+                  <span>Application Tracker</span>
+                </Link>
+                <Link
                   href="/settings"
                   className={styles.dropdownItem}
                   onClick={() => setUserDropdownOpen(false)}
@@ -349,7 +369,7 @@ export default function Navbar() {
                     try {
                       const supabase = createSupabaseClient();
                       await supabase.auth.signOut();
-                    } catch {}
+                    } catch { }
                     setUserDropdownOpen(false);
                     router.refresh();
                   }}

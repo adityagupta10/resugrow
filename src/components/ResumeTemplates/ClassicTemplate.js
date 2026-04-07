@@ -21,6 +21,9 @@ export default function ClassicTemplate({ data: rawData }) {
       <Watermark />
       {/* Header */}
       <div className={styles.resumeHeader}>
+        {p.showPhoto && p.photo && (
+          <img src={p.photo} alt={p.fullName || 'Profile'} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', float: 'right', marginLeft: 16, marginBottom: 8, border: '2px solid #e2e8f0' }} />
+        )}
         <h1 className={styles.resumeName}>{p.fullName || 'Your Name'}</h1>
         {p.currentPosition && (
           <p className={styles.resumePosition}>{p.currentPosition}</p>

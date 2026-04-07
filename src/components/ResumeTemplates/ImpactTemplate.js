@@ -12,6 +12,9 @@ export default function ImpactTemplate({ data: rawData }) {
 
       <div className={styles.mainContent}>
         <header className={styles.header}>
+          {personal.showPhoto && personal.photo && (
+            <img src={personal.photo} alt={personal.fullName || 'Profile'} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', float: 'right', marginLeft: 16, border: '2px solid rgba(255,255,255,0.2)' }} />
+          )}
           <h1 className={styles.name}>{personal.fullName || 'Your Name'}</h1>
           <p className={styles.tagline}>{personal.currentPosition || 'High-Impact Professional'}</p>
         </header>

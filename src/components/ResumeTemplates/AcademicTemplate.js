@@ -12,6 +12,9 @@ export default function AcademicTemplate({ data: rawData }) {
       <div className={styles.watermark}>Built with RESUGROW</div>
 
       <header className={styles.header}>
+        {personal.showPhoto && personal.photo && (
+          <img src={personal.photo} alt={personal.fullName || 'Profile'} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', float: 'right', marginLeft: 16, border: '2px solid #e2e8f0' }} />
+        )}
         <h1 className={styles.name}>{personal.fullName || 'Your Name'}</h1>
         <div className={styles.contactInfo}>
           {personal.email} | {personal.phone} | {personal.location}

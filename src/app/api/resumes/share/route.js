@@ -3,6 +3,56 @@ import prisma from '@/lib/prisma';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
+const MAX_RESUME_VERSIONS = 12;
+
+function stripVersionMeta(resumeData = {}) {
+  const meta = resumeData.meta || {};
+  const {
+    versionHistory,
+    versionCounter,
+    lastVersionId,
+    lastVersionReason,
+    lastSavedAt,
+    ...safeMeta
+  } = meta;
+
+  return {
+    ...resumeData,
+    meta: safeMeta,
+  };
+}
+
+function buildVersionSummary(resumeData = {}) {
+  return {
+    fullName: resumeData.personal?.fullName || '',
+    currentPosition: resumeData.personal?.currentPosition || '',
+    experienceCount: Array.isArray(resumeData.experience) ? resumeData.experience.length : 0,
+    educationCount: Array.isArray(resumeData.education) ? resumeData.education.length : 0,
+    skillsCount: Array.isArray(resumeData.skills) ? resumeData.skills.length : 0,
+    projectsCount: Array.isArray(resumeData.projects) ? resumeData.projects.length : 0,
+    certificationsCount: Array.isArray(resumeData.certifications) ? resumeData.certifications.length : 0,
+    achievementsCount: Array.isArray(resumeData.achievements) ? resumeData.achievements.length : 0,
+    languagesCount: Array.isArray(resumeData.languages) ? resumeData.languages.length : 0,
+    hasSummary: Boolean(resumeData.personal?.summary?.trim()),
+  };
+}
+
+function buildVersionSnapshot(resumeData, templateId, versionNumber, reason) {
+  const nowIso = new Date().toISOString();
+  const cleanData = stripVersionMeta(resumeData);
+
+  return {
+    id: `version_${crypto.randomUUID()}`,
+    versionNumber,
+    label: `Version ${versionNumber}`,
+    createdAt: nowIso,
+    reason,
+    templateId: templateId || 'classic',
+    summary: buildVersionSummary(cleanData),
+    data: cleanData,
+  };
+}
+
 export async function POST(req) {
   try {
     // Supabase-only auth.
@@ -49,13 +99,62 @@ export async function POST(req) {
 
     userId = prismaUser.id;
 
-    const { data, title, sharedPdfUrl, shareId: existingShareId } = await req.json();
+    const {
+      data,
+      title,
+      sharedPdfUrl,
+      shareId: existingShareId,
+      recordVersion = false,
+      versionReason = 'Manual snapshot',
+    } = await req.json();
     const shareId = existingShareId || `${userId.slice(0, 8)}-${Date.now()}`;
+    const existingResume = await prisma.resume.findUnique({
+      where: { shareId },
+      select: { data: true },
+    });
+
+    const incomingMeta = data?.meta || {};
+    const existingMeta = existingResume?.data?.meta || {};
+    const incomingHistory = Array.isArray(incomingMeta.versionHistory) ? incomingMeta.versionHistory : [];
+    const existingHistory = Array.isArray(existingMeta.versionHistory) ? existingMeta.versionHistory : [];
+    const baseHistory = incomingHistory.length ? incomingHistory : existingHistory;
+
+    let versionCounter = Number(
+      incomingMeta.versionCounter ??
+      existingMeta.versionCounter ??
+      baseHistory.length ??
+      0,
+    ) || 0;
+
+    let latestVersionId = incomingMeta.lastVersionId ?? existingMeta.lastVersionId ?? null;
+    let latestVersionReason = incomingMeta.lastVersionReason ?? existingMeta.lastVersionReason ?? null;
+    let versionHistory = baseHistory;
+
+    if (recordVersion) {
+      versionCounter += 1;
+      const snapshot = buildVersionSnapshot(data, incomingMeta.templateId, versionCounter, versionReason);
+      versionHistory = [snapshot, ...baseHistory].slice(0, MAX_RESUME_VERSIONS);
+      latestVersionId = snapshot.id;
+      latestVersionReason = versionReason;
+    }
+
+    const finalData = {
+      ...data,
+      meta: {
+        ...existingMeta,
+        ...incomingMeta,
+        versionHistory,
+        versionCounter,
+        lastVersionId: latestVersionId,
+        lastVersionReason: latestVersionReason,
+        lastSavedAt: new Date().toISOString(),
+      },
+    };
 
     const resume = await prisma.resume.upsert({
       where: { shareId },
       update: {
-        data,
+        data: finalData,
         title,
         sharedPdfUrl,
         updatedAt: new Date(),
@@ -64,7 +163,7 @@ export async function POST(req) {
         userId,
         shareId,
         title,
-        data,
+        data: finalData,
         sharedPdfUrl,
         isPublic: true,
       },
@@ -72,6 +171,7 @@ export async function POST(req) {
 
     return NextResponse.json({ 
       success: true, 
+      resume,
       shareId: resume.shareId,
       url: `/r/${resume.shareId}`
     });

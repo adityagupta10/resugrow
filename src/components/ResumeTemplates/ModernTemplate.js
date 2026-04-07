@@ -20,6 +20,9 @@ export default function ModernTemplate({ data: rawData }) {
       <Watermark />
       {/* LEFT COLUMN */}
       <div className={styles.leftColumn}>
+        {p.showPhoto && p.photo && (
+          <img src={p.photo} alt={p.fullName || 'Profile'} style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', display: 'block', margin: '0 auto 12px', border: '3px solid rgba(255,255,255,0.2)' }} />
+        )}
         <h1 className={styles.name}>{p.fullName || 'Your Name'}</h1>
         {p.currentPosition && <p className={styles.position}>{p.currentPosition}</p>}
 

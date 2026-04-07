@@ -14,6 +14,9 @@ Primary site: ${SITE_URL}
 - ${SITE_URL}/linkedin-makeover
 - ${SITE_URL}/cover-letter/builder
 - ${SITE_URL}/tools/sar-rewriter
+- ${SITE_URL}/tools/career-path
+- ${SITE_URL}/dashboard/applications
+- ${SITE_URL}/resume/template-marketplace
 
 ## High-Signal Content
 - ${SITE_URL}/blog

@@ -1,354 +1,427 @@
 import { NextResponse } from 'next/server';
 
-// ── Hook libraries ─────────────────────────────────────────────────────────
-const OPENING_HOOKS = {
-  story: [
-    '{{timeAgo}}, I was struggling with {{challenge}}.',
-    'Nobody told me this when I started as a {{role}}.',
-    'I almost gave up on {{topic}} — until this happened.',
-    'The day I {{milestone}} changed everything about how I work.',
-    'I used to believe {{oldBelief}}. I was completely wrong.',
-    '{{timeAgo}}, my {{role}} journey hit rock bottom.',
-    'The best career advice I ever received cost me nothing.',
-    'I failed at {{topic}} 3 times before I figured it out.',
-    'The lowest point of my career taught me the most about {{topic}}.',
-    'A quick story about the time I completely messed up {{challenge}}.',
-    'They don\'t teach you how to handle {{topic}} in school.',
-    'I almost quit when I faced {{challenge}}. Here is why I didn\'t.',
-    'It took me 5 years to learn this secret about {{topic}}.',
-  ],
-  hook: [
-    'Most {{role}}s get this completely wrong:',
-    '{{stat}} of professionals don\'t know this simple trick.',
-    'Controversial take: {{boldStatement}}',
-    'Stop doing {{commonMistake}}. Here\'s what works instead:',
-    'The {{topic}} playbook nobody shares:',
-    'I\'ve reviewed 100+ {{documents}}. Here\'s what separates the best:',
-    'Hot take: {{topic}} is not about what you think.',
-    'The truth about {{topic}} that no one talks about:',
-    'Unpopular opinion: {{oldBelief}} is holding you back.',
-    'If you want to master {{topic}}, memorize this post.',
-    'Here is the harsh reality about being a {{role}}:',
-    'A brutal truth that most {{role}}s try to ignore:',
-    'I spent 1,000 hours analyzing {{topic}}. Here are my top findings:',
-  ],
-  achievement: [
-    'Proud moment: {{achievement}}',
-    'Milestone unlocked: {{achievement}} 🎯',
-    'Today marks {{timeframe}} since I {{achievement}}.',
-    'A result I\'m genuinely proud of: {{achievement}}',
-    'Sharing this not to brag, but because it might help someone:',
-    'Numbers don\'t lie: {{metric}}',
-    'This quarter, our team {{achievement}}.',
-  ],
-  lesson: [
-    '{{number}} things I wish I knew before {{topic}}:',
-    'After {{timeframe}} in {{industry}}, here\'s what I\'ve learned:',
-    'The {{number}}-step process that changed how I {{topic}}:',
-    'Lessons from {{topic}} that apply to everything:',
-    'What {{experience}} taught me about {{lesson}}:',
-  ],
-  career: [
-    'Excited to share: I\'ve just {{careerMove}}!',
-    'New chapter begins today: {{announcement}}',
-    'Grateful and excited: {{careerUpdate}}',
-    'After {{timeframe}} of hard work, I\'ve {{achievement}}.',
-    'Big news: I\'m joining {{company}} as a {{role}}.',
-  ],
+const INDUSTRY_PROFILES = {
+  general: {
+    label: 'General',
+    audience: 'professionals building a stronger personal brand',
+    keywords: [],
+    angles: ['career growth', 'execution', 'professional visibility'],
+    hashtags: ['#CareerGrowth', '#ProfessionalDevelopment', '#PersonalBranding'],
+  },
+  software: {
+    label: 'Software Engineering',
+    audience: 'software engineers, engineering managers, and product builders',
+    keywords: ['software', 'engineering', 'developer', 'backend', 'frontend', 'api', 'microservices', 'react', 'node', 'python', 'java', 'aws', 'kubernetes', 'deployment', 'platform'],
+    angles: ['scalability', 'engineering systems', 'shipping velocity'],
+    hashtags: ['#SoftwareEngineering', '#TechCareers', '#EngineeringLeadership'],
+  },
+  data: {
+    label: 'Data & AI',
+    audience: 'data professionals, ML teams, and AI operators',
+    keywords: ['data', 'analytics', 'machine learning', 'ml', 'ai', 'llm', 'model', 'forecasting', 'pipeline', 'sql', 'python', 'insights'],
+    angles: ['data-driven decisions', 'ML execution', 'business impact from data'],
+    hashtags: ['#DataScience', '#Analytics', '#AIinBusiness'],
+  },
+  product: {
+    label: 'Product Management',
+    audience: 'product managers, founders, and cross-functional leaders',
+    keywords: ['product', 'roadmap', 'users', 'retention', 'adoption', 'launch', 'discovery', 'experiment', 'feature'],
+    angles: ['customer insight', 'shipping better products', 'growth through product'],
+    hashtags: ['#ProductManagement', '#ProductStrategy', '#Growth'],
+  },
+  marketing: {
+    label: 'Marketing & Growth',
+    audience: 'growth marketers, brand operators, and demand generation leaders',
+    keywords: ['marketing', 'growth', 'seo', 'campaign', 'funnel', 'lead', 'brand', 'content', 'paid', 'organic', 'cac', 'conversion'],
+    angles: ['growth systems', 'campaign execution', 'brand leverage'],
+    hashtags: ['#MarketingStrategy', '#GrowthMarketing', '#ContentMarketing'],
+  },
+  sales: {
+    label: 'Sales & Revenue',
+    audience: 'revenue leaders, account executives, and sales operators',
+    keywords: ['sales', 'revenue', 'pipeline', 'quota', 'accounts', 'closing', 'prospects', 'deal', 'gtm'],
+    angles: ['commercial execution', 'pipeline quality', 'customer relationships'],
+    hashtags: ['#SalesLeadership', '#RevenueGrowth', '#B2BSales'],
+  },
+  finance: {
+    label: 'Finance & FinTech',
+    audience: 'finance professionals, operators, and fintech builders',
+    keywords: ['finance', 'fintech', 'payments', 'risk', 'compliance', 'reconciliation', 'cash flow', 'fraud', 'trading'],
+    angles: ['risk-aware growth', 'financial operations', 'trusted systems'],
+    hashtags: ['#FinTech', '#FinanceCareers', '#BusinessOperations'],
+  },
+  healthcare: {
+    label: 'Healthcare',
+    audience: 'healthcare operators, clinicians, and healthtech teams',
+    keywords: ['healthcare', 'clinical', 'patient', 'hospital', 'care', 'medical', 'ehr', 'healthtech'],
+    angles: ['patient outcomes', 'operational reliability', 'human-centered execution'],
+    hashtags: ['#HealthcareInnovation', '#HealthTech', '#CareDelivery'],
+  },
+  hr: {
+    label: 'HR & Talent',
+    audience: 'talent leaders, recruiters, and people managers',
+    keywords: ['recruiting', 'hiring', 'talent', 'hr', 'people', 'culture', 'onboarding', 'employer brand'],
+    angles: ['talent strategy', 'people operations', 'hiring quality'],
+    hashtags: ['#TalentAcquisition', '#PeopleOps', '#Leadership'],
+  },
 };
 
-const CLOSING_CTAS = [
-  'What\'s your experience with this? I\'d love to hear in the comments. 👇',
-  'Save this if you think it\'ll be useful. And follow me for more like this.',
-  'Tag someone who needs to read this.',
-  'What would you add to this list? Drop it below. 👇',
-  'DM me "INFO" if you want the full framework I used.',
-  'Repost if this resonates. Let\'s get this to someone who needs it. ♻️',
-  'Follow me → I post about {{topic}} every week.',
-  'What\'s the biggest challenge you\'re facing with {{topic}}? Comment below.',
-  'If this helped, share it with one person who\'s going through the same thing.',
-  'What do you think? Agree or disagree? Let\'s discuss. 👇',
+const POSTING_TIMES = [
+  { day: 'Tuesday', slots: ['8:00-9:00 AM IST', '12:30-1:30 PM IST', '6:00-7:00 PM IST'], level: 'High', reason: 'Great for practical career content and credibility posts with a strong hook.' },
+  { day: 'Wednesday', slots: ['8:30-9:30 AM IST', '1:00-2:00 PM IST', '5:30-7:00 PM IST'], level: 'Highest', reason: 'Usually the best day for reach, especially when the first 3 lines create curiosity.' },
+  { day: 'Thursday', slots: ['9:00-10:00 AM IST', '12:00-1:00 PM IST', '6:00-7:30 PM IST'], level: 'High', reason: 'Strong for thought leadership, career lessons, and framework-based content.' },
+  { day: 'Sunday', slots: ['6:00-8:00 PM IST'], level: 'Medium', reason: 'Works well for reflective stories and career transitions as people plan the week ahead.' },
 ];
 
-const HASHTAG_BANK = {
-  career: ['#CareerGrowth', '#CareerAdvice', '#JobSearch', '#ProfessionalDevelopment', '#CareerTips'],
-  resume: ['#ResumeBuilder', '#ResumeTips', '#JobApplication', '#ATS', '#ResumeAdvice'],
-  linkedin: ['#LinkedInTips', '#LinkedInStrategy', '#PersonalBranding', '#NetworkingTips', '#LinkedInMarketing'],
-  leadership: ['#Leadership', '#ManagementTips', '#TeamBuilding', '#Mentorship', '#ExecutiveLeadership'],
-  tech: ['#TechCareers', '#SoftwareEngineering', '#TechJobs', '#CodeLife', '#DevLife'],
-  productivity: ['#Productivity', '#WorkSmart', '#TimeManagement', '#WorkLifeBalance', '#GrowthMindset'],
-  marketing: ['#DigitalMarketing', '#ContentMarketing', '#MarketingStrategy', '#Growth', '#B2BMarketing'],
-  data: ['#DataScience', '#Analytics', '#MachineLearning', '#DataDriven', '#AIinBusiness'],
-  general: ['#Learning', '#Success', '#Motivation', '#PersonalGrowth', '#WorkCulture'],
+const ENGAGEMENT_TIPS = {
+  PAS: [
+    'Make the first line uncomfortable enough to stop the scroll, then resolve the tension with specifics.',
+    'Leave visible white space between sections so the post feels skimmable on mobile.',
+    'Use one concrete metric early. Numbers make the story feel earned, not inflated.',
+  ],
+  AIDA: [
+    'Treat the first three lines like ad copy. Attention and intrigue matter more than polish.',
+    'One clear desire beats five weak benefits. Keep the promise tight.',
+    'End with a low-friction question so people can reply without thinking too hard.',
+  ],
+  Story: [
+    'Story posts perform better when the setback feels real and the lesson is professionally useful.',
+    'Keep the narrative specific: what changed, why it mattered, and what others can borrow from it.',
+    'The best story posts feel personal but still teach a repeatable principle.',
+  ],
 };
 
-// ── Tone helpers ──────────────────────────────────────────────
-function applyTonePrefix(tone) {
-  if (tone === 'bold') return 'Here is the brutal truth:';
-  if (tone === 'inspirational') return 'There is a deeper truth we often miss:';
-  if (tone === 'conversational') return 'Here\'s something kind of crazy I realized:';
-  return 'Here\'s the reality:';
+const ROLE_TERMS = ['manager', 'engineer', 'developer', 'founder', 'marketer', 'designer', 'analyst', 'consultant', 'director', 'lead', 'specialist'];
+const THEMES = {
+  leadership: ['led', 'managed', 'mentored', 'hired', 'team', 'leadership', 'stakeholders'],
+  growth: ['grew', 'growth', 'scale', 'scaled', 'revenue', 'pipeline', 'conversion', 'adoption'],
+  product: ['feature', 'launch', 'roadmap', 'product', 'retention', 'users', 'customer'],
+  efficiency: ['reduced', 'cut', 'saved', 'automation', 'faster', 'efficiency', 'turnaround'],
+  technical: ['system', 'platform', 'api', 'architecture', 'infra', 'cloud', 'model', 'pipeline'],
+  credibility: ['promotion', 'promoted', 'award', 'recognition', 'certification', 'speaker', 'featured'],
+};
+
+function unique(items) {
+  return [...new Set(items.filter(Boolean))];
 }
 
-function applyToneClosingQuestion(tone) {
-  if (tone === 'bold') return 'Stop accepting average results. Are you ready to make this shift?';
-  if (tone === 'inspirational') return 'Remember, you define your own ceiling. What\'s your next breakthrough?';
-  if (tone === 'conversational') return 'Have you ever experienced something like this? Tell me below.';
-  return 'What\'s the biggest thing you\'ve changed about how you present yourself professionally?';
+function clampText(text, max = 140) {
+  if (text.length <= max) return text;
+  return `${text.slice(0, max - 1).trim()}...`;
 }
 
-function buildPASPost(achievement, tone, useEmoji) {
-  const e = useEmoji;
-  const lines = [
-    `${e ? '⚠️ ' : ''}Most professionals make this mistake — and it's costing them opportunities.`,
-    '',
-    `${applyTonePrefix(tone)} the job market has changed. What worked 5 years ago doesn't cut it today.`,
-    '',
-    `${e ? '📌 ' : ''}The problem isn't your skills. It's how you present them.`,
-    '',
-    `Here's what I did differently:`,
-    '',
-    formatAchievementLines(achievement, e),
-    '',
-    `The result? ${extractMetricFromAchievement(achievement)}`,
-    '',
-    `The lesson: ${generateLesson(achievement, tone)}`,
-    '',
-    `${e ? '💡 ' : ''}If you're going through the same thing, here's what to focus on:`,
-    `→ Quantify every bullet on your profile`,
-    `→ Use the language from job descriptions you want`,
-    `→ Lead with impact, not responsibilities`,
-    '',
-    applyToneClosingQuestion(tone),
-    `Drop it below ${e ? '👇' : ''}`,
+function extractMetrics(text) {
+  const matches = text.match(/(\$[\d,.]+[mk]?)|(\d+%?)|(\d+\s?(?:x|X))|(\d+\s?(?:users|customers|clients|teams|engineers|months|weeks|days|hours|years|leads))/g);
+  return unique(matches || []);
+}
+
+function detectRole(text) {
+  const lower = text.toLowerCase();
+  const role = ROLE_TERMS.find((term) => lower.includes(term));
+  return role ? `${role[0].toUpperCase()}${role.slice(1)}` : 'professional';
+}
+
+function inferIndustry(selectedIndustry, text) {
+  if (selectedIndustry && selectedIndustry !== 'general') return selectedIndustry;
+  const lower = text.toLowerCase();
+  const scored = Object.entries(INDUSTRY_PROFILES)
+    .filter(([key]) => key !== 'general')
+    .map(([key, profile]) => ({
+      key,
+      score: profile.keywords.reduce((acc, keyword) => acc + (lower.includes(keyword) ? 1 : 0), 0),
+    }))
+    .sort((a, b) => b.score - a.score);
+  return scored[0]?.score > 0 ? scored[0].key : 'general';
+}
+
+function detectThemes(text) {
+  const lower = text.toLowerCase();
+  return unique(
+    Object.entries(THEMES)
+      .filter(([, terms]) => terms.some((term) => lower.includes(term)))
+      .map(([theme]) => theme),
+  );
+}
+
+function detectKeywords(text, industryKey) {
+  const lower = text.toLowerCase();
+  const industryProfile = INDUSTRY_PROFILES[industryKey] || INDUSTRY_PROFILES.general;
+  const keywords = industryProfile.keywords.filter((keyword) => lower.includes(keyword));
+  const metrics = extractMetrics(text);
+  return unique([...keywords, ...metrics]).slice(0, 8);
+}
+
+function summarizeAchievement(text) {
+  const firstSentence = text.split(/[.!?]/).map((part) => part.trim()).find(Boolean) || text.trim();
+  return clampText(firstSentence, 120);
+}
+
+function getPainPoint(themes, industry) {
+  if (themes.includes('efficiency')) return 'Teams get busy, but output stays flat because the system behind the work is still broken.';
+  if (themes.includes('growth')) return 'A lot of teams chase activity instead of the metric that actually moves the business.';
+  if (themes.includes('leadership')) return 'Leadership work is often invisible until you articulate how decisions changed the outcome.';
+  if (industry === 'software') return 'Shipping faster is meaningless if reliability, quality, and ownership are not improving in parallel.';
+  if (industry === 'marketing') return 'Marketing looks noisy from the outside, but the real work is building a repeatable growth engine.';
+  return 'A lot of strong professionals undersell the actual system, thinking, and tradeoffs behind their results.';
+}
+
+function getDesire(themes, industryProfile) {
+  if (themes.includes('growth')) return 'build growth that compounds instead of chasing vanity numbers';
+  if (themes.includes('leadership')) return 'show strategic leadership, not just hard work';
+  if (themes.includes('technical')) return 'translate deep work into clear business value';
+  return `build credibility with ${industryProfile.audience}`;
+}
+
+function getActionFramework(themes, keywords, role) {
+  const base = [
+    `Define the outcome before the work starts.`,
+    `Choose one signal that proves progress.`,
+    `Communicate decisions in language your stakeholders understand.`,
   ];
-  return { framework: 'PAS', content: lines.join('\n'), cta: lines[lines.length - 2] };
-}
-
-function buildAIDAPost(achievement, tone, useEmoji) {
-  const e = useEmoji;
-  const attentionGrabber = tone === 'bold' ? 'Read this twice if you feel stuck in your career.' : 'Here is the context most people don\'t see:';
-  
-  const lines = [
-    `${e ? '🚀 ' : ''}${extractHookFromAchievement(achievement)}`,
-    '',
-    attentionGrabber,
-    `${formatAchievementContext(achievement)}`,
-    '',
-    `What actually drove this result:`,
-    `${e ? '✅ ' : '→ '}Consistent, specific effort — not one big move`,
-    `${e ? '✅ ' : '→ '}Measuring what matters, not what\'s easy to track`,
-    `${e ? '✅ ' : '→ '}Doing the uncomfortable thing first`,
-    '',
-    `The numbers: ${extractMetricFromAchievement(achievement)}`,
-    '',
-    `If you want to achieve something similar, start here:`,
-    `${generateActionStep(achievement)}`,
-    '',
-    `${e ? '🔁 ' : ''}Repost if this sparked something. And follow me — I post about real career progress, not highlight reels.`,
-  ];
-  return { framework: 'AIDA', content: lines.join('\n'), cta: lines[lines.length - 2] };
-}
-
-function buildStoryPost(achievement, tone, useEmoji) {
-  const e = useEmoji;
-  const lines = [
-    `${e ? '🧵 ' : ''}${generateTimeAgoOpener(achievement)}`,
-    '',
-    `It wasn't going well.`,
-    `${generateStruggleContext(achievement)}`,
-    '',
-    `The turning point came when I stopped ${generateOldHabit()} and started ${generateNewApproach(achievement)}.`,
-    '',
-    `Fast forward to today:`,
-    `${formatAchievementLines(achievement, e)}`,
-    '',
-    `What changed? ${generateLesson(achievement, tone)}`,
-    '',
-    `${e ? '📌 ' : ''}The 3 things I'd tell my past self:`,
-    `1. Start before you feel ready`,
-    `2. Progress compounds faster than you think`,
-    `3. Document everything — your future self will thank you`,
-    '',
-    applyToneClosingQuestion(tone),
-    `${e ? '👇 ' : ''}I read every comment.`,
-  ];
-  return { framework: 'Story', content: lines.join('\n'), cta: lines[lines.length - 2] };
-}
-
-// helper functions
-function formatAchievementLines(text, useEmoji) {
-  const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 5).slice(0, 3);
-  return sentences.map(s => `${useEmoji ? '→ ' : '→ '}${s.trim()}`).join('\n');
-}
-function extractMetricFromAchievement(text) {
-  const metricMatch = text.match(/(\d+%|\$[\d,]+|\d+[xX]|\d+\s*(?:users|customers|leads|hours|days|weeks|months|LPA|lakhs|crore))/i);
-  return metricMatch ? `${metricMatch[0]} improvement in measurable outcomes.` : 'Measurable, documented improvement in key metrics.';
-}
-function extractHookFromAchievement(text) {
-  const firstSentence = text.split(/[.!?]/)[0].trim();
-  return firstSentence.length > 80 ? firstSentence.slice(0, 80) + '...' : firstSentence;
-}
-function formatAchievementContext(text) {
-  return text.slice(0, 150).trim() + (text.length > 150 ? '...' : '');
-}
-function generateLesson(text, tone) {
-  let lessons = [
-    'small, consistent actions compound into massive results over time.',
-    'the bottleneck is almost never skill — it\'s clarity and consistency.',
-    'measuring the right things is more valuable than working harder.',
-    'the people who win aren\'t smarter — they just refuse to stop.',
-    'your environment shapes your outcomes more than your willpower does.',
-    'failure is just a data point on the path to success.',
-    'waiting for the perfect moment guarantees you will be left behind.',
-  ];
-  if (tone === 'bold') {
-    lessons = [
-      'you are probably overcomplicating it. execute relentlessly.',
-      'excuses don\'t scale. only results do.',
-      'stop hiding behind busywork and do the scary thing.',
-    ];
-  } else if (tone === 'inspirational') {
-    lessons = [
-      'your potential is entirely dictated by your mindset.',
-      'when you believe in the process, the outcome handles itself.',
-      'every setback is just a setup for an incredible comeback.',
-    ];
+  if (themes.includes('technical')) {
+    base[1] = `Tie the technical work to one visible business or delivery metric.`;
   }
-  const idx = text.length % lessons.length;
-  return lessons[idx];
-}
-function generateActionStep(text) {
-  return 'Pick one outcome you want. Work backward. Identify the ONE action that moves the needle most. Start today, not Monday.';
-}
-function generateTimeAgoOpener(text) {
-  const periods = ['12 months ago', '18 months ago', '2 years ago', '6 months ago'];
-  return `${periods[text.length % periods.length]}, I had zero of what I needed to achieve this.`;
-}
-function generateStruggleContext(text) {
-  return 'I was putting in the hours, but the results weren\'t following. I thought I was doing everything right — I wasn\'t.';
-}
-function generateOldHabit() {
-  const habits = ['optimizing for activity', 'measuring effort over outcomes', 'waiting for perfect conditions', 'doing more instead of doing better'];
-  return habits[Math.floor(Math.random() * habits.length)];
-}
-function generateNewApproach(text) {
-  return 'focusing exclusively on the one metric that actually moved the business forward';
+  if (themes.includes('leadership')) {
+    base[2] = `Show how your decisions improved team velocity, quality, or clarity.`;
+  }
+  if (keywords.length) {
+    base.push(`Keep the language concrete: mention ${keywords.slice(0, 2).join(' and ')} instead of vague responsibility terms.`);
+  }
+  base.push(`As a ${role.toLowerCase()}, make the result easier to repeat, not just easier to celebrate.`);
+  return base;
 }
 
-// ── Carousel generator ─────────────────────────────────────────────────────
-function generateCarousel(achievement, postType) {
-  const topic = extractTopic(achievement);
+function buildHashtags(industryKey, themes, keywords, postType, includeHashtags) {
+  if (!includeHashtags) return [];
+  const industryProfile = INDUSTRY_PROFILES[industryKey] || INDUSTRY_PROFILES.general;
+  const themeTags = [];
+  if (themes.includes('leadership')) themeTags.push('#Leadership', '#TeamBuilding');
+  if (themes.includes('growth')) themeTags.push('#Growth', '#BusinessImpact');
+  if (themes.includes('technical')) themeTags.push('#Execution', '#OperationalExcellence');
+  if (postType === 'story') themeTags.push('#CareerStory');
+  if (postType === 'achievement') themeTags.push('#Wins');
+  const keywordTags = keywords
+    .filter((kw) => /^[a-z][a-z0-9 ]+$/i.test(kw))
+    .slice(0, 3)
+    .map((kw) => `#${kw.replace(/[^a-z0-9]+/gi, '')}`);
+  return unique([...industryProfile.hashtags, ...themeTags, ...keywordTags, '#LinkedInTips']).slice(0, 8);
+}
+
+function addEmoji(enabled, emoji, text) {
+  return enabled ? `${emoji} ${text}` : text;
+}
+
+function joinPost(lines) {
+  return lines.filter(Boolean).join('\n\n');
+}
+
+function buildPASPost(context, tone, includeEmoji) {
+  const { summary, painPoint, actionFramework, lesson, metrics, audience, industryLabel, suggestedAngle, role } = context;
+  const opener =
+    tone === 'bold'
+      ? `Most ${audience} are still talking about effort when they should be talking about outcomes.`
+      : `A lot of ${audience} have stronger results than their LinkedIn content makes visible.`;
+
+  const lines = [
+    addEmoji(includeEmoji, '⚠️', opener),
+    painPoint,
+    `A recent example from my own work: ${summary}`,
+    `What changed was not just the output. It was the system behind it.`,
+    addEmoji(includeEmoji, 'Problem', 'The usual mistake: describing the task, but hiding the leverage.'),
+    addEmoji(includeEmoji, 'Agitation', `That makes high-value work in ${industryLabel.toLowerCase()} sound interchangeable, even when it clearly is not.`),
+    addEmoji(includeEmoji, 'Solution', `The better approach is to frame the story around ${suggestedAngle}.`),
+    ...actionFramework.map((item, index) => `${index + 1}. ${item}`),
+    metrics.length ? `In this case, the evidence was visible in metrics like ${metrics.slice(0, 3).join(', ')}.` : `In this case, the evidence was clear because the outcome became easier to see and easier to trust.`,
+    `Lesson: ${lesson}`,
+    `If you are a ${role.toLowerCase()} trying to build stronger credibility on LinkedIn, start by rewriting one recent win through the lens of business impact, not effort.`,
+    tone === 'conversational'
+      ? 'What is one piece of work you have done recently that deserves a sharper story?'
+      : 'What is one result from your recent work that is still being described too vaguely?',
+  ];
+
+  return { framework: 'PAS', content: joinPost(lines) };
+}
+
+function buildAIDAPost(context, tone, includeEmoji) {
+  const { summary, desire, metrics, keywords, industryLabel, lesson, audience } = context;
+  const attention =
+    tone === 'inspirational'
+      ? `A single strong career story can completely change how ${audience} see your work.`
+      : `If you want to stand out in ${industryLabel}, generic updates will not get you there.`;
+
+  const interest = `For context: ${summary}`;
+  const desireBlock = [
+    `What makes a post resonate is not the achievement alone.`,
+    `It is the combination of clarity, proof, and a takeaway people can apply.`,
+    `That is how you ${desire}.`,
+  ];
+  const evidence = metrics.length
+    ? `In this example, the proof points were ${metrics.slice(0, 3).join(', ')}.`
+    : `In this example, the proof came from visible change in execution quality and outcomes.`;
+  const keywordLine = keywords.length
+    ? `Even the wording matters. Terms like ${keywords.slice(0, 4).join(', ')} make the post feel credible because they reflect the actual work.`
+    : '';
+  const lines = [
+    addEmoji(includeEmoji, '🚀', attention),
+    interest,
+    ...desireBlock,
+    evidence,
+    keywordLine,
+    `The takeaway: ${lesson}`,
+    `If you are writing about your own wins this week, ask yourself three things:`,
+    `1. What changed because of my work?`,
+    `2. What proof makes that believable?`,
+    `3. What lesson would make someone stop and save this post?`,
+    tone === 'bold'
+      ? 'If your post could describe anyone, it is not ready yet.'
+      : 'If your post could describe anyone, it is probably too generic.',
+    'Which of those three questions do you find hardest when writing on LinkedIn?',
+  ];
+
+  return { framework: 'AIDA', content: joinPost(lines) };
+}
+
+function buildStoryPost(context, tone, includeEmoji) {
+  const { summary, lesson, metrics, role, industryLabel, actionFramework, audience } = context;
+  const opener =
+    tone === 'conversational'
+      ? `A quick story from my work in ${industryLabel}.`
+      : `Not every meaningful career move looks dramatic in real time.`;
+  const tension = `At the time, it just looked like a normal piece of work: ${summary}`;
+  const pivot = `But that moment forced me to think differently about how a ${role.toLowerCase()} creates trust with ${audience}.`;
+  const evidence = metrics.length
+    ? `Later, the effect showed up in real signals: ${metrics.slice(0, 3).join(', ')}.`
+    : `Later, the effect was obvious in stronger execution, clearer communication, and better follow-through.`;
+  const lessons = actionFramework.slice(0, 3).map((item, index) => `${index + 1}. ${item}`);
+  const lines = [
+    addEmoji(includeEmoji, '🧵', opener),
+    tension,
+    pivot,
+    evidence,
+    `What I would tell my past self now:`,
+    ...lessons,
+    `The real point is this: ${lesson}`,
+    tone === 'inspirational'
+      ? `A lot of careers accelerate when people finally learn how to explain their own value clearly.`
+      : `A lot of great work goes unnoticed simply because the story around it is too soft.`,
+    `What is one professional lesson you learned the hard way this year?`,
+  ];
+
+  return { framework: 'Story', content: joinPost(lines) };
+}
+
+function buildCarousel(context) {
+  const { summary, lesson, industryLabel, metrics, suggestedAngle } = context;
   return {
-    title: `${topic} — A Practical Framework`,
+    title: `${industryLabel} post framework`,
     slideCount: 7,
     slides: [
-      { number: 1, title: 'Hook Slide', content: `${extractHookFromAchievement(achievement)}\n\n(Swipe to see how →)`, designTip: 'Bold font. Single sentence. High contrast background. No clutter.' },
-      { number: 2, title: 'The Problem', content: `Most people approach ${topic.toLowerCase()} the wrong way.\n\nThey focus on [common mistake].\n\nHere's what actually works:`, designTip: 'Use a split layout: "Before" vs "After" works great here.' },
-      { number: 3, title: 'The Framework', content: `Step 1: Define the outcome clearly\nStep 2: Identify the ONE lever\nStep 3: Execute relentlessly\nStep 4: Measure weekly, adjust monthly`, designTip: 'Numbered list. Icon for each step. Keep copy under 20 words per step.' },
-      { number: 4, title: 'Real Example', content: `Here's how I applied this:\n\n${formatAchievementLines(achievement, false)}\n\nResult: ${extractMetricFromAchievement(achievement)}`, designTip: 'Use your actual photo or a result screenshot for social proof.' },
-      { number: 5, title: 'The Lesson', content: `The biggest lesson:\n\n"${generateLesson(achievement)}"\n\nThis is what separates people who grow from people who stay stuck.`, designTip: 'Large pull-quote design. Single lesson per slide. White on dark works well.' },
-      { number: 6, title: 'Your Next Step', content: `Don't let this stay theoretical.\n\nTake ONE action today:\n→ ${generateActionStep(achievement)}\n\nSet a 30-day goal. Track it weekly.`, designTip: 'CTA design. Bright accent color. Make the action feel small and achievable.' },
-      { number: 7, title: 'Follow CTA', content: `Found this useful?\n\n♻️ Repost to help others\n👋 Follow for weekly career insights\n\n@resugrow for more tools`, designTip: 'Branding slide. Include your headshot or logo. Keep it clean and memorable.' },
+      { number: 1, title: 'Hook', content: `Most professionals in ${industryLabel.toLowerCase()} are underselling their best work.` },
+      { number: 2, title: 'Context', content: summary },
+      { number: 3, title: 'What people usually do', content: 'They list responsibilities, tools, and tasks without explaining the leverage.' },
+      { number: 4, title: 'What works better', content: `Lead with ${suggestedAngle}, then support it with evidence.` },
+      { number: 5, title: 'Proof', content: metrics.length ? metrics.slice(0, 3).join('\n') : 'Use one concrete metric, one operational shift, and one lesson.' },
+      { number: 6, title: 'Lesson', content: lesson },
+      { number: 7, title: 'CTA', content: 'Take one recent win and rewrite it with a stronger hook, evidence, and takeaway.' },
     ],
   };
 }
-function extractTopic(text) {
-  const words = text.split(' ').slice(0, 4).join(' ');
-  return words.charAt(0).toUpperCase() + words.slice(1);
+
+function buildContext(achievement, selectedIndustry, postType) {
+  const industryKey = inferIndustry(selectedIndustry, achievement);
+  const industryProfile = INDUSTRY_PROFILES[industryKey] || INDUSTRY_PROFILES.general;
+  const role = detectRole(achievement);
+  const themes = detectThemes(achievement);
+  const keywords = detectKeywords(achievement, industryKey);
+  const metrics = extractMetrics(achievement);
+  const summary = summarizeAchievement(achievement);
+  const suggestedAngle =
+    themes.includes('growth')
+      ? 'what actually moved the business metric'
+      : themes.includes('leadership')
+        ? 'the decision-making behind the result'
+        : themes.includes('technical')
+          ? 'the system change that unlocked the result'
+          : industryProfile.angles[0];
+  const lesson =
+    themes.includes('growth')
+      ? 'The strongest career content explains leverage, not just effort.'
+      : themes.includes('leadership')
+        ? 'Leadership becomes visible when you explain the decisions that changed the outcome.'
+        : themes.includes('technical')
+          ? 'Technical work earns attention when the business consequence is obvious.'
+          : 'Clarity turns good work into visible professional equity.';
+
+  return {
+    industryKey,
+    industryLabel: industryProfile.label,
+    audience: industryProfile.audience,
+    role,
+    themes,
+    keywords,
+    metrics,
+    summary,
+    painPoint: getPainPoint(themes, industryKey),
+    desire: getDesire(themes, industryProfile),
+    suggestedAngle,
+    lesson,
+    postType,
+    actionFramework: getActionFramework(themes, keywords, role),
+  };
 }
 
-// ── Best posting times (Global Localized) ─────────────────────────────────────
-const BEST_POSTING_TIMES = [
-  { day: 'Tuesday', slots: ['8:00–9:00 AM IST', '12:30–1:30 PM IST', '6:00–7:00 PM IST'], level: 'High', reason: 'Mid-week energy is high. Morning commuters and lunch scrollers drive strong early traction.' },
-  { day: 'Wednesday', slots: ['8:30–9:30 AM IST', '1:00–2:00 PM IST', '5:30–7:00 PM IST'], level: 'Highest', reason: 'Consistently the highest-engagement day on LinkedIn globally. Algo favors posts with early engagement.' },
-  { day: 'Thursday', slots: ['9:00–10:00 AM IST', '12:00–1:00 PM IST', '6:00–7:30 PM IST'], level: 'High', reason: 'End-of-week forward planning mindset makes career content perform exceptionally well.' },
-  { day: 'Sunday', slots: ['6:00–8:00 PM IST'], level: 'Medium', reason: 'Sunday evening planning mode. Thought leadership and career reflection posts perform above average.' },
-  { day: 'Monday', slots: ['8:00–9:00 AM IST', '7:00–8:00 PM IST'], level: 'Medium', reason: 'Post before 9 AM to catch the Monday motivation wave, or late evening for reflective content.' },
-];
-
-// ── Hashtag selector ───────────────────────────────────────────────────────
-function selectHashtags(achievement, postType) {
-  const lower = achievement.toLowerCase();
-  const tags = [...HASHTAG_BANK.career, ...HASHTAG_BANK.general];
-  if (/tech|software|dev|engineer|code|api|react|python/i.test(lower)) tags.push(...HASHTAG_BANK.tech);
-  if (/market|seo|campaign|brand|content|growth/i.test(lower)) tags.push(...HASHTAG_BANK.marketing);
-  if (/data|analytics|ml|ai|insights/i.test(lower)) tags.push(...HASHTAG_BANK.data);
-  if (/lead|manage|team|direct|mentor|head/i.test(lower)) tags.push(...HASHTAG_BANK.leadership);
-  tags.push(...HASHTAG_BANK.linkedin, ...HASHTAG_BANK.resume);
-  const unique = [...new Set(tags)];
-  return shuffleArr(unique).slice(0, 9);
-}
-function shuffleArr(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-
-// ── Engagement tips ────────────────────────────────────────────────────────
-const ENGAGEMENT_TIPS = {
-  PAS: [
-    'Reply to every comment within the first hour — LinkedIn\'s algorithm rewards post activity.',
-    'Add a poll in the first comment to trigger more engagement signals.',
-    'Hook + 3-line gap + body: the white space forces LinkedIn to show "See more" — curiosity gap is your friend.',
-  ],
-  AIDA: [
-    'Post at 8:30 AM on a Tuesday or Wednesday for maximum reach window.',
-    'The first 3 lines are your entire post — write and rewrite them until they\'re irresistible.',
-    'End with a question that has a low barrier to answer — makes commenting feel effortless.',
-  ],
-  Story: [
-    'Story posts get 40–60% more comments than pure-value posts. The emotional hook is the mechanism.',
-    'Use "I" liberally — LinkedIn rewards personal, authentic writing over corporate voice.',
-    'Avoid posting stories on Monday — save them for Wed/Thu when people are in a reflective mood.',
-  ],
-};
-
-// ── POST handler ───────────────────────────────────────────────────────────
 export async function POST(request) {
   try {
     const body = await request.json();
     const achievement = (body.achievement || '').trim();
     const postType = body.postType || 'story';
     const tone = body.tone || 'professional';
+    const industry = body.industry || 'general';
     const includeEmoji = body.includeEmoji !== false;
     const includeHashtags = body.includeHashtags !== false;
 
     if (!achievement || achievement.length < 20) {
-      return NextResponse.json(
-        { error: 'Please describe your achievement in at least 20 characters.' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Please describe your achievement in at least 20 characters.' }, { status: 400 });
     }
 
-    const hashtags = includeHashtags ? selectHashtags(achievement, postType) : [];
+    const context = buildContext(achievement, industry, postType);
+    const hashtags = buildHashtags(context.industryKey, context.themes, context.keywords, postType, includeHashtags);
 
-    const pasResult = buildPASPost(achievement, tone, includeEmoji);
-    const aidaResult = buildAIDAPost(achievement, tone, includeEmoji);
-    const storyResult = buildStoryPost(achievement, tone, includeEmoji);
-
-    const posts = [pasResult, aidaResult, storyResult].map(p => ({
-      framework: p.framework,
-      content: p.content,
-      characterCount: p.content.length,
+    const posts = [
+      buildPASPost(context, tone, includeEmoji),
+      buildAIDAPost(context, tone, includeEmoji),
+      buildStoryPost(context, tone, includeEmoji),
+    ].map((post) => ({
+      framework: post.framework,
+      content: post.content,
+      characterCount: post.content.length,
       hashtags,
-      callToAction: p.cta,
-      engagementTips: ENGAGEMENT_TIPS[p.framework] || ENGAGEMENT_TIPS.Story,
+      callToAction: post.content.split('\n\n').at(-1),
+      engagementTips: ENGAGEMENT_TIPS[post.framework] || ENGAGEMENT_TIPS.Story,
     }));
 
     return NextResponse.json({
       posts,
-      carouselTemplate: generateCarousel(achievement, postType),
-      bestPostingTimes: BEST_POSTING_TIMES,
+      insights: {
+        industry: context.industryLabel,
+        audience: context.audience,
+        role: context.role,
+        themes: context.themes,
+        keywords: context.keywords,
+        suggestedAngle: context.suggestedAngle,
+      },
+      carouselTemplate: buildCarousel(context),
+      bestPostingTimes: POSTING_TIMES,
       generalTips: [
-        'Post 3–4 times per week maximum. Consistency > frequency on LinkedIn.',
-        'Engage with 5–10 posts in your niche before and after publishing your own — it primes the algorithm.',
-        'Never include links in the post body — LinkedIn suppresses off-platform content. Put links in the first comment.',
-        'Images boost reach by ~30%. A simple solid-background image with bold text works better than stock photos.',
-        'The first 90 minutes after posting are critical — respond to every comment quickly to trigger ranking signals.',
+        'The first 2-3 lines determine whether someone taps "see more". Spend most of your time there.',
+        'If you mention a result, pair it with context. Numbers land harder when readers know what changed.',
+        'Posts feel more credible when they include one industry-specific term and one business consequence.',
+        'Do not overload hashtags. A smaller, more relevant set usually performs better than a long generic stack.',
+        'LinkedIn rewards follow-up engagement. Stay in the comments for the first hour after posting.',
       ],
     });
   } catch (err) {
     console.error('LinkedIn studio error:', err);
-    return NextResponse.json(
-      { error: 'Failed to generate posts. Please try again.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to generate posts. Please try again.' }, { status: 500 });
   }
 }

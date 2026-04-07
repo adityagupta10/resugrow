@@ -12,6 +12,9 @@ export default function SwissTemplate({ data: rawData }) {
 
       <div className={styles.topSection}>
         <div className={styles.nameCard}>
+          {personal.showPhoto && personal.photo && (
+            <img src={personal.photo} alt={personal.fullName || 'Profile'} style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', marginBottom: 10, border: '2px solid #e2e8f0', display: 'block' }} />
+          )}
           <h1 className={styles.name}>{personal.fullName || 'Your Name'}</h1>
           <p className={styles.title}>{personal.currentPosition || 'Professional'}</p>
         </div>

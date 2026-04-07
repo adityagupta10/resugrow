@@ -42,6 +42,12 @@ export default function sitemap() {
       lastModified: now,
     },
     {
+      url: `${baseUrl}/resume/template-marketplace`,
+      changeFrequency: "weekly",
+      priority: 0.9,
+      lastModified: now,
+    },
+    {
       url: `${baseUrl}/linkedin-makeover`,
       changeFrequency: "weekly",
       priority: 0.93,

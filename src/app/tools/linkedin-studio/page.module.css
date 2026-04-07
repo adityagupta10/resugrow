@@ -181,6 +181,25 @@
     box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
 }
 
+.selectInput {
+    width: 100%;
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+    background: #ffffff;
+    padding: 12px 14px;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #1a1a2e;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+}
+
+.selectInput:focus {
+    outline: none;
+    border-color: #0891b2;
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+}
+
 /* ── Post type + tone pills ─────────────────────────────────────────────── */
 .typePills {
     display: flex;
@@ -419,6 +438,69 @@
     gap: 8px;
     margin-bottom: 18px;
     flex-wrap: wrap;
+}
+
+.contextGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 20px;
+}
+
+.contextCard {
+    padding: 16px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef9fb 100%);
+    border: 1px solid #dbeafe;
+}
+
+.contextCard strong {
+    display: block;
+    color: #0f172a;
+    font-size: 16px;
+    line-height: 1.35;
+}
+
+.contextCard p {
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.contextLabel {
+    display: block;
+    margin-bottom: 8px;
+    color: #0891b2;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.contextTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.contextTag {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: white;
+    color: #0e7490;
+    border: 1px solid #a5f3fc;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.contextHint {
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .postTab {
@@ -1060,6 +1142,10 @@
 
     .savedSection {
         padding: 20px 16px;
+    }
+
+    .contextGrid {
+        grid-template-columns: 1fr;
     }
 }
 
