@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #059669 0%, #064e3b 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   position: relative;
   overflow-x: hidden;
 }
@@ -13,8 +13,8 @@
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(circle at 20% 80%, rgba(5, 150, 105, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.35) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, var(--soft-overlay), transparent 50%),
+    radial-gradient(circle at 85% 15%, var(--soft-overlay), transparent 50%),
     radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
   pointer-events: none;
   z-index: 1;
@@ -100,7 +100,7 @@
   display: block;
   width: 4px;
   height: 26px;
-  background: linear-gradient(135deg, #059669, #047857);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   border-radius: 2px;
   flex-shrink: 0;
 }
@@ -163,8 +163,8 @@
 .formInput:focus,
 .formSelect:focus {
   outline: none;
-  border-color: #059669;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-50);
 }
 
 .formInput::placeholder {
@@ -192,19 +192,19 @@
 }
 
 .typePill:hover {
-  border-color: #059669;
-  color: #059669;
-  background: #f0fdf4;
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-50);
 }
 
 .typePillActive {
-  background: #059669;
+  background: var(--primary);
   color: white;
-  border-color: #059669;
+  border-color: var(--primary);
 }
 
 .typePillActive:hover {
-  background: #047857;
+  background: var(--primary-dark);
   color: white;
 }
 
@@ -224,17 +224,17 @@
 }
 
 .skillsInputWrapper:focus-within {
-  border-color: #059669;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-50);
 }
 
 .skillChip {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #d1fae5;
-  color: #065f46;
-  border: 1px solid #6ee7b7;
+  background: var(--primary-100);
+  color: var(--primary-dark);
+  border: 1px solid var(--primary-100);
   border-radius: 20px;
   padding: 4px 10px;
   font-size: 13px;
@@ -302,9 +302,9 @@
   font-size: 12px;
   padding: 7px 14px;
   border-radius: 20px;
-  border: 1px solid #6ee7b7;
-  background: #f0fdf4;
-  color: #059669;
+  border: 1px solid var(--primary-100);
+  background: var(--primary-50);
+  color: var(--primary);
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
@@ -312,9 +312,9 @@
 }
 
 .scenarioChip:hover {
-  background: #059669;
+  background: var(--primary);
   color: white;
-  border-color: #059669;
+  border-color: var(--primary);
 }
 
 /* ── Primary CTA button ──────────────────────────────────────────────────── */
@@ -327,7 +327,7 @@
   font-size: 15px;
   font-weight: 700;
   color: white;
-  background: linear-gradient(135deg, #059669, #047857);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -356,7 +356,7 @@
 
 .primaryBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(5, 150, 105, 0.45);
+  box-shadow: 0 12px 32px var(--shadow-color);
 }
 
 .primaryBtn:active {

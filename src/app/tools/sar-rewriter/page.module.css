@@ -1,7 +1,6 @@
-/* ── Page shell ─────────────────────────────────────────────────────────── */
 .page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   position: relative;
   overflow-x: hidden;
 }
@@ -123,7 +122,7 @@
   display: block;
   width: 4px;
   height: 26px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   border-radius: 2px;
   flex-shrink: 0;
 }
@@ -176,8 +175,8 @@
 .input:focus,
 .select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-50);
 }
 
 /* ── Meta Row ────────────────────────────────────────────────────────────── */
@@ -258,9 +257,9 @@
   font-size: 12px;
   padding: 7px 14px;
   border-radius: 20px;
-  border: 1px solid #c7d2fe;
-  background: #f5f3ff;
-  color: #6366f1;
+  border: 1px solid var(--primary-100);
+  background: var(--primary-50);
+  color: var(--primary);
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
@@ -268,9 +267,9 @@
 }
 
 .scenarioChip:hover {
-  background: #6366f1;
+  background: var(--primary);
   color: white;
-  border-color: #6366f1;
+  border-color: var(--primary);
 }
 
 /* ── Primary Button ──────────────────────────────────────────────────────── */
@@ -283,7 +282,7 @@
   font-size: 15px;
   font-weight: 700;
   color: white;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -312,18 +311,18 @@
 
 .primaryBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 12px 32px var(--primary-50);
 }
 
 .errorMsg {
   margin: 12px 0 0;
-  color: #dc2626;
+  color: var(--primary-dark);
   font-size: 14px;
   font-weight: 500;
   padding: 10px 14px;
-  background: #fee2e2;
+  background: var(--primary-50);
   border-radius: 10px;
-  border: 1px solid #fecaca;
+  border: 1px solid var(--primary-100);
   line-height: 1.5;
 }
 
@@ -400,7 +399,7 @@
 }
 
 .positive { color: #10b981; }
-.negative { color: #ef4444; }
+.negative { color: var(--primary); }
 
 /* ── Signal List ─────────────────────────────────────────────────────────── */
 .subTitle {
@@ -452,8 +451,8 @@
 }
 
 .rewriteCard:hover {
-  border-color: #667eea;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.08);
+  border-color: var(--primary);
+  box-shadow: 0 8px 24px var(--primary-50);
 }
 
 .rewriteHeader {
@@ -473,7 +472,7 @@
 .rewriteScore {
   font-size: 12px;
   font-weight: 700;
-  color: #667eea;
+  color: var(--primary);
   margin: 2px 0 0;
 }
 
@@ -490,15 +489,15 @@
   font-weight: 700;
   padding: 6px 14px;
   border-radius: 20px;
-  border: 2px solid #667eea;
-  color: #667eea;
+  border: 2px solid var(--primary);
+  color: var(--primary);
   background: white;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .copyBtn:hover {
-  background: #667eea;
+  background: var(--primary);
   color: white;
 }
 
@@ -535,9 +534,9 @@
 .fixChip {
   font-size: 11px;
   font-weight: 700;
-  color: #667eea;
-  background: #f5f3ff;
-  border: 1px solid #c7d2fe;
+  color: var(--primary);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
   padding: 3px 10px;
   border-radius: 20px;
 }

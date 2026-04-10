@@ -35,7 +35,7 @@ export default function CoverLetterBuilder() {
   });
 
   return (
-    <>
+    <div data-theme="letters">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
@@ -76,6 +76,6 @@ export default function CoverLetterBuilder() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

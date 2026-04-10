@@ -8,10 +8,66 @@
   padding: 0 24px;
 }
 
+/* Theme Overrides */
+:global([data-theme="resume"]) {
+  --primary: #8b5cf6;
+  --primary-dark: #7c3aed;
+  --primary-50: #f5f3ff;
+  --primary-100: #ede9fe;
+}
+:global([data-theme="linkedin"]) {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-50: #eff6ff;
+  --primary-100: #dbeafe;
+}
+:global([data-theme="letters"]) {
+  --primary: #22c55e;
+  --primary-dark: #16a34a;
+  --primary-50: #f0fdf4;
+  --primary-100: #dcfce7;
+}
+:global([data-theme="sar"]) {
+  --primary: #ef4444;
+  --primary-dark: #dc2626;
+  --primary-50: #fef2f2;
+  --primary-100: #fee2e2;
+}
+:global([data-theme="coach"]) {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --primary-50: #eef2ff;
+  --primary-100: #e0e7ff;
+}
+:global([data-theme="track"]) {
+  --primary: #64748b;
+  --primary-dark: #475569;
+  --primary-50: #f8fafc;
+  --primary-100: #f1f5f9;
+}
+:global([data-theme="market"]) {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --primary-50: #f8fafc;
+  --primary-100: #eff6ff;
+}
+:global([data-theme="salary"]) {
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --primary-50: #ecfdf5;
+  --primary-100: #d1fae5;
+}
+:global([data-theme="path"]) {
+  --primary: #06b6d4;
+  --primary-dark: #0891b2;
+  --primary-50: #ecfeff;
+  --primary-100: #cffafe;
+}
+
 .subpageHero {
   text-align: center;
   padding: 80px 0 60px;
-  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #f0f9ff 100%);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--primary-50) 50%, var(--primary-100) 100%);
   position: relative;
   overflow: hidden;
 }

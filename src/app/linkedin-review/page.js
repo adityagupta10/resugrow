@@ -130,7 +130,7 @@ export default function ProfileReview() {
   };
 
   return (
-    <>
+    <div data-theme="linkedin">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -262,7 +262,7 @@ export default function ProfileReview() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 

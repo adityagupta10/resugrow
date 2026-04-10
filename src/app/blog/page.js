@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { posts } from './data';
 import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } from '@/lib/seo';
+import { supabase } from '@/lib/supabase';
 import styles from './blog.module.css';
 
 export const metadata = createPageMetadata({
@@ -11,8 +12,6 @@ export const metadata = createPageMetadata({
   path: '/blog',
   keywords: ['resume tips', 'career advice', 'job search', 'ATS optimization', 'LinkedIn tips', 'salary negotiation'],
 });
-
-import { supabase } from '@/lib/supabase';
 
 const categories = [
   'All',
@@ -190,6 +189,14 @@ export default async function BlogPage() {
               <Link href="/contact" className={styles.newsletterBtn}>Subscribe</Link>
             </div>
           </div>
+        </div>
+
+        {/* Tools backlink */}
+        <div style={{ textAlign: 'center', padding: '32px 0 8px' }}>
+          <p style={{ fontSize: 14, color: '#64748b', marginBottom: 12 }}>Ready to put these insights into action?</p>
+          <Link href="/tools" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', background: '#0f172a', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: 'none' }}>
+            🛠 Explore All Career Tools →
+          </Link>
         </div>
       </div>
     </div>

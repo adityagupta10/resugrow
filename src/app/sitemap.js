@@ -36,6 +36,18 @@ export default function sitemap() {
       lastModified: now,
     },
     {
+      url: `${baseUrl}/resume/builder`,
+      changeFrequency: "weekly",
+      priority: 0.95,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/resume/ats-checker`,
+      changeFrequency: "weekly",
+      priority: 0.95,
+      lastModified: now,
+    },
+    {
       url: `${baseUrl}/resume/templates`,
       changeFrequency: "weekly",
       priority: 0.94,
@@ -48,9 +60,27 @@ export default function sitemap() {
       lastModified: now,
     },
     {
+      url: `${baseUrl}/resume/template-marketplace/submit`,
+      changeFrequency: "monthly",
+      priority: 0.75,
+      lastModified: now,
+    },
+    {
       url: `${baseUrl}/linkedin-makeover`,
       changeFrequency: "weekly",
       priority: 0.93,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/linkedin-review`,
+      changeFrequency: "weekly",
+      priority: 0.92,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/linkedin-review/paste`,
+      changeFrequency: "weekly",
+      priority: 0.85,
       lastModified: now,
     },
     {
@@ -66,6 +96,38 @@ export default function sitemap() {
       lastModified: now,
     },
 
+    // ── Tier 2b: Tool pages ───────────────────────────────────────────────
+    {
+      url: `${baseUrl}/tools/sar-rewriter`,
+      changeFrequency: "weekly",
+      priority: 0.87,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/tools/salary-coach`,
+      changeFrequency: "weekly",
+      priority: 0.86,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/tools/interview-prep`,
+      changeFrequency: "weekly",
+      priority: 0.86,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/tools/linkedin-studio`,
+      changeFrequency: "weekly",
+      priority: 0.85,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/tools/career-path`,
+      changeFrequency: "weekly",
+      priority: 0.85,
+      lastModified: now,
+    },
+
     // ── Tier 3: High-value SEO content pages ──────────────────────────────
     {
       url: `${baseUrl}/examples`,
@@ -77,6 +139,12 @@ export default function sitemap() {
       url: `${baseUrl}/cv-vs-resume`,
       changeFrequency: "monthly",
       priority: 0.89,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/tools`,
+      changeFrequency: "monthly",
+      priority: 0.88,
       lastModified: now,
     },
     {
@@ -95,6 +163,12 @@ export default function sitemap() {
       url: `${baseUrl}/blog/resugrow-vs-canva-google-docs`,
       changeFrequency: "monthly",
       priority: 0.8,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/blog/skills-for-resume-guide`,
+      changeFrequency: "monthly",
+      priority: 0.78,
       lastModified: now,
     },
 

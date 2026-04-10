@@ -631,6 +631,75 @@ function ResumeBuilderPage() {
   const resumeIdParam = searchParams.get('id');
   const [isLoadingResume, setIsLoadingResume] = useState(!!resumeIdParam);
 
+  const [shareUrl, setShareUrl] = useState('');
+  const [shareId, setShareId] = useState('');
+
+  // ── Persistence Helper (Defined early to avoid ReferenceError) ──────────
+  const persistResumeRecord = useCallback(async ({
+    sharedPdfUrl = null,
+    recordVersion = false,
+    versionReason = 'Manual snapshot',
+    overrideData = null,
+    overrideTemplateId = null,
+  } = {}) => {
+    const supabase = createClient();
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    if (authError) throw authError;
+    if (!authData?.user) throw new Error('Please sign in to save your resume.');
+
+    const userId = authData.user.id;
+    const stableShareId = shareId || `${userId.slice(0, 8)}-${Date.now()}`;
+    const nextTemplateId = overrideTemplateId || activeTemplateId;
+    const payloadData = overrideData || data;
+    const sanitizedData = stripVersionMeta(payloadData);
+    const hydratedData = {
+      ...sanitizedData,
+      meta: {
+        ...(sanitizedData.meta || {}),
+        templateId: nextTemplateId,
+      },
+    };
+
+    const res = await fetch('/api/resumes/share', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: hydratedData,
+        title: hydratedData.personal?.fullName ? `Resume - ${hydratedData.personal.fullName}` : 'Untitled Resume',
+        sharedPdfUrl,
+        shareId: stableShareId,
+        recordVersion,
+        versionReason,
+      }),
+    });
+
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save resume state.');
+
+    const brandedUrl = `https://www.resugrow.com${result.url}`;
+    setShareUrl(brandedUrl);
+    setShareId(stableShareId);
+
+    if (result.resume?.data) {
+      setData(result.resume.data);
+      const incomingHistory = extractVersionHistory(result.resume.data);
+      setVersionHistory(incomingHistory);
+      if (incomingHistory.length >= 2) {
+        setCompareVersionIds({
+          left: incomingHistory[0].id,
+          right: incomingHistory[1].id,
+        });
+      } else if (incomingHistory.length === 1) {
+        setCompareVersionIds({
+          left: incomingHistory[0].id,
+          right: '',
+        });
+      }
+    }
+
+    return { ...result, shareId: stableShareId, brandedUrl };
+  }, [activeTemplateId, data, shareId]);
+
   // Uploading state (for start modal)
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
@@ -740,10 +809,7 @@ function ResumeBuilderPage() {
   const removeProject = (id) =>
     setData((d) => ({ ...d, projects: d.projects.filter((p) => p.id !== id) }));
 
-  // ── Share via Link ─────────────────────────────────────────────────
   const [isSharing, setIsSharing] = useState(false);
-  const [shareUrl, setShareUrl] = useState('');
-  const [shareId, setShareId] = useState('');
   const [copied, setCopied] = useState(false);
   const [shareError, setShareError] = useState(null);
   const [versionHistory, setVersionHistory] = useState([]);
@@ -762,70 +828,6 @@ function ResumeBuilderPage() {
     [comparedVersions.left, comparedVersions.right],
   );
 
-  const persistResumeRecord = useCallback(async ({
-    sharedPdfUrl = null,
-    recordVersion = false,
-    versionReason = 'Manual snapshot',
-    overrideData = null,
-    overrideTemplateId = null,
-  } = {}) => {
-    const supabase = createClient();
-    const { data: authData, error: authError } = await supabase.auth.getUser();
-    if (authError) throw authError;
-    if (!authData?.user) throw new Error('Please sign in to save your resume.');
-
-    const userId = authData.user.id;
-    const stableShareId = shareId || `${userId.slice(0, 8)}-${Date.now()}`;
-    const nextTemplateId = overrideTemplateId || activeTemplateId;
-    const payloadData = overrideData || data;
-    const sanitizedData = stripVersionMeta(payloadData);
-    const hydratedData = {
-      ...sanitizedData,
-      meta: {
-        ...(sanitizedData.meta || {}),
-        templateId: nextTemplateId,
-      },
-    };
-
-    const res = await fetch('/api/resumes/share', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        data: hydratedData,
-        title: hydratedData.personal?.fullName ? `Resume - ${hydratedData.personal.fullName}` : 'Untitled Resume',
-        sharedPdfUrl,
-        shareId: stableShareId,
-        recordVersion,
-        versionReason,
-      }),
-    });
-
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.error || 'Failed to save resume state.');
-
-    const brandedUrl = `https://www.resugrow.com${result.url}`;
-    setShareUrl(brandedUrl);
-    setShareId(stableShareId);
-
-    if (result.resume?.data) {
-      setData(result.resume.data);
-      const incomingHistory = extractVersionHistory(result.resume.data);
-      setVersionHistory(incomingHistory);
-      if (incomingHistory.length >= 2) {
-        setCompareVersionIds({
-          left: incomingHistory[0].id,
-          right: incomingHistory[1].id,
-        });
-      } else if (incomingHistory.length === 1) {
-        setCompareVersionIds({
-          left: incomingHistory[0].id,
-          right: '',
-        });
-      }
-    }
-
-    return { ...result, shareId: stableShareId, brandedUrl };
-  }, [activeTemplateId, data, shareId]);
 
   const handleShareResume = async () => {
     if (isSharing) return;
@@ -1236,7 +1238,7 @@ function ResumeBuilderPage() {
   };
 
   return (
-    <div className={styles.wizardPage}>
+    <div data-theme="resume" className={styles.wizardPage}>
       {isLoadingResume && (
         <div className={styles.globalLoader}>
           <div className={styles.loaderContent}>

@@ -10,28 +10,76 @@ import Testimonials from '@/components/Testimonials/Testimonials';
 
 const productPillars = [
   {
-    tag: 'ATS',
-    title: 'ATS Resume Checker',
-    desc: 'Scan your resume like a recruiter system and pinpoint keyword, structure, and formatting leaks instantly.',
-    points: ['Deterministic scoring', 'Industry-aware keyword mapping', 'Priority fixes in one view'],
-    href: '/resume/ats-checker',
-    cta: 'Run ATS Check'
-  },
-  {
     tag: 'Resume',
-    title: 'AI powered Resume builder',
-    desc: 'Create a job-ready resume with AI guidance, clean formatting, and ATS-safe structure in minutes.',
-    points: ['Smart section suggestions', 'ATS-friendly formatting', 'One-click export workflow'],
-    href: '/resume/ai-builder',
+    title: 'Resume Excellence',
+    desc: 'Build an ATS-optimized resume with AI guidance and professional styling in minutes.',
+    points: ['Real-time ATS scoring', 'Smart section suggestions', 'One-click PDF export'],
+    href: '/resume/builder',
     cta: 'Build My Resume'
   },
   {
     tag: 'LinkedIn',
-    title: 'LinkedIn Profile Reviewer',
-    desc: 'Upload PDF or paste profile text for a strict, section-wise score that highlights visibility blockers.',
-    points: ['PDF + direct paste modes', 'Core pillar breakdown', 'Action-ready optimization path'],
+    title: 'LinkedIn Power',
+    desc: 'Optimize your professional visibility with section-wise scores and direct profile audits.',
+    points: ['Visibility bottleneck scan', 'Section-by-section audit', 'keyword mapping'],
     href: '/linkedin-review',
     cta: 'Scan LinkedIn Profile'
+  },
+  {
+    tag: 'Letters',
+    title: 'Cover Letter Hub',
+    desc: 'Generate tailored cover letters for every application using AI that matches your resume and the job.',
+    points: ['Job description matching', 'Tailored tone & style', 'High-impact templates'],
+    href: '/cover-letter/builder',
+    cta: 'Build Cover Letter'
+  },
+  {
+    tag: 'SAR',
+    title: 'AI SAR Rewriter',
+    desc: 'Transform weak bullet points into high-impact SAR (Situation, Action, Result) achievements.',
+    points: ['Impact quantification', 'Action-verb injection', 'Recruiter-ready phrasing'],
+    href: '/tools/sar-rewriter',
+    cta: 'Optimize Bullets'
+  },
+  {
+    tag: 'Coach',
+    title: 'Interview Mastery',
+    desc: 'Prepare for any interview with an AI-powered coach that provides real-time feedback.',
+    points: ['Section-wise rehearsal', 'Industry-specific Q&A', 'Performance tips'],
+    href: '/tools/interview-prep',
+    cta: 'Start Coaching'
+  },
+  {
+    tag: 'Track',
+    title: 'Smart Dashboard',
+    desc: 'Manage your entire job search from one place with a centralized application tracker.',
+    points: ['Centralized app history', 'Interview scheduling', 'Search analytics'],
+    href: '/dashboard/applications',
+    cta: 'Track Applications'
+  },
+  {
+    tag: 'Market',
+    title: 'Template Marketplace',
+    desc: 'Browse and use premium, community-driven resume layouts designed for specific industries.',
+    points: ['Verified ATS-safe designs', 'Industry-specific layouts', 'Community-vetted styles'],
+    href: '/resume/template-marketplace',
+    cta: 'Explore Designs'
+  },
+  {
+    tag: 'Salary',
+    title: 'Salary Negotiator',
+    desc: 'Maximize your offer with AI-led negotiation scripts and market data for your role.',
+    points: ['Custom script generation', 'Market value analysis', 'Counter-offer strategies'],
+    href: '/tools/salary-coach',
+    cta: 'Negotiate Better'
+  },
+  {
+    tag: 'Path',
+    title: 'Careerpath Simulator',
+    desc: 'Map your future with an AI that simulates different career trajectories based on your skills.',
+    points: ['Trajectory forecasting', 'Skill-gap analysis', 'Future role requirements'],
+    href: '/tools/career-path',
+    cta: 'Simulate My Path'
   }
 ];
 
@@ -129,7 +177,7 @@ export default function Home() {
             {productPillars.map((pillar) => (
               <article
                 key={pillar.title}
-                className={`${styles.pillarCard} ${pillar.tag === 'Resume' ? styles.pillarCardResume : ''}`}
+                className={`${styles.pillarCard} ${styles[`pillarCard${pillar.tag}`] || ''}`}
               >
                 <span className={styles.pillarTag}>{pillar.tag}</span>
                 <h3>{pillar.title}</h3>

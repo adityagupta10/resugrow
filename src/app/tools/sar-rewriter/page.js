@@ -111,7 +111,8 @@ const SARContent = () => {
   };
 
   return (
-    <div className={styles.page}>
+    <div data-theme="sar">
+      <div className={styles.page}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -340,6 +341,7 @@ const SARContent = () => {
           </div>
         </div>
       </main>
+    </div>
     </div>
   );
 };

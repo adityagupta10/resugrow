@@ -186,7 +186,7 @@ export default function ApplicationTrackerClient() {
   }, [applications]);
 
   return (
-    <div className={styles.page}>
+    <div data-theme="track" className={styles.page}>
       <div className={styles.header}>
         <div>
           <p className={styles.kicker}>Job Search OS</p>

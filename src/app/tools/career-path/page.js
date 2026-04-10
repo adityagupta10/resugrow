@@ -153,7 +153,7 @@ export default function CareerPathPage() {
   }
 
   return (
-    <div className={styles.page}>
+    <div data-theme="path" className={styles.page}>
       <main className={styles.main}>
         <section className={styles.hero}>
           <p className={styles.kicker}>Career Intelligence : Growth Planning</p>

@@ -43,7 +43,7 @@
 .sidebarLogoIcon {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -89,7 +89,7 @@
 
 .sidebarStepActive {
   color: white;
-  background: rgba(59, 130, 246, 0.15);
+  background: rgba(139, 92, 246, 0.15);
   font-weight: 600;
 }
 
@@ -100,7 +100,7 @@
   top: 4px;
   bottom: 4px;
   width: 3px;
-  background: #3b82f6;
+  background: #8b5cf6;
   border-radius: 0 3px 3px 0;
 }
 
@@ -134,8 +134,8 @@
 }
 
 .sidebarStepActive .stepIcon {
-  background: #3b82f6;
-  border-color: #3b82f6;
+  background: #8b5cf6;
+  border-color: #8b5cf6;
   color: white;
 }
 
@@ -222,7 +222,7 @@
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  background: linear-gradient(90deg, #a78bfa, #8b5cf6);
   border-radius: 3px;
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -333,7 +333,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 28px;
-  background: linear-gradient(135deg, #3b82f6, #4f46e5);
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
   color: white;
   border: none;
   border-radius: 10px;
@@ -341,12 +341,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(59,130,246,0.3);
+  box-shadow: 0 2px 8px rgba(139,92,246,0.3);
 }
 
 .continueBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(59,130,246,0.4);
+  box-shadow: 0 4px 16px rgba(139,92,246,0.4);
 }
 
 .skipBtn {
@@ -478,8 +478,8 @@
   align-items: center;
   gap: 6px;
   background: white;
-  color: #3b82f6;
-  border: 1.5px dashed #93c5fd;
+  color: #8b5cf6;
+  border: 1.5px dashed #c4b5fd;
   padding: 8px 16px;
   border-radius: 10px;
   font-size: 13px;
@@ -491,8 +491,8 @@
 }
 
 .addBtn:hover {
-  background: #eff6ff;
-  border-color: #3b82f6;
+  background: #f5f3ff;
+  border-color: #8b5cf6;
 }
 
 .sectionHeader {
@@ -518,9 +518,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
+  background: #f5f3ff;
+  color: #7c3aed;
+  border: 1px solid #c4b5fd;
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 13px;
@@ -558,7 +558,7 @@
 
 .addTagBtn {
   padding: 10px 20px;
-  background: #3b82f6;
+  background: #8b5cf6;
   color: white;
   border: none;
   border-radius: 10px;
@@ -570,7 +570,7 @@
 }
 
 .addTagBtn:hover {
-  background: #2563eb;
+  background: #7c3aed;
 }
 
 .empty { font-size: 13px; color: #94a3b8; margin: 0 0 12px; }
@@ -578,8 +578,8 @@
 /* ── AI Suggestions ─────────────────────────────────────────────────────── */
 .suggestionsToggle {
   background: linear-gradient(135deg, #f0f9ff, #ede9fe);
-  color: #6366f1;
-  border: 1px solid #c7d2fe;
+  color: #8b5cf6;
+  border: 1px solid #c4b5fd;
   padding: 5px 12px;
   border-radius: 8px;
   font-size: 12px;
@@ -675,10 +675,10 @@
 }
 
 .suggestionsFieldTabActive {
-  background: #3b82f6;
+  background: #8b5cf6;
   color: white;
-  border-color: #3b82f6;
-  box-shadow: 0 4px 10px rgba(59,130,246,0.25);
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 10px rgba(139,92,246,0.25);
 }
 
 .suggestionsList {
@@ -717,11 +717,11 @@
 }
 
 .suggestionItem:hover {
-  background: #f0f9ff;
+  background: #f5f3ff;
 }
 
 .suggestionBullet {
-  color: #3b82f6;
+  color: #8b5cf6;
   font-weight: 700;
   font-size: 14px;
   flex-shrink: 0;
@@ -755,8 +755,8 @@
 }
 
 .startCard:hover {
-  border-color: #3b82f6;
-  box-shadow: 0 8px 30px rgba(59,130,246,0.12);
+  border-color: #8b5cf6;
+  box-shadow: 0 8px 30px rgba(139,92,246,0.12);
   transform: translateY(-2px);
 }
 
@@ -769,7 +769,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #3b82f6;
+  color: #8b5cf6;
 }
 
 .startCardTitle {
@@ -792,7 +792,7 @@
   justify-content: center;
   gap: 8px;
   padding: 10px 24px;
-  background: linear-gradient(135deg, #3b82f6, #4f46e5);
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
   color: white;
   border: none;
   border-radius: 10px;
@@ -804,7 +804,7 @@
 }
 
 .primaryBtn:hover {
-  box-shadow: 0 4px 16px rgba(59,130,246,0.35);
+  box-shadow: 0 4px 16px rgba(139,92,246,0.35);
 }
 
 .secondaryBtn {

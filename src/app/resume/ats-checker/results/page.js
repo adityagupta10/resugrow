@@ -551,7 +551,12 @@ export default function ATSResultsPage() {
             <p className={styles.aiFixDesc}>
               Our AI Resume Builder can automatically fix the gaps identified above while maintaining the perfect ATS format.
             </p>
-            <Link href="/resume/ai-builder" className={`btn btn-secondary ${styles.aiFixBtn}`}>Optimize My Resume with AI</Link>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <Link href="/resume/ai-builder" className={`btn btn-secondary ${styles.aiFixBtn}`}>Optimize My Resume with AI</Link>
+              <Link href="/tools" style={{ fontSize: '13px', fontWeight: 600, color: '#2563eb', textDecoration: 'none' }}>
+                Explore all career tools →
+              </Link>
+            </div>
           </div>
         </div>
 

@@ -29,7 +29,7 @@ export default async function MySubmittedTemplatesPage() {
   const templates = await listCreatorCommunityTemplates({ userId: user.id, email: user.email });
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-theme="market">
       <main className={styles.main}>
         <section className={styles.hero}>
           <div className={styles.heroCopy}>

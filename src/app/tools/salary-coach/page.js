@@ -307,7 +307,7 @@ export default function SalaryCoachPage() {
 
   // ── Render ────────────────────────────────────────────────────────────
   return (
-    <div className={styles.page}>
+    <div data-theme="salary" className={styles.page}>
       <main className={styles.main}>
         {/* Hero */}
         <section className={styles.hero}>

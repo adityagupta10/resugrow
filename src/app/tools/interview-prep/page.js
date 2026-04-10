@@ -401,7 +401,7 @@ export default function InterviewPrepPage() {
 
   // ── Render ───────────────────────────────────────────────────────────────
   return (
-    <div className={styles.page}>
+    <div data-theme="coach" className={styles.page}>
       <main className={styles.main}>
 
         {/* ── Hero ─────────────────────────────────────────────────────── */}
@@ -501,11 +501,11 @@ export default function InterviewPrepPage() {
                       cursor: 'pointer',
                       fontSize: '14px',
                       fontWeight: focusArea === opt.value ? 700 : 500,
-                      color: focusArea === opt.value ? '#4f46e5' : '#4b5563',
+                      color: focusArea === opt.value ? 'var(--primary)' : '#4b5563',
                       padding: '7px 16px',
                       borderRadius: '20px',
-                      border: focusArea === opt.value ? '2px solid #4f46e5' : '2px solid #e5e7eb',
-                      background: focusArea === opt.value ? '#ede9fe' : 'white',
+                      border: focusArea === opt.value ? '2px solid var(--primary)' : '2px solid #e5e7eb',
+                      background: focusArea === opt.value ? 'var(--primary-50)' : 'white',
                       transition: 'all 0.2s ease',
                       userSelect: 'none',
                     }}
@@ -679,7 +679,7 @@ export default function InterviewPrepPage() {
           <div className={styles.practiceSection}>
             <div className={styles.practiceSectionHeader}>
               <h2>Practice Cards ({practiceCards.length} saved)</h2>
-              <BookOpen size={22} color="#4f46e5" />
+              <BookOpen size={22} color="var(--primary)" />
             </div>
             <div className={styles.practiceGrid}>
               {practiceCards.map((card) => (

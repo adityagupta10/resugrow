@@ -604,7 +604,7 @@ export default function CoverLetterBuilderClient() {
           ))}
         </div>
       </div>
-      <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '12px', padding: '16px 20px', fontSize: '14px', color: '#1e40af' }}>
+      <div style={{ background: '#f0fdf4', border: '1px solid #bcf0da', borderRadius: '12px', padding: '16px 20px', fontSize: '14px', color: '#166534' }}>
         ✅ You're all set! Click <strong>Next →</strong> to see your cover letter preview and make final edits.
       </div>
     </div>,
@@ -687,7 +687,7 @@ export default function CoverLetterBuilderClient() {
               <div style={{ display: 'flex', gap: '6px' }}>
                 {[['short','Short'],['medium','Medium'],['detailed','Detailed']].map(([v,l]) => (
                   <button key={v} type="button" onClick={() => setLen(v)}
-                    style={{ padding: '5px 12px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid', borderColor: letterLength === v ? '#2563eb' : '#e2e8f0', background: letterLength === v ? '#eff6ff' : 'white', color: letterLength === v ? '#2563eb' : '#64748b', cursor: 'pointer' }}>
+                    style={{ padding: '5px 12px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid', borderColor: letterLength === v ? '#16a34a' : '#e2e8f0', background: letterLength === v ? '#f0fdf4' : 'white', color: letterLength === v ? '#16a34a' : '#64748b', cursor: 'pointer' }}>
                     {l}
                   </button>
                 ))}
@@ -695,7 +695,7 @@ export default function CoverLetterBuilderClient() {
             </div>
 
             <button type="button" onClick={() => setRndKey(k => k + 1)}
-              style={{ width: '100%', padding: '9px', border: '2px solid #2563eb', borderRadius: '10px', background: 'white', color: '#2563eb', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+              style={{ width: '100%', padding: '9px', border: '2px solid #16a34a', borderRadius: '10px', background: 'white', color: '#16a34a', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
               🎲 Regenerate Content
             </button>
           </div>
@@ -735,7 +735,7 @@ export default function CoverLetterBuilderClient() {
             <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
               {[['12px','Small'],['14px','Medium'],['16px','Large']].map(([v,l]) => (
                 <button key={v} type="button" onClick={() => setFontSize(v)}
-                  style={{ flex: 1, padding: '8px 4px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: '1.5px solid', borderColor: fontSize === v ? '#2563eb' : '#e2e8f0', background: fontSize === v ? '#eff6ff' : 'white', color: fontSize === v ? '#2563eb' : '#64748b', cursor: 'pointer' }}>
+                  style={{ flex: 1, padding: '8px 4px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: '1.5px solid', borderColor: fontSize === v ? '#16a34a' : '#e2e8f0', background: fontSize === v ? '#f0fdf4' : 'white', color: fontSize === v ? '#16a34a' : '#64748b', cursor: 'pointer' }}>
                   {l}
                 </button>
               ))}
@@ -743,7 +743,7 @@ export default function CoverLetterBuilderClient() {
 
             {/* Download buttons */}
             <p style={sectionLabel}>Export Format</p>
-            {dlBtn(downloadPDF, '#2563eb', 'white', <><span style={{ fontSize: '18px' }}>📄</span><div><div style={{ fontSize: '13px' }}>Download PDF</div><div style={{ fontSize: '10px', opacity: 0.8, fontWeight: 400 }}>Best for job applications</div></div></>)}
+            {dlBtn(downloadPDF, '#16a34a', 'white', <><span style={{ fontSize: '18px' }}>📄</span><div><div style={{ fontSize: '13px' }}>Download PDF</div><div style={{ fontSize: '10px', opacity: 0.8, fontWeight: 400 }}>Best for job applications</div></div></>)}
             {dlBtn(downloadWord, '#1d6f42', 'white', <><span style={{ fontSize: '18px' }}>📝</span><div><div style={{ fontSize: '13px' }}>Download Word (.doc)</div><div style={{ fontSize: '10px', opacity: 0.8, fontWeight: 400 }}>Editable in Microsoft Word</div></div></>)}
             {dlBtn(downloadText, 'white', '#374151', <><span style={{ fontSize: '18px' }}>📋</span><div><div style={{ fontSize: '13px' }}>Export Plain Text</div><div style={{ fontSize: '10px', color: '#64748b', fontWeight: 400 }}>For online application forms</div></div></>)}
 
@@ -754,7 +754,7 @@ export default function CoverLetterBuilderClient() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '20px' }}>
               {TEMPLATES.map(t => (
                 <button key={t.id} type="button" onClick={() => setField('templateId', t.id)}
-                  style={{ padding: '8px', border: '1.5px solid', borderColor: form.templateId === t.id ? '#2563eb' : '#e2e8f0', borderRadius: '8px', background: form.templateId === t.id ? '#eff6ff' : 'white', fontSize: '12px', fontWeight: 600, color: form.templateId === t.id ? '#2563eb' : '#475569', cursor: 'pointer' }}>
+                  style={{ padding: '8px', border: '1.5px solid', borderColor: form.templateId === t.id ? '#16a34a' : '#e2e8f0', borderRadius: '8px', background: form.templateId === t.id ? '#f0fdf4' : 'white', fontSize: '12px', fontWeight: 600, color: form.templateId === t.id ? '#16a34a' : '#475569', cursor: 'pointer' }}>
                   {t.label}
                 </button>
               ))}
@@ -784,7 +784,7 @@ export default function CoverLetterBuilderClient() {
 
   // ── Wizard layout ─────────────────────────────────────────────────────
   return (
-    <div className={styles.wizardPage}>
+    <div data-theme="letters" className={styles.wizardPage}>
       {/* Sidebar */}
       <aside className={styles.sidebar}>
         <Link href="/" className={styles.sidebarLogo}>

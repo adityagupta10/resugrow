@@ -119,8 +119,8 @@ export default function Hero() {
                 </TrackedLink>
               </div>
               <div className={styles.heroSecondaryActions}>
-                <TrackedLink href="/linkedin-makeover" ctaName="linkedin_makeover" ctaPage="Homepage" ctaLocation="hero" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
-                  Linkedin Profile Makeover
+                <TrackedLink href="/tools" ctaName="all_tools" ctaPage="Homepage" ctaLocation="hero" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
+                  Explore All Career Tools
                 </TrackedLink>
               </div>
             </div>

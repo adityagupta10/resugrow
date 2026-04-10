@@ -406,6 +406,51 @@
   background: linear-gradient(180deg, #fcfaff 0%, #f6f0ff 100%);
 }
 
+.pillarCardLinkedIn {
+  border-color: #bfdbfe;
+  background: linear-gradient(180deg, #f8faff 0%, #eff6ff 100%);
+}
+
+.pillarCardLetters {
+  border-color: #bbf7d0;
+  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.pillarCardCareer {
+  border-color: #fef08a;
+  background: linear-gradient(180deg, #fffbeb 0%, #fef9c3 100%);
+}
+
+.pillarCardCoach {
+  border-color: #fed7aa;
+  background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%);
+}
+
+.pillarCardTrack {
+  border-color: #94a3b8;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.pillarCardSAR {
+  border-color: #fca5a5;
+  background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+}
+
+.pillarCardMarket {
+  border-color: #f9a8d4;
+  background: linear-gradient(180deg, #fdf2f8 0%, #fce7f3 100%);
+}
+
+.pillarCardSalary {
+  border-color: #86efac;
+  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.pillarCardPath {
+  border-color: #93c5fd;
+  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+}
+
 .pillarTag {
   display: inline-flex;
   border-radius: 999px;
@@ -423,6 +468,117 @@
   border-color: #d8b4fe;
   background: #f1e9ff;
   color: #6d28d9;
+}
+.pillarCardResume .pillarCtaBtn {
+  --btn-base: #7c3aed;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+  color: white !important;
+  border-color: #c4b5fd !important;
+  box-shadow: 0 8px 18px rgba(124, 58, 237, 0.28) !important;
+}
+
+.pillarCardLinkedIn .pillarTag {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+.pillarCardLinkedIn .pillarCtaBtn {
+  --btn-base: #1d4ed8;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  color: white !important;
+  border-color: #bae6fd !important;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28) !important;
+}
+
+.pillarCardLetters .pillarTag {
+  border-color: #86efac;
+  background: #dcfce7;
+  color: #15803d;
+}
+.pillarCardLetters .pillarCtaBtn {
+  --btn-base: #16a34a;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  color: white !important;
+  border-color: #bbf7d0 !important;
+  box-shadow: 0 8px 18px rgba(22, 163, 74, 0.28) !important;
+}
+
+.pillarCardSAR .pillarTag {
+  border-color: #f87171;
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.pillarCardSAR .pillarCtaBtn {
+  --btn-base: #dc2626;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;
+  border-color: #fca5a5 !important;
+  box-shadow: 0 8px 18px rgba(220, 38, 38, 0.28) !important;
+}
+
+.pillarCardCoach .pillarTag {
+  border-color: #fdba74;
+  background: #ffedd5;
+  color: #c2410c;
+}
+.pillarCardCoach .pillarCtaBtn {
+  --btn-base: #4f46e5;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+  color: white !important;
+  border-color: #c7d2fe !important;
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.28) !important;
+}
+
+.pillarCardTrack .pillarTag {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+  color: #475569;
+}
+.pillarCardTrack .pillarCtaBtn {
+  --btn-base: #475569;
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%) !important;
+  color: white !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 8px 18px rgba(71, 85, 105, 0.28) !important;
+}
+
+.pillarCardMarket .pillarTag {
+  border-color: #f472b6;
+  background: #fce7f3;
+  color: #be185d;
+}
+.pillarCardMarket .pillarCtaBtn {
+  --btn-base: #db2777;
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%) !important;
+  color: white !important;
+  border-color: #f9a8d4 !important;
+  box-shadow: 0 8px 18px rgba(219, 39, 119, 0.28) !important;
+}
+
+.pillarCardSalary .pillarTag {
+  border-color: #4ade80;
+  background: #dcfce7;
+  color: #15803d;
+}
+.pillarCardSalary .pillarCtaBtn {
+  --btn-base: #059669;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: white !important;
+  border-color: #86efac !important;
+  box-shadow: 0 8px 18px rgba(5, 150, 105, 0.28) !important;
+}
+
+.pillarCardPath .pillarTag {
+  border-color: #60a5fa;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+.pillarCardPath .pillarCtaBtn {
+  --btn-base: #0891b2;
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+  color: white !important;
+  border-color: #67e8f9 !important;
+  box-shadow: 0 8px 18px rgba(8, 145, 178, 0.28) !important;
 }
 
 .pillarCard h3 {
@@ -467,6 +623,38 @@
 
 .pillarCardResume li::before {
   background: #8b5cf6;
+}
+
+.pillarCardLetters li::before {
+  background: #22c55e;
+}
+
+.pillarCardSAR li::before {
+  background: #ef4444;
+}
+
+.pillarCardCoach li::before {
+  background: #6366f1;
+}
+
+.pillarCardTrack li::before {
+  background: #64748b;
+}
+
+.pillarCardLinkedIn li::before {
+  background: #2563eb;
+}
+
+.pillarCardMarket li::before {
+  background: #ec4899;
+}
+
+.pillarCardSalary li::before {
+  background: #10b981;
+}
+
+.pillarCardPath li::before {
+  background: #06b6d4;
 }
 
 .pillarCtaBtn {
