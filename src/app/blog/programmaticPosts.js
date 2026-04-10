@@ -36,12 +36,6 @@ const COVER_POOL = [
   { src: '/templates/customer-success-resume-design-13.png', theme: 'resume' },
   { src: '/templates/freelance-consultant-cv-template-14.png', theme: 'resume' },
   { src: '/templates/academic-research-cv-format-15.png', theme: 'resume' },
-  { src: '/linkedin-save-pdf-guide.png', theme: 'linkedin' },
-  { src: '/linkedin-makeover.png', theme: 'linkedin' },
-  { src: '/hero-images/ats-optimized-resume-builder-preview.webp', theme: 'resume' },
-  { src: '/hero-images/professional-resume-template-ats-friendly.webp', theme: 'resume' },
-  { src: '/hero-images/ai-resume-builder-job-application-template.webp', theme: 'ats' },
-  { src: '/hero-images/resume-template-interview-call-rate-boost.webp', theme: 'resume' },
 ];
 
 function slugHash(slug) {

@@ -407,8 +407,8 @@
 }
 
 .pillarCardLinkedIn {
-  border-color: #bfdbfe;
-  background: linear-gradient(180deg, #f8faff 0%, #eff6ff 100%);
+  border-color: #0077b5;
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
 }
 
 .pillarCardLetters {
@@ -422,8 +422,8 @@
 }
 
 .pillarCardCoach {
-  border-color: #fed7aa;
-  background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%);
+  border-color: #93c5fd;
+  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
 }
 
 .pillarCardTrack {
@@ -437,8 +437,8 @@
 }
 
 .pillarCardMarket {
-  border-color: #f9a8d4;
-  background: linear-gradient(180deg, #fdf2f8 0%, #fce7f3 100%);
+  border-color: #93c5fd;
+  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
 }
 
 .pillarCardSalary {
@@ -478,16 +478,16 @@
 }
 
 .pillarCardLinkedIn .pillarTag {
-  border-color: #bfdbfe;
-  background: #eff6ff;
-  color: #1d4ed8;
+  border-color: #0077b5;
+  background: #e0f2fe;
+  color: #0077b5;
 }
 .pillarCardLinkedIn .pillarCtaBtn {
-  --btn-base: #1d4ed8;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  --btn-base: #0077b5;
+  background: linear-gradient(135deg, #007dba 0%, #0077b5 100%) !important;
   color: white !important;
-  border-color: #bae6fd !important;
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28) !important;
+  border-color: #7dd3fc !important;
+  box-shadow: 0 8px 18px rgba(0, 119, 181, 0.28) !important;
 }
 
 .pillarCardLetters .pillarTag {
@@ -517,16 +517,16 @@
 }
 
 .pillarCardCoach .pillarTag {
-  border-color: #fdba74;
-  background: #ffedd5;
-  color: #c2410c;
+  border-color: #60a5fa;
+  background: #eff6ff;
+  color: #1d4ed8;
 }
 .pillarCardCoach .pillarCtaBtn {
-  --btn-base: #4f46e5;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+  --btn-base: #2563eb;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
   color: white !important;
-  border-color: #c7d2fe !important;
-  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.28) !important;
+  border-color: #93c5fd !important;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28) !important;
 }
 
 .pillarCardTrack .pillarTag {
@@ -543,16 +543,16 @@
 }
 
 .pillarCardMarket .pillarTag {
-  border-color: #f472b6;
-  background: #fce7f3;
-  color: #be185d;
+  border-color: #60a5fa;
+  background: #eff6ff;
+  color: #1d4ed8;
 }
 .pillarCardMarket .pillarCtaBtn {
-  --btn-base: #db2777;
-  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%) !important;
+  --btn-base: #1d4ed8;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
   color: white !important;
-  border-color: #f9a8d4 !important;
-  box-shadow: 0 8px 18px rgba(219, 39, 119, 0.28) !important;
+  border-color: #93c5fd !important;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28) !important;
 }
 
 .pillarCardSalary .pillarTag {
@@ -642,11 +642,11 @@
 }
 
 .pillarCardLinkedIn li::before {
-  background: #2563eb;
+  background: #1e40af;
 }
 
 .pillarCardMarket li::before {
-  background: #ec4899;
+  background: #2563eb;
 }
 
 .pillarCardSalary li::before {

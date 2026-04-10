@@ -1,60 +1,45 @@
-const TITLE_TO_IMAGE = {
-  'The Top 10 ATS Keywords for Tech Roles in 2026': '/images/blog/ats-keywords-tech-roles-2026.png',
-  'Answering "Tell Me About Yourself" in Interviews': '/images/blog/tell-me-about-yourself-interview-answer.png',
-  'How to Explain an Employment Gap on Your Resume': '/images/blog/explain-employment-gap-resume.png',
-  'When to Use a Two-Page Resume': '/images/blog/when-to-use-two-page-resume.png',
-  'Following Up After an Interview (With Templates)': '/images/blog/follow-up-after-interview-email-templates.png',
-  'The 2026 Guide to ATS-Friendly Resumes: Why Your PDF Might Be Failing': '/images/blog/ats-friendly-resume-guide-2026.png',
-  'Word vs. PDF: Which Resume Format Do Recruiters Actually Prefer?': '/images/blog/word-vs-pdf-resume-format-recruiters.png',
-  'Stop Using Adjectives: How to Quantify Your Resume with Hard Metrics and ROI': '/images/blog/quantify-resume-metrics-roi-guide.png',
-  'How to Highlight Professional Certifications and Technical Stacks on a Resume': '/images/blog/certifications-technical-skills-resume.png',
-  'Closing the Deal: How to Write a High-Converting Sales Executive Resume': '/images/blog/sales-executive-resume-writing-guide.png',
-  'The MarTech Resume: Formatting for Digital, Operations, and Analytics Roles': '/images/blog/martech-resume-digital-marketing-format.png',
-  'How to Explain Career Gaps on Your Resume (Without Sounding Defensive)': '/images/blog/explain-career-gaps-resume-tips.png',
-  '50 High-Impact Action Verbs to Replace "Responsible For"': '/images/blog/high-impact-action-verbs-resume-guide.png',
-  'Tailoring at Scale: How to Adjust One Core Resume for 5 Different Job Applications': '/images/blog/tailoring-resume-multiple-job-applications.png',
-  'The 6-Second Test: What Recruiters Actually Look For When Scanning Your Resume': '/images/blog/recruiter-resume-scan-6-second-test.png',
-  '12 Interview Questions You Should Always Ask (And Why They Work)': '/images/blog/interview-questions-to-ask-hiring-manager.png',
-  'The Remote Job Search Strategy That Landed Me 4 Offers in 6 Weeks': '/images/blog/remote-job-search-strategy-4-offers.png',
-  'How to Write a Cover Letter That Actually Gets Read in 2025': '/images/blog/cover-letter-gets-read-2025.png',
-  'Salary Negotiation Scripts That Actually Work (With Real Examples)': '/images/blog/salary-negotiation-scripts-examples.png',
-  'The Complete LinkedIn Profile Optimization Guide for 2025': '/images/blog/linkedin-profile-optimization-guide.png',
-  'How to Write a Resume Summary That Gets Noticed in Under 10 Seconds': '/images/blog/resume-summary-noticed-10-seconds.png',
-  "How to Write a Career Change Resume (When You're Starting From Scratch)": '/images/blog/career-change-resume-guide.png',
-};
+const DARK_BACKGROUNDS = [
+  '/images/blog/bg/dark_bg_1.png',
+  '/images/blog/bg/dark_bg_2.png',
+  '/images/blog/bg/dark_bg_3.png',
+  '/images/blog/bg/dark_bg_4.png',
+  '/images/blog/bg/dark_bg_5.png',
+  '/images/blog/bg/dark_bg_6.png',
+  '/images/blog/bg/dark_bg_7.png',
+  '/images/blog/bg/dark_bg_8.png',
+  '/images/blog/bg/dark_bg_9.png',
+  '/images/blog/bg/dark_bg_10.png',
+];
 
-const COMMON_IMAGE = '/images/blog/common.png';
+// Resume/career template images used for in-article screenshots
+const COVER_POOL = [
+  { src: '/templates/ats-friendly-professional-resume-template-1.png', theme: 'resume' },
+  { src: '/templates/modern-creative-cv-layout-template-2.png', theme: 'resume' },
+  { src: '/templates/executive-leadership-resume-design-3.png', theme: 'ats' },
+  { src: '/templates/entry-level-graduate-resume-format-4.png', theme: 'resume' },
+  { src: '/templates/tech-software-engineer-resume-template-5.png', theme: 'ats' },
+  { src: '/templates/minimalist-clean-resume-builder-template-6.png', theme: 'resume' },
+  { src: '/templates/marketing-manager-creative-resume-7.png', theme: 'resume' },
+  { src: '/templates/finance-accounting-professional-cv-8.png', theme: 'ats' },
+  { src: '/templates/data-science-analytics-resume-template-9.png', theme: 'resume' },
+  { src: '/templates/healthcare-medical-resume-format-10.png', theme: 'resume' },
+  { src: '/templates/project-manager-agile-resume-template-11.png', theme: 'resume' },
+  { src: '/templates/sales-executive-resume-layout-12.png', theme: 'resume' },
+  { src: '/templates/customer-success-resume-design-13.png', theme: 'resume' },
+  { src: '/templates/freelance-consultant-cv-template-14.png', theme: 'resume' },
+  { src: '/templates/academic-research-cv-format-15.png', theme: 'resume' },
+];
 
-const ALL_BLOG_IMAGES = [
-  '/images/blog/recruiter-resume-scan-6-second-test.png',
-  '/images/blog/tailoring-resume-multiple-job-applications.png',
-  '/images/blog/high-impact-action-verbs-resume-guide.png',
-  '/images/blog/explain-career-gaps-resume-tips.png',
-  '/images/blog/martech-resume-digital-marketing-format.png',
-  '/images/blog/sales-executive-resume-writing-guide.png',
-  '/images/blog/certifications-technical-skills-resume.png',
-  '/images/blog/quantify-resume-metrics-roi-guide.png',
-  '/images/blog/word-vs-pdf-resume-format-recruiters.png',
-  '/images/blog/ats-friendly-resume-guide-2026.png',
-  '/images/blog/follow-up-after-interview-email-templates.png',
-  '/images/blog/when-to-use-two-page-resume.png',
-  '/images/blog/explain-employment-gap-resume.png',
-  '/images/blog/tell-me-about-yourself-interview-answer.png',
-  '/images/blog/ats-keywords-tech-roles-2026.png',
-  '/images/blog/career-change-resume-guide.png',
-  '/images/blog/resume-summary-examples-guide.png',
-  '/images/blog/resume-summary-noticed-10-seconds.png',
-  '/images/blog/linkedin-profile-optimization-guide.png',
-  '/images/blog/salary-negotiation-scripts-examples.png',
-  '/images/blog/cover-letter-gets-read-2025.png',
-  '/images/blog/remote-job-search-strategy-4-offers.png',
-  '/images/blog/interview-questions-to-ask-hiring-manager.png',
+// Curated emoji pool using .png files from /public/emoji
+const EMOJI_POOL = [
+  '/emoji/bar-chart-resume-career-icon.png', '/emoji/bolt-resume-career-icon.png', '/emoji/bookmark-tabs-resume-career-icon.png', '/emoji/books-resume-career-icon.png', '/emoji/briefcase-resume-career-icon.png', '/emoji/bubbles-resume-career-icon.png', '/emoji/building-construction-resume-career-icon.png', '/emoji/bust-in-silhouette-resume-career-icon.png', '/emoji/calendar-resume-career-icon.png', '/emoji/card-index-resume-career-icon.png', '/emoji/chart-increasing-resume-career-icon.png', '/emoji/check-mark-button-resume-career-icon.png', '/emoji/clipboard-resume-career-icon.png', '/emoji/clockwise-vertical-arrows-resume-career-icon.png', '/emoji/confused-face-resume-career-icon.png', '/emoji/counterclockwise-arrows-resume-career-icon.png', '/emoji/credit-card-resume-career-icon.png', '/emoji/cross-mark-resume-career-icon.png', '/emoji/direct-hit-resume-career-icon.png', '/emoji/envelope-resume-career-icon.png', '/emoji/eye-resume-career-icon.png', '/emoji/file-folder-resume-career-icon.png', '/emoji/flexed-biceps-resume-career-icon.png', '/emoji/game-die-resume-career-icon.png', '/emoji/gear-resume-career-icon.png', '/emoji/hammer-and-wrench-resume-career-icon.png', '/emoji/handshake-resume-career-icon.png', '/emoji/hourglass-done-resume-career-icon.png', '/emoji/inbox-tray-resume-career-icon.png', '/emoji/information-resume-career-icon.png', '/emoji/light-bulb-resume-career-icon.png', '/emoji/locked-resume-career-icon.png', '/emoji/magic-wand-resume-career-icon.png', '/emoji/magnifying-glass-resume-career-icon.png', '/emoji/memo-resume-career-icon.png', '/emoji/one-oclock-resume-career-icon.png', '/emoji/open-book-resume-career-icon.png', '/emoji/outbox-tray-resume-career-icon.png', '/emoji/page-facing-up-resume-career-icon.png', '/emoji/puzzle-piece-resume-career-icon.png', '/emoji/red-circle-resume-career-icon.png', '/emoji/robot-resume-career-icon.png', '/emoji/rocket-resume-career-icon.png', '/emoji/round-pushpin-resume-career-icon.png', '/emoji/shield-resume-career-icon.png', '/emoji/sparkles-resume-career-icon.png', '/emoji/speech-balloon-resume-career-icon.png', '/emoji/star-resume-career-icon.png', '/emoji/straight-ruler-resume-career-icon.png', '/emoji/warning-resume-career-icon.png', '/emoji/writing-hand-resume-career-icon.png'
 ];
 
 function slugHash(slug) {
   let h = 2166136261;
-  for (let i = 0; i < slug.length; i++) {
-    h ^= slug.charCodeAt(i);
+  const s = slug || '';
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
     h = Math.imul(h, 16777619);
   }
   return h >>> 0;
@@ -66,47 +51,47 @@ function buildCoverAlt(post) {
 }
 
 function resolveCoverImage(post) {
-  const mapped = TITLE_TO_IMAGE[post.title];
-  if (mapped) return mapped;
-
-  // 40% of unmapped posts: use common.png. Remaining 60%: deterministic pick from pool.
+  // Deterministic pick from the dark background pool
   const h = slugHash(post.slug || post.title || '');
-  if (h % 100 < 40) return COMMON_IMAGE;
-
-  return ALL_BLOG_IMAGES[h % ALL_BLOG_IMAGES.length] || COMMON_IMAGE;
-}
-
-function pickSecondaryImage(post, avoidSrc) {
-  const h = slugHash(`${post.slug || post.title || ''}::secondary`);
-  const pool = ALL_BLOG_IMAGES.filter((s) => s !== avoidSrc);
-  return pool[h % pool.length] || COMMON_IMAGE;
+  return DARK_BACKGROUNDS[h % DARK_BACKGROUNDS.length];
 }
 
 export function attachBlogImagesToPost(post) {
   const coverImage = resolveCoverImage(post);
   const coverAlt = buildCoverAlt(post);
-  const coverShot = {
-    src: coverImage,
-    alt: coverAlt,
-    caption: `Cover visual for ${post.title}.`,
-  };
 
-  const existing = Array.isArray(post.screenshots) ? post.screenshots : [];
-  const filtered = existing.filter((s) => s?.src && s.src !== coverImage);
+  // Assign a deterministic emoji from the png pool for all posts (overriding any old hardcoded unicode emojis)
+  const coverEmoji = EMOJI_POOL[slugHash(post.slug || post.title || '') % EMOJI_POOL.length];
 
-  const secondarySrc = pickSecondaryImage(post, coverImage);
-  const secondaryShot = {
-    src: secondarySrc,
-    alt: `${post.title} supporting image for RESUGROW blog with ATS optimization and recruiter scan guidance`,
-    caption: `Supporting visual for ${post.category || 'this guide'}.`,
-  };
+  // Only generate screenshots if the post doesn't already have them
+  let screenshots = post.screenshots;
+  if (!screenshots || screenshots.length === 0) {
+    const h = slugHash(post.slug || post.title || '');
+    const primaryIdx = h % COVER_POOL.length;
+    const secondaryIdx = (h + 5) % COVER_POOL.length;
 
-  const screenshots = [coverShot, ...(filtered.length ? filtered : [secondaryShot])].slice(0, 2);
+    const primaryShot = COVER_POOL[primaryIdx];
+    const secondaryShot = COVER_POOL[secondaryIdx];
+
+    screenshots = [
+      {
+        src: primaryShot.src,
+        alt: `${post.title} overview screenshot illustrating ${post.category || 'career'} best practices for recruiters and ATS parsing`,
+        caption: `Overview: example visual used to explain ${(post.category || 'career').toLowerCase()} improvements.`,
+      },
+      {
+        src: secondaryShot.src,
+        alt: `${post.title} example screenshot illustrating ${post.category || 'career'} best practices for recruiters and ATS parsing`,
+        caption: `Example: supporting visual for ${(post.category || 'career').toLowerCase()} guide.`,
+      },
+    ];
+  }
 
   return {
     ...post,
     coverImage,
     coverAlt,
+    coverEmoji,
     screenshots,
   };
 }

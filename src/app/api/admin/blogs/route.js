@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
 async function checkAdminStatus() {
-  if (process.env.NODE_ENV !== 'development') return false;
-  
   const cookieStore = await cookies();
   const serverSupabase = createClient(cookieStore);
   const { data: { user } } = await serverSupabase.auth.getUser();
@@ -13,7 +11,7 @@ async function checkAdminStatus() {
   if (!user || !user.email) {
     return false;
   }
-  
+
   const adminEmail = "aditya.gupta10jan@gmail.com";
   return user.email.toLowerCase() === adminEmail.toLowerCase();
 }
@@ -24,8 +22,12 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server misconfigured — missing SUPABASE_SERVICE_ROLE_KEY' }, { status: 500 });
+  }
+
   try {
-    const { data: blogs, error } = await supabase
+    const { data: blogs, error } = await supabaseAdmin
       .from('BlogPost')
       .select('*')
       .order('createdAt', { ascending: false });
@@ -44,6 +46,10 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server misconfigured — missing SUPABASE_SERVICE_ROLE_KEY' }, { status: 500 });
+  }
+
   try {
     const data = await request.json();
     
@@ -51,7 +57,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const { data: newPost, error } = await supabase
+    const { data: newPost, error } = await supabaseAdmin
       .from('BlogPost')
       .insert([
         {

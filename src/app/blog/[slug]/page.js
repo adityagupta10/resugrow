@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { posts } from '../data';
+import { attachBlogImagesToPost } from '../blogImages';
 import { createPageMetadata, getArticleJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
 import styles from './post.module.css';
 
@@ -21,7 +22,9 @@ export async function generateMetadata({ params }) {
       .select('*')
       .eq('slug', slug)
       .single();
-    post = dbPost;
+    if (dbPost) {
+      post = attachBlogImagesToPost(dbPost);
+    }
   }
 
   if (!post) return {};
@@ -84,14 +87,14 @@ const defaultToolLinks = [
 
 const defaultScreenshots = [
   {
-    src: '/templates/executive-leadership-resume-design-3.png',
+    src: '/templates/ats-friendly-professional-resume-template-1.png',
     alt: 'ATS-friendly resume template screenshot with clean one-column format',
     caption: 'ATS-friendly resume layout example'
   },
   {
-    src: '/linkedin-makeover.png',
-    alt: 'LinkedIn profile optimization example from RESUGROW tool experience',
-    caption: 'LinkedIn optimization workflow preview'
+    src: '/templates/minimalist-clean-resume-builder-template-6.png',
+    alt: 'Minimalist resume builder template showing clean ATS-optimized layout',
+    caption: 'Clean resume template preview'
   }
 ];
 
@@ -169,7 +172,9 @@ export default async function BlogPost({ params }) {
       .select('*')
       .eq('slug', slug)
       .single();
-    post = dbPost;
+    if (dbPost) {
+      post = attachBlogImagesToPost(dbPost);
+    }
   }
 
   if (!post) notFound();
@@ -222,14 +227,14 @@ export default async function BlogPost({ params }) {
         <nav className={styles.breadcrumb}>
           <Link href="/blog">Blog</Link>
           <span>›</span>
-          <span>{post.category}</span>
+          <Link href={`/blog?category=${encodeURIComponent(post.category)}`}>{post.category}</Link>
         </nav>
 
         <article className={styles.article}>
           {/* Header */}
           <header className={styles.header}>
             <div className={styles.headerMeta}>
-              <span className={styles.catBadge}>{post.category}</span>
+              <Link href={`/blog?category=${encodeURIComponent(post.category)}`} className={styles.catBadge}>{post.category}</Link>
               <span className={styles.metaDot}>·</span>
               <span className={styles.metaText}>{post.readTime}</span>
               <span className={styles.metaDot}>·</span>
@@ -249,21 +254,19 @@ export default async function BlogPost({ params }) {
           </header>
 
           {/* Cover emoji banner */}
-          <div className={styles.coverBanner}>
-            {post.coverImage ? (
-              <div className={styles.coverMedia}>
-                {/* Use a responsive img here to preserve each cover image's natural aspect ratio (no cropping). */}
-                <img
-                  src={post.coverImage}
-                  alt={post.coverAlt || `${post.title} cover image`}
-                  className={styles.coverImg}
-                  loading="eager"
-                  decoding="async"
-                />
-              </div>
-            ) : (
-              <span className={styles.coverEmoji}>{post.coverEmoji}</span>
-            )}
+          <div
+            className={styles.coverBanner}
+            role="img"
+            aria-label={post.coverAlt || `${post.title} — visual icon representing ${post.category || 'career'} content`}
+          >
+            <Image
+              src={post.coverEmoji}
+              alt=""
+              width={100}
+              height={100}
+              className={styles.coverEmojiImage}
+              priority
+            />
           </div>
 
           <ToolCtaStrip title="Apply this guide immediately with RESUGROW tools" links={toolLinks} />
@@ -323,7 +326,7 @@ export default async function BlogPost({ params }) {
             <div className={styles.relatedGrid}>
               {related.map((p) => (
                 <Link key={p.slug} href={`/blog/${p.slug}`} className={styles.relatedCard}>
-                  <span className={styles.relatedEmoji}>{p.coverEmoji}</span>
+                  <Image src={p.coverEmoji} alt="" width={32} height={32} className={styles.relatedEmojiImage} />
                   <div>
                     <span className={styles.catBadge}>{p.category}</span>
                     <h4 className={styles.relatedCardTitle}>{p.title}</h4>

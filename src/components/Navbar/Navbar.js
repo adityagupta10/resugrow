@@ -14,7 +14,7 @@ const dropdownSections = [
     label: "Resume",
     badge: "1 New",
     items: [
-      { label: "AI Powered Resume Builder", href: "/resume/builder", badge: "⚡", badgeStyle: "white" },
+      { label: "AI Resume Builder", href: "/resume/ai-builder", badge: "⚡", badgeStyle: "white" },
       { label: "ATS Score Checker", href: "/resume/ats-checker", badge: "🎯", badgeStyle: "white" },
       { label: "High Impact Templates", href: "/resume/templates", badge: "📝", badgeStyle: "white" },
       { label: "Community Template Marketplace", href: "/resume/template-marketplace", badge: "New", badgeStyle: "green" },

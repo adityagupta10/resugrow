@@ -1,32 +1,33 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
-async function getAuthenticatedClient() {
+async function checkAdminStatus() {
   const cookieStore = await cookies();
   const serverSupabase = createClient(cookieStore);
   const { data: { user } } = await serverSupabase.auth.getUser();
-  
+
   const adminEmail = "aditya.gupta10jan@gmail.com";
-  const isAdmin = user && user.email && user.email.toLowerCase() === adminEmail.toLowerCase();
-  
-  return { serverSupabase, isAdmin };
+  return user && user.email && user.email.toLowerCase() === adminEmail.toLowerCase();
 }
 
 const EMOJI_POOL = ['🚀', '📈', '💼', '💡', '🎯', '🧠', '✨', '🔥', '🏆', '📝', '🤝', '🌐', '📊', '💎', '🎨'];
 const getRandomEmoji = () => EMOJI_POOL[Math.floor(Math.random() * EMOJI_POOL.length)];
 
 export async function GET(request, { params }) {
-  const { serverSupabase, isAdmin } = await getAuthenticatedClient();
+  const isAdmin = await checkAdminStatus();
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server misconfigured — missing SUPABASE_SERVICE_ROLE_KEY' }, { status: 500 });
   }
 
   const { id } = await params;
 
   try {
-    const { data: blog, error } = await serverSupabase
+    const { data: blog, error } = await supabaseAdmin
       .from('BlogPost')
       .select('*')
       .eq('id', id)
@@ -43,9 +44,12 @@ export async function GET(request, { params }) {
 }
 
 export async function PATCH(request, { params }) {
-  const { serverSupabase, isAdmin } = await getAuthenticatedClient();
+  const isAdmin = await checkAdminStatus();
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server misconfigured — missing SUPABASE_SERVICE_ROLE_KEY' }, { status: 500 });
   }
 
   const { id } = await params;
@@ -76,7 +80,7 @@ export async function PATCH(request, { params }) {
       updatedAt: new Date().toISOString(),
     };
 
-    const { data: updatedPost, error } = await serverSupabase
+    const { data: updatedPost, error } = await supabaseAdmin
       .from('BlogPost')
       .update(updateData)
       .eq('id', id)
@@ -100,15 +104,18 @@ export async function PATCH(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const { serverSupabase, isAdmin } = await getAuthenticatedClient();
+  const isAdmin = await checkAdminStatus();
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server misconfigured — missing SUPABASE_SERVICE_ROLE_KEY' }, { status: 500 });
   }
 
   const { id } = await params;
 
   try {
-    const { error } = await serverSupabase
+    const { error } = await supabaseAdmin
       .from('BlogPost')
       .delete()
       .eq('id', id);

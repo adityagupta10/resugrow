@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Suspense } from 'react';
 import { posts } from './data';
+import { attachBlogImagesToPost } from './blogImages';
 import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } from '@/lib/seo';
 import { supabase } from '@/lib/supabase';
+import CategoryFilter from './CategoryFilter';
 import styles from './blog.module.css';
 
 export const metadata = createPageMetadata({
@@ -13,23 +16,10 @@ export const metadata = createPageMetadata({
   keywords: ['resume tips', 'career advice', 'job search', 'ATS optimization', 'LinkedIn tips', 'salary negotiation'],
 });
 
-const categories = [
-  'All',
-  'ATS Optimization',
-  'Resume Guides',
-  'Skills Optimization',
-  'Templates',
-  'Resume Writing',
-  'LinkedIn Optimization',
-  'LinkedIn',
-  'Career Advice',
-  'Job Search',
-  'Interview Prep',
-  'Cover Letters',
-  'Career Change',
-];
+export default async function BlogPage({ searchParams }) {
+  const resolvedParams = await searchParams;
+  const activeCategory = resolvedParams?.category || 'All';
 
-export default async function BlogPage() {
   const { data: dbPosts, error } = await supabase
     .from('BlogPost')
     .select('*')
@@ -40,28 +30,31 @@ export default async function BlogPage() {
     console.error('Error fetching blogs from Supabase:', error);
   }
 
-  // Combine static and DB posts
-  const allPosts = [...(dbPosts || []), ...posts];
+  // Combine static and DB posts — process DB posts through image assignment
+  const processedDbPosts = (dbPosts || []).map(attachBlogImagesToPost);
+  const allPosts = [...processedDbPosts, ...posts];
 
-  if (allPosts.length === 0) {
-    return (
-      <div className={styles.page}>
-        <div className={styles.container}>
-          <p>No blog posts found.</p>
-        </div>
-      </div>
-    );
+  // Filter by category if one is selected
+  const filteredPosts = activeCategory === 'All'
+    ? allPosts
+    : allPosts.filter((p) => p.category === activeCategory);
+
+  if (filteredPosts.length === 0 && activeCategory !== 'All') {
+    // Show all posts if the filter returns nothing
+    // (fallback so the page never looks empty)
   }
 
-  const featured = allPosts[0];
-  const rest = allPosts.slice(1);
+  const displayPosts = filteredPosts.length > 0 ? filteredPosts : allPosts;
+  const featured = displayPosts[0];
+  const rest = displayPosts.slice(1);
+
   const breadcrumbSchema = getBreadcrumbJsonLd([
     { name: 'Home', url: SITE_URL },
     { name: 'Blog', url: `${SITE_URL}/blog` }
   ]);
   const itemListSchema = getItemListJsonLd({
     name: 'RESUGROW Blog Articles',
-    items: allPosts.map((post) => ({
+    items: displayPosts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
       name: post.title
     }))
@@ -77,126 +70,116 @@ export default async function BlogPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
       />
-      {/* Hero */}
-      <section className={styles.hero}>
+      
+      {/* Centered Hero */}
+      <section className={styles.heroSection}>
         <div className={styles.container}>
-          <div className={styles.heroBadge}>The RESUGROW Blog</div>
-          <h1 className={styles.heroTitle}>
-            Career Insights That <span className="gradient-text">Actually Move the Needle</span>
-          </h1>
-          <p className={styles.heroDesc}>
-            Practical guides on resumes, LinkedIn, interviews, and job search strategy — written by recruiters and career coaches who have seen thousands of applications.
-          </p>
+          <div className={styles.heroContent}>
+            <div className={styles.badge}>RESUGROW BLOG</div>
+            <h1 className={styles.title}>
+              Career Advice & <span className="gradient-text">Resume Strategy</span>
+            </h1>
+            <p className={styles.subtitle}>
+              Expert-backed insights to help you navigate the modern job market, optimize your ATS performance, and land your dream offer.
+            </p>
+          </div>
         </div>
       </section>
 
-      <div className={styles.container}>
-        {/* Category pills */}
-        <div className={styles.categoryRow}>
-          {categories.map((cat) => (
-            <span key={cat} className={`${styles.catPill} ${cat === 'All' ? styles.catPillActive : ''}`}>
-              {cat}
-            </span>
-          ))}
-        </div>
+      <div className={styles.mainContent}>
+        <div className={styles.container}>
+          {/* Category Navigation */}
+          <Suspense fallback={null}>
+            <CategoryFilter />
+          </Suspense>
 
-        {/* Featured post */}
-        <Link href={`/blog/${featured.slug}`} className={styles.featured}>
-          <div className={styles.featuredEmoji}>
-            {featured.coverImage ? (
-              <Image
-                src={featured.coverImage}
-                alt={featured.coverAlt || `${featured.title} cover image`}
-                fill
-                className={styles.coverImage}
-                sizes="(max-width: 900px) 100vw, 280px"
-                priority
-              />
-            ) : (
-              <span className={styles.coverEmojiFallback}>{featured.coverEmoji}</span>
-            )}
-          </div>
-          <div className={styles.featuredBody}>
-            <div className={styles.featuredMeta}>
-              <span className={styles.catBadge}>{featured.category}</span>
-              <span className={styles.metaDot}>·</span>
-              <span className={styles.metaText}>{featured.readTime}</span>
-              <span className={styles.metaDot}>·</span>
-              <span className={styles.metaText}>{featured.date}</span>
+          {/* Active filter indicator */}
+          {activeCategory !== 'All' && filteredPosts.length > 0 && (
+            <div className={styles.filterIndicator}>
+              Showing <strong>{filteredPosts.length}</strong> {filteredPosts.length === 1 ? 'article' : 'articles'} in <strong>{activeCategory}</strong>
+              <Link href="/blog" className={styles.clearFilter}>Clear filter ✕</Link>
             </div>
-            <h2 className={styles.featuredTitle}>{featured.title}</h2>
-            <p className={styles.featuredExcerpt}>{featured.excerpt}</p>
-            <div className={styles.authorRow}>
-              <div className={styles.authorAvatar} style={{ background: featured.authorColor }}>
-                {featured.authorInitials}
-              </div>
-              <div>
-                <span className={styles.authorName}>{featured.author}</span>
-                <span className={styles.authorRole}>{featured.authorRole}</span>
-              </div>
-            </div>
-          </div>
-        </Link>
+          )}
 
-        {/* Grid */}
-        <div className={styles.grid}>
-          {rest.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`} className={styles.card}>
-              <div className={styles.cardEmoji}>
-                {post.coverImage ? (
-                  <Image
-                    src={post.coverImage}
-                    alt={post.coverAlt || `${post.title} cover image`}
-                    fill
-                    className={styles.coverImage}
-                    sizes="(max-width: 600px) 100vw, 360px"
-                  />
-                ) : (
-                  <span className={styles.coverEmojiFallback}>{post.coverEmoji}</span>
-                )}
-              </div>
-              <div className={styles.cardBody}>
-                <div className={styles.cardMeta}>
-                  <span className={styles.catBadge}>{post.category}</span>
-                  <span className={styles.metaText}>{post.readTime}</span>
-                </div>
-                <h3 className={styles.cardTitle}>{post.title}</h3>
-                <p className={styles.cardExcerpt}>{post.excerpt}</p>
-                <div className={styles.cardFooter}>
-                  <div className={styles.authorRow}>
-                    <div className={styles.authorAvatarSm} style={{ background: post.authorColor }}>
-                      {post.authorInitials}
-                    </div>
-                    <span className={styles.authorName}>{post.author}</span>
+          {/* Featured Section */}
+          {featured && (
+            <div className={styles.featuredSection}>
+              <Link href={`/blog/${featured.slug}`} className={styles.featuredCard}>
+                <div className={styles.featuredCover}>
+                  {featured.coverImage && (
+                    <Image
+                      src={featured.coverImage}
+                      alt={featured.coverAlt || featured.title}
+                      fill
+                      className={styles.coverImg}
+                      priority
+                    />
+                  )}
+                  <div className={styles.coverOverlay}>
+                    <h2 className={styles.coverTitle}>{featured.title}</h2>
                   </div>
-                  <span className={styles.metaText}>{post.date}</span>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* Newsletter CTA */}
-        <div className={styles.newsletter}>
-          <div className={styles.newsletterInner}>
-            <div className={styles.newsletterEmoji}>📬</div>
-            <div>
-              <h3 className={styles.newsletterTitle}>Get career tips in your inbox</h3>
-              <p className={styles.newsletterDesc}>One practical article every week. No fluff, no spam. Join 14,000+ job seekers.</p>
+                <div className={styles.featuredInfo}>
+                  <div className={styles.postMeta}>
+                    <span className={styles.category}>{featured.category}</span>
+                    <span className={styles.dot}></span>
+                    <span>{featured.readTime}</span>
+                  </div>
+                  <p className={styles.excerpt}>{featured.excerpt}</p>
+                  <div className={styles.authorRow}>
+                    <div className={styles.avatar} style={{ background: featured.authorColor }}>
+                      {featured.authorInitials}
+                    </div>
+                    <div className={styles.authorInfo}>
+                      <span className={styles.authorName}>{featured.author}</span>
+                      <span className={styles.date}>{featured.date}</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
             </div>
-            <div className={styles.newsletterForm}>
-              <input type="email" placeholder="your@email.com" className={styles.newsletterInput} />
-              <Link href="/contact" className={styles.newsletterBtn}>Subscribe</Link>
+          )}
+
+          {/* Blog Grid */}
+          <div className={styles.blogGrid}>
+            {rest.map((post) => (
+              <Link key={post.slug} href={`/blog/${post.slug}`} className={styles.blogCard}>
+                <div className={styles.cardCover}>
+                  {post.coverImage && (
+                    <Image
+                      src={post.coverImage}
+                      alt={post.coverAlt || post.title}
+                      fill
+                      className={styles.coverImg}
+                    />
+                  )}
+                  <div className={styles.coverOverlay}>
+                    <h3 className={styles.coverTitleSmall}>{post.title}</h3>
+                  </div>
+                </div>
+                <div className={styles.cardContent}>
+                  <div className={styles.postMeta}>
+                    <span className={styles.category}>{post.category}</span>
+                    <span className={styles.dot}></span>
+                    <span>{post.readTime}</span>
+                  </div>
+                  <p className={styles.excerptSmall}>{post.excerpt}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Newsletter Section */}
+          <div className={styles.newsletterBox}>
+            <div className={styles.newsletterContent}>
+              <h3>Elevate your career search</h3>
+              <p>Get the latest resume strategies and interview hacks delivered to your inbox.</p>
+              <div className={styles.formGroup}>
+                <input type="email" placeholder="Enter your email" className={styles.input} />
+                <button className={styles.submitBtn}>Subscribe Now</button>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Tools backlink */}
-        <div style={{ textAlign: 'center', padding: '32px 0 8px' }}>
-          <p style={{ fontSize: 14, color: '#64748b', marginBottom: 12 }}>Ready to put these insights into action?</p>
-          <Link href="/tools" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', background: '#0f172a', color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: 'none' }}>
-            🛠 Explore All Career Tools →
-          </Link>
         </div>
       </div>
     </div>

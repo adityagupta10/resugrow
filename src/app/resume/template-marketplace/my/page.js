@@ -5,6 +5,8 @@ import { getUnifiedSession } from '@/lib/session';
 import { listCreatorCommunityTemplates } from '@/lib/communityTemplatesDb';
 import styles from '../marketplace.module.css';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = createPageMetadata({
   title: 'My Submitted Resume Templates | RESUGROW',
   description:

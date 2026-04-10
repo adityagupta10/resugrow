@@ -1,34 +1,24 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 
 async function checkAdminStatus() {
-  if (process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'production') return false;
-  
   const cookieStore = await cookies();
   const serverSupabase = createClient(cookieStore);
   const { data: { user } } = await serverSupabase.auth.getUser();
 
-  if (!user || !user.email) {
-    return false;
-  }
-  
   const adminEmail = "aditya.gupta10jan@gmail.com";
-  return user.email.toLowerCase() === adminEmail.toLowerCase();
+  return user && user.email && user.email.toLowerCase() === adminEmail.toLowerCase();
 }
 
 export async function POST(request) {
-  const cookieStore = await cookies();
-  const serverSupabase = createClient(cookieStore);
-  
-  // 1. Verify Admin Status
-  const { data: { user } } = await serverSupabase.auth.getUser();
-  const adminEmail = "aditya.gupta10jan@gmail.com";
-  const isAdmin = user && user.email && user.email.toLowerCase() === adminEmail.toLowerCase();
-
+  const isAdmin = await checkAdminStatus();
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server misconfigured — missing SUPABASE_SERVICE_ROLE_KEY' }, { status: 500 });
   }
 
   try {
@@ -38,8 +28,8 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid or empty blogs array' }, { status: 400 });
     }
 
-    // 2. Get all existing slugs to check for duplicates (Using Authenticated Client)
-    const { data: existingBlogs, error: fetchError } = await serverSupabase
+    // Get all existing slugs to check for duplicates
+    const { data: existingBlogs, error: fetchError } = await supabaseAdmin
       .from('BlogPost')
       .select('slug');
 
@@ -52,7 +42,6 @@ export async function POST(request) {
     const EMOJI_POOL = ['🚀', '📈', '💼', '💡', '🎯', '🧠', '✨', '🔥', '🏆', '📝', '🤝', '🌐', '📊', '💎', '🎨'];
     const getRandomEmoji = () => EMOJI_POOL[Math.floor(Math.random() * EMOJI_POOL.length)];
 
-    // 3. Separate into "To Insert" and "Skipped"
     blogs.forEach(blog => {
       if (existingSlugs.has(blog.slug)) {
         skipped.push({ title: blog.title, slug: blog.slug, reason: 'Duplicate Slug' });
@@ -83,7 +72,6 @@ export async function POST(request) {
           updatedAt: new Date().toISOString(),
           createdAt: new Date().toISOString(),
         });
-        // Add to existingSlugs to catch duplicates WITHIN the same file
         existingSlugs.add(blog.slug);
       }
     });
@@ -96,8 +84,7 @@ export async function POST(request) {
       });
     }
 
-    // 4. Batch Insert (Using Authenticated Client)
-    const { data, error } = await serverSupabase
+    const { data, error } = await supabaseAdmin
       .from('BlogPost')
       .insert(toInsert)
       .select();
