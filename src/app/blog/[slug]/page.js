@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import Script from 'next/script';
 import { posts } from '../data';
 import { attachBlogImagesToPost } from '../blogImages';
 import { createPageMetadata, getArticleJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
+import BlogAd from '@/components/Ads/BlogAd';
 import styles from './post.module.css';
 
 import { supabase } from '@/lib/supabase';
@@ -269,6 +271,9 @@ export default async function BlogPost({ params }) {
             />
           </div>
 
+          {/* Ad: blog-top — fixed 728×90 leaderboard */}
+          <BlogAd slot="5070373781" format="fixed" width={728} height={90} />
+
           <ToolCtaStrip title="Apply this guide immediately with RESUGROW tools" links={toolLinks} />
 
           <div className={styles.screenshotGrid}>
@@ -292,6 +297,9 @@ export default async function BlogPost({ params }) {
           <div className={styles.body}>
             {renderContent(post.content)}
           </div>
+
+          {/* Ad: blog-mid — responsive */}
+          <BlogAd slot="4770990889" format="auto" />
 
           <ToolCtaStrip title="Ready to improve your score?" links={toolLinks.slice(0, 3)} />
 
@@ -319,6 +327,9 @@ export default async function BlogPost({ params }) {
           </div>
         </div>
 
+        {/* Ad: blog-bottom — responsive */}
+        <BlogAd slot="1632248698" format="auto" />
+
         {/* Related posts */}
         {related.length > 0 && (
           <section className={styles.related}>
@@ -342,6 +353,14 @@ export default async function BlogPost({ params }) {
           <Link href="/blog" className={styles.backLink}>← Back to all articles</Link>
         </div>
       </div>
+
+      {/* AdSense library — loaded lazily, only on blog post pages */}
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3570928751495304"
+        crossOrigin="anonymous"
+        strategy="lazyOnload"
+      />
     </div>
   );
 }

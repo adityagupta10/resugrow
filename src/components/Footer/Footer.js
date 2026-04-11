@@ -217,6 +217,10 @@ export default function Footer() {
         </div>
 
         <div className={styles.footerBottom}>
+          <p className={styles.adDisclosure}>
+            We use Google AdSense to serve ads on our blog. Google may use cookies to serve ads based on your prior visits. You can opt out of personalized advertising at{' '}
+            <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Google Ad Settings</a>.
+          </p>
           <p className={styles.copyright}>
             Made with love for job seekers © {new Date().getFullYear()}{' '}
             <span className="gradient-text">RESUGROW</span>{' '}. All rights reserved.

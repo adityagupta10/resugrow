@@ -18,6 +18,7 @@ const inter = Inter({
   display: 'swap',
   weight: ['400', '500', '600', '700'],
   variable: '--font-inter',
+  preload: true,
 });
 
 const homeMetadata = createPageMetadata({
@@ -75,6 +76,12 @@ export const metadata = {
   manifest: '/site.webmanifest'
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#2563eb',
+};
+
 export default function RootLayout({ children }) {
   const organizationJsonLd = getOrganizationJsonLd();
   const websiteJsonLd = getWebsiteJsonLd();
@@ -82,18 +89,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-PNP4M5Y49H"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-PNP4M5Y49H');`}
-        </Script>
-        <link rel="preconnect" href="https://www.resugrow.com" />
-        <link rel="dns-prefetch" href="https://www.resugrow.com" />
+        {/* Preconnect to Google Analytics to reduce DNS/TLS latency */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </head>
       <body className={inter.className}>
         <AuthProvider>
@@ -111,6 +109,18 @@ gtag('config', 'G-PNP4M5Y49H');`}
           <Analytics />
           <SpeedInsights />
         </AuthProvider>
+
+        {/* Google Analytics — loaded AFTER page is interactive to avoid blocking FCP/LCP */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-PNP4M5Y49H"
+          strategy="lazyOnload"
+        />
+        <Script id="gtag-init" strategy="lazyOnload">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-PNP4M5Y49H', { send_page_view: true });`}
+        </Script>
       </body>
     </html>
   );

@@ -161,9 +161,30 @@
 
 .footerBottom {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 12px;
     padding: 24px 0;
+    text-align: center;
+}
+
+.adDisclosure {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+.adDisclosure a {
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+}
+
+.adDisclosure a:hover {
+    color: white;
 }
 
 .copyright {

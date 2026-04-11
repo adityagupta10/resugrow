@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, memo } from 'react';
 import Link from 'next/link';
 import TrackedLink from '@/components/UI/TrackedLink';
 import Image from 'next/image';
@@ -20,19 +20,19 @@ const heroPhrases = [
 
 const heroResumeSlides = [
   {
-    src: '/hero-images/ats-optimized-resume-builder-preview.webp',
+    src: '/hero-images/ats-optimized-resume-builder-preview.png',
     alt: 'AI resume builder sample with ATS-optimized professional resume layout for job seekers'
   },
   {
-    src: '/hero-images/professional-resume-template-ats-friendly.webp',
+    src: '/hero-images/professional-resume-template-ats-friendly.png',
     alt: 'ATS-friendly resume template example designed to pass applicant tracking systems'
   },
   {
-    src: '/hero-images/ai-resume-builder-job-application-template.webp',
+    src: '/hero-images/ai-resume-builder-job-application-template.png',
     alt: 'Professional resume format template for high-converting job applications and recruiter screening'
   },
   {
-    src: '/hero-images/resume-template-interview-call-rate-boost.webp',
+    src: '/hero-images/resume-template-interview-call-rate-boost.png',
     alt: 'Best resume template preview to improve interview call rate and hiring visibility'
   }
 ];
@@ -50,7 +50,7 @@ const targetCompanies = [
   { name: 'Uber', logo: '/company-logos/uber.svg', alt: 'Uber company for operations' }
 ];
 
-export default function Hero() {
+function Hero() {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -87,6 +87,10 @@ export default function Hero() {
     }, 2600);
 
     return () => clearInterval(interval);
+  }, []);
+
+  const handleDotClick = useCallback((index) => {
+    setActiveSlide(index);
   }, []);
 
   return (
@@ -130,7 +134,7 @@ export default function Hero() {
               <div className={styles.signalChips}>
                 {targetCompanies.map((company) => (
                   <span key={company.name} className={styles.signalLogo} title={company.name}>
-                    <Image src={company.logo} alt={company.alt} width={22} height={22} />
+                    <Image src={company.logo} alt={company.alt} width={22} height={22} loading="lazy" />
                   </span>
                 ))}
               </div>
@@ -167,10 +171,10 @@ export default function Hero() {
                     key={slide.src}
                     src={slide.src}
                     alt={slide.alt}
-                    width={304}
-                    height={304}
-                    sizes="(max-width: 768px) 304px, 520px"
-                    quality={index === 0 ? 85 : 75}
+                    width={520}
+                    height={436}
+                    sizes="(max-width: 768px) 100vw, 520px"
+                    quality={index === 0 ? 80 : 65}
                     className={`${styles.panelImage} ${index === activeSlide ? styles.panelImageActive : ''}`}
                     priority={index === 0}
                     loading={index === 0 ? "eager" : "lazy"}
@@ -183,7 +187,7 @@ export default function Hero() {
                     key={slide.src}
                     type="button"
                     className={`${styles.slideDot} ${index === activeSlide ? styles.slideDotActive : ''}`}
-                    onClick={() => setActiveSlide(index)}
+                    onClick={() => handleDotClick(index)}
                     aria-label={`Show resume preview ${index + 1}`}
                   />
                 ))}
@@ -195,3 +199,5 @@ export default function Hero() {
     </section>
   );
 }
+
+export default memo(Hero);

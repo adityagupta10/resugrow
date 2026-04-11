@@ -12,7 +12,7 @@ const fallbackScreenshots = [
     caption: 'Example of a clean ATS-friendly layout that preserves structure.'
   },
   {
-    src: '/linkedin-save-pdf-guide.png',
+    src: '/templates/ats-friendly-professional-resume-template-1.png',
     alt: 'LinkedIn Save to PDF walkthrough screenshot for profile optimization workflow',
     caption: 'Workflow screenshot used in RESUGROW tools and LinkedIn optimization guides.'
   }
@@ -50,7 +50,7 @@ const screenshotSets = {
       caption: 'Strong bullets combine action, context, and measurable impact.'
     },
     {
-      src: '/hero-images/ats-optimized-resume-builder-preview.webp',
+      src: '/templates/minimalist-clean-resume-builder-template-6.png',
       alt: 'Resume builder screenshot for rewriting weak bullets into quantified achievements',
       caption: 'Use structured rewrite workflows to turn vague bullets into evidence-backed outcomes.'
     }
@@ -86,7 +86,7 @@ const screenshotSets = {
       caption: 'MarTech resumes work best when tools and outcomes are presented together.'
     },
     {
-      src: '/hero-images/professional-resume-template-ats-friendly.webp',
+      src: '/templates/sales-executive-resume-layout-12.png',
       alt: 'Digital marketing resume screenshot with operations and analytics stack organization',
       caption: 'Keep stack sections organized across attribution, analytics, and activation.'
     }
@@ -98,7 +98,7 @@ const screenshotSets = {
       caption: 'Concise gap context plus current proof builds recruiter trust.'
     },
     {
-      src: '/linkedin-save-pdf-guide.png',
+      src: '/templates/marketing-manager-creative-resume-7.png',
       alt: 'LinkedIn profile screenshot guide used for career continuity and credibility optimization',
       caption: 'Use LinkedIn and resume together to reinforce a consistent transition story.'
     }
@@ -110,7 +110,7 @@ const screenshotSets = {
       caption: 'Action verbs improve clarity and ownership signals in first-pass review.'
     },
     {
-      src: '/hero-images/resume-template-interview-call-rate-boost.webp',
+      src: '/templates/finance-accounting-professional-cv-8.png',
       alt: 'Resume optimization screenshot for replacing passive phrasing with impact-driven verbs',
       caption: 'Upgrade passive language with role-accurate verbs and measurable outcomes.'
     }
@@ -122,7 +122,7 @@ const screenshotSets = {
       caption: 'Use a master resume and clone role-specific versions for faster customization.'
     },
     {
-      src: '/hero-images/ai-resume-builder-job-application-template.webp',
+      src: '/templates/sales-executive-resume-layout-12.png',
       alt: 'ATS checker screenshot used to validate tailored resume versions before submission',
       caption: 'Validate each customized version against job-specific keyword requirements.'
     }
@@ -134,7 +134,7 @@ const screenshotSets = {
       caption: 'Place identity, role fit, and outcomes where the eye lands first.'
     },
     {
-      src: '/linkedin-makeover.png',
+      src: '/templates/tech-software-engineer-resume-template-5.png',
       alt: 'Professional profile optimization screenshot showing clarity improvements for recruiter scanning',
       caption: 'Consistent structure across resume and LinkedIn improves total brand comprehension.'
     }
