@@ -7,7 +7,7 @@ import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
 import TemplateGallery from './client-gallery';
 import { listApprovedCommunityTemplates } from '@/lib/communityTemplatesDb';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata = createPageMetadata({
   title: 'Free Resume Templates — ATS-Friendly & Recruiter-Tested (2026)',

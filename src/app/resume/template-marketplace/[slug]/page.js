@@ -4,7 +4,7 @@ import { createPageMetadata } from '@/lib/seo';
 import { getCommunityTemplateBySlug } from '@/lib/communityTemplatesDb';
 import styles from '../marketplace.module.css';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;

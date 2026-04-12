@@ -3,8 +3,8 @@ import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
 import { listApprovedCommunityTemplates } from '@/lib/communityTemplatesDb';
 import styles from './marketplace.module.css';
 
-// DB call at request time — don't prerender at build
-export const dynamic = 'force-dynamic';
+// DB call at request time — revalidate every hour for high performance cache
+export const revalidate = 3600;
 
 export const metadata = createPageMetadata({
   title: 'Community Resume Template Marketplace | ResuGrow',

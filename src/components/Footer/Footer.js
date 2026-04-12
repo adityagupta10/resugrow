@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 
 const footerLinks = {
@@ -49,15 +50,19 @@ const footerLinks = {
       href: "/tools/salary-coach",
       badge: "New",
     },
-    { label: "Career Tips", href: "/career-tips" },
   ],
   Resources: [
-    { label: "Resume Examples by Role", href: "/examples" },
+    { label: "Resume Examples", href: "/examples", badge: "⚡" },
     {
-      label: "RESUGROW vs other Resume Builders",
+      label: "Resugrow vs other Resume Builders",
       href: "/resume-builder-comparison",
     },
-    { label: "Blog & Career Tips", href: "/blog" },
+    {
+      label: "Resugrow Glossary",
+      href: "/glossary", badge: "⚡"
+    },
+    { label: "Resugrow Blogs", href: "/blog", badge: "⚡" },
+    { label: "Resugrow Career Tips", href: "/career-tips", badge: "⚡" },
     { label: "Help Center", href: "/help-center" },
     { label: "About Us", href: "/about" },
     { label: "Contact Us", href: "/contact" },
@@ -71,6 +76,9 @@ const footerLinks = {
 };
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isBlogPage = pathname?.startsWith('/blog');
+
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -217,12 +225,14 @@ export default function Footer() {
         </div>
 
         <div className={styles.footerBottom}>
-          <p className={styles.adDisclosure}>
-            We use Google AdSense to serve ads on our blog. Google may use cookies to serve ads based on your prior visits. You can opt out of personalized advertising at{' '}
-            <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Google Ad Settings</a>.
-          </p>
+          {isBlogPage && (
+            <p className={styles.complianceText}>
+              <span style={{ fontSize: "10px" }}>We use Google AdSense to serve ads on our blog.Google may use cookies<br />to serve ads based on your prior visits.You can opt out of personalized advertising at{' '}</span>
+              <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer"><span className="gradient-text" style={{ fontSize: "10px" }}>Google Ad Settings</span></a>.
+            </p>
+          )}
           <p className={styles.copyright}>
-            Made with love for job seekers © {new Date().getFullYear()}{' '}
+            Made with <span className="gradient-text">Love</span> and <span className="gradient-text">Hardwork</span> © {new Date().getFullYear()}{' '}
             <span className="gradient-text">RESUGROW</span>{' '}. All rights reserved.
           </p>
           <p className={styles.bottomLinks}>

@@ -487,6 +487,45 @@ export const ROLE_SUGGESTIONS = {
   },
 };
 
+// --- Mass SEO Generation Injector ---
+const extraRoles = [
+  'accountant', 'administrative-assistant', 'architect', 'art-director', 'bank-teller', 
+  'bartender', 'bookkeeper', 'brand-manager', 'business-development', 'call-center-representative',
+  'cashier', 'certified-nursing-assistant', 'chef', 'civil-engineer', 'communications-specialist',
+  'community-manager', 'construction-manager', 'copywriter', 'customer-service', 'data-entry',
+  'database-administrator', 'dental-assistant', 'digital-marketing', 'electrical-engineer',
+  'elementary-teacher', 'event-planner', 'executive-assistant', 'financial-advisor',
+  'flight-attendant', 'front-desk-receptionist', 'general-manager', 'graphic-web-designer',
+  'health-administrator', 'help-desk-technician', 'hospitality-manager', 'human-resources-assistant',
+  'industrial-designer', 'inside-sales', 'instructional-designer', 'interior-designer',
+  'investment-banker', 'it-manager', 'java-developer', 'journalist', 'legal-assistant',
+  'logistics-manager', 'machine-learning-engineer', 'managing-director', 'marketing-coordinator',
+  'mechanical-engineer', 'medical-assistant', 'network-engineer', 'nurse-practitioner',
+  'occupational-therapist', 'office-manager', 'paralegal', 'pharmacist', 'physical-therapist',
+  'physician-assistant', 'police-officer', 'pr-manager', 'preschool-teacher', 'production-manager',
+  'property-manager', 'public-relations', 'purchasing-manager', 'quality-assurance', 'real-estate-agent',
+  'registered-nurse', 'restaurant-manager', 'retail-manager', 'sales-associate', 'sales-manager',
+  'scrum-master', 'security-guard', 'social-media-manager', 'social-worker', 'software-tester',
+  'solutions-architect', 'special-education-teacher', 'store-manager', 'supply-chain-manager',
+  'systems-administrator', 'teacher-assistant', 'technical-support', 'technical-writer',
+  'truck-driver', 'ui-developer', 'virtual-assistant', 'warehouse-manager', 'web-developer'
+];
+
+extraRoles.forEach(role => {
+  const roleName = role.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  ROLE_SUGGESTIONS[`${role}-resume`] = {
+    experience: {
+      impact: [`Demonstrated excellence as a ${roleName}, consistently exceeding performance targets.`, `Streamlined operations reducing manual workload by 15% across the cross-functional team.`],
+      technical: [`Leveraged industry-standard tools to optimize daily workflows and output.`],
+      ownership: [`Spearheaded initiatives to improve overall service quality and delivery.`]
+    },
+    summary: [`Results-driven ${roleName} with a proven track record of delivering high-quality outcomes.`, `Dedicated ${roleName} focused on growth, efficiency, and cross-functional success.`],
+    skills: [roleName, 'Communication', 'Project Management', 'Problem Solving', 'Leadership'],
+    metrics: ['efficiency', 'productivity', 'growth']
+  };
+});
+
+
 // ====================== ENGINE LOGIC ======================
 
 export function detectRole(jobTitle = '') {

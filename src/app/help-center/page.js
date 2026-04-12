@@ -4,8 +4,16 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../subpage.module.css';
-import { platformFaqs } from '@/data/faqs';
+import { platformFaqs } from '@/data/expandedfaqs';
 import { getBreadcrumbJsonLd, getFaqJsonLd, SITE_URL } from '@/lib/seo';
+
+// Group the flat FAQ array by category
+const grouped = platformFaqs.reduce((acc, faq) => {
+  const cat = faq.category || 'General';
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push({ q: faq.q, a: faq.a });
+  return acc;
+}, {});
 
 const helpCategories = [
   {
@@ -13,28 +21,85 @@ const helpCategories = [
     icon: '🚀',
     title: 'Getting Started',
     desc: 'Set up your first resume and understand your workflow.',
-    faqs: [platformFaqs[0], platformFaqs[1]]
+    faqs: grouped['Getting Started'] || [],
   },
   {
-    id: 'scoring',
+    id: 'ats-scoring',
     icon: '📊',
-    title: 'ATS and LinkedIn Scoring',
-    desc: 'Understand score logic, normalization, and improvements.',
-    faqs: [platformFaqs[2], platformFaqs[3], platformFaqs[6], platformFaqs[7]]
+    title: 'ATS Scoring & Analysis',
+    desc: 'Understand score logic, keyword matching, and how to improve.',
+    faqs: grouped['ATS Scoring & Analysis'] || [],
   },
   {
-    id: 'content-quality',
+    id: 'resume-builder',
     icon: '🛠️',
-    title: 'Resume Content Quality',
-    desc: 'Improve bullets, skills, and narrative quality quickly.',
-    faqs: [platformFaqs[4], platformFaqs[5]]
+    title: 'Resume Builder & Writing Tools',
+    desc: 'Build, rewrite, and optimize your resume content.',
+    faqs: grouped['Resume Builder & Writing Tools'] || [],
   },
   {
-    id: 'account-billing',
+    id: 'cover-letter',
+    icon: '✉️',
+    title: 'Cover Letter',
+    desc: 'Generate and personalize job-targeted cover letters.',
+    faqs: grouped['Cover Letter'] || [],
+  },
+  {
+    id: 'linkedin',
+    icon: '💼',
+    title: 'LinkedIn Optimization',
+    desc: 'Optimize your LinkedIn profile for recruiter visibility.',
+    faqs: grouped['LinkedIn Optimization'] || [],
+  },
+  {
+    id: 'recruiter-impact',
+    icon: '�️',
+    title: 'Human Recruiter Impact',
+    desc: 'How Resugrow improves your performance with real reviewers.',
+    faqs: grouped['Human Recruiter Impact'] || [],
+  },
+  {
+    id: 'keywords',
+    icon: '🔑',
+    title: 'Keyword Optimization',
+    desc: 'Keyword strategy, tailoring, and avoiding stuffing.',
+    faqs: grouped['Keyword Optimization'] || [],
+  },
+  {
+    id: 'privacy',
+    icon: '🔒',
+    title: 'Privacy & Data',
+    desc: 'How your data is stored, used, and protected.',
+    faqs: grouped['Privacy & Data'] || [],
+  },
+  {
+    id: 'exports',
+    icon: '📤',
+    title: 'Exports & Compatibility',
+    desc: 'File formats, ATS compatibility, and download options.',
+    faqs: grouped['Exports & Compatibility'] || [],
+  },
+  {
+    id: 'user-situations',
+    icon: '🎯',
+    title: 'Specific User Situations',
+    desc: 'Graduates, career changers, senior professionals, and more.',
+    faqs: grouped['Specific User Situations'] || [],
+  },
+  {
+    id: 'ai-tech',
+    icon: '🤖',
+    title: 'AI & Technology',
+    desc: 'How the AI works and what it does with your data.',
+    faqs: grouped['AI & Technology'] || [],
+  },
+  {
+    id: 'pricing',
     icon: '💳',
-    title: 'Account and Billing',
-    desc: 'Use plans, manage sessions, and troubleshoot payment flow.',
+    title: 'Pricing & Access',
+    desc: 'Free tier, premium plans, and billing questions.',
     faqs: [
+      ...( grouped['Pricing & Access'] || []),
       {
         q: 'How do I move from a free scan to premium optimization?',
         a: 'When your results page shows a premium call-to-action, click it to open the payment route and continue to the makeover workflow. We keep the transition short so you do not lose context from your scan.'
@@ -47,9 +112,23 @@ const helpCategories = [
         q: 'What if payment succeeds but I do not see updates instantly?',
         a: 'Refresh once, then revisit the same service route from your results page CTA. If your access still does not update, contact support with your payment timestamp and email so we can resolve it quickly.'
       }
-    ]
-  }
-];
+    ],
+  },
+  {
+    id: 'results',
+    icon: '📈',
+    title: 'Results & Effectiveness',
+    desc: 'What to expect from score improvements and interview rates.',
+    faqs: grouped['Results & Effectiveness'] || [],
+  },
+  {
+    id: 'platform-support',
+    icon: '💬',
+    title: 'Platform & Support',
+    desc: 'Mobile access, updates, and how to get help.',
+    faqs: grouped['Platform & Support'] || [],
+  },
+].filter(cat => cat.faqs.length > 0);
 
 const quickActions = [
   { title: 'Open Resume Builder', href: '/resume/builder', icon: '📄' },
@@ -132,10 +211,13 @@ export default function HelpCenter() {
             {helpCategories.map((item) => (
               <div key={item.id} className={styles.helpTopicCard}>
                 <div className={styles.helpTopicIcon}>
-                  <EmojiImage emoji={item.icon} size={34} alt={`${item.title} help category icon for RESUGROW support`} />
+                  <EmojiImage emoji={item.icon} size={34} alt={`${item.title} help category icon`} />
                 </div>
                 <h3>{item.title}</h3>
                 <p>{item.desc}</p>
+                <span style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
+                  {item.faqs.length} {item.faqs.length === 1 ? 'answer' : 'answers'}
+                </span>
               </div>
             ))}
           </div>
@@ -160,6 +242,9 @@ export default function HelpCenter() {
                     <EmojiImage emoji={group.icon} size={14} alt={`${group.title} sidebar icon`} />
                   </span>
                   <span>{group.title}</span>
+                  <span style={{ marginLeft: 'auto', fontSize: '11px', color: '#94a3b8', fontWeight: 600 }}>
+                    {group.faqs.length}
+                  </span>
                 </a>
               ))}
             </aside>
@@ -193,7 +278,7 @@ export default function HelpCenter() {
                             onClick={() => setOpenId(open ? '' : id)}
                           >
                             <span>{faq.q}</span>
-                            <span>{open ? '-' : '+'}</span>
+                            <span>{open ? '−' : '+'}</span>
                           </button>
                           {open && <p className={styles.helpFaqAnswer}>{faq.a}</p>}
                         </article>

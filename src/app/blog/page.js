@@ -1,12 +1,20 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Suspense } from 'react';
-import { posts } from './data';
+import { listingPosts } from './data';
 import { attachBlogImagesToPost } from './blogImages';
 import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } from '@/lib/seo';
 import { supabase } from '@/lib/supabase';
 import CategoryFilter from './CategoryFilter';
+import LoadMorePosts from './LoadMorePosts';
 import styles from './blog.module.css';
+
+/* ---------------------------------------------------------------------------
+ * ISR: regenerate at most once per hour.  The page was previously fully
+ * dynamic (because of searchParams) with no cache — every visit triggered a
+ * fresh Supabase call + full SSR render of 107+ cards.
+ * --------------------------------------------------------------------------- */
+export const revalidate = 3600;
 
 export const metadata = createPageMetadata({
   title: 'Blog | Resume Tips, Career Advice & Job Search Strategies | RESUGROW',
@@ -16,13 +24,16 @@ export const metadata = createPageMetadata({
   keywords: ['resume tips', 'career advice', 'job search', 'ATS optimization', 'LinkedIn tips', 'salary negotiation'],
 });
 
+/* Only select the columns the listing page actually needs */
+const DB_LISTING_COLS = 'title, slug, excerpt, category, readTime, author, authorRole, authorInitials, authorColor, date, createdAt, coverEmoji';
+
 export default async function BlogPage({ searchParams }) {
   const resolvedParams = await searchParams;
   const activeCategory = resolvedParams?.category || 'All';
 
   const { data: dbPosts, error } = await supabase
     .from('BlogPost')
-    .select('*')
+    .select(DB_LISTING_COLS)
     .eq('isPublished', true)
     .order('createdAt', { ascending: false });
 
@@ -32,17 +43,12 @@ export default async function BlogPage({ searchParams }) {
 
   // Combine static and DB posts — process DB posts through image assignment
   const processedDbPosts = (dbPosts || []).map(attachBlogImagesToPost);
-  const allPosts = [...processedDbPosts, ...posts];
+  const allPosts = [...processedDbPosts, ...listingPosts];
 
   // Filter by category if one is selected
   const filteredPosts = activeCategory === 'All'
     ? allPosts
     : allPosts.filter((p) => p.category === activeCategory);
-
-  if (filteredPosts.length === 0 && activeCategory !== 'All') {
-    // Show all posts if the filter returns nothing
-    // (fallback so the page never looks empty)
-  }
 
   const displayPosts = filteredPosts.length > 0 ? filteredPosts : allPosts;
   const featured = displayPosts[0];
@@ -113,6 +119,7 @@ export default async function BlogPage({ searchParams }) {
                       fill
                       className={styles.coverImg}
                       priority
+                      sizes="(max-width: 1024px) 100vw, 60vw"
                     />
                   )}
                   <div className={styles.coverOverlay}>
@@ -140,34 +147,8 @@ export default async function BlogPage({ searchParams }) {
             </div>
           )}
 
-          {/* Blog Grid */}
-          <div className={styles.blogGrid}>
-            {rest.map((post) => (
-              <Link key={post.slug} href={`/blog/${post.slug}`} className={styles.blogCard}>
-                <div className={styles.cardCover}>
-                  {post.coverImage && (
-                    <Image
-                      src={post.coverImage}
-                      alt={post.coverAlt || post.title}
-                      fill
-                      className={styles.coverImg}
-                    />
-                  )}
-                  <div className={styles.coverOverlay}>
-                    <h3 className={styles.coverTitleSmall}>{post.title}</h3>
-                  </div>
-                </div>
-                <div className={styles.cardContent}>
-                  <div className={styles.postMeta}>
-                    <span className={styles.category}>{post.category}</span>
-                    <span className={styles.dot}></span>
-                    <span>{post.readTime}</span>
-                  </div>
-                  <p className={styles.excerptSmall}>{post.excerpt}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {/* Blog Grid — progressively loaded */}
+          <LoadMorePosts posts={rest} />
 
           {/* Newsletter Section */}
           <div className={styles.newsletterBox}>

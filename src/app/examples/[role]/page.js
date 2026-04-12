@@ -5,7 +5,7 @@ import { getBreadcrumbJsonLd, getFaqJsonLd, SITE_URL } from '@/lib/seo';
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 function formatRole(slug) {
-  return slug.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  return slug.replace('-resume', '').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
 
 // ── Static params — one page per role ────────────────────────────────────

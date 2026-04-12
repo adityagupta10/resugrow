@@ -1,7 +1,7 @@
 export const platformFaqs = [
   {
-    q: 'Is RESUGROW beginner-friendly?',
-    a: 'Yes. RESUGROW is designed as a guided workflow, not a blank editor. You can start with your existing resume, run a scan, and apply fixes in priority order without needing professional writing experience.'
+    q: 'Is Resugrow beginner-friendly?',
+    a: 'Yes. Resugrow is designed as a guided workflow, not a blank editor. You can start with your existing resume, run a scan, and apply fixes in priority order without needing professional writing experience.'
   },
   {
     q: 'What should I use first: Builder, ATS Checker, or LinkedIn tools?',
@@ -17,15 +17,15 @@ export const platformFaqs = [
   },
   {
     q: 'How is this different from a normal resume template website?',
-    a: 'Most template websites stop at design. RESUGROW combines templates with scoring, rewrite logic, and keyword gap analysis so you can improve quality with data-backed direction rather than guesswork.'
+    a: 'Most template websites stop at design. Resugrow combines templates with scoring, rewrite logic, and keyword gap analysis so you can improve quality with data-backed direction rather than guesswork.'
   },
   {
-    q: 'Can RESUGROW help me improve weak bullet points quickly?',
+    q: 'Can Resugrow help me improve weak bullet points quickly?',
     a: 'Yes. The SAR Rewriter transforms weak responsibility-style bullets into measurable achievement statements. You can then tune them with your exact numbers for stronger recruiter impact.'
   },
   {
     q: 'Will this help with both ATS and human recruiters?',
-    a: 'That is the core goal. RESUGROW improves machine readability for ATS while also strengthening clarity, positioning, and quantified outcomes for human decision-makers.'
+    a: 'That is the core goal. Resugrow improves machine readability for ATS while also strengthening clarity, positioning, and quantified outcomes for human decision-makers.'
   },
   {
     q: 'Do I need to rewrite everything manually after scanning?',

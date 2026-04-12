@@ -169,21 +169,21 @@
     text-align: center;
 }
 
-.adDisclosure {
+.complianceText {
     font-size: 11px;
     color: rgba(255, 255, 255, 0.4);
     line-height: 1.6;
     max-width: 600px;
 }
 
-.adDisclosure a {
+.complianceText a {
     color: rgba(255, 255, 255, 0.55);
     text-decoration: underline;
     text-underline-offset: 2px;
     transition: color 0.2s;
 }
 
-.adDisclosure a:hover {
+.complianceText a:hover {
     color: white;
 }
 

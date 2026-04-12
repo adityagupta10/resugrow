@@ -738,3 +738,21 @@ Good follow-ups are respectful and strategic. They show consistency, communicati
 ];
 
 export const posts = [...corePosts, ...strategicPosts, ...reviewPosts, ...programmaticPosts].map(attachBlogImagesToPost);
+
+/* ---------------------------------------------------------------------------
+ * Lightweight listing data for /blog.
+ *
+ * Strips content, faqs, howToSteps, screenshots, and toolLinks to reduce the
+ * page payload from ~170 KB to ~15 KB. Individual blog pages still use `posts`.
+ * --------------------------------------------------------------------------- */
+const HEAVY_KEYS = new Set(['content', 'faqs', 'howToSteps', 'screenshots', 'toolLinks']);
+
+function toListingPost(post) {
+  const slim = {};
+  for (const key of Object.keys(post)) {
+    if (!HEAVY_KEYS.has(key)) slim[key] = post[key];
+  }
+  return slim;
+}
+
+export const listingPosts = posts.map(toListingPost);

@@ -181,7 +181,7 @@ export default async function BlogPost({ params }) {
 
   if (!post) notFound();
 
-  const related = posts.filter((p) => p.slug !== post.slug && p.tags.some((t) => post.tags.includes(t))).slice(0, 3);
+  const related = posts.filter((p) => p.slug !== post.slug && p.tags?.some((t) => post.tags?.includes(t))).slice(0, 3);
   const toolLinks = post.toolLinks?.length ? post.toolLinks : defaultToolLinks;
   const screenshots = post.screenshots?.length ? post.screenshots : defaultScreenshots;
   const faqSchema = buildFaqSchema(post);
@@ -305,7 +305,7 @@ export default async function BlogPost({ params }) {
 
           {/* Tags */}
           <div className={styles.tags}>
-            {post.tags.map((tag) => (
+            {post.tags?.map((tag) => (
               <span key={tag} className={styles.tag}>{tag}</span>
             ))}
           </div>
