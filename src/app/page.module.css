@@ -392,67 +392,166 @@
   letter-spacing: -0.02em;
 }
 
-.pillarGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+
+.pillarStack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0 60px;
 }
 
-.pillarCard {
-  border: 1px solid #dbe4ef;
-  border-radius: 18px;
-  padding: 20px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+.horizontalPillar {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: 380px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 16px rgba(15,23,42,0.06);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  background: white;
 }
 
-.pillarCardResume {
-  border-color: #dfd1fb;
-  background: linear-gradient(180deg, #fcfaff 0%, #f6f0ff 100%);
+.horizontalPillar:hover {
+  box-shadow: 0 12px 40px rgba(15,23,42,0.1);
+  transform: translateY(-2px);
 }
 
-.pillarCardLinkedIn {
-  border-color: #0077b5;
-  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+.reversePillar { flex-direction: row-reverse; }
+
+.pillarTextContent {
+  flex: 1;
+  padding: 48px 52px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.pillarCardLetters {
-  border-color: #bbf7d0;
-  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+.pillarTextContent h3 {
+  margin: 10px 0 12px;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
 }
 
-.pillarCardCareer {
-  border-color: #fef08a;
-  background: linear-gradient(180deg, #fffbeb 0%, #fef9c3 100%);
+.pillarTextContent p {
+  margin: 0 0 18px;
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.75;
+  max-width: 400px;
 }
 
-.pillarCardCoach {
-  border-color: #93c5fd;
-  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+.pillarTextContent ul {
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.pillarCardTrack {
-  border-color: #94a3b8;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+.pillarTextContent li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
 }
 
-.pillarCardSAR {
-  border-color: #fca5a5;
-  background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+.pillarTextContent li::before {
+  content: "✓";
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
 }
 
-.pillarCardMarket {
-  border-color: #93c5fd;
-  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+.pillarVisualBlock {
+  flex: 0 0 42%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
 }
 
-.pillarCardSalary {
-  border-color: #86efac;
-  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+.pillarVisualInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 280px;
 }
 
-.pillarCardPath {
-  border-color: #93c5fd;
-  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+.pillarScoreRing {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.pillarScoreNum {
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.pillarScoreLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.pillarPills {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.pillarPill {
+  display: block;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.pillarEmoji {
+  font-size: 40px;
+  position: absolute;
+  bottom: 24px;
+  right: 28px;
+  opacity: 0.2;
+  pointer-events: none;
 }
 
 .pillarTag {
@@ -919,6 +1018,45 @@
   .templateGrid,
   .testimonialGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Responsive Stack for Product Suite */
+  .horizontalPillar, 
+  .reversePillar {
+    flex-direction: column !important;
+    gap: 0;
+    min-height: auto;
+    text-align: left;
+  }
+
+  .pillarTextContent {
+    max-width: 100%;
+    padding: 36px 28px;
+  }
+
+  .pillarVisualBlock {
+    max-width: 100%;
+    min-height: 220px;
+    order: -1;
+  }
+
+  .pillarStack {
+    gap: 0;
+    padding: 20px 0 40px;
+  }
+  
+  .pillarCtaBtn {
+    margin: 16px 0 0;
+  }
+
+  .pillarCard ul {
+    justify-content: center;
+  }
+
+  .pillarCard li {
+    text-align: left;
+    width: fit-content;
+    margin: 0 auto;
   }
 }
 

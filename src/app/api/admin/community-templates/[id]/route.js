@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getUnifiedSession } from '@/lib/session';
 import { isAdminEmail } from '@/lib/admin';
 import { moderateCommunityTemplateSubmission } from '@/lib/communityTemplatesDb';
+import { submitToIndexNow } from '@/lib/indexnow';
 
 export async function PATCH(request, { params }) {
   try {
@@ -18,6 +19,10 @@ export async function PATCH(request, { params }) {
       moderationNotes: body?.moderationNotes || '',
       reviewerEmail: user.email,
     });
+
+    if (body?.status === 'APPROVED' && template?.slug) {
+      submitToIndexNow(`/resume/template-marketplace/${template.slug}`);
+    }
 
     return NextResponse.json({ success: true, template });
   } catch (error) {

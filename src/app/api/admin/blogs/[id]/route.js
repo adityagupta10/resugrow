@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
+import { submitToIndexNow } from '@/lib/indexnow';
 
 async function checkAdminStatus() {
   const cookieStore = await cookies();
@@ -91,6 +92,10 @@ export async function PATCH(request, { params }) {
         return NextResponse.json({ error: 'Slug must be unique' }, { status: 400 });
       }
       throw error;
+    }
+
+    if (updatedPost[0].isPublished) {
+      submitToIndexNow(`/blog/${updatedPost[0].slug}`);
     }
 
     return NextResponse.json(updatedPost[0]);

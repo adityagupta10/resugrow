@@ -22,6 +22,10 @@ const footerLinks = {
     { label: "Resume Summary Examples", href: "/resume-summary-examples" },
     { label: "ATS Resume Guide", href: "/ats-resume-guide" },
     { label: "CV vs Resume Guide", href: "/cv-vs-resume" },
+    {
+      label: "Resugrow vs other Resume Builders",
+      href: "/resume-builder-comparison",
+    },
   ],
   "AI Career Tools": [
     { label: "AI SAR Bullet Rewriter", href: "/tools/sar-rewriter" },
@@ -54,15 +58,11 @@ const footerLinks = {
   Resources: [
     { label: "Resume Examples", href: "/examples", badge: "⚡" },
     {
-      label: "Resugrow vs other Resume Builders",
-      href: "/resume-builder-comparison",
-    },
-    {
       label: "Resugrow Glossary",
       href: "/glossary", badge: "⚡"
     },
     { label: "Resugrow Blogs", href: "/blog", badge: "⚡" },
-    { label: "Resugrow Career Tips", href: "/career-tips", badge: "⚡" },
+    { label: "Resugrow Career Tips and Advice", href: "/career-tips", badge: "⚡" },
     { label: "Help Center", href: "/help-center" },
     { label: "About Us", href: "/about" },
     { label: "Contact Us", href: "/contact" },

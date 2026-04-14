@@ -111,61 +111,45 @@ ul, ol {
   position: relative;
   z-index: 1;
   isolation: isolate;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.btn::before,
-.btn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  z-index: -1;
-  background-color: var(--btn-base);
-  opacity: 0.4;
-  pointer-events: none;
-  transform: translate(0, 0);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.btn:hover {
+  transform: translateY(-2px);
 }
 
-.btn:hover::before {
-  transform: translate(-10px, -8px);
-}
-
-.btn:hover::after {
-  transform: translate(10px, 8px);
+.btn:active {
+  transform: translateY(0);
 }
 
 .btn-primary {
-  --btn-base: var(--primary);
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: white;
-  border-color: rgba(125, 211, 252, 0.45);
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.34);
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.38);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45);
 }
 
 .btn-secondary {
-  --btn-base: #ffffff;
   background: white;
   color: #1e293b;
   border-color: #bfdbfe;
-  box-shadow: 0 6px 14px rgba(30, 41, 59, 0.08);
+  box-shadow: 0 2px 8px rgba(30, 41, 59, 0.06);
 }
 
 .btn-secondary:hover {
-  background: #f8fbff;
+  background: #f0f7ff;
   color: #1d4ed8;
+  border-color: #93c5fd;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
 }
 
 .btn-dark {
-  --btn-base: var(--secondary);
   background: var(--secondary);
   color: white;
   border-color: rgba(148, 163, 184, 0.4);
@@ -173,7 +157,7 @@ ul, ol {
 
 .btn-dark:hover {
   background: var(--secondary-light);
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.28);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.28);
 }
 
 /* Section Styles */

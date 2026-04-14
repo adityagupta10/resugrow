@@ -17,7 +17,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   let post = posts.find((p) => p.slug === slug);
-  
+
   if (!post) {
     const { data: dbPost } = await supabase
       .from('BlogPost')
@@ -302,7 +302,7 @@ export default async function BlogPost({ params }) {
           <BlogAd slot="4770990889" format="auto" />
 
           <ToolCtaStrip title="Ready to improve your score?" links={toolLinks.slice(0, 3)} />
-
+          <br />
           {/* Tags */}
           <div className={styles.tags}>
             {post.tags?.map((tag) => (
