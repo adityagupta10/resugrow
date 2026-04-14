@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+
+const PRIVATE_CACHE_HEADERS = { 'Cache-Control': 'private, max-age=300' };
 import {
   STRONG_VERBS,
   WEAK_VERBS,
@@ -489,7 +491,7 @@ export async function POST(request) {
     }
 
     const originalAnalysis = analyzeBullet(bullet, keyword);
-    const seed = hashString(`${bullet}|${keyword}|${tone}|${focus}|${Date.now()}`);
+    const seed = hashString(`${bullet}|${keyword}|${tone}|${focus}`);
 
     // Dynamic suggestion types based on domain and focus
     const baseTypes = [
@@ -554,24 +556,27 @@ export async function POST(request) {
       ]
     };
 
-    return NextResponse.json({
-      original: bullet,
-      controls: { keyword, tone, focus },
-      originalAnalysis: {
-        ...originalAnalysis,
-        domain: originalAnalysis.domain // Expose detected domain
+    return NextResponse.json(
+      {
+        original: bullet,
+        controls: { keyword, tone, focus },
+        originalAnalysis: {
+          ...originalAnalysis,
+          domain: originalAnalysis.domain // Expose detected domain
+        },
+        rewrittenScore: bestScore,
+        totalGain: bestScore - originalAnalysis.score,
+        suggestions,
+        topFixesApplied: [
+          `Analyzed bullet context as "${originalAnalysis.domain}" domain`,
+          'Converted narrative into SAR ordering (Context → Action → Result).',
+          'Upgraded to recruiter-preferred action verbs with domain awareness.',
+          'Increased metric and outcome visibility for ATS matching.'
+        ],
+        nextIteration: domainTips[originalAnalysis.domain] || domainTips.general
       },
-      rewrittenScore: bestScore,
-      totalGain: bestScore - originalAnalysis.score,
-      suggestions,
-      topFixesApplied: [
-        `Analyzed bullet context as "${originalAnalysis.domain}" domain`,
-        'Converted narrative into SAR ordering (Context → Action → Result).',
-        'Upgraded to recruiter-preferred action verbs with domain awareness.',
-        'Increased metric and outcome visibility for ATS matching.'
-      ],
-      nextIteration: domainTips[originalAnalysis.domain] || domainTips.general
-    });
+      { headers: PRIVATE_CACHE_HEADERS }
+    );
   } catch (error) {
     console.error('SAR rewrite failed:', error);
     return NextResponse.json({ error: 'Failed to generate rewrite.' }, { status: 500 });

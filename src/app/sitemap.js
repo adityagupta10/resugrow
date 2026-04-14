@@ -36,18 +36,6 @@ export default function sitemap() {
       lastModified: now,
     },
     {
-      url: `${baseUrl}/resume/builder`,
-      changeFrequency: "weekly",
-      priority: 0.95,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/resume/ats-checker`,
-      changeFrequency: "weekly",
-      priority: 0.95,
-      lastModified: now,
-    },
-    {
       url: `${baseUrl}/resume/templates`,
       changeFrequency: "weekly",
       priority: 0.94,
@@ -72,18 +60,6 @@ export default function sitemap() {
       lastModified: now,
     },
     {
-      url: `${baseUrl}/linkedin-review`,
-      changeFrequency: "weekly",
-      priority: 0.92,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/linkedin-review/paste`,
-      changeFrequency: "weekly",
-      priority: 0.85,
-      lastModified: now,
-    },
-    {
       url: `${baseUrl}/cover-letter/builder`,
       changeFrequency: "weekly",
       priority: 0.91,
@@ -93,38 +69,6 @@ export default function sitemap() {
       url: `${baseUrl}/cover-letter/templates`,
       changeFrequency: "weekly",
       priority: 0.88,
-      lastModified: now,
-    },
-
-    // ── Tier 2b: Tool pages ───────────────────────────────────────────────
-    {
-      url: `${baseUrl}/tools/sar-rewriter`,
-      changeFrequency: "weekly",
-      priority: 0.87,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/tools/salary-coach`,
-      changeFrequency: "weekly",
-      priority: 0.86,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/tools/interview-prep`,
-      changeFrequency: "weekly",
-      priority: 0.86,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/tools/linkedin-studio`,
-      changeFrequency: "weekly",
-      priority: 0.85,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/tools/career-path`,
-      changeFrequency: "weekly",
-      priority: 0.85,
       lastModified: now,
     },
 

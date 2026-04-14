@@ -1,8 +1,10 @@
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
+import { Suspense } from 'react';
 import './globals.css';
 import LayoutWrapper from '@/components/LayoutWrapper';
 import AuthProvider from '@/components/Providers/AuthProvider';
+import NavigationProgress from '@/components/NavigationProgress';
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
@@ -95,6 +97,9 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.className}>
         <AuthProvider>
+          <Suspense fallback={null}>
+            <NavigationProgress />
+          </Suspense>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

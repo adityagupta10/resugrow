@@ -32,6 +32,9 @@ import {
   calculateResponsibilityVsAchievementScore,
   calculateFileNameProfessionalismScore 
 } from '@/lib/ats-modules';
+
+const PRIVATE_CACHE_HEADERS = { 'Cache-Control': 'private, max-age=300' };
+
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
@@ -718,20 +721,23 @@ export async function POST(request) {
       probability = "High";
     }
 
-    return NextResponse.json({
-      score: totalV2Score,
-      probability,
-      gapAnalysis: kwMatch.skipped ? [] : kwMatch.gapAnalysis,
-      fileInfo,
-      categories,
-      repetitionData: repetition.repetitionData,
-      missingKeywords: kwMatch.skipped ? [] : kwMatch.missing,
-      verbAnalysis: {
-        strong: actionVerbs.strongVerbs,
-        weak: actionVerbs.weakVerbs
+    return NextResponse.json(
+      {
+        score: totalV2Score,
+        probability,
+        gapAnalysis: kwMatch.skipped ? [] : kwMatch.gapAnalysis,
+        fileInfo,
+        categories,
+        repetitionData: repetition.repetitionData,
+        missingKeywords: kwMatch.skipped ? [] : kwMatch.missing,
+        verbAnalysis: {
+          strong: actionVerbs.strongVerbs,
+          weak: actionVerbs.weakVerbs
+        },
+        extractedData
       },
-      extractedData
-    });
+      { headers: PRIVATE_CACHE_HEADERS }
+    );
   } catch (err) {
     console.error('ATS Scan Error:', err);
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });

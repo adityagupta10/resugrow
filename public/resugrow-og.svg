@@ -1,0 +1,29 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">ResuGrow AI Resume Builder social sharing preview</title>
+  <desc id="desc">A branded ResuGrow open graph image for AI resume building, ATS resume checking, and LinkedIn optimization.</desc>
+  <rect width="1200" height="630" fill="#F6FAFF"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#bg)"/>
+  <circle cx="1010" cy="112" r="184" fill="#DBEAFE" opacity="0.72"/>
+  <circle cx="177" cy="529" r="216" fill="#DDF5EF" opacity="0.68"/>
+  <rect x="74" y="72" width="1052" height="486" rx="44" fill="white" stroke="#D8E3F2" stroke-width="2"/>
+  <path d="M132 150L171 128L210 150V196L171 218L132 196V150Z" stroke="#0F172A" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M151 183L165 171L178 179L194 154" stroke="#2563EB" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="235" y="178" fill="#2563EB" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="800" letter-spacing="10">RESUGROW</text>
+  <text x="132" y="300" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="78" font-weight="900">Build a Recruiter-Ready</text>
+  <text x="132" y="392" fill="#2563EB" font-family="Arial, Helvetica, sans-serif" font-size="78" font-weight="900">AI Resume</text>
+  <text x="132" y="462" fill="#475569" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="500">ATS scoring, LinkedIn optimization, and AI rewriting in one career platform.</text>
+  <rect x="782" y="208" width="278" height="266" rx="26" fill="#F8FBFF" stroke="#BED5F7" stroke-width="2"/>
+  <rect x="818" y="252" width="206" height="18" rx="9" fill="#2563EB"/>
+  <rect x="818" y="300" width="172" height="14" rx="7" fill="#94A3B8"/>
+  <rect x="818" y="335" width="206" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="818" y="370" width="148" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="818" y="416" width="104" height="24" rx="12" fill="#10B981" opacity="0.86"/>
+  <text x="944" y="435" fill="#0F172A" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800">89/100</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EFF6FF"/>
+      <stop offset="0.48" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#ECFEFF"/>
+    </linearGradient>
+  </defs>
+</svg>

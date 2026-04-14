@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ROLE_SUGGESTIONS } from '@/lib/ai-suggestions';
-import { getBreadcrumbJsonLd, getFaqJsonLd, SITE_URL } from '@/lib/seo';
+import { DEFAULT_OG_IMAGE, getBreadcrumbJsonLd, getFaqJsonLd, SITE_URL } from '@/lib/seo';
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 function formatRole(slug) {
@@ -36,13 +36,13 @@ export async function generateMetadata({ params }) {
       `${role} skills`, `${formattedRole} resume template`,
       'resume builder', 'ats resume', 'ai resume',
     ],
-    alternates: { canonical: `/examples/${role}` },
+    alternates: { canonical: `${SITE_URL}/examples/${role}` },
     openGraph: {
       title: `How to Write a ${formattedRole} Resume in 2026`,
       description: `Expert-vetted resume examples and skills for ${formattedRole} professionals. Built for ATS.`,
       url: `${SITE_URL}/examples/${role}`,
       siteName: 'RESUGROW',
-      images: [{ url: '/resugrow-logo.png', width: 1200, height: 630, alt: `${formattedRole} resume example — ResuGrow` }],
+      images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: `${formattedRole} resume example — ResuGrow` }],
       locale: 'en_US',
       type: 'article',
     },

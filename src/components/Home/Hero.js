@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useCallback, memo } from 'react';
-import Link from 'next/link';
 import TrackedLink from '@/components/UI/TrackedLink';
 import Image from 'next/image';
 import styles from '@/app/page.module.css';

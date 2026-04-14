@@ -3,6 +3,8 @@ import { parsePDF } from '@/lib/pdf-extract';
 import { parseLinkedInPDF } from '@/utils/linkedin-pdf-parser';
 import { scoreLinkedInProfile } from '@/lib/linkedinScorer';
 
+const PRIVATE_CACHE_HEADERS = { 'Cache-Control': 'private, max-age=300' };
+
 function deriveCurrentPosition(headline, experienceEntries = []) {
   const headlineValue = String(headline || '').trim();
   if (headlineValue) {
@@ -112,26 +114,29 @@ export async function POST(request) {
       parsed.sections.experienceEntries
     );
 
-    return NextResponse.json({
-      ...scorecard,
-      extractedData: {
-        fullName: parsed.fullName || 'Not found',
-        email: parsed.sections.contactInfo?.email || 'Not found',
-        currentPosition: currentPosition || 'Not found',
-        linkedinUrl: parsed.sections.contactInfo?.url || 'Not found',
-        headline: parsed.headline || 'Unknown Profile',
-        aboutPreview: String(parsed.sections.about || '').slice(0, 120),
-        expCount: Array.isArray(parsed.sections.experienceEntries)
-          ? parsed.sections.experienceEntries.length
-          : 0,
-        confidence: Number.isFinite(parsed.confidence) ? parsed.confidence : 0,
-        language: parsed.language || 'English'
+    return NextResponse.json(
+      {
+        ...scorecard,
+        extractedData: {
+          fullName: parsed.fullName || 'Not found',
+          email: parsed.sections.contactInfo?.email || 'Not found',
+          currentPosition: currentPosition || 'Not found',
+          linkedinUrl: parsed.sections.contactInfo?.url || 'Not found',
+          headline: parsed.headline || 'Unknown Profile',
+          aboutPreview: String(parsed.sections.about || '').slice(0, 120),
+          expCount: Array.isArray(parsed.sections.experienceEntries)
+            ? parsed.sections.experienceEntries.length
+            : 0,
+          confidence: Number.isFinite(parsed.confidence) ? parsed.confidence : 0,
+          language: parsed.language || 'English'
+        },
+        bouncer: parsed.bouncer || {
+          passed: true,
+          mode: isPasteMode ? 'paste' : 'pdf'
+        }
       },
-      bouncer: parsed.bouncer || {
-        passed: true,
-        mode: isPasteMode ? 'paste' : 'pdf'
-      }
-    });
+      { headers: PRIVATE_CACHE_HEADERS }
+    );
   } catch (error) {
     console.error('LinkedIn scan failed:', error);
     return NextResponse.json(

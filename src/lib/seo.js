@@ -43,7 +43,7 @@ export function createPageMetadata({
     title,
     description,
     keywords: mergedKeywords,
-    alternates: { canonical: normalizedPath },
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title,
       description,
