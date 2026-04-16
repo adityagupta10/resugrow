@@ -143,6 +143,38 @@ export default async function RoleExamplePage({ params }) {
           </div>
         </section>
 
+        {/* Matching template backlink */}
+        <section
+          style={{
+            marginBottom: '48px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '24px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            background: 'linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%)',
+            border: '1px solid #bfdbfe',
+            borderRadius: '22px',
+            padding: '28px',
+            boxShadow: '0 18px 46px rgba(37, 99, 235, 0.08)',
+          }}
+        >
+          <div>
+            <div style={{ display: 'inline-flex', padding: '6px 11px', borderRadius: '999px', background: 'white', color: '#2563eb', border: '1px solid #bfdbfe', fontSize: '11px', fontWeight: 900, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>
+              Matching Template
+            </div>
+            <h2 style={{ margin: '0 0 8px', color: '#0f172a', fontSize: '24px', letterSpacing: '-0.03em' }}>
+              Want a ready-to-use {formattedRole} resume layout?
+            </h2>
+            <p style={{ margin: 0, color: '#475569', fontSize: '15px', lineHeight: 1.75 }}>
+              Open the matching template page to pair this guide&apos;s skills, metrics, and bullet examples with an ATS-friendly resume design.
+            </p>
+          </div>
+          <Link href={`/templates/${role}`} className="btn btn-primary" style={{ whiteSpace: 'nowrap' }}>
+            View {formattedRole} Template
+          </Link>
+        </section>
+
         {/* Summary examples */}
         <section style={{ marginBottom: '48px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a', marginBottom: '8px' }}>

@@ -1,5 +1,6 @@
 import { posts } from "./blog/data";
 import { ROLE_SUGGESTIONS } from "@/lib/ai-suggestions";
+import { templates } from "@/data/templates";
 
 export default function sitemap() {
   const baseUrl = "https://www.resugrow.com";
@@ -166,12 +167,35 @@ export default function sitemap() {
   }));
 
   // ── Dynamic role example pages ─────────────────────────────────────────
-  const exampleRoutes = Object.keys(ROLE_SUGGESTIONS).map((role) => ({
+  const roleSlugs = Object.keys(ROLE_SUGGESTIONS).filter((role) => role !== "general");
+
+  const exampleRoutes = roleSlugs.map((role) => ({
     url: `${baseUrl}/examples/${role}`,
     changeFrequency: "weekly",
     priority: 0.86,
     lastModified: now,
   }));
 
-  return [...staticRoutes, ...blogRoutes, ...exampleRoutes];
+  // ── SEO template pages ─────────────────────────────────────────────────
+  const visualTemplateRoutes = templates.map((t) => ({
+    url: `${baseUrl}/templates/${t.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.82,
+    lastModified: now,
+  }));
+
+  const roleTemplateRoutes = roleSlugs.map((role) => ({
+    url: `${baseUrl}/templates/${role}`,
+    changeFrequency: "monthly",
+    priority: 0.84,
+    lastModified: now,
+  }));
+
+  return [
+    ...staticRoutes,
+    ...visualTemplateRoutes,
+    ...roleTemplateRoutes,
+    ...blogRoutes,
+    ...exampleRoutes,
+  ];
 }

@@ -6,6 +6,7 @@ import Testimonials from '@/components/Testimonials/Testimonials';
 import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
 import TemplateGallery from './client-gallery';
 import { listApprovedCommunityTemplates } from '@/lib/communityTemplatesDb';
+import { ROLE_SUGGESTIONS } from '@/lib/ai-suggestions';
 
 export const revalidate = 3600;
 
@@ -22,6 +23,18 @@ export const metadata = createPageMetadata({
 });
 
 const templates = templateData;
+
+function formatRole(slug) {
+  return slug
+    .replace(/-resume$/, '')
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+function listFrom(value) {
+  return Array.isArray(value) ? value : [];
+}
 
 export default async function Templates() {
   const communityTemplates = await listApprovedCommunityTemplates();
@@ -56,6 +69,80 @@ export default async function Templates() {
       </section>
 
       <TemplateGallery templates={templates} />
+
+      <section className={styles.subpage}>
+        <div className={styles.subpageContainer}>
+          <div
+            style={{
+              background: 'linear-gradient(135deg, #f8fbff 0%, #eef2ff 100%)',
+              border: '1px solid #dbe6f6',
+              borderRadius: '32px',
+              padding: '34px',
+              boxShadow: '0 22px 60px rgba(15, 23, 42, 0.08)',
+            }}
+          >
+            <div style={{ maxWidth: '760px', marginBottom: '24px' }}>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  padding: '7px 13px',
+                  borderRadius: '999px',
+                  background: 'white',
+                  border: '1px solid #bfdbfe',
+                  color: '#2563eb',
+                  fontSize: '12px',
+                  fontWeight: 900,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  marginBottom: '14px',
+                }}
+              >
+                Templates By Job Title
+              </div>
+              <h2 style={{ margin: '0 0 10px', color: '#0f172a', fontSize: 'clamp(28px, 4vw, 42px)', letterSpacing: '-0.04em' }}>
+                Pick a resume template built for your exact role
+              </h2>
+              <p style={{ margin: 0, color: '#64748b', fontSize: '16px', lineHeight: 1.75 }}>
+                Each role page combines an ATS-friendly template with the matching resume example data:
+                top skills, metrics, summaries, and bullet patterns.
+              </p>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '12px',
+              }}
+            >
+              {Object.keys(ROLE_SUGGESTIONS)
+                .filter((role) => role !== 'general')
+                .map((role) => (
+                  <Link
+                    key={role}
+                    href={`/templates/${role}`}
+                    style={{
+                      background: 'rgba(255,255,255,0.86)',
+                      border: '1px solid #dbe6f6',
+                      borderRadius: '18px',
+                      padding: '16px',
+                      textDecoration: 'none',
+                      color: '#0f172a',
+                      boxShadow: '0 10px 28px rgba(15,23,42,0.045)',
+                    }}
+                  >
+                    <span style={{ display: 'block', fontSize: '15px', fontWeight: 850, marginBottom: '5px' }}>
+                      {formatRole(role)} Resume Template
+                    </span>
+                    <span style={{ display: 'block', fontSize: '12px', color: '#64748b', lineHeight: 1.5 }}>
+                      {listFrom(ROLE_SUGGESTIONS[role].skills).slice(0, 3).join(', ')}
+                    </span>
+                  </Link>
+                ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className={styles.subpage}>
         <div className={styles.subpageContainer}>

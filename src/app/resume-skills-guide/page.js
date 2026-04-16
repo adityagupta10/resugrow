@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { createPageMetadata, getFaqJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
 
 export const metadata = createPageMetadata({
-  title: 'Resume Skills Guide: Hard Skills vs Soft Skills (2025)',
+  title: 'Resume Skills Guide: Hard Skills vs Soft Skills (2026)',
   description:
-    'Discover the best skills to put on a resume in 2025. Learn the difference between hard and soft skills, and how to format your skills section for ATS systems.',
+    'Discover the best skills to put on a resume in 2026. Learn the difference between hard and soft skills, and how to format your skills section for ATS systems.',
   path: '/resume-skills-guide',
   keywords: [
     'resume skills', 'hard skills vs soft skills', 'skills to put on a resume',
@@ -64,7 +64,7 @@ export default function ResumeSkillsGuidePage() {
             Career Guide
           </div>
           <h1 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 800, color: '#0f172a', lineHeight: 1.15, letterSpacing: '-0.03em', marginBottom: '16px' }}>
-            The Ultimate Resume Skills Guide for 2025
+            The Ultimate Resume Skills Guide for 2026
           </h1>
           <p style={{ fontSize: '18px', color: '#475569', lineHeight: 1.7, maxWidth: '680px' }}>
             Your skills section isn't just a list—it's the primary way Applicant Tracking Systems (ATS) filter candidates. Learn how to strategically feature the right hard and soft skills to land more interviews.
