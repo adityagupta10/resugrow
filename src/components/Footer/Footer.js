@@ -63,6 +63,7 @@ const footerLinks = {
     },
     { label: "Resugrow Blogs", href: "/blog", badge: "⚡" },
     { label: "Resugrow Career Tips and Advice", href: "/career-tips", badge: "⚡" },
+    { label: "My Dashboard", href: "/dashboard" },
     { label: "Help Center", href: "/help-center" },
     { label: "About Us", href: "/about" },
     { label: "Contact Us", href: "/contact" },
