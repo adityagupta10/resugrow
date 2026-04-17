@@ -51,7 +51,7 @@ export default function LoadMorePosts({ posts }) {
 
       {hasMore && (
         <div className={styles.loadMoreWrap}>
-          <button onClick={showMore} className={styles.loadMoreBtn}>
+          <button onClick={showMore} className={`btn btn-secondary ${styles.loadMoreBtn}`}>
             Show More Articles ({posts.length - visible} remaining)
           </button>
         </div>

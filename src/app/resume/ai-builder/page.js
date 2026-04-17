@@ -2,6 +2,7 @@ import Link from 'next/link';
 import styles from '../../subpage.module.css';
 import { createPageMetadata } from '@/lib/seo';
 import EmojiImage from '@/components/UI/EmojiImage';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
   title: 'Free AI Resume Builder — Build ATS-Friendly Resumes Faster',
@@ -86,6 +87,8 @@ export default function AIBuilder() {
           </div>
         </div>
       </section>
+
+      <RelatedTools />
     </>
   );
 }

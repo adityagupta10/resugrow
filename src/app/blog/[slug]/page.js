@@ -11,7 +11,27 @@ import styles from './post.module.css';
 import { supabase } from '@/lib/supabase';
 
 export async function generateStaticParams() {
-  return posts.map((p) => ({ slug: p.slug }));
+  const staticSlugs = posts.map((p) => ({ slug: p.slug }));
+
+  // Also pre-render admin-created blog posts from Supabase
+  try {
+    const { data: dbPosts } = await supabase
+      .from('BlogPost')
+      .select('slug')
+      .eq('isPublished', true);
+
+    if (dbPosts) {
+      const staticSet = new Set(posts.map((p) => p.slug));
+      const dbSlugs = dbPosts
+        .filter((p) => !staticSet.has(p.slug))
+        .map((p) => ({ slug: p.slug }));
+      return [...staticSlugs, ...dbSlugs];
+    }
+  } catch {
+    // Supabase unavailable at build time — fall back to static only
+  }
+
+  return staticSlugs;
 }
 
 export async function generateMetadata({ params }) {

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { createPageMetadata, getFaqJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
   title: 'RESUGROW vs Canva, Zety, Resume.io & Other Resume Builders',
@@ -160,6 +161,7 @@ export default function ResumeBuilderComparisonPage() {
           </div>
         </div>
       </div>
+      <RelatedTools />
     </>
   );
 }

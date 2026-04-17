@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { glossaryTerms } from '@/data/glossaryTerms';
 import { createPageMetadata, getFaqJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 import styles from '../glossary.module.css';
 
 export async function generateStaticParams() {
@@ -88,7 +89,12 @@ export default async function GlossaryTermPage({ params }) {
           <Link href="/resume/builder" className="btn btn-primary" style={{ background: 'white', color: '#1d4ed8' }}>
             Build My Resume Free
           </Link>
+          <Link href="/glossary" style={{ display: 'block', marginTop: '16px', color: '#bfdbfe', fontSize: '14px', fontWeight: 600 }}>
+            ← Back to all terms
+          </Link>
         </div>
+
+        <RelatedTools />
       </main>
     </>
   );

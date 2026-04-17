@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { createPageMetadata, getFaqJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
   title: 'CV vs Resume: What\'s the Difference? (2025 Guide)',
@@ -198,6 +199,8 @@ export default function CVvsResumePage() {
           </div>
         </div>
       </div>
+
+      <RelatedTools />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 import { ROLE_SUGGESTIONS } from '@/lib/ai-suggestions';
 import { createPageMetadata } from '@/lib/seo';
 
@@ -38,8 +39,9 @@ export default function ExamplesIndexPage() {
   const roles = Object.keys(ROLE_SUGGESTIONS).filter(r => r !== 'general');
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <nav style={{ fontSize: '13px', color: '#64748b', marginBottom: '32px' }}>
+    <>
+      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px 80px' }}>
+        <nav style={{ fontSize: '13px', color: '#64748b', marginBottom: '32px' }}>
         <Link href="/" style={{ color: '#2563eb' }}>Home</Link>
         <span style={{ margin: '0 8px' }}>›</span>
         <span>Resume Examples</span>
@@ -79,7 +81,10 @@ export default function ExamplesIndexPage() {
         <Link href="/resume/builder" className="btn btn-primary" style={{ background: 'white', color: '#1d4ed8', fontWeight: 700 }}>
           Build My Resume Free
         </Link>
+        </div>
       </div>
-    </div>
+
+      <RelatedTools />
+    </>
   );
 }

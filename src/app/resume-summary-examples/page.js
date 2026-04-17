@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { createPageMetadata, getFaqJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
   title: 'Resume Summary Examples: How to Write a Summary (2026)',
@@ -195,6 +196,7 @@ export default function ResumeSummaryExamplesPage() {
           </div>
         </div>
       </div>
+      <RelatedTools />
     </>
   );
 }

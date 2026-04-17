@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ROLE_SUGGESTIONS } from '@/lib/ai-suggestions';
 import { DEFAULT_OG_IMAGE, getBreadcrumbJsonLd, getFaqJsonLd, SITE_URL } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 function formatRole(slug) {
@@ -277,6 +278,7 @@ export default async function RoleExamplePage({ params }) {
           </div>
         </div>
       </div>
+      <RelatedTools />
     </>
   );
 }

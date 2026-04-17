@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { ClipboardList, FileText, Inbox, Lock, AlertTriangle, FileSignature, UserCircle, Briefcase, Target, BarChart2, Lightbulb } from 'lucide-react';
 import { trackCTA } from '@/lib/analytics';
 import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 import styles from '../subpage.module.css';
 
 const analysisCategories = [
@@ -262,6 +263,7 @@ export default function ProfileReview() {
           </div>
         </div>
       </section>
+      <RelatedTools />
     </div>
   );
 }

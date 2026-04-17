@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { createPageMetadata, getFaqJsonLd, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
   title: 'What is an ATS Resume? The Complete ATS Resume Guide (2026)',
@@ -142,6 +143,7 @@ export default function AtsResumeGuidePage() {
           </div>
         </div>
       </div>
+      <RelatedTools />
     </>
   );
 }

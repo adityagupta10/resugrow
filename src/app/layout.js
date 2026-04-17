@@ -94,6 +94,13 @@ export default function RootLayout({ children }) {
         {/* Preconnect to Google Analytics to reduce DNS/TLS latency */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+        {/* hreflang — signals to search engines this is the primary/default language */}
+        <link rel="alternate" hrefLang="en" href="https://www.resugrow.com" />
+        <link rel="alternate" hrefLang="x-default" href="https://www.resugrow.com" />
+
+        {/* Preload critical above-the-fold image to improve LCP */}
+        <link rel="preload" href="/resugrow-logo.png" as="image" type="image/png" />
       </head>
       <body className={inter.className}>
         <AuthProvider>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { createPageMetadata, getBreadcrumbJsonLd, getFaqJsonLd, SITE_URL } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
   title: 'All Career Tools — Resume Builder, ATS Checker, LinkedIn & More | ResuGrow',
@@ -314,6 +315,7 @@ export default function AllToolsPage() {
             </div>
           </div>
         </div>
+        <RelatedTools />
       </div>
     </>
   );

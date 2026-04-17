@@ -3,6 +3,7 @@ import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
 import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../../subpage.module.css';
 import landingStyles from './landing.module.css';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
   title: 'Free Cover Letter Builder — Job-Tailored Letters in Minutes',
@@ -76,6 +77,8 @@ export default function CoverLetterBuilder() {
           </div>
         </div>
       </section>
+
+      <RelatedTools />
     </div>
   );
 }

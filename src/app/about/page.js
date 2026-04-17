@@ -2,6 +2,7 @@ import Link from 'next/link';
 import styles from '../subpage.module.css';
 import { createPageMetadata } from '@/lib/seo';
 import EmojiImage from '@/components/UI/EmojiImage';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
   title: 'About RESUGROW | AI Career Platform Mission & Team',
@@ -153,6 +154,7 @@ export default function About() {
           </div>
         </div>
       </section>
+      <RelatedTools />
     </>
   );
 }

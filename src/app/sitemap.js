@@ -1,8 +1,10 @@
 import { posts } from "./blog/data";
 import { ROLE_SUGGESTIONS } from "@/lib/ai-suggestions";
 import { templates } from "@/data/templates";
+import { glossaryTerms } from "@/data/glossaryTerms";
+import { supabase } from "@/lib/supabase";
 
-export default function sitemap() {
+export default async function sitemap() {
   const baseUrl = "https://www.resugrow.com";
   const now = new Date();
 
@@ -81,6 +83,12 @@ export default function sitemap() {
       lastModified: now,
     },
     {
+      url: `${baseUrl}/glossary`,
+      changeFrequency: "weekly",
+      priority: 0.85,
+      lastModified: now,
+    },
+    {
       url: `${baseUrl}/cv-vs-resume`,
       changeFrequency: "monthly",
       priority: 0.89,
@@ -102,6 +110,30 @@ export default function sitemap() {
       url: `${baseUrl}/career-tips`,
       changeFrequency: "weekly",
       priority: 0.82,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/resume-skills-guide`,
+      changeFrequency: "monthly",
+      priority: 0.8,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/resume-summary-examples`,
+      changeFrequency: "monthly",
+      priority: 0.8,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/ats-resume-guide`,
+      changeFrequency: "monthly",
+      priority: 0.8,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/resume-builder-comparison`,
+      changeFrequency: "monthly",
+      priority: 0.78,
       lastModified: now,
     },
     {
@@ -158,13 +190,36 @@ export default function sitemap() {
     },
   ];
 
-  // ── Dynamic blog post URLs ─────────────────────────────────────────────
+  // ── Dynamic blog post URLs (static data) ───────────────────────────────
   const blogRoutes = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     changeFrequency: "monthly",
     priority: 0.78,
     lastModified: parseDate(post.dateModified) || parseDate(post.date) || now,
   }));
+
+  // ── Dynamic blog posts from Supabase (admin-created) ───────────────────
+  let dbBlogRoutes = [];
+  try {
+    const staticSlugs = new Set(posts.map((p) => p.slug));
+    const { data: dbPosts } = await supabase
+      .from("BlogPost")
+      .select("slug, updatedAt")
+      .eq("isPublished", true);
+
+    if (dbPosts) {
+      dbBlogRoutes = dbPosts
+        .filter((p) => !staticSlugs.has(p.slug))
+        .map((p) => ({
+          url: `${baseUrl}/blog/${p.slug}`,
+          changeFrequency: "monthly",
+          priority: 0.76,
+          lastModified: parseDate(p.updatedAt) || now,
+        }));
+    }
+  } catch {
+    // Supabase unavailable at build time — skip gracefully
+  }
 
   // ── Dynamic role example pages ─────────────────────────────────────────
   const roleSlugs = Object.keys(ROLE_SUGGESTIONS).filter((role) => role !== "general");
@@ -191,11 +246,42 @@ export default function sitemap() {
     lastModified: now,
   }));
 
+  // ── Glossary term pages ────────────────────────────────────────────────
+  const glossaryRoutes = glossaryTerms.map((term) => ({
+    url: `${baseUrl}/glossary/${term.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.72,
+    lastModified: now,
+  }));
+
+  // ── Community marketplace template pages (from Supabase) ───────────────
+  let communityTemplateRoutes = [];
+  try {
+    const { data: communityTemplates } = await supabase
+      .from("CommunityTemplateSubmission")
+      .select("slug, updatedAt")
+      .eq("status", "APPROVED");
+
+    if (communityTemplates) {
+      communityTemplateRoutes = communityTemplates.map((t) => ({
+        url: `${baseUrl}/resume/template-marketplace/${t.slug}`,
+        changeFrequency: "monthly",
+        priority: 0.7,
+        lastModified: parseDate(t.updatedAt) || now,
+      }));
+    }
+  } catch {
+    // Supabase unavailable at build time — skip gracefully
+  }
+
   return [
     ...staticRoutes,
     ...visualTemplateRoutes,
     ...roleTemplateRoutes,
     ...blogRoutes,
+    ...dbBlogRoutes,
     ...exampleRoutes,
+    ...glossaryRoutes,
+    ...communityTemplateRoutes,
   ];
 }

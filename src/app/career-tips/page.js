@@ -2,6 +2,7 @@ import Link from 'next/link';
 import styles from '../subpage.module.css';
 import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } from '@/lib/seo';
 import { strategicPosts } from '../blog/strategicPosts';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
     title: 'Career Tips, Resume Advice & Interview Guides | RESUGROW',
@@ -106,6 +107,7 @@ export default function CareerTips() {
                     </div>
                 </div>
             </section>
+            <RelatedTools />
         </>
     );
 }

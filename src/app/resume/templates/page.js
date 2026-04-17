@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styles from '../../subpage.module.css';
 import Image from 'next/image';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 import { templates as templateData } from '../../../data/templates';
 import Testimonials from '@/components/Testimonials/Testimonials';
 import { SITE_URL, createPageMetadata, getSoftwareAppJsonLd } from '@/lib/seo';
@@ -225,6 +226,8 @@ export default async function Templates() {
         title="Templates that Get Hired" 
         subtitle="See how our ATS-optimized layouts helped these professionals land interviews at top companies." 
       />
+
+      <RelatedTools />
     </>
   );
 }

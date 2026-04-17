@@ -6,6 +6,7 @@ import EmojiImage from '@/components/UI/EmojiImage';
 import styles from '../subpage.module.css';
 import { platformFaqs } from '@/data/expandedfaqs';
 import { getBreadcrumbJsonLd, getFaqJsonLd, SITE_URL } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 // Group the flat FAQ array by category
 const grouped = platformFaqs.reduce((acc, faq) => {
@@ -300,6 +301,7 @@ export default function HelpCenter() {
           </div>
         </div>
       </section>
+      <RelatedTools />
     </>
   );
 }

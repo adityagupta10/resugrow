@@ -10,6 +10,7 @@ import {
   getSoftwareAppJsonLd,
   SITE_URL,
 } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 const roleSlugs = Object.keys(ROLE_SUGGESTIONS).filter((role) => role !== 'general');
 
@@ -286,6 +287,7 @@ function RoleTemplatePage({ roleSlug, roleData }) {
             </div>
           </section>
         </section>
+        <RelatedTools />
       </main>
     </>
   );
@@ -413,6 +415,7 @@ function VisualTemplatePage({ template }) {
             </section>
           )}
         </section>
+        <RelatedTools />
       </main>
     </>
   );

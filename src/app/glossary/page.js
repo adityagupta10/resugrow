@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createPageMetadata, SITE_URL } from '@/lib/seo';
 import { glossaryTerms } from '@/data/glossaryTerms';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 import styles from './glossary.module.css';
 
 export const metadata = createPageMetadata({
@@ -29,6 +30,8 @@ export default function GlossaryIndexPage() {
           </Link>
         ))}
       </div>
+
+      <RelatedTools />
     </div>
   );
 }

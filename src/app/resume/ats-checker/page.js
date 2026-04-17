@@ -8,6 +8,7 @@ import { INDUSTRY_MAPPINGS } from '@/constants/industry_keywords';
 import EmojiImage from '@/components/UI/EmojiImage';
 import { trackCTA } from '@/lib/analytics';
 import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 import styles from '../../subpage.module.css';
 
 const features = [
@@ -453,6 +454,7 @@ export default function ATSChecker() {
           </div>
         </div>
       </section>
+      <RelatedTools />
     </>
   );
 }

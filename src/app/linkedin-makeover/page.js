@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import EmojiImage from '@/components/UI/EmojiImage';
 import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 import styles from './page.module.css';
 
 const heroPhrases = [
@@ -238,6 +239,8 @@ export default function LinkedinMakeover() {
           </Link>
         </div>
       </section>
+
+      <RelatedTools />
     </div>
   );
 }

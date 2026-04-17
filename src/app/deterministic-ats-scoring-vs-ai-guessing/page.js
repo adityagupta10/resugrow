@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { createPageMetadata, getBreadcrumbJsonLd, SITE_URL } from '@/lib/seo';
+import RelatedTools from '@/components/RelatedTools/RelatedTools';
 
 export const metadata = createPageMetadata({
   title: 'Deterministic ATS Rules Engine vs Probabilistic AI | RESUGROW',
@@ -111,8 +112,8 @@ export default function DeterministicAtsScoringPage() {
             </Link>
           </div>
         </div>
-
       </div>
+      <RelatedTools />
     </>
   );
 }
