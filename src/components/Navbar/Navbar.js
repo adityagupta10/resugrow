@@ -12,7 +12,7 @@ const dropdownSections = [
   {
     key: "resume",
     label: "Resume",
-    badge: "1 New",
+    badge: null,
     items: [
       { label: "AI Resume Builder", href: "/resume/ai-builder", badge: "⚡", badgeStyle: "white" },
       { label: "ATS Score Checker", href: "/resume/ats-checker", badge: "🎯", badgeStyle: "white" },
@@ -32,7 +32,7 @@ const dropdownSections = [
   {
     key: "linkedin",
     label: "LinkedIn",
-    badge: "1 New",
+    badge: null,
     items: [
       { label: "LinkedIn Profile Boost", href: "/linkedin-makeover", badge: "🔥", badgeStyle: "white", },
       { label: "Profile Review & Score", href: "/linkedin-review", badge: "🏆", badgeStyle: "white" },
@@ -42,7 +42,7 @@ const dropdownSections = [
   {
     key: "tools",
     label: "Tools",
-    badge: "3 New",
+    badge: null,
     items: [
       {
         label: "AI SAR Bullet Rewriter",

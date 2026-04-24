@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { EMOJI_MAP } from '@/constants/emojis';
 
 /**
@@ -23,20 +24,19 @@ const EmojiImage = ({ emoji, size = 20, className = '', style = {}, alt: altProp
   const alt = (altProp && altProp.trim()) || emojiData.alt;
 
   return (
-    <img
+    <Image
       src={emojiData.src}
       alt={alt}
       width={size}
       height={size}
       className={className}
-      loading="lazy"
-      decoding="async"
       style={{
         objectFit: 'contain',
         verticalAlign: 'middle',
         display: 'inline-block',
         ...style
       }}
+      unoptimized={true}
     />
   );
 };

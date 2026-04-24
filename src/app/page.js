@@ -168,7 +168,9 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-
+      <h1 style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', borderWidth: 0 }}>
+        RESUGROW: Free AI Resume Builder, ATS Checker & LinkedIn Optimizer
+      </h1>
       <Hero />
 
       <section className={styles.proofSection}>
@@ -188,7 +190,7 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.sectionHeading}>
             <p>Product Suite</p>
-            <h2>Everything You Need to Win the First Recruiter Pass</h2>
+            <h2>Everything You Need in an AI Resume Builder & ATS Checker</h2>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px 0 60px' }}>
@@ -338,7 +340,7 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.sectionHeading}>
             <p>How It Works</p>
-            <h2>A Clean Workflow From Raw Profile to Interview-Ready Assets</h2>
+            <h2>How Our AI Career Tools & Resume Maker Work</h2>
           </div>
           <div className={styles.workflowGrid}>
             {workflowSteps.map((step) => (

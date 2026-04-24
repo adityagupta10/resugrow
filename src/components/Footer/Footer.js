@@ -181,7 +181,7 @@ export default function Footer() {
                   strokeLinejoin="round"
                 />
               </svg>
-              &nbsp; Follow<span className="gradient-text">&nbsp;RESUGROW&nbsp;</span>on LinkedIn
+              &nbsp; Follow<span className="gradient-text">&nbsp;Resugrow&nbsp;</span>on LinkedIn
             </a>
 
             <a
@@ -193,7 +193,7 @@ export default function Footer() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#00b67a" />
               </svg>
-              Rate<span className="gradient-text">RESUGROW</span>on Trustpilot
+              Rate<span className="gradient-text">Resugrow</span>on Trustpilot
             </a>
           </div>
 
@@ -233,7 +233,7 @@ export default function Footer() {
             </p>
           )}
           <p className={styles.copyright}>
-            Made with <span className="gradient-text">Love</span> and <span className="gradient-text">Hardwork</span> © {new Date().getFullYear()}{' '}
+            Made with <span className="gradient-text">Love</span> and <span className="gradient-text">Hard work</span> © {new Date().getFullYear()}{' '}
             <span className="gradient-text">RESUGROW</span>{' '}. All rights reserved.
           </p>
           <p className={styles.bottomLinks}>

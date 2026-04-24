@@ -277,9 +277,9 @@ function LoginContent() {
         <div className={styles.loginFormBox}>
           <div className={styles.trustBadge}>
             <div className={styles.tinyAvatars}>
-              <img src="https://i.pravatar.cc/150?u=1" className={styles.tinyAvatar} alt="Community job seeker avatar 1" />
-              <img src="https://i.pravatar.cc/150?u=2" className={styles.tinyAvatar} alt="Community job seeker avatar 2" />
-              <img src="https://i.pravatar.cc/150?u=3" className={styles.tinyAvatar} alt="Community job seeker avatar 3" />
+              <Image src="https://i.pravatar.cc/150?u=1" width={32} height={32} unoptimized className={styles.tinyAvatar} alt="Community job seeker avatar 1" />
+              <Image src="https://i.pravatar.cc/150?u=2" width={32} height={32} unoptimized className={styles.tinyAvatar} alt="Community job seeker avatar 2" />
+              <Image src="https://i.pravatar.cc/150?u=3" width={32} height={32} unoptimized className={styles.tinyAvatar} alt="Community job seeker avatar 3" />
             </div>
             <span className={styles.trustText}>
               2,90,382+ got interviews after signing up
@@ -289,7 +289,7 @@ function LoginContent() {
           <h2>Welcome to{' '}<span style={{ fontWeight: 900 }} className="gradient-text">RESUGROW</span></h2>
           <div className={styles.socialStack}>
             <button className={styles.socialBtn} onClick={() => startSupabaseOAuth('google')} disabled={isLoading} type="button">
-              <img src="/images/google.png" alt="Google logo for ResuGrow social sign-in" />
+              <Image src="/images/google.png" alt="Google logo for ResuGrow social sign-in" width={24} height={24} />
               Continue with Google
             </button>
 

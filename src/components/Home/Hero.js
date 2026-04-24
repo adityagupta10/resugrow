@@ -98,14 +98,14 @@ function Hero() {
         <div className={styles.heroGrid}>
           <div className={styles.heroContent}>
             <p className={styles.heroKicker}>#1 AI Career Advancement Platform</p>
-            <h1 className={styles.heroTitle}>
+            <h2 className={styles.heroTitle}>
               <span className={styles.typewriterWrap}>
                 <span className={styles.typewriterText}>{currentText}</span>
                 <span className={styles.typewriterCursor}>|</span>
               </span>
               <br />
               with{' '}<span className="gradient-text">RESUGROW</span>{' '}Platform
-            </h1>
+            </h2>
             <p className={styles.heroSubtitle}>
               The AI-powered career engine trusted by 25M+ pros to get hired at Google, Tesla, Microsoft and beyond.
               <br />
@@ -129,7 +129,10 @@ function Hero() {
             </div>
 
             <div className={styles.heroSignals}>
-              <span>Trusted by candidates targeting:</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '8px' }}>
+                <span style={{ color: '#64748b', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Top Applicant Destinations</span>
+                <span style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 500 }}>(We help candidates apply to these companies)</span>
+              </div>
               <div className={styles.signalChips}>
                 {targetCompanies.map((company) => (
                   <span key={company.name} className={styles.signalLogo} title={company.name}>
