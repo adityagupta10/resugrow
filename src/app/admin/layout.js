@@ -3,6 +3,14 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { isAdminEmail } from '@/lib/admin';
+import { createPageMetadata } from '@/lib/seo';
+
+export const metadata = createPageMetadata({
+  title: 'Admin Workspace | RESUGROW',
+  description: 'Private RESUGROW administration workspace.',
+  path: '/admin',
+  noindex: true,
+});
 
 export default async function AdminLayout({ children }) {
   const cookieStore = await cookies();

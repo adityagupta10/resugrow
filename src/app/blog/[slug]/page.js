@@ -212,6 +212,7 @@ export default async function BlogPost({ params }) {
     description: post.excerpt,
     slug: post.slug,
     date: post.date,
+    dateModified: post.dateModified || post.updatedAt || post.createdAt,
     authorName: post.author,
     authorRole: post.authorRole,
     imageUrl: post.coverImage ? `${SITE_URL}${post.coverImage}` : undefined,

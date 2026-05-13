@@ -21,10 +21,16 @@ export default function robots() {
           "/tools/interview-prep",
           "/tools/linkedin-studio",
           "/tools/salary-coach",
+          "/tools/career-path",
 
           // Transient result pages (localStorage-hydrated, no stable URL content)
           "/resume/ats-checker/results",
           "/linkedin-review/results",
+
+          // Internal creator/admin workspaces
+          "/admin",
+          "/resume/template-marketplace/submit",
+          "/resume/template-marketplace/my",
 
           // Account / checkout pages
           "/dashboard",

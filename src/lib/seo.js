@@ -4,6 +4,7 @@ export const SITE_TWITTER = "@resugrow";
 export const SITE_LINKEDIN_URL =
   "https://www.linkedin.com/company/resugrow-com/";
 export const DEFAULT_OG_IMAGE = "/resugrow-og.png";
+export const DEFAULT_LOGO_IMAGE = "/icon.png";
 
 // ── Global keyword base (merged into every page) ──────────────────────────
 const GLOBAL_KEYWORDS = [
@@ -22,6 +23,12 @@ function normalizePath(path = "/") {
   return path.startsWith("/") ? path : `/${path}`;
 }
 
+function absoluteAssetUrl(pathOrUrl) {
+  if (!pathOrUrl) return `${SITE_URL}${DEFAULT_OG_IMAGE}`;
+  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
+  return `${SITE_URL}${normalizePath(pathOrUrl)}`;
+}
+
 // ── Core metadata factory ─────────────────────────────────────────────────
 export function createPageMetadata({
   title,
@@ -38,6 +45,7 @@ export function createPageMetadata({
     normalizedPath === "/" ? SITE_URL : `${SITE_URL}${normalizedPath}`;
   const mergedKeywords = [...new Set([...GLOBAL_KEYWORDS, ...keywords])];
   const resolvedAlt = imageAlt || `${title} — RESUGROW`;
+  const resolvedImage = absoluteAssetUrl(image);
 
   return {
     title,
@@ -51,7 +59,7 @@ export function createPageMetadata({
       siteName: SITE_NAME,
       type,
       locale: "en_US",
-      images: [{ url: image, width: 1200, height: 630, alt: resolvedAlt }],
+      images: [{ url: resolvedImage, width: 1200, height: 630, alt: resolvedAlt }],
     },
     twitter: {
       card: "summary_large_image",
@@ -59,7 +67,7 @@ export function createPageMetadata({
       creator: SITE_TWITTER,
       title,
       description,
-      images: [image],
+      images: [resolvedImage],
     },
     robots: noindex
       ? {
@@ -96,17 +104,20 @@ export function getOrganizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
     name: SITE_NAME,
+    alternateName: ["ResuGrow", "RESUGROW AI Resume Builder"],
     description:
       "RESUGROW is an AI-powered career platform helping job seekers build ATS-optimized resumes, improve LinkedIn profiles, and land more interviews.",
     url: SITE_URL,
     foundingDate: "2024",
     logo: {
       "@type": "ImageObject",
-      url: `${SITE_URL}/resugrow-logo.png`,
-      width: 180,
-      height: 48,
+      url: `${SITE_URL}${DEFAULT_LOGO_IMAGE}`,
+      width: 500,
+      height: 500,
     },
+    image: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
     sameAs: [
       SITE_LINKEDIN_URL,
       "https://x.com/resugrow",
@@ -126,15 +137,12 @@ export function getWebsiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
     name: SITE_NAME,
     url: SITE_URL,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/blog?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
+    inLanguage: "en-US",
+    publisher: {
+      "@id": `${SITE_URL}/#organization`,
     },
   };
 }
@@ -179,6 +187,7 @@ export function getSoftwareAppJsonLd({
     }),
     publisher: {
       "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
       name: SITE_NAME,
       url: SITE_URL,
     },
@@ -213,6 +222,7 @@ export function getServiceJsonLd({
     areaServed,
     provider: {
       "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
       name: SITE_NAME,
       url: SITE_URL,
     },
@@ -283,15 +293,16 @@ export function getArticleJsonLd({
   imageUrl,
   imageAlt,
 }) {
-  const resolvedImageUrl = imageUrl || `${SITE_URL}/resugrow-logo.png`;
+  const resolvedImageUrl = imageUrl || `${SITE_URL}${DEFAULT_OG_IMAGE}`;
   return {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: title,
     description,
     url: `${SITE_URL}/blog/${slug}`,
     datePublished: date,
     dateModified: dateModified || date,
+    inLanguage: "en-US",
     author: {
       "@type": "Person",
       name: authorName,
@@ -299,10 +310,13 @@ export function getArticleJsonLd({
     },
     publisher: {
       "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
       name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/resugrow-logo.png`,
+        url: `${SITE_URL}${DEFAULT_LOGO_IMAGE}`,
+        width: 500,
+        height: 500,
       },
     },
     image: {

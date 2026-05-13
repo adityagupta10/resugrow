@@ -51,12 +51,6 @@ export default async function sitemap() {
       lastModified: now,
     },
     {
-      url: `${baseUrl}/resume/template-marketplace/submit`,
-      changeFrequency: "monthly",
-      priority: 0.75,
-      lastModified: now,
-    },
-    {
       url: `${baseUrl}/linkedin-makeover`,
       changeFrequency: "weekly",
       priority: 0.93,
@@ -148,7 +142,12 @@ export default async function sitemap() {
       priority: 0.78,
       lastModified: now,
     },
-
+    {
+      url: `${baseUrl}/deterministic-ats-scoring-vs-ai-guessing`,
+      changeFrequency: "monthly",
+      priority: 0.8,
+      lastModified: now,
+    },
     // ── Tier 4: Company / trust pages ─────────────────────────────────────
     {
       url: `${baseUrl}/about`,

@@ -1,1 +1,16 @@
-{"name":"","short_name":"","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+{
+  "name": "RESUGROW — Free AI Resume Builder & ATS Checker",
+  "short_name": "RESUGROW",
+  "description": "Build ATS-friendly resumes, score your LinkedIn profile, and generate cover letters with RESUGROW — the free AI career platform.",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity"]
+}

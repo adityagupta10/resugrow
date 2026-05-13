@@ -38,9 +38,22 @@ const nextConfig = {
   reactStrictMode: true,
   // Minimize powered-by header
   poweredByHeader: false,
-  // Headers for caching and performance
+  // Headers for caching, performance, and SEO trust signals
   async headers() {
     return [
+      // ── Security headers (SEO trust signals + protection) ───────────
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+        ],
+      },
+      // ── Static asset immutable caching ──────────────────────────────
       {
         source: '/:all*(svg|jpg|jpeg|png|webp|avif|ico|woff|woff2)',
         headers: [

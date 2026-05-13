@@ -75,7 +75,13 @@ export const metadata = {
       { rel: 'android-chrome-512x512', url: '/android-chrome-512x512.png', type: 'image/png' }
     ]
   },
-  manifest: '/site.webmanifest'
+  manifest: '/site.webmanifest',
+  alternates: {
+    ...homeMetadata.alternates,
+    types: {
+      'application/rss+xml': `${SITE_URL}/feed.xml`,
+    },
+  },
 };
 
 export const viewport = {
@@ -95,9 +101,8 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
-        {/* hreflang — signals to search engines this is the primary/default language */}
-        <link rel="alternate" hrefLang="en" href="https://www.resugrow.com" />
-        <link rel="alternate" hrefLang="x-default" href="https://www.resugrow.com" />
+        {/* RSS Feed — enables content discovery by aggregators and search engines */}
+        <link rel="alternate" type="application/rss+xml" title="RESUGROW Blog RSS Feed" href="https://www.resugrow.com/feed.xml" />
 
         {/* Preload critical above-the-fold image to improve LCP */}
         <link rel="preload" href="/resugrow-logo.png" as="image" type="image/png" />

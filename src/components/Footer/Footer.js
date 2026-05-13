@@ -11,7 +11,7 @@ const footerLinks = {
     { label: "Free ATS Resume Checker", href: "/resume/ats-checker" },
     { label: "Free Resume Templates", href: "/resume/templates" },
     { label: "Community Template Marketplace", href: "/resume/template-marketplace", badge: "New" },
-    { label: "Resume Builder Free", href: "/resume/builder" },
+    { label: "Resume Builder", href: "/resume/ai-builder" },
     { label: "Cover Letter Builder", href: "/cover-letter/builder" },
     { label: "Cover Letter Templates", href: "/cover-letter/templates" },
   ],

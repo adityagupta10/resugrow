@@ -7,21 +7,23 @@ AI-powered career platform for resume building, ATS optimization, LinkedIn revie
 Primary site: ${SITE_URL}
 
 ## Core Product Pages
-- ${SITE_URL}/resume/builder
-- ${SITE_URL}/resume/ats-checker
+- ${SITE_URL}/resume/ai-builder
 - ${SITE_URL}/resume/templates
-- ${SITE_URL}/linkedin-review
+- ${SITE_URL}/templates/software-engineer-resume
+- ${SITE_URL}/templates/product-manager-resume
+- ${SITE_URL}/templates/data-analyst-resume
 - ${SITE_URL}/linkedin-makeover
 - ${SITE_URL}/cover-letter/builder
-- ${SITE_URL}/tools/sar-rewriter
-- ${SITE_URL}/tools/career-path
-- ${SITE_URL}/dashboard/applications
+- ${SITE_URL}/tools
 - ${SITE_URL}/resume/template-marketplace
 
 ## High-Signal Content
 - ${SITE_URL}/blog
 - ${SITE_URL}/career-tips
 - ${SITE_URL}/help-center
+- ${SITE_URL}/examples
+- ${SITE_URL}/glossary
+- ${SITE_URL}/ats-resume-guide
 
 ## Company & Trust
 - ${SITE_URL}/about
