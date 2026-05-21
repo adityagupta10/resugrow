@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { enforceRateLimit } from '@/lib/rateLimit';
 
 const LOCATION_MARKETS = {
   india: { label: 'India', unit: 'LPA' },
@@ -376,6 +377,9 @@ function buildRoadmap(role, context) {
 }
 
 export async function POST(request) {
+  const limited = enforceRateLimit(request, { route: 'career-path', limit: 15, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const body = await request.json();
     const currentRole = (body.currentRole || '').trim();

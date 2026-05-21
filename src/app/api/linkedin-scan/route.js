@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { parsePDF } from '@/lib/pdf-extract';
 import { parseLinkedInPDF } from '@/utils/linkedin-pdf-parser';
 import { scoreLinkedInProfile } from '@/lib/linkedinScorer';
+import { enforceRateLimit } from '@/lib/rateLimit';
 
 const PRIVATE_CACHE_HEADERS = { 'Cache-Control': 'private, max-age=300' };
 
@@ -42,6 +43,9 @@ function runPastePrecheck(rawText) {
 }
 
 export async function POST(request) {
+  const limited = enforceRateLimit(request, { route: 'linkedin-scan', limit: 10, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const formData = await request.formData();
     const file = formData.get('resume') || formData.get('file');

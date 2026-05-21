@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { listingPosts } from './data';
 import { attachBlogImagesToPost } from './blogImages';
 import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } from '@/lib/seo';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/utils/supabase/anon';
 import CategoryFilter from './CategoryFilter';
 import LoadMorePosts from './LoadMorePosts';
 import styles from './blog.module.css';

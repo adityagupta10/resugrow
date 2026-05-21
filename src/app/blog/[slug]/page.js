@@ -8,7 +8,7 @@ import { createPageMetadata, getArticleJsonLd, getBreadcrumbJsonLd, SITE_URL } f
 import BlogAd from '@/components/Ads/BlogAd';
 import styles from './post.module.css';
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/utils/supabase/anon';
 
 export async function generateStaticParams() {
   const staticSlugs = posts.map((p) => ({ slug: p.slug }));

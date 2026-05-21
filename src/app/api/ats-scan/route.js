@@ -17,7 +17,7 @@ import semanticDict from '@/constants/semantic_dict.json';
 import { parsePDF } from '@/lib/pdf-extract';
 import { detectDocumentType } from '@/lib/documentAnalyzer';
 import { parseResumeText } from '@/lib/resume-parser';
-import { 
+import {
   calculatePronounUsageScore,
   calculateBulletLengthScore,
   calculateEmailProfessionalismScore,
@@ -30,8 +30,9 @@ import {
   calculateAcronymOveruseScore,
   calculateSectionOrderScore,
   calculateResponsibilityVsAchievementScore,
-  calculateFileNameProfessionalismScore 
+  calculateFileNameProfessionalismScore
 } from '@/lib/ats-modules';
+import { enforceRateLimit } from '@/lib/rateLimit';
 
 const PRIVATE_CACHE_HEADERS = { 'Cache-Control': 'private, max-age=300' };
 
@@ -545,12 +546,15 @@ function scoreLinkedInPolish(extractedData) {
 // Main POST Handler
 // ---------------------------------------------------------------------------
 export async function POST(request) {
+  const limited = enforceRateLimit(request, { route: 'ats-scan', limit: 10, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const formData = await request.formData();
     const file = formData.get('resume');
     const jd = formData.get('jobDescription') || '';
     const industryMode = formData.get('industryMode') || 'General';
-    
+
     if (!file) return NextResponse.json({ error: 'No file uploaded.' }, { status: 400 });
 
     const buffer = Buffer.from(await file.arrayBuffer());

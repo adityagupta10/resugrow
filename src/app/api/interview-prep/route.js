@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { enforceRateLimit } from '@/lib/rateLimit';
 
 // ── Role detection ─────────────────────────────────────────────────────────
 const ROLE_KEYWORDS = {
@@ -953,6 +954,9 @@ const PREP_TIPS = [
 
 // ── POST handler ───────────────────────────────────────────────────────────
 export async function POST(request) {
+  const limited = enforceRateLimit(request, { route: 'interview-prep', limit: 15, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const body = await request.json();
     const jobDescription = (body.jobDescription || '').trim();

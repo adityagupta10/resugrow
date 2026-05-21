@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import TrackedLink from '@/components/UI/TrackedLink';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import styles from './page.module.css';
 import { templates as templateData } from '../data/templates';
 import { platformFaqs } from '../data/faqs';
-import FaqAccordion from '@/components/Home/FaqAccordion';
 import Hero from '@/components/Home/Hero';
-import Testimonials from '@/components/Testimonials/Testimonials';
+
+// Below-fold components — lazy loaded to reduce initial JS bundle
+const FaqAccordion = dynamic(() => import('@/components/Home/FaqAccordion'));
+const Testimonials = dynamic(() => import('@/components/Testimonials/Testimonials'));
 
 const productPillars = [
   {

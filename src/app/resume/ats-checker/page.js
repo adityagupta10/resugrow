@@ -3,13 +3,16 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Testimonials from '@/components/Testimonials/Testimonials';
+import dynamic from 'next/dynamic';
 import { INDUSTRY_MAPPINGS } from '@/constants/industry_keywords';
 import EmojiImage from '@/components/UI/EmojiImage';
 import { trackCTA } from '@/lib/analytics';
 import { SITE_URL, getSoftwareAppJsonLd } from '@/lib/seo';
-import RelatedTools from '@/components/RelatedTools/RelatedTools';
 import styles from '../../subpage.module.css';
+
+// Below-fold components — lazy loaded
+const Testimonials = dynamic(() => import('@/components/Testimonials/Testimonials'));
+const RelatedTools = dynamic(() => import('@/components/RelatedTools/RelatedTools'));
 
 const features = [
   { icon: '📊', title: 'Instant ATS Analysis', desc: 'Upload your resume and get an instant compatibility score with detailed breakdown of how well it performs against ATS software.' },

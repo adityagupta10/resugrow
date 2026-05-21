@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
+import { enforceRateLimit } from '@/lib/rateLimit';
 
 export async function POST(req) {
+  const limited = enforceRateLimit(req, { route: 'contact', limit: 5, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const body = await req.json();
     const { user_name, user_email, subject, message } = body;

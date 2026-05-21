@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { enforceRateLimit } from '@/lib/rateLimit';
 
 const INDUSTRY_PROFILES = {
   general: {
@@ -371,6 +372,9 @@ function buildContext(achievement, selectedIndustry, postType) {
 }
 
 export async function POST(request) {
+  const limited = enforceRateLimit(request, { route: 'linkedin-studio', limit: 20, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const body = await request.json();
     const achievement = (body.achievement || '').trim();

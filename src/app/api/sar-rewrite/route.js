@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
-
-const PRIVATE_CACHE_HEADERS = { 'Cache-Control': 'private, max-age=300' };
 import {
   STRONG_VERBS,
   WEAK_VERBS,
   HARD_SKILLS_KEYWORDS,
   SOFT_SKILLS
 } from '@/constants/ats';
+import { enforceRateLimit } from '@/lib/rateLimit';
+
+const PRIVATE_CACHE_HEADERS = { 'Cache-Control': 'private, max-age=300' };
 
 // Domain-specific keywords to detect bullet context
 const DOMAIN_PATTERNS = {
@@ -477,6 +478,9 @@ function buildSuggestion({
 }
 
 export async function POST(request) {
+  const limited = enforceRateLimit(request, { route: 'sar-rewrite', limit: 30, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const body = await request.json();
     const bullet = normalizeBullet(body.bullet);

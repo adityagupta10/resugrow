@@ -1,6 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Deprecated: import from '@/utils/supabase/anon' instead.
+// Kept as a thin re-export to avoid breaking external references.
+export { supabase } from '@/utils/supabase/anon';

@@ -176,10 +176,11 @@ function Hero() {
                     width={520}
                     height={436}
                     sizes="(max-width: 768px) 100vw, 520px"
-                    quality={index === 0 ? 80 : 65}
+                    quality={index === 0 ? 75 : 60}
                     className={`${styles.panelImage} ${index === activeSlide ? styles.panelImageActive : ''}`}
                     priority={index === 0}
                     loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "low"}
                   />
                 ))}
               </div>

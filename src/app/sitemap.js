@@ -2,7 +2,7 @@ import { posts } from "./blog/data";
 import { ROLE_SUGGESTIONS } from "@/lib/ai-suggestions";
 import { templates } from "@/data/templates";
 import { glossaryTerms } from "@/data/glossaryTerms";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/utils/supabase/anon";
 
 export default async function sitemap() {
   const baseUrl = "https://www.resugrow.com";

@@ -32,6 +32,12 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
   },
+  // Tree-shake barrel imports — each icon gets its own chunk instead of pulling the full 1000+ icon set
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
+    },
+  },
   // Compress output
   compress: true,
   // Strict-mode for catching issues in dev

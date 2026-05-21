@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import { parsePDF } from '@/lib/pdf-extract';
 import { parseResumeText } from '@/lib/resumeParser';
+import { enforceRateLimit } from '@/lib/rateLimit';
 
 export async function POST(request) {
+  const limited = enforceRateLimit(request, { route: 'resume-extract', limit: 15, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const formData = await request.formData();
     const file = formData.get('resume');

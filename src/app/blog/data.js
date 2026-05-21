@@ -2,6 +2,7 @@ import { strategicPosts } from './strategicPosts';
 import { programmaticPosts } from './programmaticPosts';
 import { reviewPosts } from './reviewPosts';
 import { latestPosts } from './latestPosts';
+import { newPosts } from './newPosts';
 import { attachBlogImagesToPost } from './blogImages';
 
 const corePosts = [
@@ -736,7 +737,7 @@ Good follow-ups are respectful and strategic. They show consistency, communicati
   },
 ];
 
-export const posts = [...latestPosts, ...corePosts, ...strategicPosts, ...reviewPosts, ...programmaticPosts].map(attachBlogImagesToPost);
+export const posts = [...latestPosts, ...newPosts, ...corePosts, ...strategicPosts, ...reviewPosts, ...programmaticPosts].map(attachBlogImagesToPost);
 
 /* ---------------------------------------------------------------------------
  * Lightweight listing data for /blog.

@@ -1,14 +1,19 @@
-import ClassicTemplate from './ClassicTemplate';
-import ModernTemplate from './ModernTemplate';
-import ExecutiveTemplate from './ExecutiveTemplate';
-import MinimalistTemplate from './MinimalistTemplate';
-import CreativeTemplate from './CreativeTemplate';
-import StartupTemplate from './StartupTemplate';
-import TechTemplate from './TechTemplate';
-import AcademicTemplate from './AcademicTemplate';
-import ImpactTemplate from './ImpactTemplate';
-import SwissTemplate from './SwissTemplate';
-import PhotoTemplate from './PhotoTemplate';
+'use client';
+
+import dynamic from 'next/dynamic';
+
+// Lazy-load templates — only the active template is fetched, cutting ~60KB from initial bundle
+const ClassicTemplate = dynamic(() => import('./ClassicTemplate'), { ssr: false });
+const ModernTemplate = dynamic(() => import('./ModernTemplate'), { ssr: false });
+const ExecutiveTemplate = dynamic(() => import('./ExecutiveTemplate'), { ssr: false });
+const MinimalistTemplate = dynamic(() => import('./MinimalistTemplate'), { ssr: false });
+const CreativeTemplate = dynamic(() => import('./CreativeTemplate'), { ssr: false });
+const StartupTemplate = dynamic(() => import('./StartupTemplate'), { ssr: false });
+const TechTemplate = dynamic(() => import('./TechTemplate'), { ssr: false });
+const AcademicTemplate = dynamic(() => import('./AcademicTemplate'), { ssr: false });
+const ImpactTemplate = dynamic(() => import('./ImpactTemplate'), { ssr: false });
+const SwissTemplate = dynamic(() => import('./SwissTemplate'), { ssr: false });
+const PhotoTemplate = dynamic(() => import('./PhotoTemplate'), { ssr: false });
 
 export const RESUME_TEMPLATES = {
   // Standard Templates

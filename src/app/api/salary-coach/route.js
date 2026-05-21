@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { enforceRateLimit } from "@/lib/rateLimit";
 
 const ROUND_TO_HALF = (value) => Math.round(value * 2) / 2;
 const TITLE_CASE_ROLE = (role) =>
@@ -697,6 +698,9 @@ const NEGOTIATION_TIPS = [
 
 // ── POST handler ───────────────────────────────────────────────────────────
 export async function POST(request) {
+  const limited = enforceRateLimit(request, { route: 'salary-coach', limit: 15, windowMs: 60_000 });
+  if (limited) return limited;
+
   try {
     const body = await request.json();
     const {

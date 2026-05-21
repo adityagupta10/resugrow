@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/utils/supabase/anon';
 import BlogEditor from '../BlogEditor';
 import { notFound } from 'next/navigation';
 
