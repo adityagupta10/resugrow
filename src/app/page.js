@@ -19,8 +19,6 @@ const productPillars = [
     points: ['Real-time ATS scoring', 'Smart section suggestions', 'One-click PDF export'],
     href: '/resume/builder', cta: 'Build My Resume',
     tagBg: '#f5f3ff', tagColor: '#7c3aed', tagBorder: '#ddd6fe',
-    ctaFrom: '#8b5cf6', ctaTo: '#7c3aed',
-    visualFrom: '#f5f3ff', visualTo: '#ede9fe',
   },
   {
     tag: 'LinkedIn', emoji: '💼', score: '88',
@@ -29,8 +27,6 @@ const productPillars = [
     points: ['Visibility bottleneck scan', 'Section-by-section audit', 'Keyword mapping'],
     href: '/linkedin-review', cta: 'Scan LinkedIn Profile',
     tagBg: '#eff6ff', tagColor: '#2563eb', tagBorder: '#bfdbfe',
-    ctaFrom: '#3b82f6', ctaTo: '#2563eb',
-    visualFrom: '#eff6ff', visualTo: '#dbeafe',
   },
   {
     tag: 'Letters', emoji: '✉️', score: '91',
@@ -39,8 +35,6 @@ const productPillars = [
     points: ['Job description matching', 'Tailored tone & style', 'High-impact templates'],
     href: '/cover-letter/builder', cta: 'Build Cover Letter',
     tagBg: '#f0fdf4', tagColor: '#16a34a', tagBorder: '#bbf7d0',
-    ctaFrom: '#22c55e', ctaTo: '#16a34a',
-    visualFrom: '#f0fdf4', visualTo: '#dcfce7',
   },
   {
     tag: 'SAR', emoji: '✨', score: '87',
@@ -49,8 +43,6 @@ const productPillars = [
     points: ['Impact quantification', 'Action-verb injection', 'Recruiter-ready phrasing'],
     href: '/tools/sar-rewriter', cta: 'Optimize Bullets',
     tagBg: '#fff1f2', tagColor: '#dc2626', tagBorder: '#fecaca',
-    ctaFrom: '#ef4444', ctaTo: '#dc2626',
-    visualFrom: '#fff1f2', visualTo: '#ffe4e6',
   },
   {
     tag: 'Coach', emoji: '🎯', score: '92',
@@ -58,9 +50,7 @@ const productPillars = [
     desc: 'Prepare for any interview with an AI-powered coach that provides real-time feedback.',
     points: ['Section-wise rehearsal', 'Industry-specific Q&A', 'Performance tips'],
     href: '/tools/interview-prep', cta: 'Start Coaching',
-    tagBg: '#eff6ff', tagColor: '#0284c7', tagBorder: '#bae6fd',
-    ctaFrom: '#0ea5e9', ctaTo: '#0284c7',
-    visualFrom: '#f0f9ff', visualTo: '#e0f2fe',
+    tagBg: '#f0f9ff', tagColor: '#0284c7', tagBorder: '#bae6fd',
   },
   {
     tag: 'Track', emoji: '📊', score: '85',
@@ -69,8 +59,6 @@ const productPillars = [
     points: ['Centralized app history', 'Interview scheduling', 'Search analytics'],
     href: '/dashboard/applications', cta: 'Track Applications',
     tagBg: '#f8fafc', tagColor: '#475569', tagBorder: '#cbd5e1',
-    ctaFrom: '#64748b', ctaTo: '#475569',
-    visualFrom: '#f8fafc', visualTo: '#f1f5f9',
   },
   {
     tag: 'Market', emoji: '🎨', score: '90',
@@ -79,8 +67,6 @@ const productPillars = [
     points: ['Verified ATS-safe designs', 'Industry-specific layouts', 'Community-vetted styles'],
     href: '/resume/template-marketplace', cta: 'Explore Designs',
     tagBg: '#fdf4ff', tagColor: '#a21caf', tagBorder: '#f0abfc',
-    ctaFrom: '#c026d3', ctaTo: '#a21caf',
-    visualFrom: '#fdf4ff', visualTo: '#fae8ff',
   },
   {
     tag: 'Salary', emoji: '💰', score: '89',
@@ -89,8 +75,6 @@ const productPillars = [
     points: ['Custom script generation', 'Market value analysis', 'Counter-offer strategies'],
     href: '/tools/salary-coach', cta: 'Negotiate Better',
     tagBg: '#f0fdf4', tagColor: '#059669', tagBorder: '#a7f3d0',
-    ctaFrom: '#10b981', ctaTo: '#059669',
-    visualFrom: '#f0fdf4', visualTo: '#d1fae5',
   },
   {
     tag: 'Path', emoji: '🗺️', score: '86',
@@ -99,8 +83,6 @@ const productPillars = [
     points: ['Trajectory forecasting', 'Skill-gap analysis', 'Future role requirements'],
     href: '/tools/career-path', cta: 'Simulate My Path',
     tagBg: '#ecfeff', tagColor: '#0891b2', tagBorder: '#a5f3fc',
-    ctaFrom: '#06b6d4', ctaTo: '#0891b2',
-    visualFrom: '#ecfeff', visualTo: '#cffafe',
   },
 ];
 
@@ -196,143 +178,37 @@ export default function Home() {
             <h2>Everything You Need in an AI Resume Builder & ATS Checker</h2>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px 0 60px' }}>
+          <div className={styles.bentoGrid}>
             {productPillars.map((pillar, idx) => (
               <article
                 key={pillar.title}
+                className={`${styles.bentoCard} ${idx < 2 ? styles.bentoFeatured : ''} ${idx === productPillars.length - 1 ? styles.bentoWide : ''}`}
                 style={{
-                  display: 'flex',
-                  flexDirection: idx % 2 !== 0 ? 'row-reverse' : 'row',
-                  alignItems: 'stretch',
-                  width: '100%',
-                  minHeight: '360px',
-                  borderRadius: '20px',
-                  overflow: 'hidden',
-                  border: '1px solid #e2e8f0',
-                  boxShadow: '0 2px 16px rgba(15,23,42,0.06)',
-                  background: 'white',
-                  transition: 'box-shadow 0.2s, transform 0.2s',
+                  '--pc': pillar.tagColor,
+                  '--pc-bg': pillar.tagBg,
+                  '--pc-border': pillar.tagBorder,
                 }}
               >
-                {/* ── Text side ── */}
-                <div style={{
-                  flex: '1 1 55%',
-                  padding: '48px 52px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  gap: 0,
-                }}>
-                  <span style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    padding: '5px 14px',
-                    borderRadius: '999px',
-                    fontSize: '11px',
-                    fontWeight: 800,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    background: pillar.tagBg,
-                    color: pillar.tagColor,
-                    border: `1px solid ${pillar.tagBorder}`,
-                    width: 'fit-content',
-                    marginBottom: '12px',
-                  }}>
-                    {pillar.tag}
-                  </span>
-                  <h3 style={{ margin: '0 0 12px', fontSize: 'clamp(20px, 2.2vw, 28px)', fontWeight: 800, color: '#0f172a', lineHeight: 1.2, letterSpacing: '-0.025em' }}>
-                    {pillar.title}
-                  </h3>
-                  <p style={{ margin: '0 0 18px', color: '#475569', fontSize: '15px', lineHeight: 1.75, maxWidth: '400px' }}>
-                    {pillar.desc}
-                  </p>
-                  <ul style={{ margin: '0 0 24px', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {pillar.points.map((point) => (
-                      <li key={point} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', fontWeight: 600, color: '#334155' }}>
-                        <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: pillar.tagBg, color: pillar.tagColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 800, flexShrink: 0, border: `1px solid ${pillar.tagBorder}` }}>✓</span>
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-                  <TrackedLink
-                    href={pillar.href}
-                    ctaName={pillar.cta.toLowerCase().replace(/\s+/g, '_')}
-                    ctaPage="Homepage"
-                    ctaLocation="product_pillars"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      padding: '12px 24px',
-                      borderRadius: '10px',
-                      fontSize: '14px',
-                      fontWeight: 700,
-                      textDecoration: 'none',
-                      width: 'fit-content',
-                      background: `linear-gradient(135deg, ${pillar.ctaFrom}, ${pillar.ctaTo})`,
-                      color: 'white',
-                      boxShadow: `0 4px 14px ${pillar.tagBorder}`,
-                    }}
-                  >
-                    {pillar.cta} →
-                  </TrackedLink>
+                <div className={styles.cardTop}>
+                  <span className={styles.cardIcon} aria-hidden="true">{pillar.emoji}</span>
+                  <span className={styles.cardScore}>Score {pillar.score}</span>
                 </div>
-
-                {/* ── Visual side ── */}
-                <div style={{
-                  flex: '0 0 42%',
-                  background: `linear-gradient(135deg, ${pillar.visualFrom} 0%, ${pillar.visualTo} 100%)`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '40px',
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}>
-                  {/* Big emoji watermark */}
-                  <span style={{ position: 'absolute', fontSize: '120px', opacity: 0.08, bottom: '-10px', right: '-10px', lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}>
-                    {pillar.emoji}
-                  </span>
-
-                  {/* Score card */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', position: 'relative', zIndex: 1 }}>
-                    <div style={{
-                      width: '96px',
-                      height: '96px',
-                      borderRadius: '50%',
-                      border: `4px solid ${pillar.tagColor}`,
-                      background: 'white',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
-                    }}>
-                      <span style={{ fontSize: '26px', fontWeight: 900, color: pillar.tagColor, lineHeight: 1, letterSpacing: '-0.03em' }}>{pillar.score}</span>
-                      <span style={{ fontSize: '9px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: pillar.tagColor, opacity: 0.7, marginTop: '2px' }}>Score</span>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '220px' }}>
-                      {pillar.points.map((point) => (
-                        <span key={point} style={{
-                          display: 'block',
-                          padding: '7px 14px',
-                          borderRadius: '8px',
-                          fontSize: '12px',
-                          fontWeight: 700,
-                          textAlign: 'center',
-                          background: 'rgba(255,255,255,0.85)',
-                          color: pillar.tagColor,
-                          border: `1px solid ${pillar.tagBorder}`,
-                          backdropFilter: 'blur(8px)',
-                          boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                        }}>
-                          {point}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <h3 className={styles.cardTitle}>{pillar.title}</h3>
+                <p className={styles.cardDesc}>{pillar.desc}</p>
+                <ul className={styles.cardPoints}>
+                  {pillar.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+                <TrackedLink
+                  href={pillar.href}
+                  ctaName={pillar.cta.toLowerCase().replace(/\s+/g, '_')}
+                  ctaPage="Homepage"
+                  ctaLocation="product_pillars"
+                  className={styles.cardCta}
+                >
+                  {pillar.cta} →
+                </TrackedLink>
               </article>
             ))}
           </div>
@@ -341,7 +217,7 @@ export default function Home() {
 
       <section className={styles.workflowSection}>
         <div className={styles.container}>
-          <div className={styles.sectionHeading}>
+          <div className={`${styles.sectionHeading} ${styles.sectionHeadingDark}`}>
             <p>How It Works</p>
             <h2>How Our AI Career Tools & Resume Maker Work</h2>
           </div>
@@ -366,7 +242,11 @@ export default function Home() {
 
           <div className={styles.templateGrid}>
             {templates.map((template) => (
-              <article key={template.id} className={styles.templateCard}>
+              <Link
+                key={template.id}
+                href={`/resume/templates/${template.slug}`}
+                className={styles.templateCard}
+              >
                 <div className={styles.templatePreview}>
                   <Image
                     src={template.image}
@@ -375,12 +255,15 @@ export default function Home() {
                     className={styles.templateImage}
                     sizes="(max-width: 900px) 100vw, 25vw"
                   />
+                  <span className={styles.templateOverlay}>
+                    <span>Use this template →</span>
+                  </span>
                 </div>
                 <div className={styles.templateMeta}>
                   <h3>{template.name}</h3>
                   <p>{template.category}</p>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
 
@@ -399,9 +282,9 @@ export default function Home() {
             <h2>Used by Job Seekers Who Want Precise, Actionable Feedback</h2>
           </div>
 
-          <Testimonials 
-            title="Success Stories" 
-            subtitle="Real results from job seekers who beat the bots." 
+          <Testimonials
+            title="Success Stories"
+            subtitle="Real results from job seekers who beat the bots."
           />
         </div>
       </section>
@@ -419,6 +302,7 @@ export default function Home() {
       <section className={styles.finalSection}>
         <div className={styles.container}>
           <div className={styles.finalCard}>
+            <p className={styles.finalKicker}>Ready in 30 seconds</p>
             <h2>Start Optimizing the Assets Recruiters Actually See</h2>
             <p>
               Get a deterministic score, apply precision fixes, and ship stronger applications with
@@ -432,6 +316,7 @@ export default function Home() {
                 Analyze LinkedIn Profile
               </TrackedLink>
             </div>
+            <p className={styles.finalNote}>Free forever · No credit card required · 5,126 verified reviews</p>
           </div>
         </div>
       </section>

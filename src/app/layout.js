@@ -18,7 +18,9 @@ import {
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  // 800/900 included so display headlines render true black weights
+  // instead of faux-bold synthesized from 700
+  weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-inter',
   preload: true,
 });

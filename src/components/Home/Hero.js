@@ -49,6 +49,19 @@ const targetCompanies = [
   { name: 'Uber', logo: '/company-logos/uber.svg', alt: 'Uber company for operations' }
 ];
 
+function MarqueeGroup({ hidden }) {
+  return (
+    <div className={styles.marqueeGroup} aria-hidden={hidden || undefined}>
+      {targetCompanies.map((company) => (
+        <span key={company.name} className={styles.marqueeItem} title={company.name}>
+          <Image src={company.logo} alt={hidden ? '' : company.alt} width={20} height={20} loading="lazy" />
+          {company.name}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function Hero() {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
@@ -94,52 +107,66 @@ function Hero() {
 
   return (
     <section className={styles.heroSection}>
+      <div className={styles.heroAurora} aria-hidden="true" />
       <div className={styles.container}>
         <div className={styles.heroGrid}>
           <div className={styles.heroContent}>
-            <p className={styles.heroKicker}>#1 AI Career Advancement Platform</p>
+            <p className={styles.heroBadge}>
+              <span className={styles.heroBadgeDot} aria-hidden="true" />
+              #1 AI Career Advancement Platform
+            </p>
+
             <h2 className={styles.heroTitle}>
               <span className={styles.typewriterWrap}>
                 <span className={styles.typewriterText}>{currentText}</span>
-                <span className={styles.typewriterCursor}>|</span>
+                <span className={styles.typewriterCursor} aria-hidden="true">|</span>
               </span>
               <br />
               with{' '}<span className="gradient-text">RESUGROW</span>{' '}Platform
             </h2>
+
             <p className={styles.heroSubtitle}>
-              The AI-powered career engine trusted by 25M+ pros to get hired at Google, Tesla, Microsoft and beyond.
-              <br />
-              Build ATS-optimized resumes in 5 minutes with one-click job tailoring, AI-driven scoring, and a LinkedIn profile that ranks in the top 2%.
+              The AI-powered career engine trusted by 25M+ pros to get hired at Google, Tesla,
+              Microsoft and beyond. Build ATS-optimized resumes in 5 minutes with one-click job
+              tailoring, AI-driven scoring, and a LinkedIn profile that ranks in the top 2%.
             </p>
 
             <div className={styles.heroActions}>
-              <TrackedLink href="/resume/ai-builder" ctaName="build_ai_resume" ctaPage="Homepage" ctaLocation="hero" className={`btn btn-primary ${styles.heroPrimaryBtn}`}>
-                Build my AI Powered resume
+              <TrackedLink
+                href="/resume/ai-builder"
+                ctaName="build_ai_resume"
+                ctaPage="Homepage"
+                ctaLocation="hero"
+                className={styles.heroPrimaryBtn}
+              >
+                Build My AI Resume — Free <span aria-hidden="true">→</span>
               </TrackedLink>
-              <div className={styles.heroSecondaryActions}>
-                <TrackedLink href="/resume/ats-checker" ctaName="ats_check" ctaPage="Homepage" ctaLocation="hero" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
-                  ATS-Pro Resume Score
-                </TrackedLink>
-              </div>
-              <div className={styles.heroSecondaryActions}>
-                <TrackedLink href="/tools" ctaName="all_tools" ctaPage="Homepage" ctaLocation="hero" className={`btn btn-secondary ${styles.heroSecondaryBtn}`}>
-                  Explore All Career Tools
-                </TrackedLink>
-              </div>
+              <TrackedLink
+                href="/resume/ats-checker"
+                ctaName="ats_check"
+                ctaPage="Homepage"
+                ctaLocation="hero"
+                className={styles.heroSecondaryBtn}
+              >
+                Get My ATS Score
+              </TrackedLink>
             </div>
 
-            <div className={styles.heroSignals}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '8px' }}>
-                <span style={{ color: '#64748b', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Top Applicant Destinations</span>
-                <span style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 500 }}>(We help candidates apply to these companies)</span>
-              </div>
-              <div className={styles.signalChips}>
-                {targetCompanies.map((company) => (
-                  <span key={company.name} className={styles.signalLogo} title={company.name}>
-                    <Image src={company.logo} alt={company.alt} width={22} height={22} loading="lazy" />
-                  </span>
-                ))}
-              </div>
+            <TrackedLink
+              href="/tools"
+              ctaName="all_tools"
+              ctaPage="Homepage"
+              ctaLocation="hero"
+              className={styles.heroTertiaryLink}
+            >
+              Explore all 9 career tools →
+            </TrackedLink>
+
+            <div className={styles.heroTrust}>
+              <span className={styles.trustStars} aria-hidden="true">★★★★★</span>
+              <span className={styles.trustText}><b>4.9/5</b> from 5,126 verified reviews</span>
+              <span className={styles.trustDivider} aria-hidden="true" />
+              <span className={styles.trustText}><b>100% free</b> — no credit card</span>
             </div>
 
             <a
@@ -153,17 +180,28 @@ function Hero() {
           </div>
 
           <div className={styles.heroPanel}>
-            <div className={styles.panelTop}>
-              <span>RESUGROW Overview</span>
-              <span>Live</span>
+            <div className={styles.panelGlow} aria-hidden="true" />
+            <div className={styles.panelChrome}>
+              <span className={styles.chromeDots} aria-hidden="true">
+                <span className={styles.chromeDot} />
+                <span className={styles.chromeDot} />
+                <span className={styles.chromeDot} />
+              </span>
+              <span className={styles.chromeTitle}>RESUGROW Overview</span>
+              <span className={styles.chromeLive}>Live</span>
             </div>
 
             <div className={styles.panelScoreCard}>
-              <div>
+              <div className={styles.scoreInfo}>
                 <p>Composite Readiness</p>
-                <p><b>89/100</b></p>
+                <b>
+                  89/100
+                  <span className={styles.scoreDelta}>+18 this week</span>
+                </b>
               </div>
-              <div className={styles.scoreRing}>+18</div>
+              <div className={styles.scoreRing}>
+                <span className={styles.scoreRingValue}>89</span>
+              </div>
             </div>
 
             <div className={styles.panelImageWrap}>
@@ -179,8 +217,8 @@ function Hero() {
                     quality={index === 0 ? 75 : 60}
                     className={`${styles.panelImage} ${index === activeSlide ? styles.panelImageActive : ''}`}
                     priority={index === 0}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    fetchPriority={index === 0 ? "high" : "low"}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    fetchPriority={index === 0 ? 'high' : 'low'}
                   />
                 ))}
               </div>
@@ -195,6 +233,25 @@ function Hero() {
                   />
                 ))}
               </div>
+            </div>
+
+            <span className={`${styles.floatChip} ${styles.floatChipA}`} aria-hidden="true">
+              <em>✓</em> ATS Pass 98%
+            </span>
+            <span className={`${styles.floatChip} ${styles.floatChipB}`} aria-hidden="true">
+              <em>⚡</em> 3× more interviews
+            </span>
+          </div>
+        </div>
+
+        <div className={styles.heroMarquee}>
+          <p className={styles.marqueeLabel}>
+            Top applicant destinations — we help candidates apply to these companies
+          </p>
+          <div className={styles.marqueeTrack}>
+            <div className={styles.marqueeInner}>
+              <MarqueeGroup />
+              <MarqueeGroup hidden />
             </div>
           </div>
         </div>
