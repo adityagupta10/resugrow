@@ -1,5 +1,16 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // A stray lockfile in the home directory makes Next.js infer the wrong
+  // workspace root — pin it so build/start always resolve .next correctly
+  outputFileTracingRoot: projectRoot,
+  turbopack: {
+    root: projectRoot,
+  },
   compiler: {
     removeConsole: true,
   },
@@ -28,6 +39,9 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Static marketing/blog assets never change — keep optimizer output
+    // cached for 30 days instead of re-transforming after the default TTL
+    minimumCacheTTL: 2592000,
   },
   experimental: {
     optimizeCss: true,

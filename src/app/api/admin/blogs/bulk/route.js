@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { supabaseAdmin } from '@/utils/supabase/admin';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
@@ -98,11 +99,12 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    return NextResponse.json({ 
-      success: true, 
+    revalidateTag('blog-posts');
+    return NextResponse.json({
+      success: true,
       count: data.length,
       blogs: data,
-      skipped 
+      skipped
     }, { status: 201 });
 
   } catch (error) {

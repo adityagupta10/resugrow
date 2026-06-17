@@ -4,9 +4,9 @@ import { Suspense } from 'react';
 import { listingPosts } from './data';
 import { attachBlogImagesToPost } from './blogImages';
 import { createPageMetadata, getBreadcrumbJsonLd, getItemListJsonLd, SITE_URL } from '@/lib/seo';
-import { supabase } from '@/utils/supabase/anon';
+import { getPublishedListingPosts } from '@/lib/blogDb';
 import CategoryFilter from './CategoryFilter';
-import LoadMorePosts from './LoadMorePosts';
+import BlogGrid from './BlogGrid';
 import styles from './blog.module.css';
 
 /* ---------------------------------------------------------------------------
@@ -24,35 +24,18 @@ export const metadata = createPageMetadata({
   keywords: ['resume tips', 'career advice', 'job search', 'ATS optimization', 'LinkedIn tips', 'salary negotiation'],
 });
 
-/* Only select the columns the listing page actually needs */
-const DB_LISTING_COLS = 'title, slug, excerpt, category, readTime, author, authorRole, authorInitials, authorColor, date, createdAt, coverEmoji';
+export default async function BlogPage() {
+  const t0 = Date.now();
+  const dbPosts = await getPublishedListingPosts();
 
-export default async function BlogPage({ searchParams }) {
-  const resolvedParams = await searchParams;
-  const activeCategory = resolvedParams?.category || 'All';
-
-  const { data: dbPosts, error } = await supabase
-    .from('BlogPost')
-    .select(DB_LISTING_COLS)
-    .eq('isPublished', true)
-    .order('createdAt', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching blogs from Supabase:', error);
-  }
+  console.log("Supabase fetch:", Date.now() - t0, "ms");
+  const t1 = Date.now();
 
   // Combine static and DB posts — process DB posts through image assignment
   const processedDbPosts = (dbPosts || []).map(attachBlogImagesToPost);
   const allPosts = [...processedDbPosts, ...listingPosts];
 
-  // Filter by category if one is selected
-  const filteredPosts = activeCategory === 'All'
-    ? allPosts
-    : allPosts.filter((p) => p.category === activeCategory);
-
-  const displayPosts = filteredPosts.length > 0 ? filteredPosts : allPosts;
-  const featured = displayPosts[0];
-  const rest = displayPosts.slice(1);
+  console.log("Processing posts:", Date.now() - t1, "ms");
 
   const breadcrumbSchema = getBreadcrumbJsonLd([
     { name: 'Home', url: SITE_URL },
@@ -60,7 +43,7 @@ export default async function BlogPage({ searchParams }) {
   ]);
   const itemListSchema = getItemListJsonLd({
     name: 'RESUGROW Blog Articles',
-    items: displayPosts.map((post) => ({
+    items: allPosts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
       name: post.title
     }))
@@ -99,56 +82,10 @@ export default async function BlogPage({ searchParams }) {
             <CategoryFilter />
           </Suspense>
 
-          {/* Active filter indicator */}
-          {activeCategory !== 'All' && filteredPosts.length > 0 && (
-            <div className={styles.filterIndicator}>
-              Showing <strong>{filteredPosts.length}</strong> {filteredPosts.length === 1 ? 'article' : 'articles'} in <strong>{activeCategory}</strong>
-              <Link href="/blog" className={styles.clearFilter}>Clear filter ✕</Link>
-            </div>
-          )}
-
-          {/* Featured Section */}
-          {featured && (
-            <div className={styles.featuredSection}>
-              <Link href={`/blog/${featured.slug}`} className={styles.featuredCard}>
-                <div className={styles.featuredCover}>
-                  {featured.coverImage && (
-                    <Image
-                      src={featured.coverImage}
-                      alt={featured.coverAlt || featured.title}
-                      fill
-                      className={styles.coverImg}
-                      priority
-                      sizes="(max-width: 1024px) 100vw, 60vw"
-                    />
-                  )}
-                  <div className={styles.coverOverlay}>
-                    <h2 className={styles.coverTitle}>{featured.title}</h2>
-                  </div>
-                </div>
-                <div className={styles.featuredInfo}>
-                  <div className={styles.postMeta}>
-                    <span className={styles.category}>{featured.category}</span>
-                    <span className={styles.dot}></span>
-                    <span>{featured.readTime}</span>
-                  </div>
-                  <p className={styles.excerpt}>{featured.excerpt}</p>
-                  <div className={styles.authorRow}>
-                    <div className={styles.avatar} style={{ background: featured.authorColor }}>
-                      {featured.authorInitials}
-                    </div>
-                    <div className={styles.authorInfo}>
-                      <span className={styles.authorName}>{featured.author}</span>
-                      <span className={styles.date}>{featured.date}</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          )}
-
-          {/* Blog Grid — progressively loaded */}
-          <LoadMorePosts posts={rest} />
+          {/* Blog Grid — dynamically filtered on the client */}
+          <Suspense fallback={<div className={styles.loading}>Loading posts...</div>}>
+            <BlogGrid allPosts={allPosts} />
+          </Suspense>
 
           {/* Newsletter Section */}
           <div className={styles.newsletterBox}>

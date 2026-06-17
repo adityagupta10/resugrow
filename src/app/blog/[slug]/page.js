@@ -9,6 +9,7 @@ import BlogAd from '@/components/Ads/BlogAd';
 import styles from './post.module.css';
 
 import { supabase } from '@/utils/supabase/anon';
+import { getDbPostBySlug } from '@/lib/blogDb';
 
 export async function generateStaticParams() {
   const staticSlugs = posts.map((p) => ({ slug: p.slug }));
@@ -39,11 +40,7 @@ export async function generateMetadata({ params }) {
   let post = posts.find((p) => p.slug === slug);
 
   if (!post) {
-    const { data: dbPost } = await supabase
-      .from('BlogPost')
-      .select('*')
-      .eq('slug', slug)
-      .single();
+    const dbPost = await getDbPostBySlug(slug);
     if (dbPost) {
       post = attachBlogImagesToPost(dbPost);
     }
@@ -189,11 +186,7 @@ export default async function BlogPost({ params }) {
   let post = posts.find((p) => p.slug === slug);
 
   if (!post) {
-    const { data: dbPost } = await supabase
-      .from('BlogPost')
-      .select('*')
-      .eq('slug', slug)
-      .single();
+    const dbPost = await getDbPostBySlug(slug);
     if (dbPost) {
       post = attachBlogImagesToPost(dbPost);
     }

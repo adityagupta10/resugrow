@@ -1,14 +1,16 @@
+// WebP variants — 5-20x smaller than the original PNGs, so the image
+// optimizer's first-request transform (the old blog LCP bottleneck) is cheap
 const DARK_BACKGROUNDS = [
-  '/images/blog/bg/dark_bg_1.png',
-  '/images/blog/bg/dark_bg_2.png',
-  '/images/blog/bg/dark_bg_3.png',
-  '/images/blog/bg/dark_bg_4.png',
-  '/images/blog/bg/dark_bg_5.png',
-  '/images/blog/bg/dark_bg_6.png',
-  '/images/blog/bg/dark_bg_7.png',
-  '/images/blog/bg/dark_bg_8.png',
-  '/images/blog/bg/dark_bg_9.png',
-  '/images/blog/bg/dark_bg_10.png',
+  '/images/blog/bg/dark_bg_1.webp',
+  '/images/blog/bg/dark_bg_2.webp',
+  '/images/blog/bg/dark_bg_3.webp',
+  '/images/blog/bg/dark_bg_4.webp',
+  '/images/blog/bg/dark_bg_5.webp',
+  '/images/blog/bg/dark_bg_6.webp',
+  '/images/blog/bg/dark_bg_7.webp',
+  '/images/blog/bg/dark_bg_8.webp',
+  '/images/blog/bg/dark_bg_9.webp',
+  '/images/blog/bg/dark_bg_10.webp',
 ];
 
 // Resume/career template images used for in-article screenshots

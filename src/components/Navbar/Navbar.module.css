@@ -21,6 +21,75 @@
     border-bottom-color: transparent;
 }
 
+/* ── At the top of the page: blend into the hero underneath ──────────── */
+.navAtTop {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom-color: transparent;
+    box-shadow: none;
+}
+
+/* ── Over the dark homepage hero: light chrome ───────────────────────── */
+.navDark .navLink {
+    color: #cbd5e1;
+}
+
+.navDark .navLink:hover,
+.navDark .navLink.active {
+    color: #ffffff;
+    background: rgba(99, 102, 241, 0.16);
+}
+
+.navDark .logo img {
+    /* the logo asset is dark-on-transparent — render it white on the hero */
+    filter: brightness(0) invert(1);
+}
+
+.navDark .hamburger span {
+    background: #e2e8f0;
+}
+
+.navDark .userName {
+    color: #e2e8f0;
+}
+
+/* the user pill itself must go glass-dark, otherwise the light
+   username sits on the default white pill and disappears */
+.navDark .userProfileBtn {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(148, 163, 184, 0.35);
+}
+
+.navDark .userProfileBtn:hover {
+    background: rgba(99, 102, 241, 0.14);
+    border-color: rgba(129, 140, 248, 0.55);
+}
+
+.navDark .avatarWrapper {
+    background: rgba(99, 102, 241, 0.25);
+}
+
+.navDark .avatarPlaceholder {
+    color: #c7d2fe;
+}
+
+.navDark :global(.btn-secondary) {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(148, 163, 184, 0.4);
+    color: #e2e8f0;
+}
+
+.navDark :global(.btn-secondary):hover {
+    background: rgba(99, 102, 241, 0.14);
+    border-color: rgba(129, 140, 248, 0.6);
+    color: #ffffff;
+}
+
+.navDark .navLoading {
+    color: #94a3b8;
+}
+
 .navContainer {
     width: auto;
     flex: 0 0 auto;
@@ -43,6 +112,10 @@
     flex: 1;
     justify-content: center;
     max-width: var(--max-width);
+    /* keep the auth/user block off the viewport edge — items are nowrap
+       and cannot shrink, so without this the avatar clips when logged in */
+    padding-right: 24px;
+    min-width: 0;
 }
 
 .navLink {
@@ -474,13 +547,18 @@
 .avatarPlaceholder {
     font-size: 14px;
     font-weight: 700;
-    color: var(--primary-700);
+    color: var(--primary-dark);
 }
 
 .userName {
     font-size: 14px;
     font-weight: 600;
     color: var(--text-primary);
+    /* long display names must not widen the bar */
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .chevronRotate {

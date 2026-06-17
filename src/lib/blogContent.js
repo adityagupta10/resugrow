@@ -21,8 +21,10 @@ function readPostFile(filename) {
   const raw = fs.readFileSync(filePath, 'utf8');
   const { data, content } = matter(raw);
 
+  const derivedSlug = filename.replace(/\.mdx?$/, '');
+
   return {
-    slug: data.slug,
+    slug: data.slug || derivedSlug,
     title: data.title,
     category: data.category,
     date: data.date,

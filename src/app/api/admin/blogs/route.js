@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { supabaseAdmin } from '@/utils/supabase/admin';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
@@ -95,6 +96,7 @@ export async function POST(request) {
       submitToIndexNow(`/blog/${newPost[0].slug}`);
     }
 
+    revalidateTag('blog-posts');
     return NextResponse.json(newPost[0], { status: 201 });
   } catch (error) {
     console.error('API /api/admin/blogs POST error:', error);

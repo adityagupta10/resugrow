@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { createClient as createSupabaseClient } from "@/utils/supabase/client";
 import { trackCTA } from '@/lib/analytics';
 import styles from "./Navbar.module.css";
@@ -79,13 +79,37 @@ const dropdownSections = [
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [supabaseUser, setSupabaseUser] = useState(null);
   const [supabaseLoading, setSupabaseLoading] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
   const navRef = useRef(null);
   const userRef = useRef(null);
+
+  // At the top of the page the bar blends into the hero; once scrolled it
+  // becomes the white glass bar. rAF-throttled so the listener stays cheap.
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        setScrolled(window.scrollY > 24);
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  // The homepage hero is dark — the blended bar needs light text there
+  const overDarkHero = pathname === "/" && !scrolled && !mobileOpen;
 
   const userFromSupabase = supabaseUser
     ? {
@@ -207,7 +231,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`${styles.navbarWrapper} ${mobileOpen ? styles.mobileNavOpen : ""}`}
+      className={`${styles.navbarWrapper} ${mobileOpen ? styles.mobileNavOpen : ""} ${!scrolled && !mobileOpen ? styles.navAtTop : ""} ${overDarkHero ? styles.navDark : ""}`}
       ref={navRef}
     >
       <div className={styles.navContainer}>

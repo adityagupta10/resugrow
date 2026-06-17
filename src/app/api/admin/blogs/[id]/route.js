@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { supabaseAdmin } from '@/utils/supabase/admin';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
@@ -98,6 +99,7 @@ export async function PATCH(request, { params }) {
       submitToIndexNow(`/blog/${updatedPost[0].slug}`);
     }
 
+    revalidateTag('blog-posts');
     return NextResponse.json(updatedPost[0]);
   } catch (error) {
     console.error('API /api/admin/blogs/[id] PATCH error:', error);
@@ -126,6 +128,7 @@ export async function DELETE(request, { params }) {
       .eq('id', id);
 
     if (error) throw error;
+    revalidateTag('blog-posts');
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('API /api/admin/blogs/[id] DELETE error:', error);
